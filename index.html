@@ -1,11 +1,12 @@
 
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EasyTimes Jukebox</title>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EasyTimes Jukebox</title>
+<style>
     @import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700&display=swap');
 
     * {
@@ -132,125 +133,59 @@
       }
     }
   </style>
-</head>
-<body>
-  <video class="bg-video" autoplay muted loop playsinline>
-    <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4">
-  </video>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+    background-color: #121212;
+    color: #f5f5f5;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
-  <div class="orange-frame"></div>
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: linear-gradient(to right, #f0c040, #ff7e29);
+    text-align: center;
+    padding: 20px;
+    z-index: 1000;
+}
 
-  <div class="container">
-    <div class="content-box">
-      <img src="EASY TIMES LOGO BLACK-01.png" alt="EasyTimes Logo" class="logo" />
-      <div class="button-container">
-        <button class="jukebox-button" onclick="location.href='order-drinks.html'">Order Drinks</button>
-        <button class="jukebox-button" onclick="location.href='things-to-do.html'">Things To Do</button>
-      </div>
-    </div>
-  </div>
+header img {
+    height: 50px;
+}
 
-  <script>/* IDLE VIDEO SLIDESHOW HANDLER (Preserved from your code) */
-    let idleTimeout;
-    const videoOverlay = document.createElement('div');
-    videoOverlay.style.position = 'fixed';
-    videoOverlay.style.top = '0';
-    videoOverlay.style.left = '0';
-    videoOverlay.style.width = '100%';
-    videoOverlay.style.height = '100%';
-    videoOverlay.style.backgroundColor = '#000';
-    videoOverlay.style.zIndex = '10001';
-    videoOverlay.style.display = 'none';
-    videoOverlay.style.display = 'flex';
-    videoOverlay.style.flexDirection = 'column';
-    videoOverlay.style.alignItems = 'center';
-    videoOverlay.style.justifyContent = 'center';
-    videoOverlay.style.transition = 'opacity 1s ease, transform 1s ease';
-    videoOverlay.style.opacity = '0';
-    videoOverlay.style.transform = 'scale(0.9)';
-    
-    const videoLogo = document.createElement('img');
-    videoLogo.src = 'EASY TIMES LOGO BLACK-01.png';
-    videoLogo.alt = 'Easytimes Logo';
-    videoLogo.style.width = '200px';
-    videoLogo.style.marginBottom = '20px';
-    videoLogo.style.marginTop = '40px';
-    
-    const videoFrame = document.createElement('div');
-    videoFrame.style.width = '70%';
-    videoFrame.style.height = '70%';
-    videoFrame.style.border = '4px solid orange';
-    videoFrame.style.borderRadius = '20px';
-    videoFrame.style.overflow = 'hidden';
-    videoFrame.style.boxSizing = 'border-box';
-    
-    const video = document.createElement('video');
-    video.id = 'slideshowVideo';
-    video.style.width = '100%';
-    video.style.height = '100%';
-    video.style.objectFit = 'cover';
-    video.muted = true;
-    video.controls = false;
-    
-    videoFrame.appendChild(video);
-    videoOverlay.appendChild(videoLogo);
-    videoOverlay.appendChild(videoFrame);
-    document.body.appendChild(videoOverlay);
-    
-    const videoFiles = ['grinderz.mp4', 'tea.mov'];
-    let currentVideoIndex = 0;
-    
-    function playNextVideo() {
-      if (!videoFiles.length) return;
-      video.src = videoFiles[currentVideoIndex];
-      video.load();
-      video.play().catch(err => {
-        console.error('Autoplay failed:', err);
-      });
-      currentVideoIndex = (currentVideoIndex + 1) % videoFiles.length;
-    }
-    
-    video.addEventListener('ended', playNextVideo);
-    video.addEventListener('error', () => {
-      console.error("Error loading video.");
-      playNextVideo();
-    });
-    
-    function resetIdleTimer() {
-      clearTimeout(idleTimeout);
-      video.pause();
-      videoOverlay.style.opacity = '0';
-      videoOverlay.style.transform = 'scale(0.9)';
-      setTimeout(() => {
-        videoOverlay.style.display = 'none';
-      }, 1000);
-    
-      idleTimeout = setTimeout(() => {
-        videoOverlay.style.display = 'flex';
-        requestAnimationFrame(() => {
-          videoOverlay.style.opacity = '1';
-          videoOverlay.style.transform = 'scale(1)';
-        });
-        currentVideoIndex = 0;
-        playNextVideo();
-      }, 10000); // 10 seconds
-    }
-    
-    ['click', 'mousemove', 'keydown', 'touchstart'].forEach(evt => {
-      document.addEventListener(evt, resetIdleTimer);
-    });
-    
-    videoOverlay.addEventListener('click', () => {
-      video.pause();
-      videoOverlay.style.opacity = '0';
-      videoOverlay.style.transform = 'scale(0.9)';
-      setTimeout(() => {
-        videoOverlay.style.display = 'none';
-      }, 1000);
-      resetIdleTimer();
-    });
-    
-    resetIdleTimer();
-  </script></script>
-</body>
+.main-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 150px;
+}
+
+button {
+    padding: 20px 40px;
+    font-size: 1.5rem;
+    background: #f0c040;
+    border: none;
+    border-radius: 15px;
+    color: #121212;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background: #ff7e29;
+    transform: scale(1.05);
+    cursor: pointer;
+}
+</style></head>
+<body><header><img src="EASY TIMES LOGO BLACK-01.png"/></header><div class="main-buttons"><button onclick="location.href='order-drinks.html'">🛒 Order Now</button><button onclick="location.href='things-to-do.html'">🎉 Things to Do</button></div></body>
 </html>
+
