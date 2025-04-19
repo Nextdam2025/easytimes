@@ -364,10 +364,14 @@ video.bg-video {
   <!-- Hot Drinks Section -->
   <div class="section-title">Hot Drinks</div>
   <div class="menu" id="hot-drinks">
-    <div class="item" style="background-color:#CD7F2F" 
-         onclick='prepareOptions({ name: "Espresso", articleNumber: 102, price: 3.50, buttonColor: "#CD7F2F", options: [ { name: "Extra Espresso Shot", price: 0.50 }, { name: "Whipped Cream", price: 0.50 } ] })'>
-      Espresso (€3,50)
-    </div>
+    <div class="item" onclick='prepareOptions({ name: "Espresso", articleNumber: 102, price: 3.50, buttonColor: "#CD7F2F", options: [ { name: "Extra Espresso Shot", price: 0.50 }, { name: "Whipped Cream", price: 0.50 } ] })' style="background-color:#CD7F2F">
+  <div class="bg-video-inside">
+    <video autoplay muted loop playsinline>
+      <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4" />
+    </video>
+  </div>
+  Espresso (€3,50)
+</div>
     <div class="item" style="background-color:#8B4513" 
          onclick='prepareOptions({ name: "Doppio", articleNumber: 202, price: 4.00, buttonColor: "#8B4513", options: [ { name: "Extra Shot", price: 0.50 } ] })'>
       Doppio (€4,00)
