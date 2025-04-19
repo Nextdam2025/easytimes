@@ -654,102 +654,107 @@ video.bg-video {
     
     /* IDLE VIDEO SLIDESHOW HANDLER (Preserved from your code) */
   let idleTimeout;
-  const videoOverlay = document.createElement('div');
-  videoOverlay.style.position = 'fixed';
-  videoOverlay.style.top = '0';
-  videoOverlay.style.left = '0';
-  videoOverlay.style.width = '100vw';
-  videoOverlay.style.height = '100vh';
-  videoOverlay.style.zIndex = '9999';
-  videoOverlay.style.background = '#000';
-  videoOverlay.style.display = 'none';
-  videoOverlay.style.flexDirection = 'column';
-  videoOverlay.style.alignItems = 'center';
-  videoOverlay.style.justifyContent = 'center';
-  videoOverlay.style.transition = 'opacity 1s ease, transform 1s ease';
-  videoOverlay.style.opacity = '0';
-  videoOverlay.style.transform = 'scale(0.95)';
+const videoOverlay = document.createElement('div');
+videoOverlay.style.position = 'fixed';
+videoOverlay.style.top = '0';
+videoOverlay.style.left = '0';
+videoOverlay.style.width = '100vw';
+videoOverlay.style.height = '100vh';
+videoOverlay.style.zIndex = '9999';
+videoOverlay.style.background = '#000';
+videoOverlay.style.display = 'none';
+videoOverlay.style.flexDirection = 'column';
+videoOverlay.style.alignItems = 'center';
+videoOverlay.style.justifyContent = 'center';
+videoOverlay.style.transition = 'opacity 1s ease, transform 1s ease';
+videoOverlay.style.opacity = '0';
+videoOverlay.style.transform = 'scale(0.95)';
 
-  const videoLogo = document.createElement('img');
-  videoLogo.src = 'EASY TIMES LOGO BLACK-01.png';
-  videoLogo.alt = 'Easytimes Logo';
-  videoLogo.style.width = '200px';
-  videoLogo.style.marginBottom = '20px';
+const videoLogo = document.createElement('img');
+videoLogo.src = 'EASY TIMES LOGO BLACK-01.png';
+videoLogo.alt = 'Easytimes Logo';
+videoLogo.style.width = '200px';
+videoLogo.style.marginBottom = '20px';
 
-  const videoFrame = document.createElement('div');
-  videoFrame.style.width = '80vw';
-  videoFrame.style.height = '80vh';
-  videoFrame.style.border = '10px solid orange';
-  videoFrame.style.borderRadius = '20px';
-  videoFrame.style.overflow = 'hidden';
-  videoFrame.style.boxSizing = 'border-box';
+const videoFrame = document.createElement('div');
+videoFrame.style.width = '80vw';
+videoFrame.style.height = '80vh';
+videoFrame.style.border = '10px solid orange';
+videoFrame.style.borderRadius = '20px';
+videoFrame.style.overflow = 'hidden';
+videoFrame.style.boxSizing = 'border-box';
 
-  const video = document.createElement('video');
-  video.style.width = '100%';
-  video.style.height = '100%';
-  video.style.objectFit = 'cover';
-  video.muted = true;
-  video.playsInline = true;
-  video.controls = false;
-  video.autoplay = true;
+const video = document.createElement('video');
+video.style.width = '100%';
+video.style.height = '100%';
+video.style.objectFit = 'cover';
+video.muted = true;
+video.controls = false;
+video.setAttribute('playsinline', 'true'); // Ensure inline on iOS
 
-  videoFrame.appendChild(video);
-  videoOverlay.appendChild(videoLogo);
-  videoOverlay.appendChild(videoFrame);
-  document.body.appendChild(videoOverlay);
+videoFrame.appendChild(video);
+videoOverlay.appendChild(videoLogo);
+videoOverlay.appendChild(videoFrame);
+document.body.appendChild(videoOverlay);
 
-  const videoFiles = ['smoke.mp4', 'grinderz.mp4'];
-  let currentVideoIndex = 0;
+const videoFiles = ['smoke.mp4', 'grinderz.mp4'];
+let currentVideoIndex = 0;
 
-  function playNextVideo() {
-    const currentFile = videoFiles[currentVideoIndex];
-    video.src = currentFile;
-    video.load();
-    video.play().catch(err => {
-      console.warn('Autoplay blocked, waiting for interaction.');
+function playNextVideo() {
+  const currentFile = videoFiles[currentVideoIndex];
+  video.src = currentFile;
+  video.load();
+
+  video
+    .play()
+    .then(() => console.log("Playing:", currentFile))
+    .catch((err) => {
+      console.warn('Autoplay was blocked. Waiting for user interaction:', err);
     });
-    currentVideoIndex = (currentVideoIndex + 1) % videoFiles.length;
-  }
 
-  video.addEventListener('ended', playNextVideo);
-  video.addEventListener('error', () => {
-    console.error("Error playing video:", video.src);
-    playNextVideo();
+  currentVideoIndex = (currentVideoIndex + 1) % videoFiles.length;
+}
+
+video.addEventListener('ended', playNextVideo);
+video.addEventListener('error', () => {
+  console.error("Video failed to play:", video.src);
+  playNextVideo();
+});
+
+function showIdleVideoOverlay() {
+  videoOverlay.style.display = 'flex';
+  requestAnimationFrame(() => {
+    videoOverlay.style.opacity = '1';
+    videoOverlay.style.transform = 'scale(1)';
   });
 
-  function showIdleVideoOverlay() {
-    videoOverlay.style.display = 'flex';
-    requestAnimationFrame(() => {
-      videoOverlay.style.opacity = '1';
-      videoOverlay.style.transform = 'scale(1)';
-    });
-    currentVideoIndex = 0;
+  currentVideoIndex = 0;
+  setTimeout(() => {
     playNextVideo();
-  }
+  }, 200); // Slight delay helps on some browsers
+}
 
-  function hideIdleVideoOverlay() {
-    video.pause();
-    videoOverlay.style.opacity = '0';
-    videoOverlay.style.transform = 'scale(0.9)';
-    setTimeout(() => {
-      videoOverlay.style.display = 'none';
-    }, 1000);
-  }
+function hideIdleVideoOverlay() {
+  video.pause();
+  videoOverlay.style.opacity = '0';
+  videoOverlay.style.transform = 'scale(0.9)';
+  setTimeout(() => {
+    videoOverlay.style.display = 'none';
+  }, 800);
+}
 
-  function resetIdleTimer() {
-    clearTimeout(idleTimeout);
-    hideIdleVideoOverlay();
-    idleTimeout = setTimeout(showIdleVideoOverlay, 10000); // Show after 10 sec
-  }
+function resetIdleTimer() {
+  clearTimeout(idleTimeout);
+  hideIdleVideoOverlay();
+  idleTimeout = setTimeout(showIdleVideoOverlay, 10000); // after 10 seconds idle
+}
 
-  ['click', 'mousemove', 'keydown', 'touchstart'].forEach(event =>
-    document.addEventListener(event, resetIdleTimer)
-  );
+['click', 'mousemove', 'keydown', 'touchstart'].forEach((evt) =>
+  document.addEventListener(evt, resetIdleTimer)
+);
 
-  videoOverlay.addEventListener('click', resetIdleTimer);
-
-  // Initial setup
-  resetIdleTimer();
+videoOverlay.addEventListener('click', resetIdleTimer);
+resetIdleTimer();
 </script>
 </body>
 </html>
