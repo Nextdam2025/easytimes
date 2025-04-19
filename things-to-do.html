@@ -79,7 +79,7 @@
 </div>
 
 <script>
-  const feedUrl = 'https://corsproxy.io/?https://www.iamsterdam.com/en/see-and-do/whats-on/whats-on.rss'; // Replace with any public RSS feed
+  const feedUrl = 'https://api.allorigins.win/raw?url=https://www.iamsterdam.com/en/see-and-do/whats-on/whats-on.rss';
 
   fetch(feedUrl)
     .then(response => response.text())
@@ -105,6 +105,7 @@
       console.error(err);
     });
 </script>
+
 
 </body>
 </html>
