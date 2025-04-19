@@ -112,8 +112,9 @@
   </div>
 
   <script>
-    // IDLE VIDEO OVERLAY
+    // IDLE VIDEO OVERLAY — now with full mobile compatibility
     let idleTimeout;
+
     const overlay = document.createElement('div');
     overlay.style.position = 'fixed';
     overlay.style.top = '0';
@@ -145,12 +146,15 @@
     frame.style.boxSizing = 'border-box';
 
     const video = document.createElement('video');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('muted', '');
+    video.setAttribute('autoplay', '');
+    video.muted = true;
+    video.autoplay = true;
+    video.controls = false;
     video.style.width = '100%';
     video.style.height = '100%';
     video.style.objectFit = 'cover';
-    video.muted = true;
-    video.controls = false;
-    video.setAttribute('playsinline', '');
     frame.appendChild(video);
 
     overlay.appendChild(logo);
@@ -164,7 +168,10 @@
       const file = videos[vidIndex];
       video.src = file;
       video.load();
-      video.play().catch(err => console.warn('Autoplay blocked:', err));
+      const promise = video.play();
+      if (promise !== undefined) {
+        promise.catch(e => console.warn('Autoplay blocked:', e));
+      }
       vidIndex = (vidIndex + 1) % videos.length;
     }
 
@@ -181,7 +188,9 @@
         overlay.style.transform = 'scale(1)';
       });
       vidIndex = 0;
-      setTimeout(playNext, 200);
+      setTimeout(() => {
+        playNext();
+      }, 300); // slight delay helps Android load
     }
 
     function hideOverlay() {
