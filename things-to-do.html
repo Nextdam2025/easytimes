@@ -186,8 +186,6 @@
     <iframe id="modalMap" loading="lazy" allowfullscreen></iframe>
   </div>
 </div>
-  <div class="orange-frame"></div>
-
 <script>
   const attractions = [
     { name: "Rijksmuseum", image: "images/rijksmuseum.jpg", description: "The Rijksmuseum is the national museum of the Netherlands dedicated to Dutch arts and history and is located in Amsterdam.", lat: 52.3600, lng: 4.8852 },
@@ -216,13 +214,13 @@
   attractions.forEach(attraction => {
     const item = document.createElement("div");
     item.className = "grid-item";
-    item.innerHTML = `<img src="${attraction.image}" alt="${attraction.name} Image"><span>${attraction.name}</span>`;
+    item.innerHTML = <img src="${attraction.image}" alt="${attraction.name} Image"><span>${attraction.name}</span>;
     item.onclick = () => {
       modal.classList.add("show");
       modalImage.src = attraction.image;
       modalTitle.textContent = attraction.name;
       modalDescription.textContent = attraction.description;
-      modalMap.src = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyDZu2HXR9E6qrryrTXHcOjzMcMVvMmEPUM&origin=${easytimesLat},${easytimesLng}&destination=${attraction.lat},${attraction.lng}&mode=walking`;
+      modalMap.src = https://www.google.com/maps/embed/v1/directions?key=AIzaSyDZu2HXR9E6qrryrTXHcOjzMcMVvMmEPUM&origin=${easytimesLat},${easytimesLng}&destination=${attraction.lat},${attraction.lng}&mode=walking;
     };
     grid.appendChild(item);
   });
@@ -331,7 +329,7 @@ function resetIdle() {
 overlay.addEventListener('click', resetIdle);
 
 resetIdle();
-
+  <div class="orange-frame"></div>
 
 </script>
 🧡 Bonus: Add the same orange border to background if you want:
@@ -354,4 +352,3 @@ Edit
 
 </body>
 </html>
-
