@@ -22,6 +22,18 @@
       border-radius: 16px;
       box-shadow: 0 0 30px rgba(255,255,255,0.05);
     }
+    .orange-frame {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  border: 10px solid #f26522;
+  box-sizing: border-box;
+  pointer-events: none;
+  z-index: 5;
+}
+
     .logo {
       text-align: center;
       margin-bottom: 10px;
@@ -186,6 +198,8 @@
     <iframe id="modalMap" loading="lazy" allowfullscreen></iframe>
   </div>
 </div>
+  <div class="orange-frame"></div>
+
 <script>
   const attractions = [
     { name: "Rijksmuseum", image: "images/rijksmuseum.jpg", description: "The Rijksmuseum is the national museum of the Netherlands dedicated to Dutch arts and history and is located in Amsterdam.", lat: 52.3600, lng: 4.8852 },
