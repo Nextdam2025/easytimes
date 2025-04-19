@@ -1,12 +1,10 @@
-
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>EasyTimes Jukebox</title>
-<style>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>EasyTimes Jukebox</title>
+  <style>
     @import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700&display=swap');
 
     * {
@@ -70,35 +68,35 @@
     }
 
     .content-box {
-  background: #000; /* solid black */
-  color: white;
-  border: 1px solid #CD7F2F; /* thin orange border */
-  border-radius: 24px;
-  padding: 20px 30px;
-  max-width: 400px;
-  width: 100%;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  font-size: 1.2rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.content-box:hover {
-  background: #111;
-  transform: scale(1.03);
-  box-shadow: 0 6px 20px rgba(205, 127, 47, 0.4); /* glow on hover */
-  border-color: #FFA64D; /* lighter orange hover */
-}
+      background: #000;
+      color: white;
+      border: 1px solid #CD7F2F;
+      border-radius: 24px;
+      padding: 20px 30px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      font-size: 1.2rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .content-box:hover {
+      background: #111;
+      transform: scale(1.03);
+      box-shadow: 0 6px 20px rgba(205, 127, 47, 0.4);
+      border-color: #FFA64D;
+    }
 
     .logo {
-  width: 220px;
-  max-width: 80%;
-  margin-bottom: 30px;
-  animation: floatLogo 2s ease-in-out infinite alternate;
-  border-radius: 20px;
-}
-
+      width: 220px;
+      max-width: 80%;
+      margin-bottom: 30px;
+      animation: floatLogo 2s ease-in-out infinite alternate;
+      border-radius: 20px;
+    }
 
     .button-container {
       display: flex;
@@ -107,25 +105,24 @@
     }
 
     .jukebox-button {
-  background: #000;
-  border: 1px solid #CD7F2F; /* thin orange */
-  color: white;
-  font-size: 1.2rem;
-  font-weight: 500;
-  padding: 16px 24px;
-  border-radius: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
+      background: #000;
+      border: 1px solid #CD7F2F;
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 500;
+      padding: 16px 24px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
 
-.jukebox-button:hover {
-  background: #111;
-  border-color: #FFA64D; /* lighter orange on hover */
-  transform: scale(1.04);
-  box-shadow: 0 6px 20px rgba(205,127,47,0.4);
-}
-
+    .jukebox-button:hover {
+      background: #111;
+      border-color: #FFA64D;
+      transform: scale(1.04);
+      box-shadow: 0 6px 20px rgba(205,127,47,0.4);
+    }
 
     @media (max-width: 480px) {
       .content-box {
@@ -137,65 +134,82 @@
       }
     }
   </style>
-<style>
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: 'Arial', sans-serif;
-    background-color: #121212;
-    color: #f5f5f5;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Arial', sans-serif;
+      background-color: #121212;
+      color: #f5f5f5;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
 
-header {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background: linear-gradient(to right, #f0c040, #ff7e29);
-    text-align: center;
-    padding: 30px 20px;
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: linear-gradient(to right, #f0c040, #ff7e29);
+      text-align: center;
+      padding: 30px 20px;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-}
+    header img {
+      height: 80px;
+      max-height: 20vh;
+      max-width: 90vw;
+      object-fit: contain;
+    }
 
-header img {
-  height: 80px;
-  max-height: 20vh;
-  max-width: 90vw;
-  object-fit: contain;
-}
+    .main-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 150px;
+    }
 
-.main-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-top: 150px;
-}
+    button {
+      padding: 20px 40px;
+      font-size: 1.5rem;
+      background: #f0c040;
+      border: none;
+      border-radius: 15px;
+      color: #121212;
+      font-weight: bold;
+      transition: background 0.3s, transform 0.2s;
+    }
 
-button {
-    padding: 20px 40px;
-    font-size: 1.5rem;
-    background: #f0c040;
-    border: none;
-    border-radius: 15px;
-    color: #121212;
-    font-weight: bold;
-    transition: background 0.3s, transform 0.2s;
-}
+    button:hover {
+      background: #ff7e29;
+      transform: scale(1.05);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
 
-button:hover {
-    background: #ff7e29;
-    transform: scale(1.05);
-    cursor: pointer;
-}
-</style></head>
-<body><header><img src="EASY TIMES LOGO BLACK-01.png"/></header><div class="main-buttons"><button onclick="location.href='order-drinks.html'">🛒 Order Now</button><button onclick="location.href='things-to-do.html'">🎉 Things to Do</button></div></body>
+  <!-- 🔥 Smoke video background -->
+  <video class="bg-video" autoplay muted loop playsinline>
+    <source src="smoke.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <header>
+    <img src="EASY TIMES LOGO BLACK-01.png"/>
+  </header>
+
+  <div class="main-buttons">
+    <button onclick="location.href='order-drinks.html'">🛒 Order Now</button>
+    <button onclick="location.href='things-to-do.html'">🎉 Things to Do</button>
+  </div>
+
+</body>
 </html>
