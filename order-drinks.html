@@ -755,6 +755,15 @@ function resetIdleTimer() {
 
 videoOverlay.addEventListener('click', resetIdleTimer);
 resetIdleTimer();
+    // ✅ Unlock autoplay on first user gesture (mobile-safe)
+function unlockVideoAutoplay() {
+  video.play().catch(() => {});
+  document.removeEventListener('touchstart', unlockVideoAutoplay);
+  document.removeEventListener('click', unlockVideoAutoplay);
+}
+document.addEventListener('touchstart', unlockVideoAutoplay, { once: true });
+document.addEventListener('click', unlockVideoAutoplay, { once: true });
+
 </script>
 </body>
 </html>
