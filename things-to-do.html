@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Top 10 Things to Do in Amsterdam</title>
+  <style>
+    body {
+  font-family: 'Inter', sans-serif;
+  background-color: #000;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  transform: scale(0.9);
+  transform-origin: top center;
+}
+
+    .container {
+          max-width: 100vw;
+          max-height: 100vh; overflow: hidden;
+          overflow: hidden;
+          flex-wrap: nowrap;
+          flex-shrink: 0;
+          gap: 20px;
+        
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #111;
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(255,255,255,0.05);
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .logo img {
+      height: 120px;
+      max-width: 280px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.5rem;
+    }
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 10px 0;
+    }
+    .modal {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.85);
+      z-index: 999;
+    }
+    .modal.show {
+      display: flex;
+    }
+    .grid-item {
+  width: 140px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.grid-item img {
+  width: 84px; /* 70px * 1.2 = 84px */
+  height: 84px;
+  object-fit: contain;
+  margin-bottom: 8px;
+  padding: 8px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+}
+
+.grid-item span {
+  font-size: 0.9rem;
+  color: #eee;
+  display: block;
+  text-align: center;
+  margin-top: 4px;
+  font-weight: bold;
+}
+
+
+    }
+    .grid-item:hover {
+      transform: scale(1.05);
+    }
+
+    .modal-content img {
+      width: 300px;
+      height: auto;
+      object-fit: contain;
+      border: 3px solid orange;
+      border-radius: 12px;
+      display: block;
+      margin: 0 auto 15px auto;
+    }
+    .modal-content h2 {
+      margin: 0 0 10px;
+    }
+    .modal-content p {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #ccc;
+    }
+    .modal iframe {
+      width: 100%;
+      height: 180px;
+      border: 0;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 30px;
+      font-size: 1.5rem;
+      color: #fff;
+      cursor: pointer;
+    }
+    .qr-section {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .qr-section img {
+      height: 120px;
+    }
+    .qr-section p {
+      color: #ccc;
+      font-size: 0.9rem;
+    }
+  
+video.bg-video {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -1;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  opacity: 0.3;
+}
+
+
+</style>
+</head>
+<body>
+
+<video class="bg-video" autoplay muted loop playsinline>
+  <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4">
+</video>
+
+
+<div style="text-align: center; margin: 20px;">
+  <button onclick="location.href='index.html'" style="
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 10px;
+    background: #ffffff10;
+    border: none;
+    color: white;
+    cursor: pointer;
+  ">⬅ Back to Home</button>
+</div>
+<div class="container">
+  <div class="logo">
+    <img src="logos/easytimes_logo_with_text.png" alt="Easytimes Logo" />
+  </div>
+  <h1>Top 10 Things to Do in Amsterdam</h1>
+  <div class="grid" id="attractionsGrid"></div>
+  <div class="qr-section">
+    <img src="qr/affiliate-qr.png" alt="QR Code" />
+    <p>Scan the QR code to access exclusive Amsterdam experiences.</p>
+  </div>
+</div>
+<div id="attractionModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeBtn">&times;</span>
+    <img id="modalImage" src="" alt="Attraction" />
+    <h2 id="modalTitle"></h2>
+    <p id="modalDescription"></p>
+    <iframe id="modalMap" loading="lazy" allowfullscreen></iframe>
+  </div>
+</div>
+<script>
+  const attractions = [
+    {
+      name: "Rijksmuseum",
+      image: "images/rijksmuseum.jpg",
+      description: "The Rijksmuseum is the national museum of the Netherlands dedicated to Dutch arts and history and is located in Amsterdam.",
+      lat: 52.3600, lng: 4.8852
+    },
+    {
+      name: "Van Gogh Museum",
+      image: "images/van-gogh.jpg",
+      description: "The Van Gogh Museum is a Dutch art museum dedicated to the works of Vincent van Gogh and his contemporaries.",
+      lat: 52.3584, lng: 4.8811
+    },
+    {
+      name: "Anne Frank House",
+      image: "images/anne-frank.jpg",
+      description: "The Anne Frank House is a writer's house and biographical museum dedicated to Jewish wartime diarist Anne Frank.",
+      lat: 52.3752, lng: 4.8838
+    },
+    {
+      name: "Heineken Experience",
+      image: "images/heineken.jpg",
+      description: "The Heineken Experience is a historic brewery and visitor center for the Dutch pilsner, Heineken.",
+      lat: 52.3578, lng: 4.8910
+    },
+    {
+      name: "Vondelpark",
+      image: "images/vondelpark.jpg",
+      description: "Vondelpark is the most famous park in Amsterdam, perfect for walking, biking, or relaxing in the greenery.",
+      lat: 52.3580, lng: 4.8687
+    },
+    {
+      name: "Johan Cruijff ArenA",
+      image: "images/arena.jpg",
+      description: "The Johan Cruijff ArenA is the main stadium in Amsterdam, home of Ajax and a popular concert venue.",
+      lat: 52.3143, lng: 4.9414
+    },
+    {
+      name: "ARTIS Zoo",
+      image: "images/artis.jpg",
+      description: "ARTIS Amsterdam Royal Zoo is one of the oldest zoos in Europe, located right in the city center.",
+      lat: 52.3668, lng: 4.9121
+    },
+    {
+      name: "Madame Tussauds",
+      image: "images/madame-tussauds.jpg",
+      description: "Madame Tussauds Amsterdam is a world-famous wax museum with lifelike figures of celebrities and historical icons.",
+      lat: 52.3728, lng: 4.8936
+    },
+    {
+      name: "Moco Museum",
+      image: "images/moco.jpg",
+      description: "The Moco Museum exhibits inspiring modern and contemporary art in a boutique setting on Museumplein.",
+      lat: 52.3580, lng: 4.8812
+    },
+    {
+      name: "A'DAM Lookout",
+      image: "images/adam-lookout.jpg",
+      description: "A'DAM Lookout offers stunning 360° views of Amsterdam from across the IJ river, including a thrilling swing!",
+      lat: 52.3840, lng: 4.9003
+    }
+  ];
+
+  const grid = document.getElementById("attractionsGrid");
+  const modal = document.getElementById("attractionModal");
+  const modalImage = document.getElementById("modalImage");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalDescription = document.getElementById("modalDescription");
+  const modalMap = document.getElementById("modalMap");
+  const closeBtn = document.getElementById("closeBtn");
+
+  // Easytimes coordinates (Reguliersdwarsstraat 47)
+  const easytimesLat = 52.3657;
+  const easytimesLng = 4.8945;
+
+  attractions.forEach(attraction => {
+  const item = document.createElement("div");
+  item.className = "grid-item";
+  item.innerHTML = `<img src="${attraction.image}" alt="${attraction.name} Image"><span>${attraction.name}</span>`;
+  item.onclick = () => {
+    modal.classList.add("show");
+    modalImage.src = attraction.image;
+    modalTitle.textContent = attraction.name;
+    modalDescription.textContent = attraction.description;
+    modalMap.src = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyDZu2HXR9E6qrryrTXHcOjzMcMVvMmEPUM&origin=${easytimesLat},${easytimesLng}&destination=${attraction.lat},${attraction.lng}&mode=walking`;
+  }; // ✅ This line was missing
+  grid.appendChild(item);
+});
+
+
+  closeBtn.onclick = () => {
+    modal.classList.remove("show");
+    modalMap.src = "";
+  };
+  window.onclick = (e) => {
+    if (e.target === modal) {
+      modal.classList.remove("show");
+      modalMap.src = "";
+    }
+  };
+</script>
+
+</body>
+</html>
