@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Easytimes Order Menu</title>
+
+<style>
+    /* Global Reset and Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #000;
+  color: #fff;
+  min-height: 100vh;
+  overflow-x: hidden;   /* ✅ only hide horizontal overflow */
+  overflow-y: auto;     /* ✅ allow vertical scrolling */
+}
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      position: relative;
+      z-index: 1;
+    }
+    img.logo {
+      width: 150px;
+      max-width: 60%;
+      margin-bottom: 15px;
+      animation: floatLogo 2s ease-in-out infinite alternate;
+      border-radius: 20px;
+    }
+    @keyframes floatLogo {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-8px); }
+    }
+
+    /* Notification */
+    #notification {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(205, 127, 47, 0.9);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-size: 1rem;
+      display: none;
+      z-index: 10000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    #notification.show {
+      display: block;
+      opacity: 1;
+    }
+
+    /* Table Selection */
+    .table-selection {
+      text-align: center;
+      margin: 20px 0;
+      width: 100%;
+    }
+    .table-label {
+      font-weight: bold;
+      color: orange;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+    #table-number {
+      font-size: 1rem;
+      padding: 10px;
+      border: 2px solid #CD7F2F;
+      border-radius: 10px;
+      background-color: #333;
+      color: white;
+      width: 200px;
+      transition: border-color 0.3s;
+      margin: 0 auto;
+      display: block;
+    }
+    #table-number:focus {
+      border-color: #FFA500;
+    }
+
+    /* Section Titles */
+    .section-title {
+      font-size: 1.2rem;
+      color: #CD7F2F;
+      margin: 20px 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* Menu Layout */
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 900px;
+      margin-bottom: 15px;
+      padding: 0 10px;
+    }
+    .item {
+      background-color: #222;
+      padding: 20px 16px;
+      border-radius: 8px;
+      width: 250px;
+      height: 60px;
+      cursor: pointer;
+      font-size: 1rem;
+      text-align: center;
+      transition: background-color 0.2s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      white-space: normal;
+    }
+    .item:hover {
+      transform: translateY(-4px);
+    }
+    .item:active {
+      opacity: 0.8;
+      transform: translateY(0);
+    }
+
+    /* Order Summary (Main) */
+    .order-summary {
+      background: #111;
+      padding: 20px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+      text-align: left;
+      margin-bottom: 20px;
+    }
+    .order-summary h2 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      color: #CD7F2F;
+      text-align: center;
+    }
+    .order-summary ul {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+    }
+    .order-summary li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 1rem;
+      border-bottom: 1px solid #333;
+      padding-bottom: 5px;
+    }
+    .remove-btn {
+      background: transparent;
+      border: none;
+      color: #CD7F2F;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 5px;
+    }
+    .confirm-btn {
+      background: #CD7F2F;
+      color: #fff;
+      padding: 14px 22px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      margin: 20px auto 0;
+      width: 100%;
+      max-width: 300px;
+      font-weight: bold;
+      display: block;
+      transition: background 0.3s;
+    }
+    .confirm-btn:hover {
+      background: #e89a4a;
+    }
+
+    /* Option Modal */
+    .option-modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeIn 0.3s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .option-box {
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 300px;
+      width: 100%;
+      text-align: left;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+    }
+    .option-box h3 {
+      margin-top: 0;
+      color: #CD7F2F;
+    }
+    .option-box label {
+      display: block;
+      margin: 8px 0;
+      font-size: 1rem;
+    }
+    .option-box button {
+      margin-top: 10px;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 6px;
+      background: #CD7F2F;
+      color: white;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+      width: 100%;
+      display: block;
+    }
+    .option-box button:hover {
+      background: #e89a4a;
+    }
+
+    /* Mini Cart Styling */
+    #mini-cart {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(34, 34, 34, 0.95);
+      color: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+      width: 280px;
+      max-width: 90%;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      z-index: 1000;
+    }
+    #mini-cart.show {
+      opacity: 1;
+    }
+    #mini-cart h3 {
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+      color: #CD7F2F;
+    }
+    #mini-cart ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+    #mini-cart li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      border-bottom: 1px solid #333;
+      padding-bottom: 5px;
+    }
+    #mini-cart .total {
+      font-weight: bold;
+      margin-top: 10px;
+      text-align: right;
+    }
+  
+video.bg-video {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -1;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  opacity: 0.3;
+}
+.orange-frame {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  border: 10px solid #f26522;
+  box-sizing: border-box;
+  pointer-events: none;
+  z-index: 5;
+}
+
+</style>
+</head>
+<body>
+<video autoplay="" class="bg-video" loop="" muted="" playsinline="">
+<source src="Smoke_4___45s___4k_res.mp4" type="video/mp4"/>
+</video>
+<div class="orange-frame"></div>
+<div style="text-align: center; margin: 20px;">
+<button onclick="location.href='index.html'" style="
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 10px;
+    background: #ffffff10;
+    border: none;
+    color: white;
+    cursor: pointer;
+  ">⬅ Back to Home</button>
+</div>
+<!-- Notification Container -->
+<div id="notification"></div>
+<img alt="Easytimes Logo" class="logo" src="EASY TIMES LOGO BLACK-01.png"/>
+<!-- Table Selection Section -->
+<div class="table-selection">
+<label class="table-label" for="table-number">Select Table:</label>
+<select id="table-number">
+<option value="">--Select Table--</option>
+<option value="1">Table 1</option>
+<option value="2">Table 2</option>
+<option value="3">Table 3</option>
+<option value="4">Table 4</option>
+<option value="5">Table 5</option>
+<option value="6">Table 6</option>
+</select>
+</div>
+<!-- Hot Drinks Section -->
+<div class="section-title">Hot Drinks</div>
+<div class="menu" id="hot-drinks">
+<div class="item" onclick='prepareOptions({ name: "Espresso", articleNumber: 102, price: 3.50, buttonColor: "#CD7F2F", options: [ { name: "Extra Espresso Shot", price: 0.50 }, { name: "Whipped Cream", price: 0.50 } ] })' style="background-color:#CD7F2F">
+      Espresso (€3,50)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Doppio", articleNumber: 202, price: 4.00, buttonColor: "#8B4513", options: [ { name: "Extra Shot", price: 0.50 } ] })' style="background-color:#8B4513">
+      Doppio (€4,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Black Coffee", articleNumber: 203, price: 3.50, buttonColor: "#4B3621", options: [ { name: "Add Sugar", price: 0.10 }, { name: "Whipped Cream", price: 0.50 } ] })' style="background-color:#4B3621">
+      Black Coffee (€3,50)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Americano", articleNumber: 204, price: 3.50, buttonColor: "#7B3F00", options: [ { name: "Extra Water", price: 0.10 } ] })' style="background-color:#7B3F00">
+      Americano (€3,50)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Cappuccino", articleNumber: 102, price: 4.00, buttonColor: "#CD7F2F", options: [ { name: "Extra Espresso Shot", price: 0.50 }, { name: "Whipped Cream", price: 0.50 } ] })' style="background-color:#A0522D">
+      Cappuccino (€4,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Flavored Latte", articleNumber: 205, price: 5.00, buttonColor: "#FFA07A", options: [ { name: "Hazelnuts", price: 0 }, { name: "Caramel", price: 0 } ] })' style="background-color:#FFA07A">
+      Flavored Latte (€5,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Cafe Latte", articleNumber: 206, price: 4.50, buttonColor: "#BC8F8F", options: [ { name: "Oat Milk", price: 0.50 } ] })' style="background-color:#BC8F8F">
+      Cafe Latte (€4,50)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Latte Macchiato", articleNumber: 207, price: 4.50, buttonColor: "#CD853F", options: [ { name: "Chocolate Drizzle", price: 0.50 } ] })' style="background-color:#CD853F">
+      Latte Macchiato (€4,50)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Coffee Mocca", articleNumber: 208, price: 5.00, buttonColor: "#8B0000", options: [ { name: "Double Espresso", price: 0.75 } ] })' style="background-color:#8B0000">
+      Coffee Mocca (€5,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Hot Chocolate", articleNumber: 209, price: 4.00, buttonColor: "#A52A2A", options: [ { name: "Marshmallows", price: 0.30 }, { name: "Whipped Cream", price: 0.50 } ] })' style="background-color:#A52A2A">
+      Hot Chocolate (€4,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Tea", articleNumber: 301, price: 3.50, buttonColor: "#1E90FF", options: [ { name: "Extra Lemon", price: 0.30 }, { name: "Extra Ginger", price: 0.40 }, { name: "Honey", price: 0.20 } ] })' style="background-color:#C0D860">
+      Tea (€3,50)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Fresh Mint Tea", articleNumber: 301, price: 4.50, buttonColor: "#1E90FF", options: [ { name: "Extra Lemon/Ginger/Orange blossom:", price: 0.50 } ] })' style="background-color:#C0D860">
+      Fresh Mint Tea (€4,50)
+    </div>
+</div>
+<!-- Cold Drinks Section -->
+<div class="section-title">Cold Drinks</div>
+<div class="menu" id="cold-drinks">
+<div class="item" onclick='prepareOptions({ name: "Coca-Cola", articleNumber: 401, price: 4.00, buttonColor: "#4682B4", options: [ { name: "Added Ice", price: 0.20 } ] })' style="background-color:#4682B4">
+      Coca-Cola (€4,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Coca-Cola Zero", articleNumber: 402, price: 4.00, buttonColor: "#5F9EA0", options: [] })' style="background-color:#5F9EA0">
+      Coca-Cola Zero (€4,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Fanta Orange", articleNumber: 403, price: 4.00, buttonColor: "#F4A460", options: [] })' style="background-color:#F4A460">
+      Fanta Orange (€4,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Fanta Cassis", articleNumber: 404, price: 4.00, buttonColor: "#DA70D6", options: [] })' style="background-color:#DA70D6">
+      Fanta Cassis (€4,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Still Water", articleNumber: 405, price: 3.50, buttonColor: "#87CEFA", options: [] })' style="background-color:#87CEFA">
+      Still Water (€3,50)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Sparkling Water", articleNumber: 406, price: 3.50, buttonColor: "#00CED1", options: [] })' style="background-color:#00CED1">
+      Sparkling Water (€3,50)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Sprite", articleNumber: 407, price: 4.00, buttonColor: "#B0C4DE", options: [] })' style="background-color:#B0C4DE">
+      Sprite (€4,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Chocomel", articleNumber: 408, price: 4.00, buttonColor: "#FFD700", options: [] })' style="background-color:#FFD700">
+      Chocomel (€4,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Iced Tea Peach/Mango", articleNumber: 409, price: 4.00, buttonColor: "#5F9EA0", options: [ { name: "Peach", price: 0 }, { name: "Mango", price: 0 } ] })' style="background-color:#5F9EA0">
+      Iced Tea Peach/Mango (€4,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Iced Tea Lemon Sparkling", articleNumber: 410, price: 4.00, buttonColor: "#EEE8AA", options: [] })' style="background-color:#FFD700">
+      Iced Tea Lemon Sparkling (€4,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Royal Bliss Bitter Lemon", articleNumber: 411, price: 4.00, buttonColor: "#BDB76B", options: [] })' style="background-color:#BDB76B">
+      Royal Bliss Bitter Lemon (€4,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Royal Bliss Ginger Ale", articleNumber: 412, price: 4.00, buttonColor: "#E0FFFF", options: [] })' style="background-color:#BDB76B">
+      Royal Bliss Ginger Ale (€4,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Looza (Pear/Strawberry/Peach)", articleNumber: 413, price: 4.00, buttonColor: "#D8BFD8", options: [ { name: "Pear", price: 0 }, { name: "Strawberry", price: 0 }, { name: "Peach", price: 0 } ] })' style="background-color:#D8BFD8">
+      Looza (Pear/Strawberry/Peach) (€4,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Minute Maid Juices", articleNumber: 414, price: 4.00, buttonColor: "#FA8072", options: [ { name: "Orange", price: 0 }, { name: "Apple", price: 0 } ] })' style="background-color:#FA8072">
+      Minute Maid (Orange/Apple) (€4,00)
+
+    </div>
+</div>
+<!-- Order Summary (Main) -->
+<div class="order-summary">
+<h2>Order Summary</h2>
+<ul id="orderList"></ul>
+<div class="payment-selection" style="text-align:center; margin-top:15px;">
+<label for="payment-method">Payment Method:</label>
+<select id="payment-method" style="padding: 8px; margin-left: 10px; border-radius: 5px;">
+<option value="cash">Cash</option>
+<option value="credit">Credit</option>
+</select>
+</div>
+<button class="confirm-btn" onclick="sendOrder()">Confirm Order</button>
+</div>
+<!-- Option Modal -->
+<div class="option-modal" id="optionModal" style="display:none">
+<div class="option-box">
+<h3 id="optionTitle"></h3>
+<div id="optionList"></div>
+<button onclick="confirmOptions()">Add to Order</button>
+<button onclick="closeModal()" style="margin-top: 5px;">Close</button>
+</div>
+</div>
+<!-- Mini Cart (Preview) -->
+<div id="mini-cart"></div>
+<!-- JavaScript -->
+<script>
+    const botToken = "7627172769:AAH7I_2LRd0VqZuMOpVxRn_vZbt4QXPn9wU";
+    const chatId = "5462781265";
+    let orderList = [];
+    let selectedArticle = null;
+    let selectedTable = null;
+    
+    // Notification Function
+    function showNotification(message) {
+      const notification = document.getElementById("notification");
+      notification.textContent = message;
+      notification.classList.add("show");
+      setTimeout(() => {
+        notification.classList.remove("show");
+      }, 3000);
+    }
+    
+    // Capture Table Selection
+    document.getElementById("table-number").addEventListener("change", function () {
+      selectedTable = this.value;
+    });
+    
+    // Prepare Options Modal
+    function prepareOptions(article) {
+      if (!selectedTable) {
+        showNotification("Please select a table first!");
+        return;
+      }
+      selectedArticle = article;
+      document.getElementById("optionTitle").innerText = `Options for ${article.name}`;
+      const optionList = document.getElementById("optionList");
+      optionList.innerHTML = "";
+      article.options.forEach((opt, index) => {
+        const checkbox = document.createElement("label");
+        checkbox.innerHTML = `<input type='checkbox' data-index='${index}'> ${opt.name} (+€${opt.price.toFixed(2)})`;
+        optionList.appendChild(checkbox);
+      });
+      document.getElementById("optionModal").style.display = "flex";
+    }
+    
+    // Confirm Options and Update Order
+    function confirmOptions() {
+      const selectedOptions = [];
+      let extraPrice = 0;
+      const inputs = document.querySelectorAll("#optionList input[type=checkbox]");
+      inputs.forEach((input) => {
+        if (input.checked) {
+          const opt = selectedArticle.options[parseInt(input.dataset.index)];
+          selectedOptions.push(opt);
+          extraPrice += opt.price;
+        }
+      });
+      orderList.push({
+        ...selectedArticle,
+        selectedOptions: selectedOptions,
+        totalPrice: selectedArticle.price + extraPrice
+      });
+      updateOrderList();
+      updateMiniCart();
+      document.getElementById("optionModal").style.display = "none";
+    }
+    
+    function removeFromOrder(index) {
+      orderList.splice(index, 1);
+      updateOrderList();
+      updateMiniCart();
+    }
+    
+    // Update Main Order List
+    function updateOrderList() {
+      const list = document.getElementById("orderList");
+      list.innerHTML = "";
+      orderList.forEach((item, index) => {
+        const options = item.selectedOptions?.map(opt => opt.name).join(", ") || "";
+        list.innerHTML += `
+          <li>
+            #${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})
+            ${options ? `<br><small>+ ${options}</small>` : ""}
+            <button class="remove-btn" onclick="removeFromOrder(${index})">×</button>
+          </li>
+        `;
+      });
+    }
+    
+    // Update Mini Cart with Live Order Preview and Total Price
+    let miniCartIdleTimeout;
+    function updateMiniCart() {
+      const miniCart = document.getElementById("mini-cart");
+      let miniHTML = `<h3>Basket</h3><ul>`;
+      let total = 0;
+      orderList.forEach(item => {
+        miniHTML += `<li>${item.name} - €${item.totalPrice.toFixed(2)}</li>`;
+        total += item.totalPrice;
+      });
+      miniHTML += `</ul><div class="total">Total: €${total.toFixed(2)}</div>`;
+      miniCart.innerHTML = miniHTML;
+      miniCart.classList.add("show");
+      resetMiniCartIdleTimer();
+    }
+    
+    // Auto-hide Mini Cart after 10 seconds of inactivity
+    function resetMiniCartIdleTimer() {
+      clearTimeout(miniCartIdleTimeout);
+      miniCartIdleTimeout = setTimeout(() => {
+        document.getElementById("mini-cart").classList.remove("show");
+      }, 10000);
+    }
+    
+    // Send Order Functionality
+    function sendOrder() {
+      if (orderList.length === 0) {
+        showNotification("No items in order!");
+        return;
+      }
+      const paymentMethod = document.getElementById("payment-method").value;
+      let text = `🇎 New Order from Table ${selectedTable}:\n`;
+      orderList.forEach(item => {
+        text += `#${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})\n`;
+        if (item.selectedOptions && item.selectedOptions.length > 0) {
+          text += `  → ${item.selectedOptions.map(o => o.name + ` (+€${o.price.toFixed(2)})`).join(", ")}\n`;
+        }
+      });
+      text += `Payment: ${paymentMethod}`;
+    
+      fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.ok) {
+            showNotification("Order sent!");
+            orderList = [];
+            selectedTable = null;
+            document.getElementById("table-number").value = "";
+            document.getElementById("payment-method").value = "cash";
+            updateOrderList();
+            updateMiniCart();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(() => { window.location.href = 'index.html'; }, 3000);
+          } else {
+            showNotification("Error sending order");
+          }
+        });
+    }
+    
+    // Option Modal Close Function
+    function closeModal() {
+      document.getElementById("optionModal").style.display = "none";
+    }
+    
+    /* IDLE VIDEO SLIDESHOW HANDLER (Preserved from your code) */
+    let idleTimeout;
+    const videoOverlay = document.createElement('div');
+    videoOverlay.style.position = 'fixed';
+    videoOverlay.style.top = '0';
+    videoOverlay.style.left = '0';
+    videoOverlay.style.width = '100%';
+    videoOverlay.style.height = '100%';
+    videoOverlay.style.backgroundColor = '#000';
+    videoOverlay.style.zIndex = '10001';
+    videoOverlay.style.display = 'none';
+    videoOverlay.style.display = 'flex';
+    videoOverlay.style.flexDirection = 'column';
+    videoOverlay.style.alignItems = 'center';
+    videoOverlay.style.justifyContent = 'center';
+    videoOverlay.style.transition = 'opacity 1s ease, transform 1s ease';
+    videoOverlay.style.opacity = '0';
+    videoOverlay.style.transform = 'scale(0.9)';
+    
+    const videoLogo = document.createElement('img');
+    videoLogo.src = 'EASY TIMES LOGO BLACK-01.png';
+    videoLogo.alt = 'Easytimes Logo';
+    videoLogo.style.width = '200px';
+    videoLogo.style.marginBottom = '20px';
+    videoLogo.style.marginTop = '40px';
+    
+    const videoFrame = document.createElement('div');
+    videoFrame.style.width = '70%';
+    videoFrame.style.height = '70%';
+    videoFrame.style.border = '4px solid orange';
+    videoFrame.style.borderRadius = '20px';
+    videoFrame.style.overflow = 'hidden';
+    videoFrame.style.boxSizing = 'border-box';
+    
+    const video = document.createElement('video');
+    video.id = 'slideshowVideo';
+    video.style.width = '100%';
+    video.style.height = '100%';
+    video.style.objectFit = 'cover';
+    video.muted = true;
+    video.controls = false;
+    
+    videoFrame.appendChild(video);
+    videoOverlay.appendChild(videoLogo);
+    videoOverlay.appendChild(videoFrame);
+    document.body.appendChild(videoOverlay);
+    
+    const videoFiles = ['grinderz.mp4', 'tea.mov'];
+    let currentVideoIndex = 0;
+    
+    function playNextVideo() {
+      if (!videoFiles.length) return;
+      video.src = videoFiles[currentVideoIndex];
+      video.load();
+      video.play().catch(err => {
+        console.error('Autoplay failed:', err);
+      });
+      currentVideoIndex = (currentVideoIndex + 1) % videoFiles.length;
+    }
+    
+    video.addEventListener('ended', playNextVideo);
+    video.addEventListener('error', () => {
+      console.error("Error loading video.");
+      playNextVideo();
+    });
+    
+    function resetIdleTimer() {
+      clearTimeout(idleTimeout);
+      video.pause();
+      videoOverlay.style.opacity = '0';
+      videoOverlay.style.transform = 'scale(0.9)';
+      setTimeout(() => {
+        videoOverlay.style.display = 'none';
+      }, 1000);
+    
+      idleTimeout = setTimeout(() => {
+        videoOverlay.style.display = 'flex';
+        requestAnimationFrame(() => {
+          videoOverlay.style.opacity = '1';
+          videoOverlay.style.transform = 'scale(1)';
+        });
+        currentVideoIndex = 0;
+        playNextVideo();
+      }, 10000); // 10 seconds
+    }
+    
+    ['click', 'mousemove', 'keydown', 'touchstart'].forEach(evt => {
+      document.addEventListener(evt, resetIdleTimer);
+    });
+    
+    videoOverlay.addEventListener('click', () => {
+      video.pause();
+      videoOverlay.style.opacity = '0';
+      videoOverlay.style.transform = 'scale(0.9)';
+      setTimeout(() => {
+        videoOverlay.style.display = 'none';
+      }, 1000);
+      resetIdleTimer();
+    });
+    
+    resetIdleTimer();
+  </script>
+</body>
+</html>
