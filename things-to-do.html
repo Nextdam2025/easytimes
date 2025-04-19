@@ -294,6 +294,30 @@ video.bg-video {
       modalMap.src = "";
     }
   };
+  // --- RSS Feed Detection and Link Analysis ---
+window.addEventListener('DOMContentLoaded', () => {
+  const sampleElement = document.querySelector('.grid-item') || document.body;
+
+  const data = {
+    blueLinks: Array.from(document.querySelectorAll('a')).filter(link => {
+      const styles = window.getComputedStyle(link);
+      const color = styles.getPropertyValue('color');
+      return color === 'rgb(0, 0, 255)' || color.toLowerCase() === 'blue';
+    }).map(link => ({
+      href: link.href,
+      text: link.textContent,
+      id: link.id,
+      className: link.className,
+    })),
+    elementText: sampleElement.textContent,
+    parentText: sampleElement.parentElement ? sampleElement.parentElement.textContent : '',
+    siblingTexts: sampleElement.parentElement ? Array.from(sampleElement.parentElement.children).map(sibling => sibling.textContent) : [],
+    hasRss: Array.from(document.querySelectorAll('a')).some(link => link.href.toLowerCase().includes('rss'))
+  };
+
+  console.log('RSS & Link Analysis:', data);
+});
+
 </script>
 
 </body>
