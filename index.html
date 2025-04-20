@@ -205,7 +205,7 @@
     function resetIdle() {
       clearTimeout(idleTimeout);
       hideOverlay();
-      idleTimeout = setTimeout(showOverlay, 10000); // 10s idle trigger
+      idleTimeout = setTimeout(showOverlay, 25000); // 25s idle trigger
     }
 
     ['click', 'mousemove', 'keydown', 'touchstart'].forEach(e =>
