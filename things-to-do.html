@@ -26,6 +26,8 @@
   #mini-cart {
     top: 20px;
     bottom: auto;
+    opacity: 1 !important;
+    pointer-events: auto;
     right: 20px;
     left: auto;
     width: 300px;
@@ -554,7 +556,27 @@ video.bg-video {
       });
       document.getElementById("optionModal").style.display = "flex";
     }
-    
+    function isTablet() {
+  return window.innerWidth >= 768 && window.innerWidth <= 1024;
+}
+
+function updateMiniCart() {
+  const miniCart = document.getElementById("mini-cart");
+  let miniHTML = `<h3>Basket</h3><ul>`;
+  let total = 0;
+  orderList.forEach(item => {
+    miniHTML += `<li>${item.name} - €${item.totalPrice.toFixed(2)}</li>`;
+    total += item.totalPrice;
+  });
+  miniHTML += `</ul><div class="total">Total: €${total.toFixed(2)}</div>`;
+  miniCart.innerHTML = miniHTML;
+  miniCart.classList.add("show");
+
+  if (!isTablet()) {
+    resetMiniCartIdleTimer();
+  }
+}
+
     // Confirm Options and Update Order
     function confirmOptions() {
       const selectedOptions = [];
