@@ -727,7 +727,7 @@ video.bg-video {
         videoOverlay.style.display = 'none';
       }, 1000);
     
-      idleTimeout = setTimeout(() => {
+      idleTimeout = setTimeout(showOverlay, 25000); // 25s idle trigger
         videoOverlay.style.display = 'flex';
         requestAnimationFrame(() => {
           videoOverlay.style.opacity = '1';
