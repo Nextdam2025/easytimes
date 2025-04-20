@@ -2,310 +2,140 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" 
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Easytimes Order Menu</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" 
-        rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Top 10 Things to Do in Amsterdam</title>
   <style>
-    /* Global Reset and Base Styles */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    html, body {
-  font-family: 'Roboto', sans-serif;
+    body {
+  font-family: 'Inter', sans-serif;
   background-color: #000;
   color: #fff;
-  min-height: 100vh;
-  overflow-x: hidden;   /* ✅ only hide horizontal overflow */
-  overflow-y: auto;     /* ✅ allow vertical scrolling */
-}
-    @media (min-width: 768px) and (max-width: 1024px) {
-  #mini-cart {
-    top: 20px;
-    bottom: auto;
-    opacity: 1 !important;
-    pointer-events: auto;
-    right: 20px;
-    left: auto;
-    width: 300px;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  transform: scale(0.9);
+  transform-origin: top center;
 }
 
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 10px;
-      position: relative;
-      z-index: 1;
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #111;
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(255,255,255,0.05);
     }
-    img.logo {
-      width: 150px;
-      max-width: 60%;
-      margin-bottom: 15px;
-      animation: floatLogo 2s ease-in-out infinite alternate;
-      border-radius: 20px;
-    }
-    @keyframes floatLogo {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-8px); }
-    }
-
-    /* Notification */
-    #notification {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(205, 127, 47, 0.9);
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 6px;
-      font-size: 1rem;
-      display: none;
-      z-index: 10000;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.7);
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-    #notification.show {
-      display: block;
-      opacity: 1;
-    }
-
-    /* Table Selection */
-    .table-selection {
+    .logo {
       text-align: center;
-      margin: 20px 0;
-      width: 100%;
-    }
-    .table-label {
-      font-weight: bold;
-      color: orange;
-      font-size: 1.2rem;
       margin-bottom: 10px;
-      display: block;
     }
-    #table-number {
-      font-size: 1rem;
-      padding: 10px;
-      border: 2px solid #CD7F2F;
-      border-radius: 10px;
-      background-color: #333;
-      color: white;
-      width: 200px;
-      transition: border-color 0.3s;
-      margin: 0 auto;
-      display: block;
+    .logo img {
+      height: 120px;
+      max-width: 280px;
     }
-    #table-number:focus {
-      border-color: #FFA500;
-    }
-
-    /* Section Titles */
-    .section-title {
-      font-size: 1.2rem;
-      color: #CD7F2F;
-      margin: 20px 0 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      width: 100%;
+    h1 {
       text-align: center;
+      font-size: 1.5rem;
     }
-
-    /* Menu Layout */
-    .menu {
+    .grid {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
-      width: 100%;
-      max-width: 900px;
-      margin-bottom: 15px;
-      padding: 0 10px;
+      gap: 20px;
+      padding: 10px 0;
     }
-    .item {
-      background-color: #222;
-      padding: 20px 16px;
-      border-radius: 8px;
-      width: 250px;
-      height: 60px;
-      cursor: pointer;
-      font-size: 1rem;
-      text-align: center;
-      transition: background-color 0.2s, transform 0.2s;
-      display: flex;
+    .modal {
+      display: none;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
-      white-space: normal;
-    }
-    .item:hover {
-      transform: translateY(-4px);
-    }
-    .item:active {
-      opacity: 0.8;
-      transform: translateY(0);
-    }
-
-    /* Order Summary (Main) */
-    .order-summary {
-      background: #111;
-      padding: 20px;
-      border-radius: 10px;
-      width: 100%;
-      max-width: 500px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-      text-align: left;
-      margin-bottom: 20px;
-    }
-    .order-summary h2 {
-      font-size: 1.4rem;
-      margin-bottom: 10px;
-      color: #CD7F2F;
-      text-align: center;
-    }
-    .order-summary ul {
-      list-style: none;
-      padding: 0;
-      margin: 10px 0;
-    }
-    .order-summary li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      font-size: 1rem;
-      border-bottom: 1px solid #333;
-      padding-bottom: 5px;
-    }
-    .remove-btn {
-      background: transparent;
-      border: none;
-      color: #CD7F2F;
-      font-size: 1.2rem;
-      cursor: pointer;
-      padding: 5px;
-    }
-    .confirm-btn {
-      background: #CD7F2F;
-      color: #fff;
-      padding: 14px 22px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1.1rem;
-      margin: 20px auto 0;
-      width: 100%;
-      max-width: 300px;
-      font-weight: bold;
-      display: block;
-      transition: background 0.3s;
-    }
-    .confirm-btn:hover {
-      background: #e89a4a;
-    }
-
-    /* Option Modal */
-    .option-modal {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      background-color: rgba(0,0,0,0.85);
+      z-index: 999;
+    }
+    .modal.show {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      animation: fadeIn 0.3s;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    .grid-item {
+  width: 140px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.grid-item img {
+  width: 84px; /* 70px * 1.2 = 84px */
+  height: 84px;
+  object-fit: contain;
+  margin-bottom: 8px;
+  padding: 8px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+}
+
+.grid-item span {
+  font-size: 0.9rem;
+  color: #eee;
+  display: block;
+  text-align: center;
+  margin-top: 4px;
+  font-weight: bold;
+}
+
+
     }
-    .option-box {
-      background: #222;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 300px;
-      width: 100%;
-      text-align: left;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.7);
-    }
-    .option-box h3 {
-      margin-top: 0;
-      color: #CD7F2F;
-    }
-    .option-box label {
-      display: block;
-      margin: 8px 0;
-      font-size: 1rem;
-    }
-    .option-box button {
-      margin-top: 10px;
-      padding: 10px 14px;
-      border: none;
-      border-radius: 6px;
-      background: #CD7F2F;
-      color: white;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.3s;
-      width: 100%;
-      display: block;
-    }
-    .option-box button:hover {
-      background: #e89a4a;
+    .grid-item:hover {
+      transform: scale(1.05);
     }
 
-    /* Mini Cart Styling */
-    #mini-cart {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: rgba(34, 34, 34, 0.95);
-      color: #fff;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-      width: 280px;
-      max-width: 90%;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-      z-index: 1000;
+    .modal-content img {
+      width: 300px;
+      height: auto;
+      object-fit: contain;
+      border: 3px solid orange;
+      border-radius: 12px;
+      display: block;
+      margin: 0 auto 15px auto;
     }
-    #mini-cart.show {
-      opacity: 1;
+    .modal-content h2 {
+      margin: 0 0 10px;
     }
-    #mini-cart h3 {
-      margin-bottom: 10px;
-      font-size: 1.2rem;
-      color: #CD7F2F;
-    }
-    #mini-cart ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      max-height: 150px;
-      overflow-y: auto;
-    }
-    #mini-cart li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
+    .modal-content p {
       font-size: 0.9rem;
-      border-bottom: 1px solid #333;
-      padding-bottom: 5px;
+      line-height: 1.5;
+      color: #ccc;
     }
-    #mini-cart .total {
-      font-weight: bold;
-      margin-top: 10px;
-      text-align: right;
+    .modal iframe {
+      width: 100%;
+      height: 180px;
+      border: 0;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 30px;
+      font-size: 1.5rem;
+      color: #fff;
+      cursor: pointer;
+    }
+    .qr-section {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .qr-section img {
+      height: 120px;
+    }
+    .qr-section p {
+      color: #ccc;
+      font-size: 0.9rem;
     }
   
 video.bg-video {
@@ -321,17 +151,7 @@ video.bg-video {
   object-fit: cover;
   opacity: 0.3;
 }
-.orange-frame {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  border: 10px solid #f26522;
-  box-sizing: border-box;
-  pointer-events: none;
-  z-index: 5;
-}
+
 
 </style>
 </head>
@@ -340,7 +160,7 @@ video.bg-video {
 <video class="bg-video" autoplay muted loop playsinline>
   <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4">
 </video>
-<div class="orange-frame"></div>
+
 
 <div style="text-align: center; margin: 20px;">
   <button onclick="location.href='index.html'" style="
@@ -353,439 +173,128 @@ video.bg-video {
     cursor: pointer;
   ">⬅ Back to Home</button>
 </div>
-
-  <!-- Notification Container -->
-  <div id="notification"></div>
-  
-  <img src="https://d146j8l6ymhf1q.cloudfront.net/webshop/B52DEAB9-9609-4876-B187-64C952745254-e1617724463401.png" 
-       alt="Easytimes Logo" class="logo" />
-
-  <!-- Table Selection Section -->
-  <div class="table-selection">
-    <label for="table-number" class="table-label">Select Table:</label>
-    <select id="table-number">
-      <option value="">--Select Table--</option>
-      <option value="1">Table 1</option>
-      <option value="2">Table 2</option>
-      <option value="3">Table 3</option>
-      <option value="4">Table 4</option>
-      <option value="5">Table 5</option>
-      <option value="6">Table 6</option>
-    </select>
+<div class="container">
+  <div class="logo">
+    <img src="logos/easytimes_logo_with_text.png" alt="Easytimes Logo" />
   </div>
-
-  <!-- Hot Drinks Section -->
-  <div class="section-title">Hot Drinks</div>
-  <div class="menu" id="hot-drinks">
-    <div class="item" style="background-color:#CD7F2F" 
-         onclick='prepareOptions({ name: "Espresso", articleNumber: 102, price: 3.50, buttonColor: "#CD7F2F", options: [ { name: "Extra Espresso Shot", price: 0.50 }, { name: "Whipped Cream", price: 0.50 } ] })'>
-      Espresso (€3,50)
-    </div>
-    <div class="item" style="background-color:#8B4513" 
-         onclick='prepareOptions({ name: "Doppio", articleNumber: 202, price: 4.00, buttonColor: "#8B4513", options: [ { name: "Extra Shot", price: 0.50 } ] })'>
-      Doppio (€4,00)
-    </div>
-    <div class="item" style="background-color:#4B3621" 
-         onclick='prepareOptions({ name: "Black Coffee", articleNumber: 203, price: 3.50, buttonColor: "#4B3621", options: [ { name: "Add Sugar", price: 0.10 }, { name: "Whipped Cream", price: 0.50 } ] })'>
-      Black Coffee (€3,50)
-    </div>
-    <div class="item" style="background-color:#7B3F00" 
-         onclick='prepareOptions({ name: "Americano", articleNumber: 204, price: 3.50, buttonColor: "#7B3F00", options: [ { name: "Extra Water", price: 0.10 } ] })'>
-      Americano (€3,50)
-    </div>
-    <div class="item" style="background-color:#A0522D" 
-         onclick='prepareOptions({ name: "Cappuccino", articleNumber: 102, price: 4.00, buttonColor: "#CD7F2F", options: [ { name: "Extra Espresso Shot", price: 0.50 }, { name: "Whipped Cream", price: 0.50 } ] })'>
-      Cappuccino (€4,00)
-    </div>
-    <div class="item" style="background-color:#FFA07A" 
-         onclick='prepareOptions({ name: "Flavored Latte", articleNumber: 205, price: 5.00, buttonColor: "#FFA07A", options: [ { name: "Hazelnuts", price: 0 }, { name: "Caramel", price: 0 } ] })'>
-      Flavored Latte (€5,00)
-    </div>
-    <div class="item" style="background-color:#BC8F8F" 
-         onclick='prepareOptions({ name: "Cafe Latte", articleNumber: 206, price: 4.50, buttonColor: "#BC8F8F", options: [ { name: "Oat Milk", price: 0.50 } ] })'>
-      Cafe Latte (€4,50)
-    </div>
-    <div class="item" style="background-color:#CD853F" 
-         onclick='prepareOptions({ name: "Latte Macchiato", articleNumber: 207, price: 4.50, buttonColor: "#CD853F", options: [ { name: "Chocolate Drizzle", price: 0.50 } ] })'>
-      Latte Macchiato (€4,50)
-    </div>
-    <div class="item" style="background-color:#8B0000" 
-         onclick='prepareOptions({ name: "Coffee Mocca", articleNumber: 208, price: 5.00, buttonColor: "#8B0000", options: [ { name: "Double Espresso", price: 0.75 } ] })'>
-      Coffee Mocca (€5,00)
-    </div>
-    <div class="item" style="background-color:#A52A2A" 
-         onclick='prepareOptions({ name: "Hot Chocolate", articleNumber: 209, price: 4.00, buttonColor: "#A52A2A", options: [ { name: "Marshmallows", price: 0.30 }, { name: "Whipped Cream", price: 0.50 } ] })'>
-      Hot Chocolate (€4,00)
-    </div>
-    <div class="item" style="background-color:#C0D860" 
-         onclick='prepareOptions({ name: "Tea", articleNumber: 301, price: 3.50, buttonColor: "#1E90FF", options: [ { name: "Extra Lemon", price: 0.30 }, { name: "Extra Ginger", price: 0.40 }, { name: "Honey", price: 0.20 } ] })'>
-      Tea (€3,50)
-    </div>
-    <div class="item" style="background-color:#C0D860" 
-         onclick='prepareOptions({ name: "Fresh Mint Tea", articleNumber: 301, price: 4.50, buttonColor: "#1E90FF", options: [ { name: "Extra Lemon/Ginger/Orange blossom:", price: 0.50 } ] })'>
-      Fresh Mint Tea (€4,50)
-    </div>
+  <h1>Top 10 Things to Do in Amsterdam</h1>
+  <div class="grid" id="attractionsGrid"></div>
+  <div class="qr-section">
+    <img src="qr/affiliate-qr.png" alt="QR Code" />
+    <p>Scan the QR code to access exclusive Amsterdam experiences.</p>
   </div>
-
-  <!-- Cold Drinks Section -->
-  <div class="section-title">Cold Drinks</div>
-  <div class="menu" id="cold-drinks">
-    <div class="item" style="background-color:#4682B4" 
-         onclick='prepareOptions({ name: "Coca-Cola", articleNumber: 401, price: 4.00, buttonColor: "#4682B4", options: [ { name: "Added Ice", price: 0.20 } ] })'>
-      Coca-Cola (€4,00)
-    </div>
-    <div class="item" style="background-color:#5F9EA0" 
-         onclick='prepareOptions({ name: "Coca-Cola Zero", articleNumber: 402, price: 4.00, buttonColor: "#5F9EA0", options: [] })'>
-      Coca-Cola Zero (€4,00)
-    </div>
-    <div class="item" style="background-color:#F4A460" 
-         onclick='prepareOptions({ name: "Fanta Orange", articleNumber: 403, price: 4.00, buttonColor: "#F4A460", options: [] })'>
-      Fanta Orange (€4,00)
-    </div>
-    <div class="item" style="background-color:#DA70D6" 
-         onclick='prepareOptions({ name: "Fanta Cassis", articleNumber: 404, price: 4.00, buttonColor: "#DA70D6", options: [] })'>
-      Fanta Cassis (€4,00)
-    </div>
-    <div class="item" style="background-color:#87CEFA" 
-         onclick='prepareOptions({ name: "Still Water", articleNumber: 405, price: 3.50, buttonColor: "#87CEFA", options: [] })'>
-      Still Water (€3,50)
-    </div>
-    <div class="item" style="background-color:#00CED1" 
-         onclick='prepareOptions({ name: "Sparkling Water", articleNumber: 406, price: 3.50, buttonColor: "#00CED1", options: [] })'>
-      Sparkling Water (€3,50)
-    </div>
-    <div class="item" style="background-color:#B0C4DE" 
-         onclick='prepareOptions({ name: "Sprite", articleNumber: 407, price: 4.00, buttonColor: "#B0C4DE", options: [] })'>
-      Sprite (€4,00)
-    </div>
-    <div class="item" style="background-color:#FFD700" 
-         onclick='prepareOptions({ name: "Chocomel", articleNumber: 408, price: 4.00, buttonColor: "#FFD700", options: [] })'>
-      Chocomel (€4,00)
-    </div>
-    <div class="item" style="background-color:#5F9EA0" 
-         onclick='prepareOptions({ name: "Iced Tea Peach/Mango", articleNumber: 409, price: 4.00, buttonColor: "#5F9EA0", options: [ { name: "Peach", price: 0 }, { name: "Mango", price: 0 } ] })'>
-      Iced Tea Peach/Mango (€4,00)
-    </div>
-    <div class="item" style="background-color:#FFD700" 
-         onclick='prepareOptions({ name: "Iced Tea Lemon Sparkling", articleNumber: 410, price: 4.00, buttonColor: "#EEE8AA", options: [] })'>
-      Iced Tea Lemon Sparkling (€4,00)
-    </div>
-    <div class="item" style="background-color:#BDB76B" 
-         onclick='prepareOptions({ name: "Royal Bliss Bitter Lemon", articleNumber: 411, price: 4.00, buttonColor: "#BDB76B", options: [] })'>
-      Royal Bliss Bitter Lemon (€4,00)
-    </div>
-    <div class="item" style="background-color:#BDB76B" 
-         onclick='prepareOptions({ name: "Royal Bliss Ginger Ale", articleNumber: 412, price: 4.00, buttonColor: "#E0FFFF", options: [] })'>
-      Royal Bliss Ginger Ale (€4,00)
-    </div>
-    <div class="item" style="background-color:#D8BFD8" 
-         onclick='prepareOptions({ name: "Looza (Pear/Strawberry/Peach)", articleNumber: 413, price: 4.00, buttonColor: "#D8BFD8", options: [ { name: "Pear", price: 0 }, { name: "Strawberry", price: 0 }, { name: "Peach", price: 0 } ] })'>
-      Looza (Pear/Strawberry/Peach) (€4,00)
-    </div>
-    <div class="item" style="background-color:#FA8072" 
-         onclick='prepareOptions({ name: "Minute Maid Juices", articleNumber: 414, price: 4.00, buttonColor: "#FA8072", options: [ { name: "Orange", price: 0 }, { name: "Apple", price: 0 } ] })'>
-      Minute Maid (Orange/Apple) (€4,00)
-
-    </div>
+</div>
+<div id="attractionModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeBtn">&times;</span>
+    <img id="modalImage" src="" alt="Attraction" />
+    <h2 id="modalTitle"></h2>
+    <p id="modalDescription"></p>
+    <iframe id="modalMap" loading="lazy" allowfullscreen></iframe>
   </div>
+</div>
+<script>
+  const attractions = [
+    {
+      name: "Rijksmuseum",
+      image: "images/rijksmuseum.jpg",
+      description: "The Rijksmuseum is the national museum of the Netherlands dedicated to Dutch arts and history and is located in Amsterdam.",
+      lat: 52.3600, lng: 4.8852
+    },
+    {
+      name: "Van Gogh Museum",
+      image: "images/van-gogh.jpg",
+      description: "The Van Gogh Museum is a Dutch art museum dedicated to the works of Vincent van Gogh and his contemporaries.",
+      lat: 52.3584, lng: 4.8811
+    },
+    {
+      name: "Anne Frank House",
+      image: "images/anne-frank.jpg",
+      description: "The Anne Frank House is a writer's house and biographical museum dedicated to Jewish wartime diarist Anne Frank.",
+      lat: 52.3752, lng: 4.8838
+    },
+    {
+      name: "Heineken Experience",
+      image: "images/heineken.jpg",
+      description: "The Heineken Experience is a historic brewery and visitor center for the Dutch pilsner, Heineken.",
+      lat: 52.3578, lng: 4.8910
+    },
+    {
+      name: "Vondelpark",
+      image: "images/vondelpark.jpg",
+      description: "Vondelpark is the most famous park in Amsterdam, perfect for walking, biking, or relaxing in the greenery.",
+      lat: 52.3580, lng: 4.8687
+    },
+    {
+      name: "Johan Cruijff ArenA",
+      image: "images/arena.jpg",
+      description: "The Johan Cruijff ArenA is the main stadium in Amsterdam, home of Ajax and a popular concert venue.",
+      lat: 52.3143, lng: 4.9414
+    },
+    {
+      name: "ARTIS Zoo",
+      image: "images/artis.jpg",
+      description: "ARTIS Amsterdam Royal Zoo is one of the oldest zoos in Europe, located right in the city center.",
+      lat: 52.3668, lng: 4.9121
+    },
+    {
+      name: "Madame Tussauds",
+      image: "images/madame-tussauds.jpg",
+      description: "Madame Tussauds Amsterdam is a world-famous wax museum with lifelike figures of celebrities and historical icons.",
+      lat: 52.3728, lng: 4.8936
+    },
+    {
+      name: "Moco Museum",
+      image: "images/moco.jpg",
+      description: "The Moco Museum exhibits inspiring modern and contemporary art in a boutique setting on Museumplein.",
+      lat: 52.3580, lng: 4.8812
+    },
+    {
+      name: "A'DAM Lookout",
+      image: "images/adam-lookout.jpg",
+      description: "A'DAM Lookout offers stunning 360° views of Amsterdam from across the IJ river, including a thrilling swing!",
+      lat: 52.3840, lng: 4.9003
+    }
+  ];
 
-  <!-- Order Summary (Main) -->
-  <div class="order-summary">
-    <h2>Order Summary</h2>
-    <ul id="orderList"></ul>
-    <div class="payment-selection" style="text-align:center; margin-top:15px;">
-      <label for="payment-method">Payment Method:</label>
-      <select id="payment-method" style="padding: 8px; margin-left: 10px; border-radius: 5px;">
-        <option value="cash">Cash</option>
-        <option value="credit">Credit</option>
-      </select>
-    </div>
-    <button class="confirm-btn" onclick="sendOrder()">Confirm Order</button>
-  </div>
+  const grid = document.getElementById("attractionsGrid");
+  const modal = document.getElementById("attractionModal");
+  const modalImage = document.getElementById("modalImage");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalDescription = document.getElementById("modalDescription");
+  const modalMap = document.getElementById("modalMap");
+  const closeBtn = document.getElementById("closeBtn");
 
-  <!-- Option Modal -->
-  <div id="optionModal" class="option-modal" style="display:none">
-    <div class="option-box">
-      <h3 id="optionTitle"></h3>
-      <div id="optionList"></div>
-      <button onclick="confirmOptions()">Add to Order</button>
-      <button onclick="closeModal()" style="margin-top: 5px;">Close</button>
-    </div>
-  </div>
+  // Easytimes coordinates (Reguliersdwarsstraat 47)
+  const easytimesLat = 52.3657;
+  const easytimesLng = 4.8945;
 
-  <!-- Mini Cart (Preview) -->
-  <div id="mini-cart"></div>
+  attractions.forEach(attraction => {
+  const item = document.createElement("div");
+  item.className = "grid-item";
+  item.innerHTML = `<img src="${attraction.image}" alt="${attraction.name} Image"><span>${attraction.name}</span>`;
+  item.onclick = () => {
+    modal.classList.add("show");
+    modalImage.src = attraction.image;
+    modalTitle.textContent = attraction.name;
+    modalDescription.textContent = attraction.description;
+    modalMap.src = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyDZu2HXR9E6qrryrTXHcOjzMcMVvMmEPUM&origin=${easytimesLat},${easytimesLng}&destination=${attraction.lat},${attraction.lng}&mode=walking`;
+  }; // ✅ This line was missing
+  grid.appendChild(item);
+});
 
-  <!-- JavaScript -->
-  <script>
-    const botToken = "7627172769:AAH7I_2LRd0VqZuMOpVxRn_vZbt4QXPn9wU";
-    const chatId = "5462781265";
-    let orderList = [];
-    let selectedArticle = null;
-    let selectedTable = null;
-    
-    // Notification Function
-    function showNotification(message) {
-      const notification = document.getElementById("notification");
-      notification.textContent = message;
-      notification.classList.add("show");
-      setTimeout(() => {
-        notification.classList.remove("show");
-      }, 3000);
-    }
-    
-    // Capture Table Selection
-    document.getElementById("table-number").addEventListener("change", function () {
-      selectedTable = this.value;
-    });
-    
-    // Prepare Options Modal
-    function prepareOptions(article) {
-      if (!selectedTable) {
-        showNotification("Please select a table first!");
-        return;
-      }
-      selectedArticle = article;
-      document.getElementById("optionTitle").innerText = `Options for ${article.name}`;
-      const optionList = document.getElementById("optionList");
-      optionList.innerHTML = "";
-      article.options.forEach((opt, index) => {
-        const checkbox = document.createElement("label");
-        checkbox.innerHTML = `<input type='checkbox' data-index='${index}'> ${opt.name} (+€${opt.price.toFixed(2)})`;
-        optionList.appendChild(checkbox);
-      });
-      document.getElementById("optionModal").style.display = "flex";
-    }
-    function isTablet() {
-  return window.innerWidth >= 768 && window.innerWidth <= 1024;
-}
 
-function updateMiniCart() {
-  const miniCart = document.getElementById("mini-cart");
-  let miniHTML = `<h3>Basket</h3><ul>`;
-  let total = 0;
-  orderList.forEach(item => {
-    miniHTML += `<li>${item.name} - €${item.totalPrice.toFixed(2)}</li>`;
-    total += item.totalPrice;
-  });
-  miniHTML += `</ul><div class="total">Total: €${total.toFixed(2)}</div>`;
-  miniCart.innerHTML = miniHTML;
-  miniCart.classList.add("show");
+  closeBtn.onclick = () => {
+    modal.classList.remove("show");
+    modalMap.src = "";
+  };
+  window.onclick = (e) => {
+    if (e.target === modal) {
+      modal.classList.remove("show");
+      modalMap.src = "";
+    }
+  };
+</script>
 
-  if (!isTablet()) {
-    resetMiniCartIdleTimer();
-  }
-}
-
-    // Confirm Options and Update Order
-    function confirmOptions() {
-      const selectedOptions = [];
-      let extraPrice = 0;
-      const inputs = document.querySelectorAll("#optionList input[type=checkbox]");
-      inputs.forEach((input) => {
-        if (input.checked) {
-          const opt = selectedArticle.options[parseInt(input.dataset.index)];
-          selectedOptions.push(opt);
-          extraPrice += opt.price;
-        }
-      });
-      orderList.push({
-        ...selectedArticle,
-        selectedOptions: selectedOptions,
-        totalPrice: selectedArticle.price + extraPrice
-      });
-      updateOrderList();
-      updateMiniCart();
-      document.getElementById("optionModal").style.display = "none";
-    }
-    
-    function removeFromOrder(index) {
-      orderList.splice(index, 1);
-      updateOrderList();
-      updateMiniCart();
-    }
-    
-    // Update Main Order List
-    function updateOrderList() {
-      const list = document.getElementById("orderList");
-      list.innerHTML = "";
-      orderList.forEach((item, index) => {
-        const options = item.selectedOptions?.map(opt => opt.name).join(", ") || "";
-        list.innerHTML += `
-          <li>
-            #${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})
-            ${options ? `<br><small>+ ${options}</small>` : ""}
-            <button class="remove-btn" onclick="removeFromOrder(${index})">×</button>
-          </li>
-        `;
-      });
-    }
-    
-    // Update Mini Cart with Live Order Preview and Total Price
-    let miniCartIdleTimeout;
-    function updateMiniCart() {
-      const miniCart = document.getElementById("mini-cart");
-      let miniHTML = `<h3>Basket</h3><ul>`;
-      let total = 0;
-      orderList.forEach(item => {
-        miniHTML += `<li>${item.name} - €${item.totalPrice.toFixed(2)}</li>`;
-        total += item.totalPrice;
-      });
-      miniHTML += `</ul><div class="total">Total: €${total.toFixed(2)}</div>`;
-      miniCart.innerHTML = miniHTML;
-      miniCart.classList.add("show");
-      resetMiniCartIdleTimer();
-    }
-    
-    // Auto-hide Mini Cart after 10 seconds of inactivity
-    function resetMiniCartIdleTimer() {
-      clearTimeout(miniCartIdleTimeout);
-      miniCartIdleTimeout = setTimeout(() => {
-        document.getElementById("mini-cart").classList.remove("show");
-      }, 10000);
-    }
-    
-    // Send Order Functionality
-    function sendOrder() {
-      if (orderList.length === 0) {
-        showNotification("No items in order!");
-        return;
-      }
-      const paymentMethod = document.getElementById("payment-method").value;
-      let text = `🇎 New Order from Table ${selectedTable}:\n`;
-      orderList.forEach(item => {
-        text += `#${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})\n`;
-        if (item.selectedOptions && item.selectedOptions.length > 0) {
-          text += `  → ${item.selectedOptions.map(o => o.name + ` (+€${o.price.toFixed(2)})`).join(", ")}\n`;
-        }
-      });
-      text += `Payment: ${paymentMethod}`;
-    
-      fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.ok) {
-            showNotification("Order sent!");
-            orderList = [];
-            selectedTable = null;
-            document.getElementById("table-number").value = "";
-            document.getElementById("payment-method").value = "cash";
-            updateOrderList();
-            updateMiniCart();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            setTimeout(() => { window.location.href = 'index.html'; }, 3000);
-          } else {
-            showNotification("Error sending order");
-          }
-        });
-    }
-    
-    // Option Modal Close Function
-    function closeModal() {
-      document.getElementById("optionModal").style.display = "none";
-    }
-    
-    /* IDLE VIDEO SLIDESHOW HANDLER (Preserved from your code) */
-    let idleTimeout;
-    const videoOverlay = document.createElement('div');
-    videoOverlay.style.position = 'fixed';
-    videoOverlay.style.top = '0';
-    videoOverlay.style.left = '0';
-    videoOverlay.style.width = '100%';
-    videoOverlay.style.height = '100%';
-    videoOverlay.style.backgroundColor = '#000';
-    videoOverlay.style.zIndex = '10001';
-    videoOverlay.style.display = 'none';
-    videoOverlay.style.display = 'flex';
-    videoOverlay.style.flexDirection = 'column';
-    videoOverlay.style.alignItems = 'center';
-    videoOverlay.style.justifyContent = 'center';
-    videoOverlay.style.transition = 'opacity 1s ease, transform 1s ease';
-    videoOverlay.style.opacity = '0';
-    videoOverlay.style.transform = 'scale(0.9)';
-    
-    const videoLogo = document.createElement('img');
-    videoLogo.src = 'EASY TIMES LOGO BLACK-01.png';
-    videoLogo.alt = 'Easytimes Logo';
-    videoLogo.style.width = '200px';
-    videoLogo.style.marginBottom = '20px';
-    videoLogo.style.marginTop = '40px';
-    
-    const videoFrame = document.createElement('div');
-    videoFrame.style.width = '70%';
-    videoFrame.style.height = '70%';
-    videoFrame.style.border = '4px solid orange';
-    videoFrame.style.borderRadius = '20px';
-    videoFrame.style.overflow = 'hidden';
-    videoFrame.style.boxSizing = 'border-box';
-    
-    const video = document.createElement('video');
-    video.id = 'slideshowVideo';
-    video.style.width = '100%';
-    video.style.height = '100%';
-    video.style.objectFit = 'cover';
-    video.muted = true;
-    video.controls = false;
-    
-    videoFrame.appendChild(video);
-    videoOverlay.appendChild(videoLogo);
-    videoOverlay.appendChild(videoFrame);
-    document.body.appendChild(videoOverlay);
-    
-    const videoFiles = ['grinderz.mp4', 'tea.mov'];
-    let currentVideoIndex = 0;
-    
-    function playNextVideo() {
-      if (!videoFiles.length) return;
-      video.src = videoFiles[currentVideoIndex];
-      video.load();
-      video.play().catch(err => {
-        console.error('Autoplay failed:', err);
-      });
-      currentVideoIndex = (currentVideoIndex + 1) % videoFiles.length;
-    }
-    
-    video.addEventListener('ended', playNextVideo);
-    video.addEventListener('error', () => {
-      console.error("Error loading video.");
-      playNextVideo();
-    });
-    
-    function resetIdleTimer() {
-      clearTimeout(idleTimeout);
-      video.pause();
-      videoOverlay.style.opacity = '0';
-      videoOverlay.style.transform = 'scale(0.9)';
-      setTimeout(() => {
-        videoOverlay.style.display = 'none';
-      }, 1000);
-    
-      idleTimeout = setTimeout(() => {
-        videoOverlay.style.display = 'flex';
-        requestAnimationFrame(() => {
-          videoOverlay.style.opacity = '1';
-          videoOverlay.style.transform = 'scale(1)';
-        });
-        currentVideoIndex = 0;
-        playNextVideo();
-      }, 10000); // 10 seconds
-    }
-    
-    ['click', 'mousemove', 'keydown', 'touchstart'].forEach(evt => {
-      document.addEventListener(evt, resetIdleTimer);
-    });
-    
-    videoOverlay.addEventListener('click', () => {
-      video.pause();
-      videoOverlay.style.opacity = '0';
-      videoOverlay.style.transform = 'scale(0.9)';
-      setTimeout(() => {
-        videoOverlay.style.display = 'none';
-      }, 1000);
-      resetIdleTimer();
-    });
-    
-    resetIdleTimer();
-  </script>
 </body>
 </html>
