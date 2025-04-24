@@ -18,7 +18,7 @@
   font-family: 'Roboto', sans-serif;
   background-color: #000;
   color: #fff;
-  min-height: 100vh; overflow: hidden;
+  min-height: 100vh;
   overflow-x: hidden;   /* ✅ only hide horizontal overflow */
   overflow-y: auto;     /* ✅ allow vertical scrolling */
 }
@@ -65,45 +65,56 @@
       opacity: 1;
     }
 
-    /* Table Selection */
     .table-selection {
-      text-align: center;
-      margin: 20px 0;
-      width: 100%;
-    }
-    .table-label {
-      font-weight: bold;
-      color: orange;
-      font-size: 1.2rem;
-      margin-bottom: 10px;
-      display: block;
-    }
-    #table-number {
-      font-size: 1rem;
-      padding: 10px;
-      border: 2px solid #CD7F2F;
-      border-radius: 10px;
-      background-color: #333;
-      color: white;
-      width: 200px;
-      transition: border-color 0.3s;
-      margin: 0 auto;
-      display: block;
-    }
-    #table-number:focus {
-      border-color: #FFA500;
-    }
+  background: #111;
+  padding: 20px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  text-align: center;
+  margin: 20px auto;
+}
 
-    /* Section Titles */
+    .table-label {
+  font-weight: bold;
+  color: #CD7F2F;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+    #table-number {
+  font-size: 1rem;
+  padding: 10px 14px;
+  border: 2px solid #CD7F2F;
+  border-radius: 8px;
+  background-color: #222;
+  color: white;
+  width: 100%;
+  max-width: 220px;
+  margin: 0 auto;
+  transition: border-color 0.3s;
+}
+#table-number:focus {
+  border-color: #FFA500;
+  outline: none;
+}
+
+
     .section-title {
-      font-size: 1.2rem;
-      color: #CD7F2F;
-      margin: 20px 0 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      width: 100%;
-      text-align: center;
-    }
+  font-size: 1.2rem;
+  color: #CD7F2F;
+  margin: 20px 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: 100%;
+  text-align: center;
+  font-weight: bold; /* ✅ Add this line */
+}
+
 
     /* Menu Layout */
     .menu {
@@ -117,28 +128,47 @@
       padding: 0 10px;
     }
     .item {
-      background-color: #222;
-      padding: 20px 16px;
-      border-radius: 8px;
-      width: 250px;
-      height: 60px;
-      cursor: pointer;
-      font-size: 1rem;
-      text-align: center;
-      transition: background-color 0.2s, transform 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
-      white-space: normal;
-    }
-    .item:hover {
-      transform: translateY(-4px);
-    }
-    .item:active {
-      opacity: 0.8;
-      transform: translateY(0);
-    }
+  background-color: #222;
+  padding: 20px 16px;
+  border-radius: 12px;
+  width: 250px;
+  height: 60px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-align: center;
+  transition: background-color 0.2s, transform 0.2s, color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: normal;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 0 3px rgba(255, 255, 255, 0.2), 0 2px 4px rgba(0, 0, 0, 0.6);
+
+  color: #fff;
+  font-weight: 600;
+
+  /* ✨ NEW: Layered text shadow for readability on any bg */
+  text-shadow:
+    1px 1px 2px rgba(0,0,0,0.9),
+    0 0 8px rgba(255,255,255,0.2);
+}
+
+.item:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    inset 0 0 3px rgba(255, 255, 255, 0.3),
+    0 4px 8px rgba(0, 0, 0, 0.6);
+  text-shadow:
+    0 0 4px rgba(255, 255, 255, 0.8),
+    0 0 12px rgba(255, 255, 255, 0.4);
+}
+
+.item:active {
+  opacity: 0.9;
+  transform: translateY(0);
+}
+
+
 
     /* Order Summary (Main) */
     .order-summary {
@@ -313,7 +343,7 @@ video.bg-video {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh; overflow: hidden;
+  height: 100vh;
   border: 10px solid #f26522;
   box-sizing: border-box;
   pointer-events: none;
@@ -384,8 +414,8 @@ video.bg-video {
          onclick='prepareOptions({ name: "Cappuccino", articleNumber: 102, price: 4.00, buttonColor: "#CD7F2F", options: [ { name: "Extra Espresso Shot", price: 0.50 }, { name: "Whipped Cream", price: 0.50 } ] })'>
       Cappuccino (€4,00)
     </div>
-    <div class="item" style="background-color:#FFA07A" 
-         onclick='prepareOptions({ name: "Flavored Latte", articleNumber: 205, price: 5.00, buttonColor: "#FFA07A", options: [ { name: "Hazelnuts", price: 0 }, { name: "Caramel", price: 0 } ] })'>
+    <div class="item" style="background-color:#D4A76A" 
+         onclick='prepareOptions({ name: "Flavored Latte", articleNumber: 205, price: 5.00, buttonColor: "#D4A76A", options: [ { name: "Hazelnuts", price: 0 }, { name: "Caramel", price: 0 } ] })'>
       Flavored Latte (€5,00)
     </div>
     <div class="item" style="background-color:#BC8F8F" 
@@ -414,67 +444,67 @@ video.bg-video {
     </div>
   </div>
 
-  <!-- Cold Drinks Section -->
-  <div class="section-title">Cold Drinks</div>
-  <div class="menu" id="cold-drinks">
-    <div class="item" style="background-color:#4682B4" 
-         onclick='prepareOptions({ name: "Coca-Cola", articleNumber: 401, price: 4.00, buttonColor: "#4682B4", options: [ { name: "Added Ice", price: 0.20 } ] })'>
-      Coca-Cola (€4,00)
-    </div>
-    <div class="item" style="background-color:#5F9EA0" 
-         onclick='prepareOptions({ name: "Coca-Cola Zero", articleNumber: 402, price: 4.00, buttonColor: "#5F9EA0", options: [] })'>
-      Coca-Cola Zero (€4,00)
-    </div>
-    <div class="item" style="background-color:#F4A460" 
-         onclick='prepareOptions({ name: "Fanta Orange", articleNumber: 403, price: 4.00, buttonColor: "#F4A460", options: [] })'>
-      Fanta Orange (€4,00)
-    </div>
-    <div class="item" style="background-color:#DA70D6" 
-         onclick='prepareOptions({ name: "Fanta Cassis", articleNumber: 404, price: 4.00, buttonColor: "#DA70D6", options: [] })'>
-      Fanta Cassis (€4,00)
-    </div>
-    <div class="item" style="background-color:#87CEFA" 
-         onclick='prepareOptions({ name: "Still Water", articleNumber: 405, price: 3.50, buttonColor: "#87CEFA", options: [] })'>
-      Still Water (€3,50)
-    </div>
-    <div class="item" style="background-color:#00CED1" 
-         onclick='prepareOptions({ name: "Sparkling Water", articleNumber: 406, price: 3.50, buttonColor: "#00CED1", options: [] })'>
-      Sparkling Water (€3,50)
-    </div>
-    <div class="item" style="background-color:#B0C4DE" 
-         onclick='prepareOptions({ name: "Sprite", articleNumber: 407, price: 4.00, buttonColor: "#B0C4DE", options: [] })'>
-      Sprite (€4,00)
-    </div>
-    <div class="item" style="background-color:#FFD700" 
-         onclick='prepareOptions({ name: "Chocomel", articleNumber: 408, price: 4.00, buttonColor: "#FFD700", options: [] })'>
-      Chocomel (€4,00)
-    </div>
-    <div class="item" style="background-color:#5F9EA0" 
-         onclick='prepareOptions({ name: "Iced Tea Peach/Mango", articleNumber: 409, price: 4.00, buttonColor: "#5F9EA0", options: [ { name: "Peach", price: 0 }, { name: "Mango", price: 0 } ] })'>
-      Iced Tea Peach/Mango (€4,00)
-    </div>
-    <div class="item" style="background-color:#FFD700" 
-         onclick='prepareOptions({ name: "Iced Tea Lemon Sparkling", articleNumber: 410, price: 4.00, buttonColor: "#EEE8AA", options: [] })'>
-      Iced Tea Lemon Sparkling (€4,00)
-    </div>
-    <div class="item" style="background-color:#BDB76B" 
-         onclick='prepareOptions({ name: "Royal Bliss Bitter Lemon", articleNumber: 411, price: 4.00, buttonColor: "#BDB76B", options: [] })'>
-      Royal Bliss Bitter Lemon (€4,00)
-    </div>
-    <div class="item" style="background-color:#BDB76B" 
-         onclick='prepareOptions({ name: "Royal Bliss Ginger Ale", articleNumber: 412, price: 4.00, buttonColor: "#E0FFFF", options: [] })'>
-      Royal Bliss Ginger Ale (€4,00)
-    </div>
-    <div class="item" style="background-color:#D8BFD8" 
-         onclick='prepareOptions({ name: "Looza (Pear/Strawberry/Peach)", articleNumber: 413, price: 4.00, buttonColor: "#D8BFD8", options: [ { name: "Pear", price: 0 }, { name: "Strawberry", price: 0 }, { name: "Peach", price: 0 } ] })'>
-      Looza (Pear/Strawberry/Peach) (€4,00)
-    </div>
-    <div class="item" style="background-color:#FA8072" 
-         onclick='prepareOptions({ name: "Minute Maid Juices", articleNumber: 414, price: 4.00, buttonColor: "#FA8072", options: [ { name: "Orange", price: 0 }, { name: "Apple", price: 0 } ] })'>
-      Minute Maid (Orange/Apple) (€4,00)
-
-    </div>
+<!-- Cold Drinks Section -->
+<div class="section-title">Cold Drinks</div>
+<div class="menu" id="cold-drinks">
+  <div class="item" style="background-color:#F40009" 
+       onclick='prepareOptions({ name: "Coca-Cola", articleNumber: 401, price: 4.00, buttonColor: "#F40009", options: [ { name: "Added Ice", price: 0.20 } ] })'>
+    Coca-Cola (€4,00)
   </div>
+  <div class="item" style="background-color:#000000" 
+       onclick='prepareOptions({ name: "Coca-Cola Zero", articleNumber: 402, price: 4.00, buttonColor: "#000000", options: [] })'>
+    Coca-Cola Zero (€4,00)
+  </div>
+  <div class="item" style="background-color:#FF6600" 
+       onclick='prepareOptions({ name: "Fanta Orange", articleNumber: 403, price: 4.00, buttonColor: "#FF6600", options: [] })'>
+    Fanta Orange (€4,00)
+  </div>
+  <div class="item" style="background-color:#541E64" 
+       onclick='prepareOptions({ name: "Fanta Cassis", articleNumber: 404, price: 4.00, buttonColor: "#541E64", options: [] })'>
+    Fanta Cassis (€4,00)
+  </div>
+  <div class="item" style="background-color:#87CEFA" 
+       onclick='prepareOptions({ name: "Still Water", articleNumber: 405, price: 3.50, buttonColor: "#87CEFA", options: [] })'>
+    Still Water (€3,50)
+  </div>
+  <div class="item" style="background-color:#00CED1" 
+       onclick='prepareOptions({ name: "Sparkling Water", articleNumber: 406, price: 3.50, buttonColor: "#00CED1", options: [] })'>
+    Sparkling Water (€3,50)
+  </div>
+  <div class="item" style="background-color:#50B848" 
+       onclick='prepareOptions({ name: "Sprite", articleNumber: 407, price: 4.00, buttonColor: "#50B848", options: [] })'>
+    Sprite (€4,00)
+  </div>
+  <div class="item" style="background-color:#FFD700" 
+       onclick='prepareOptions({ name: "Chocomel", articleNumber: 408, price: 4.00, buttonColor: "#FFD700", options: [] })'>
+    Chocomel (€4,00)
+  </div>
+  <div class="item" style="background-color:#FBB040" 
+       onclick='prepareOptions({ name: "Iced Tea Peach/Mango", articleNumber: 409, price: 4.00, buttonColor: "#FBB040", options: [ { name: "Peach", price: 0 }, { name: "Mango", price: 0 } ] })'>
+    Iced Tea Peach/Mango (€4,00)
+  </div>
+  <div class="item" style="background-color:#E6D117" 
+       onclick='prepareOptions({ name: "Iced Tea Lemon Sparkling", articleNumber: 410, price: 4.00, buttonColor: "#E6D117", options: [] })'>
+    Iced Tea Lemon Sparkling (€4,00)
+  </div>
+  <div class="item" style="background-color:#BDB76B" 
+       onclick='prepareOptions({ name: "Royal Bliss Bitter Lemon", articleNumber: 411, price: 4.00, buttonColor: "#BDB76B", options: [] })'>
+    Royal Bliss Bitter Lemon (€4,00)
+  </div>
+  <div class="item" style="background-color:#D4AF37" 
+       onclick='prepareOptions({ name: "Royal Bliss Ginger Ale", articleNumber: 412, price: 4.00, buttonColor: "#D4AF37", options: [] })'>
+    Royal Bliss Ginger Ale (€4,00)
+  </div>
+  <div class="item" style="background-color:#D8BFD8" 
+       onclick='prepareOptions({ name: "Looza (Pear/Strawberry/Peach)", articleNumber: 413, price: 4.00, buttonColor: "#D8BFD8", options: [ { name: "Pear", price: 0 }, { name: "Strawberry", price: 0 }, { name: "Peach", price: 0 } ] })'>
+    Looza (Pear/Strawberry/Peach) (€4,00)
+  </div>
+  <div class="item" style="background-color:#FA8072" 
+       onclick='prepareOptions({ name: "Minute Maid Juices", articleNumber: 414, price: 4.00, buttonColor: "#FA8072", options: [ { name: "Orange", price: 0 }, { name: "Apple", price: 0 } ] })'>
+    Minute Maid (Orange/Apple) (€4,00)
+  </div>
+</div>
+
 
   <!-- Order Summary (Main) -->
   <div class="order-summary">
@@ -699,7 +729,7 @@ video.bg-video {
     videoOverlay.appendChild(videoFrame);
     document.body.appendChild(videoOverlay);
     
-    const videoFiles = ['smoke.mp4', 'tea.mov'];
+    const videoFiles = ['grinderz.mp4', 'tea.mov'];
     let currentVideoIndex = 0;
     
     function playNextVideo() {
@@ -756,4 +786,5 @@ video.bg-video {
   </script>
 </body>
 </html>
+
 
