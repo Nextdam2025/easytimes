@@ -43,27 +43,30 @@
       100% { transform: translateY(-8px); }
     }
 
-    /* Notification */
     #notification {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(205, 127, 47, 0.9);
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 6px;
-      font-size: 1rem;
-      display: none;
-      z-index: 10000;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.7);
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-    #notification.show {
-      display: block;
-      opacity: 1;
-    }
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e4d1e; /* Dark green background */
+  color: #d4f7d4;       /* Light green text */
+  padding: 14px 24px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  display: none;
+  z-index: 10000;
+  box-shadow: 0 0 12px rgba(0, 255, 0, 0.5);
+  border: 2px solid #4CAF50;
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.3s ease;
+  font-weight: bold;
+}
+#notification.show {
+  display: block;
+  opacity: 1;
+  transform: translateX(-50%) scale(1.05);
+}
+
 
     .table-selection {
   background: #111;
@@ -662,7 +665,7 @@ video.bg-video {
         .then(res => res.json())
         .then(data => {
           if (data.ok) {
-            showNotification("Order sent!");
+            showNotification("✅ Order sent successfully!");
             orderList = [];
             selectedTable = null;
             document.getElementById("table-number").value = "";
@@ -786,5 +789,3 @@ video.bg-video {
   </script>
 </body>
 </html>
-
-
