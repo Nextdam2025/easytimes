@@ -176,8 +176,8 @@ logo.style.objectFit = 'contain';      // Ensures the image scales nicely
     overlayContent.appendChild(idleMsg);
 
     const frame = document.createElement('div');
-    frame.style.width = '80vw';
-    frame.style.height = '80vh';
+frame.style.width = 'calc(100vw - 20px)';
+frame.style.height = 'calc(100vh - 20px)';
     frame.style.border = '10px solid orange';
     frame.style.borderRadius = '20px';
     frame.style.overflow = 'hidden';
@@ -190,9 +190,10 @@ logo.style.objectFit = 'contain';      // Ensures the image scales nicely
     video.muted = true;
     video.autoplay = true;
     video.controls = false;
-    video.style.width = '100%';
-    video.style.height = '100%';
-    video.style.objectFit = 'cover';
+video.style.width = '100%';
+video.style.height = '100%';
+video.style.objectFit = 'cover';
+
     frame.appendChild(video);
 
     overlay.appendChild(overlayContent);
