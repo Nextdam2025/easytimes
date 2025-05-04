@@ -95,15 +95,22 @@
       cursor: pointer;
     }
 
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.85; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
     .idle-message {
       font-size: 42px;
       color: #f26522;
       font-weight: bold;
       text-shadow: 3px 3px 12px black;
       text-align: center;
-      margin: 20px 0 30px;
+      margin: 10px 0 20px;
       padding: 10px 20px;
       z-index: 10001;
+      animation: pulse 2s infinite ease-in-out;
     }
   </style>
 </head>
@@ -144,6 +151,13 @@
     overlay.style.opacity = '0';
     overlay.style.transform = 'scale(0.95)';
 
+    const overlayContent = document.createElement('div');
+    overlayContent.style.display = 'flex';
+    overlayContent.style.flexDirection = 'column';
+    overlayContent.style.alignItems = 'center';
+    overlayContent.style.justifyContent = 'center';
+    overlayContent.style.marginBottom = '30px';
+
     const logo = document.createElement('img');
     logo.src = 'EASY TIMES LOGO BLACK-01.png';
     logo.alt = 'Easytimes Logo';
@@ -153,6 +167,9 @@
     const idleMsg = document.createElement('div');
     idleMsg.className = 'idle-message';
     idleMsg.textContent = 'CLICK THE SCREEN TO ORDER DRINKS';
+
+    overlayContent.appendChild(logo);
+    overlayContent.appendChild(idleMsg);
 
     const frame = document.createElement('div');
     frame.style.width = '80vw';
@@ -174,8 +191,7 @@
     video.style.objectFit = 'cover';
     frame.appendChild(video);
 
-    overlay.appendChild(logo);
-    overlay.appendChild(idleMsg); // message ABOVE the video
+    overlay.appendChild(overlayContent);
     overlay.appendChild(frame);
     document.body.appendChild(overlay);
 
