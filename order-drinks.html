@@ -2,27 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" 
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=1080, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Easytimes Order Menu</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" 
-        rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
-    /* Global Reset and Base Styles */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
     html, body {
-  font-family: 'Roboto', sans-serif;
-  background-color: #000;
-  color: #fff;
-  min-height: 100vh;
-  overflow-x: hidden;   /* ✅ only hide horizontal overflow */
-  overflow-y: auto;     /* ✅ allow vertical scrolling */
-}
-
+      font-family: 'Roboto', sans-serif;
+      background-color: #000;
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
     body {
       display: flex;
       flex-direction: column;
@@ -32,9 +30,9 @@
       z-index: 1;
     }
     img.logo {
-      width: 150px;
+      width: 120px;
       max-width: 60%;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       animation: floatLogo 2s ease-in-out infinite alternate;
       border-radius: 20px;
     }
@@ -44,142 +42,122 @@
     }
 
     #notification {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #1e4d1e; /* Dark green background */
-  color: #d4f7d4;       /* Light green text */
-  padding: 14px 24px;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  display: none;
-  z-index: 10000;
-  box-shadow: 0 0 12px rgba(0, 255, 0, 0.5);
-  border: 2px solid #4CAF50;
-  opacity: 0;
-  transition: opacity 0.5s ease, transform 0.3s ease;
-  font-weight: bold;
-}
-#notification.show {
-  display: block;
-  opacity: 1;
-  transform: translateX(-50%) scale(1.05);
-}
-
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e4d1e;
+      color: #d4f7d4;
+      padding: 14px 24px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      display: none;
+      z-index: 10000;
+      box-shadow: 0 0 12px rgba(0, 255, 0, 0.5);
+      border: 2px solid #4CAF50;
+      opacity: 0;
+      transition: opacity 0.5s ease, transform 0.3s ease;
+      font-weight: bold;
+    }
+    #notification.show {
+      display: block;
+      opacity: 1;
+      transform: translateX(-50%) scale(1.05);
+    }
 
     .table-selection {
-  background: #111;
-  padding: 20px;
-  border-radius: 10px;
-  width: 100%;
-  max-width: 500px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-  text-align: center;
-  margin: 20px auto;
-}
-
-    .table-label {
-  font-weight: bold;
-  color: #CD7F2F;
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-  display: block;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-    #table-number {
-  font-size: 1rem;
-  padding: 10px 14px;
-  border: 2px solid #CD7F2F;
-  border-radius: 8px;
-  background-color: #222;
-  color: white;
-  width: 100%;
-  max-width: 220px;
-  margin: 0 auto;
-  transition: border-color 0.3s;
-}
-#table-number:focus {
-  border-color: #FFA500;
-  outline: none;
-}
-
-
-    .section-title {
-  font-size: 1.2rem;
-  color: #CD7F2F;
-  margin: 20px 0 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  width: 100%;
-  text-align: center;
-  font-weight: bold; /* ✅ Add this line */
-}
-
-
-    /* Menu Layout */
-    .menu {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
-      max-width: 900px;
-      margin-bottom: 15px;
-      padding: 0 10px;
-    }
-    .item {
-  background-color: #222;
-  padding: 20px 16px;
-  border-radius: 12px;
-  width: 250px;
-  height: 60px;
-  cursor: pointer;
-  font-size: 1rem;
-  text-align: center;
-  transition: background-color 0.2s, transform 0.2s, color 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  white-space: normal;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: inset 0 0 3px rgba(255, 255, 255, 0.2), 0 2px 4px rgba(0, 0, 0, 0.6);
-
-  color: #fff;
-  font-weight: 600;
-
-  /* ✨ NEW: Layered text shadow for readability on any bg */
-  text-shadow:
-    1px 1px 2px rgba(0,0,0,0.9),
-    0 0 8px rgba(255,255,255,0.2);
-}
-
-.item:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    inset 0 0 3px rgba(255, 255, 255, 0.3),
-    0 4px 8px rgba(0, 0, 0, 0.6);
-  text-shadow:
-    0 0 4px rgba(255, 255, 255, 0.8),
-    0 0 12px rgba(255, 255, 255, 0.4);
-}
-
-.item:active {
-  opacity: 0.9;
-  transform: translateY(0);
-}
-
-
-
-    /* Order Summary (Main) */
-    .order-summary {
       background: #111;
       padding: 20px;
       border-radius: 10px;
       width: 100%;
       max-width: 500px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+      text-align: center;
+      margin: 20px auto;
+    }
+    .table-label {
+      font-weight: bold;
+      color: #CD7F2F;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    #table-number {
+      font-size: 1rem;
+      padding: 10px 14px;
+      border: 2px solid #CD7F2F;
+      border-radius: 8px;
+      background-color: #222;
+      color: white;
+      width: 100%;
+      max-width: 220px;
+      margin: 0 auto;
+      transition: border-color 0.3s;
+    }
+    #table-number:focus {
+      border-color: #FFA500;
+      outline: none;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      color: #CD7F2F;
+      margin: 20px 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      width: 100%;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      max-width: 900px;
+      margin-bottom: 15px;
+      padding: 0;
+    }
+    .item {
+      background-color: #222;
+      padding: 16px 12px;
+      border-radius: 12px;
+      width: 200px;
+      height: 50px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      text-align: center;
+      transition: background-color 0.2s, transform 0.2s, color 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: normal;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: inset 0 0 3px rgba(255, 255, 255, 0.2), 0 2px 4px rgba(0, 0, 0, 0.6);
+      color: #fff;
+      font-weight: 600;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.9), 0 0 8px rgba(255,255,255,0.2);
+    }
+    .item:hover {
+      transform: translateY(-4px);
+      box-shadow: inset 0 0 3px rgba(255, 255, 255, 0.3), 0 4px 8px rgba(0, 0, 0, 0.6);
+      text-shadow: 0 0 4px rgba(255, 255, 255, 0.8), 0 0 12px rgba(255, 255, 255, 0.4);
+    }
+    .item:active {
+      opacity: 0.9;
+      transform: translateY(0);
+    }
+
+    .order-summary {
+      background: #111;
+      padding: 15px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 420px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.6);
       text-align: left;
       margin-bottom: 20px;
@@ -215,11 +193,11 @@
     .confirm-btn {
       background: #CD7F2F;
       color: #fff;
-      padding: 14px 22px;
+      padding: 12px 20px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 1rem;
       margin: 20px auto 0;
       width: 100%;
       max-width: 300px;
@@ -231,68 +209,16 @@
       background: #e89a4a;
     }
 
-    /* Option Modal */
-    .option-modal {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      animation: fadeIn 0.3s;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    .option-box {
-      background: #222;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 300px;
-      width: 100%;
-      text-align: left;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.7);
-    }
-    .option-box h3 {
-      margin-top: 0;
-      color: #CD7F2F;
-    }
-    .option-box label {
-      display: block;
-      margin: 8px 0;
-      font-size: 1rem;
-    }
-    .option-box button {
-      margin-top: 10px;
-      padding: 10px 14px;
-      border: none;
-      border-radius: 6px;
-      background: #CD7F2F;
-      color: white;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.3s;
-      width: 100%;
-      display: block;
-    }
-    .option-box button:hover {
-      background: #e89a4a;
-    }
-
-    /* Mini Cart Styling */
     #mini-cart {
       position: fixed;
       bottom: 20px;
       right: 20px;
       background: rgba(34, 34, 34, 0.95);
       color: #fff;
-      padding: 15px;
+      padding: 12px;
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-      width: 280px;
+      width: 240px;
       max-width: 90%;
       opacity: 0;
       transition: opacity 0.5s ease;
@@ -327,33 +253,38 @@
       margin-top: 10px;
       text-align: right;
     }
-  
-video.bg-video {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  z-index: -1;
-  transform: translate(-50%, -50%);
-  object-fit: cover;
-  opacity: 0.3;
-}
-.orange-frame {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  border: 10px solid #f26522;
-  box-sizing: border-box;
-  pointer-events: none;
-  z-index: 5;
-}
 
-</style>
+    video.bg-video {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      z-index: -1;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      opacity: 0.3;
+    }
+    .orange-frame {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      border: 10px solid #f26522;
+      box-sizing: border-box;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    @media (max-width: 1080px) {
+      .item {
+        width: 45%;
+      }
+    }
+  </style>
 </head>
 <body>
 
