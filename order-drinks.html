@@ -728,6 +728,17 @@ video.bg-video {
     videoFrame.style.borderRadius = '20px';
     videoFrame.style.overflow = 'hidden';
     videoFrame.style.boxSizing = 'border-box';
+
+    const videoMessage = document.createElement('div');
+videoMessage.innerText = 'CLICK THE SCREEN TO ORDER DRINKS';
+videoMessage.style.color = '#FFA500';
+videoMessage.style.fontSize = '2rem';
+videoMessage.style.fontWeight = 'bold';
+videoMessage.style.marginTop = '30px';
+videoMessage.style.textAlign = 'center';
+videoMessage.style.textShadow = '1px 1px 4px black';
+videoOverlay.appendChild(videoMessage);
+
     
     const video = document.createElement('video');
     video.id = 'slideshowVideo';
