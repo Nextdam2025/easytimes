@@ -159,11 +159,14 @@
     overlayContent.style.justifyContent = 'center';
     overlayContent.style.marginBottom = '30px';
 
-    const logo = document.createElement('img');
-    logo.src = 'EASY TIMES LOGO BLACK-01.png';
-    logo.alt = 'Easytimes Logo';
-    logo.style.width = '200px';
-    logo.style.marginBottom = '20px';
+const logo = document.createElement('img');
+logo.src = 'EASY TIMES LOGO BLACK-01.png';
+logo.alt = 'Easytimes Logo';
+logo.style.width = '320px';            // Increased from 200px to 320px
+logo.style.maxWidth = '80vw';          // Prevents it from overflowing on smaller screens
+logo.style.marginBottom = '30px';      // Slightly more spacing
+logo.style.objectFit = 'contain';      // Ensures the image scales nicely
+
 
     const idleMsg = document.createElement('div');
     idleMsg.className = 'idle-message';
