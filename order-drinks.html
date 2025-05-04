@@ -538,152 +538,145 @@ video.bg-video {
 
   <!-- JavaScript -->
   <script>
-    const botToken = "7627172769:AAH7I_2LRd0VqZuMOpVxRn_vZbt4QXPn9wU";
-    const chatId = "5462781265";
-    let orderList = [];
-    let selectedArticle = null;
-    let selectedTable = null;
-    
-    // Notification Function
-    function showNotification(message) {
-      const notification = document.getElementById("notification");
-      notification.textContent = message;
-      notification.classList.add("show");
-      setTimeout(() => {
-        notification.classList.remove("show");
-      }, 3000);
+const botToken = "7627172769:AAH7I_2LRd0VqZuMOpVxRn_vZbt4QXPn9wU";
+const chatId = "5462781265";
+let orderList = [];
+let selectedArticle = null;
+let selectedTable = null;
+
+function showNotification(message) {
+  const notification = document.getElementById("notification");
+  notification.textContent = message;
+  notification.classList.add("show");
+  setTimeout(() => {
+    notification.classList.remove("show");
+  }, 3000);
+}
+
+document.getElementById("table-number").addEventListener("change", function () {
+  selectedTable = this.value;
+});
+
+function prepareOptions(article) {
+  if (!selectedTable) {
+    showNotification("Please select a table first!");
+    return;
+  }
+  selectedArticle = article;
+  document.getElementById("optionTitle").innerText = `Options for ${article.name}`;
+  const optionList = document.getElementById("optionList");
+  optionList.innerHTML = "";
+  article.options.forEach((opt, index) => {
+    const checkbox = document.createElement("label");
+    checkbox.innerHTML = `<input type='checkbox' data-index='${index}'> ${opt.name} (+€${opt.price.toFixed(2)})`;
+    optionList.appendChild(checkbox);
+  });
+  document.getElementById("optionModal").style.display = "flex";
+}
+
+function confirmOptions() {
+  const selectedOptions = [];
+  let extraPrice = 0;
+  const inputs = document.querySelectorAll("#optionList input[type=checkbox]");
+  inputs.forEach((input) => {
+    if (input.checked) {
+      const opt = selectedArticle.options[parseInt(input.dataset.index)];
+      selectedOptions.push(opt);
+      extraPrice += opt.price;
     }
-    
-    // Capture Table Selection
-    document.getElementById("table-number").addEventListener("change", function () {
-      selectedTable = this.value;
+  });
+  orderList.push({
+    ...selectedArticle,
+    selectedOptions: selectedOptions,
+    totalPrice: selectedArticle.price + extraPrice
+  });
+  updateOrderList();
+  updateMiniCart();
+  document.getElementById("optionModal").style.display = "none";
+}
+
+function removeFromOrder(index) {
+  orderList.splice(index, 1);
+  updateOrderList();
+  updateMiniCart();
+}
+
+function updateOrderList() {
+  const list = document.getElementById("orderList");
+  list.innerHTML = "";
+  orderList.forEach((item, index) => {
+    const options = item.selectedOptions?.map(opt => opt.name).join(", ") || "";
+    list.innerHTML += `
+      <li>
+        #${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})
+        ${options ? `<br><small>+ ${options}</small>` : ""}
+        <button class="remove-btn" onclick="removeFromOrder(${index})">×</button>
+      </li>
+    `;
+  });
+}
+
+let miniCartIdleTimeout;
+function updateMiniCart() {
+  const miniCart = document.getElementById("mini-cart");
+  let miniHTML = `<h3>Basket</h3><ul>`;
+  let total = 0;
+  orderList.forEach(item => {
+    miniHTML += `<li>${item.name} - €${item.totalPrice.toFixed(2)}</li>`;
+    total += item.totalPrice;
+  });
+  miniHTML += `</ul><div class="total">Total: €${total.toFixed(2)}</div>`;
+  miniCart.innerHTML = miniHTML;
+  miniCart.classList.add("show");
+  resetMiniCartIdleTimer();
+}
+
+function resetMiniCartIdleTimer() {
+  clearTimeout(miniCartIdleTimeout);
+  miniCartIdleTimeout = setTimeout(() => {
+    document.getElementById("mini-cart").classList.remove("show");
+  }, 10000);
+}
+
+function sendOrder() {
+  if (orderList.length === 0) {
+    showNotification("No items in order!");
+    return;
+  }
+  const paymentMethod = document.getElementById("payment-method").value;
+  let text = `🇎 New Order from Table ${selectedTable}:\n`;
+  orderList.forEach(item => {
+    text += `#${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})\n`;
+    if (item.selectedOptions && item.selectedOptions.length > 0) {
+      text += `  → ${item.selectedOptions.map(o => `${o.name} (+€${o.price.toFixed(2)})`).join(", ")}\n`;
+    }
+  });
+  text += `Payment: ${paymentMethod}`;
+
+  fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.ok) {
+        showNotification("✅ Order sent successfully!");
+        orderList = [];
+        selectedTable = null;
+        document.getElementById("table-number").value = "";
+        document.getElementById("payment-method").value = "cash";
+        updateOrderList();
+        updateMiniCart();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setTimeout(() => { window.location.href = 'index.html'; }, 3000);
+      } else {
+        showNotification("Error sending order");
+      }
     });
-    
-    // Prepare Options Modal
-    function prepareOptions(article) {
-      if (!selectedTable) {
-        showNotification("Please select a table first!");
-        return;
-      }
-      selectedArticle = article;
-      document.getElementById("optionTitle").innerText = Options for ${article.name};
-      const optionList = document.getElementById("optionList");
-      optionList.innerHTML = "";
-      article.options.forEach((opt, index) => {
-        const checkbox = document.createElement("label");
-        checkbox.innerHTML = <input type='checkbox' data-index='${index}'> ${opt.name} (+€${opt.price.toFixed(2)});
-        optionList.appendChild(checkbox);
-      });
-      document.getElementById("optionModal").style.display = "flex";
-    }
-    
-    // Confirm Options and Update Order
-    function confirmOptions() {
-      const selectedOptions = [];
-      let extraPrice = 0;
-      const inputs = document.querySelectorAll("#optionList input[type=checkbox]");
-      inputs.forEach((input) => {
-        if (input.checked) {
-          const opt = selectedArticle.options[parseInt(input.dataset.index)];
-          selectedOptions.push(opt);
-          extraPrice += opt.price;
-        }
-      });
-      orderList.push({
-        ...selectedArticle,
-        selectedOptions: selectedOptions,
-        totalPrice: selectedArticle.price + extraPrice
-      });
-      updateOrderList();
-      updateMiniCart();
-      document.getElementById("optionModal").style.display = "none";
-    }
-    
-    function removeFromOrder(index) {
-      orderList.splice(index, 1);
-      updateOrderList();
-      updateMiniCart();
-    }
-    
-    // Update Main Order List
-    function updateOrderList() {
-      const list = document.getElementById("orderList");
-      list.innerHTML = "";
-      orderList.forEach((item, index) => {
-        const options = item.selectedOptions?.map(opt => opt.name).join(", ") || "";
-        list.innerHTML += 
-          <li>
-            #${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})
-            ${options ? <br><small>+ ${options}</small> : ""}
-            <button class="remove-btn" onclick="removeFromOrder(${index})">×</button>
-          </li>
-        ;
-      });
-    }
-    
-    // Update Mini Cart with Live Order Preview and Total Price
-    let miniCartIdleTimeout;
-    function updateMiniCart() {
-      const miniCart = document.getElementById("mini-cart");
-      let miniHTML = <h3>Basket</h3><ul>;
-      let total = 0;
-      orderList.forEach(item => {
-        miniHTML += <li>${item.name} - €${item.totalPrice.toFixed(2)}</li>;
-        total += item.totalPrice;
-      });
-      miniHTML += </ul><div class="total">Total: €${total.toFixed(2)}</div>;
-      miniCart.innerHTML = miniHTML;
-      miniCart.classList.add("show");
-      resetMiniCartIdleTimer();
-    }
-    
-    // Auto-hide Mini Cart after 10 seconds of inactivity
-    function resetMiniCartIdleTimer() {
-      clearTimeout(miniCartIdleTimeout);
-      miniCartIdleTimeout = setTimeout(() => {
-        document.getElementById("mini-cart").classList.remove("show");
-      }, 10000);
-    }
-    
-    // Send Order Functionality
-    function sendOrder() {
-      if (orderList.length === 0) {
-        showNotification("No items in order!");
-        return;
-      }
-      const paymentMethod = document.getElementById("payment-method").value;
-      let text = 🇎 New Order from Table ${selectedTable}:\n;
-      orderList.forEach(item => {
-        text += #${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})\n;
-        if (item.selectedOptions && item.selectedOptions.length > 0) {
-          text +=   → ${item.selectedOptions.map(o => o.name +  (+€${o.price.toFixed(2)})).join(", ")}\n;
-        }
-      });
-      text += Payment: ${paymentMethod};
-    
-      fetch(https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)})
-        .then(res => res.json())
-        .then(data => {
-          if (data.ok) {
-            showNotification("✅ Order sent successfully!");
-            orderList = [];
-            selectedTable = null;
-            document.getElementById("table-number").value = "";
-            document.getElementById("payment-method").value = "cash";
-            updateOrderList();
-            updateMiniCart();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            setTimeout(() => { window.location.href = 'index.html'; }, 3000);
-          } else {
-            showNotification("Error sending order");
-          }
-        });
-    }
-    
-    // Option Modal Close Function
-    function closeModal() {
-      document.getElementById("optionModal").style.display = "none";
-    }
+}
+
+function closeModal() {
+  document.getElementById("optionModal").style.display = "none";
+}
+</script>
+
     
     /* IDLE VIDEO SLIDESHOW HANDLER (Preserved from your code) */
     let idleTimeout;
