@@ -166,7 +166,7 @@
     frame.appendChild(video);
 
     overlay.appendChild(overlayText);
-  overlay.appendChild(logo);
+overlay.appendChild(logo);
     overlay.appendChild(frame);
     const overlayText = document.createElement('div');
 overlayText.textContent = 'CLICK THE SCREEN TO ORDER DRINKS';
@@ -180,9 +180,9 @@ overlayText.style.color = '#f26522';
 overlayText.style.textShadow = '0 0 12px rgba(255,100,0,0.8)';
 overlayText.style.fontWeight = 'bold';
 overlayText.style.letterSpacing = '1px';
+overlayText.style.pointerEvents = 'none';
 
 document.body.appendChild(overlay);
-showOverlay();
 
     const videos = ['smoke.mp4', 'grinderz.mp4'];
     let vidIndex = 0;
