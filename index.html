@@ -152,6 +152,12 @@
     overlay.style.opacity = '0';
     overlay.style.transform = 'scale(0.95)';
 
+const logoContainer = document.createElement('div');
+logoContainer.style.width = '100%';
+logoContainer.style.textAlign = 'center';
+logoContainer.appendChild(logo);
+
+    
     const overlayContent = document.createElement('div');
     overlayContent.style.display = 'flex';
     overlayContent.style.flexDirection = 'column';
