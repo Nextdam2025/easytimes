@@ -96,12 +96,13 @@
     }
 
     .idle-message {
-      font-size: 48px;
+      font-size: 42px;
       color: #f26522;
       font-weight: bold;
-      text-shadow: 2px 2px 10px black;
+      text-shadow: 3px 3px 12px black;
       text-align: center;
-      margin-top: 30px;
+      margin: 20px 0 30px;
+      padding: 10px 20px;
       z-index: 10001;
     }
   </style>
@@ -149,6 +150,10 @@
     logo.style.width = '200px';
     logo.style.marginBottom = '20px';
 
+    const idleMsg = document.createElement('div');
+    idleMsg.className = 'idle-message';
+    idleMsg.textContent = 'CLICK THE SCREEN TO ORDER DRINKS';
+
     const frame = document.createElement('div');
     frame.style.width = '80vw';
     frame.style.height = '80vh';
@@ -169,13 +174,9 @@
     video.style.objectFit = 'cover';
     frame.appendChild(video);
 
-    const idleMsg = document.createElement('div');
-    idleMsg.className = 'idle-message';
-    idleMsg.textContent = 'CLICK THE SCREEN TO ORDER DRINKS';
-
     overlay.appendChild(logo);
+    overlay.appendChild(idleMsg); // message ABOVE the video
     overlay.appendChild(frame);
-    overlay.appendChild(idleMsg);
     document.body.appendChild(overlay);
 
     const videos = ['smoke.mp4', 'grinderz.mp4'];
