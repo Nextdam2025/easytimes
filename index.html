@@ -69,19 +69,33 @@
       object-fit: contain;
     }
 
+    .idle-message {
+      position: fixed;
+      top: 120px;
+      width: 100%;
+      text-align: center;
+      font-size: 48px;
+      color: white;
+      font-weight: bold;
+      text-shadow: 2px 2px 8px black;
+      z-index: 1000;
+    }
+
     .main-buttons {
       display: flex;
       flex-direction: column;
-      gap: 20px;
-      margin-top: 150px;
+      align-items: center;
+      gap: 40px;
+      margin-top: 250px;
     }
 
     button {
-      padding: 20px 40px;
-      font-size: 1.5rem;
+      width: 60vw;
+      height: 15vh;
+      font-size: 3rem;
       background: #f0c040;
       border: none;
-      border-radius: 15px;
+      border-radius: 20px;
       color: #121212;
       font-weight: bold;
       transition: background 0.3s, transform 0.2s;
@@ -105,6 +119,8 @@
   <header>
     <img src="EASY TIMES LOGO BLACK-01.png"/>
   </header>
+
+  <div class="idle-message">CLICK THE SCREEN TO ORDER DRINKS</div>
 
   <div class="main-buttons">
     <button onclick="location.href='order-drinks.html'">🛒 Order Now</button>
@@ -190,7 +206,7 @@
       vidIndex = 0;
       setTimeout(() => {
         playNext();
-      }, 300); // slight delay helps Android load
+      }, 300);
     }
 
     function hideOverlay() {
@@ -205,7 +221,7 @@
     function resetIdle() {
       clearTimeout(idleTimeout);
       hideOverlay();
-      idleTimeout = setTimeout(showOverlay, 25000); // 25s idle trigger
+      idleTimeout = setTimeout(showOverlay, 120000); // now 2 minutes = 120,000 ms
     }
 
     ['click', 'mousemove', 'keydown', 'touchstart'].forEach(e =>
