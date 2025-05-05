@@ -8,21 +8,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" 
         rel="stylesheet">
   <style>
-    /* Global Reset and Base Styles */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    /* Global Reset & Base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
-  font-family: 'Roboto', sans-serif;
-  background-color: #000;
-  color: #fff;
-  min-height: 100vh;
-  overflow-x: hidden;   /* ✅ only hide horizontal overflow */
-  overflow-y: auto;     /* ✅ allow vertical scrolling */
-}
-
+      font-family: 'Roboto', sans-serif;
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden; overflow-y: auto;
+    }
     body {
       display: flex;
       flex-direction: column;
@@ -31,356 +25,254 @@
       position: relative;
       z-index: 1;
     }
+
+    /* Logo animation */
     img.logo {
-      width: 150px;
-      max-width: 60%;
+      width: 150px; max-width: 60%;
       margin-bottom: 15px;
       animation: floatLogo 2s ease-in-out infinite alternate;
       border-radius: 20px;
     }
     @keyframes floatLogo {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-8px); }
+      to { transform: translateY(-8px); }
     }
 
+    /* Notification */
     #notification {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #1e4d1e; /* Dark green background */
-  color: #d4f7d4;       /* Light green text */
-  padding: 14px 24px;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  display: none;
-  z-index: 10000;
-  box-shadow: 0 0 12px rgba(0, 255, 0, 0.5);
-  border: 2px solid #4CAF50;
-  opacity: 0;
-  transition: opacity 0.5s ease, transform 0.3s ease;
-  font-weight: bold;
-}
-#notification.show {
-  display: block;
-  opacity: 1;
-  transform: translateX(-50%) scale(1.05);
-}
+      position: fixed;
+      top: 20px; left: 50%;
+      transform: translateX(-50%);
+      background: #1e4d1e; color: #d4f7d4;
+      padding: 14px 24px; border-radius: 8px;
+      font-size: 1.1rem; font-weight: bold;
+      display: none; opacity: 0;
+      transition: opacity 0.5s, transform 0.3s;
+      z-index: 10000;
+      box-shadow: 0 0 12px rgba(0,255,0,0.5);
+      border: 2px solid #4CAF50;
+    }
+    #notification.show {
+      display: block; opacity: 1;
+      transform: translateX(-50%) scale(1.05);
+    }
 
-
+    /* Table selection */
     .table-selection {
-  background: #111;
-  padding: 20px;
-  border-radius: 10px;
-  width: 100%;
-  max-width: 500px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-  text-align: center;
-  margin: 20px auto;
-}
-
+      background: #111; padding: 20px; border-radius: 10px;
+      width: 100%; max-width: 500px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+      text-align: center; margin: 20px auto;
+    }
     .table-label {
-  font-weight: bold;
-  color: #CD7F2F;
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-  display: block;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
+      font-weight: bold; color: #CD7F2F;
+      font-size: 1.2rem; margin-bottom: 10px;
+      display: block; text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
     #table-number {
-  font-size: 1rem;
-  padding: 10px 14px;
-  border: 2px solid #CD7F2F;
-  border-radius: 8px;
-  background-color: #222;
-  color: white;
-  width: 100%;
-  max-width: 220px;
-  margin: 0 auto;
-  transition: border-color 0.3s;
-}
-#table-number:focus {
-  border-color: #FFA500;
-  outline: none;
-}
+      font-size: 1rem; padding: 10px 14px;
+      border: 2px solid #CD7F2F; border-radius: 8px;
+      background: #222; color: #fff;
+      width: 100%; max-width: 220px;
+      transition: border-color 0.3s;
+    }
+    #table-number:focus {
+      outline: none; border-color: #FFA500;
+    }
 
-
+    /* Section titles */
     .section-title {
-  font-size: 1.2rem;
-  color: #CD7F2F;
-  margin: 20px 0 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  width: 100%;
-  text-align: center;
-  font-weight: bold; /* ✅ Add this line */
-}
+      font-size: 1.2rem; color: #CD7F2F;
+      margin: 20px 0 10px; text-transform: uppercase;
+      letter-spacing: 0.05em; text-align: center;
+      width: 100%; font-weight: bold;
+    }
 
-
-    /* Menu Layout */
+    /* Menu items */
     .menu {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
-      max-width: 900px;
-      margin-bottom: 15px;
-      padding: 0 10px;
+      display: flex; flex-wrap: wrap;
+      justify-content: center; gap: 10px;
+      width: 100%; max-width: 900px;
+      margin-bottom: 15px; padding: 0 10px;
     }
     .item {
-  background-color: #222;
-  padding: 20px 16px;
-  border-radius: 12px;
-  width: 250px;
-  height: 60px;
-  cursor: pointer;
-  font-size: 1rem;
-  text-align: center;
-  transition: background-color 0.2s, transform 0.2s, color 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  white-space: normal;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: inset 0 0 3px rgba(255, 255, 255, 0.2), 0 2px 4px rgba(0, 0, 0, 0.6);
+      background: #222; padding: 20px 16px;
+      border-radius: 12px; width: 250px; height: 60px;
+      cursor: pointer; font-size: 1rem; text-align: center;
+      display: flex; align-items: center; justify-content: center;
+      white-space: normal; transition: .2s;
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: inset 0 0 3px rgba(255,255,255,0.2),
+                  0 2px 4px rgba(0,0,0,0.6);
+      color: #fff; font-weight: 600;
+      text-shadow:
+        1px 1px 2px rgba(0,0,0,0.9),
+        0 0 8px rgba(255,255,255,0.2);
+    }
+    .item:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        inset 0 0 3px rgba(255,255,255,0.3),
+        0 4px 8px rgba(0,0,0,0.6);
+      text-shadow:
+        0 0 4px rgba(255,255,255,0.8),
+        0 0 12px rgba(255,255,255,0.4);
+    }
+    .item:active {
+      opacity: 0.9; transform: translateY(0);
+    }
 
-  color: #fff;
-  font-weight: 600;
-
-  /* ✨ NEW: Layered text shadow for readability on any bg */
-  text-shadow:
-    1px 1px 2px rgba(0,0,0,0.9),
-    0 0 8px rgba(255,255,255,0.2);
-}
-
-.item:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    inset 0 0 3px rgba(255, 255, 255, 0.3),
-    0 4px 8px rgba(0, 0, 0, 0.6);
-  text-shadow:
-    0 0 4px rgba(255, 255, 255, 0.8),
-    0 0 12px rgba(255, 255, 255, 0.4);
-}
-
-.item:active {
-  opacity: 0.9;
-  transform: translateY(0);
-}
-
-
-
-    /* Order Summary (Main) */
+    /* Order summary */
     .order-summary {
-      background: #111;
-      padding: 20px;
-      border-radius: 10px;
-      width: 100%;
-      max-width: 500px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-      text-align: left;
-      margin-bottom: 20px;
+      background: #111; padding: 20px;
+      border-radius: 10px; width: 100%;
+      max-width: 500px; box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+      text-align: left; margin-bottom: 20px;
     }
     .order-summary h2 {
-      font-size: 1.4rem;
-      margin-bottom: 10px;
-      color: #CD7F2F;
-      text-align: center;
+      font-size: 1.4rem; margin-bottom: 10px;
+      color: #CD7F2F; text-align: center;
     }
     .order-summary ul {
-      list-style: none;
-      padding: 0;
-      margin: 10px 0;
+      list-style: none; padding: 0; margin: 10px 0;
     }
     .order-summary li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      font-size: 1rem;
-      border-bottom: 1px solid #333;
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 8px;
+      font-size: 1rem; border-bottom: 1px solid #333;
       padding-bottom: 5px;
     }
     .remove-btn {
-      background: transparent;
-      border: none;
-      color: #CD7F2F;
-      font-size: 1.2rem;
-      cursor: pointer;
-      padding: 5px;
+      background: transparent; border: none;
+      color: #CD7F2F; font-size: 1.2rem;
+      cursor: pointer; padding: 5px;
     }
     .confirm-btn {
-      background: #CD7F2F;
-      color: #fff;
-      padding: 14px 22px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1.1rem;
-      margin: 20px auto 0;
-      width: 100%;
-      max-width: 300px;
-      font-weight: bold;
-      display: block;
+      background: #CD7F2F; color: #fff;
+      padding: 14px 22px; border: none;
+      border-radius: 8px; cursor: pointer;
+      font-size: 1.1rem; margin: 20px auto 0;
+      width: 100%; max-width: 300px;
+      display: block; font-weight: bold;
       transition: background 0.3s;
     }
-    .confirm-btn:hover {
-      background: #e89a4a;
-    }
+    .confirm-btn:hover { background: #e89a4a; }
 
-    /* Option Modal */
+    /* Modal */
     .option-modal {
-      position: fixed;
-      top: 0; left: 0;
+      position: fixed; top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
+      background: rgba(0,0,0,0.8);
+      display: flex; justify-content: center;
+      align-items: center; z-index: 9999;
       animation: fadeIn 0.3s;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
+    @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
     .option-box {
-      background: #222;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 300px;
-      width: 100%;
+      background: #222; padding: 20px;
+      border-radius: 10px; max-width: 300px;
+      width: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.7);
       text-align: left;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.7);
     }
-    .option-box h3 {
-      margin-top: 0;
-      color: #CD7F2F;
-    }
-    .option-box label {
-      display: block;
-      margin: 8px 0;
-      font-size: 1rem;
-    }
+    .option-box h3 { margin-top: 0; color: #CD7F2F; }
+    .option-box label { display: block; margin: 8px 0; }
     .option-box button {
-      margin-top: 10px;
-      padding: 10px 14px;
-      border: none;
-      border-radius: 6px;
-      background: #CD7F2F;
-      color: white;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.3s;
-      width: 100%;
-      display: block;
+      margin-top: 10px; padding: 10px 14px;
+      border: none; border-radius: 6px;
+      background: #CD7F2F; color: #fff;
+      cursor: pointer; font-size: 1rem;
+      transition: background 0.3s; width: 100%;
     }
-    .option-box button:hover {
-      background: #e89a4a;
-    }
+    .option-box button:hover { background: #e89a4a; }
 
-    /* Mini Cart Styling */
+    /* Mini-cart */
     #mini-cart {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: rgba(34, 34, 34, 0.95);
-      color: #fff;
-      padding: 15px;
-      border-radius: 10px;
+      position: fixed; bottom: 20px; right: 20px;
+      background: rgba(34,34,34,0.95); color: #fff;
+      padding: 15px; border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-      width: 280px;
-      max-width: 90%;
-      opacity: 0;
-      transition: opacity 0.5s ease;
+      width: 280px; max-width: 90%;
+      opacity: 0; transition: opacity 0.5s;
       z-index: 1000;
     }
-    #mini-cart.show {
-      opacity: 1;
-    }
-    #mini-cart h3 {
-      margin-bottom: 10px;
-      font-size: 1.2rem;
-      color: #CD7F2F;
-    }
+    #mini-cart.show { opacity: 1; }
+    #mini-cart h3 { margin-bottom: 10px; color: #CD7F2F; }
     #mini-cart ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      max-height: 150px;
-      overflow-y: auto;
+      list-style: none; padding: 0; margin: 0;
+      max-height: 150px; overflow-y: auto;
     }
     #mini-cart li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      font-size: 0.9rem;
-      border-bottom: 1px solid #333;
-      padding-bottom: 5px;
+      display: flex; justify-content: space-between;
+      margin-bottom: 8px; font-size: 0.9rem;
+      border-bottom: 1px solid #333; padding-bottom: 5px;
     }
     #mini-cart .total {
-      font-weight: bold;
-      margin-top: 10px;
+      font-weight: bold; margin-top: 10px;
       text-align: right;
     }
-  
-video.bg-video {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  z-index: -1;
-  transform: translate(-50%, -50%);
-  object-fit: cover;
-  opacity: 0.3;
-}
-.orange-frame {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  border: 10px solid #f26522;
-  box-sizing: border-box;
-  pointer-events: none;
-  z-index: 5;
-}
 
-</style>
+    /* Background video (greyed out) */
+    video.bg-video {
+      position: fixed;
+      top: 50%; left: 50%;
+      min-width: 100%; min-height: 100%;
+      width: auto; height: auto;
+      z-index: -1;
+      transform: translate(-50%, -50%);
+      object-fit: cover; opacity: 0.3;
+    }
+
+    /* Always-on-top orange frame */
+    .orange-frame {
+      position: fixed; top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      border: 10px solid #f26522;
+      box-sizing: border-box; pointer-events: none;
+      z-index: 10001;
+    }
+
+    /* NEW: centered & cover slideshow frame */
+    .video-frame {
+      position: relative;
+      width: 70%; height: 70%;
+      border: 4px solid orange;
+      border-radius: 20px;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    .video-frame video {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      min-width: 100%; min-height: 100%;
+      object-fit: cover;
+    }
+  </style>
 </head>
 <body>
 
-<video class="bg-video" autoplay muted loop playsinline>
-  <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4">
-</video>
-<div class="orange-frame"></div>
+  <!-- Background & Orange Border -->
+  <video class="bg-video" autoplay muted loop playsinline>
+    <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4">
+  </video>
+  <div class="orange-frame"></div>
 
-<div style="text-align: center; margin: 20px;">
-  <button onclick="location.href='index.html'" style="
-    padding: 10px 20px;
-    font-size: 1rem;
-    border-radius: 10px;
-    background: #ffffff10;
-    border: none;
-    color: white;
-    cursor: pointer;
-  ">⬅ Back to Home</button>
-</div>
+  <!-- Back button -->
+  <div style="text-align:center; margin:20px;">
+    <button onclick="location.href='index.html'"
+            style="padding:10px 20px; font-size:1rem; border-radius:10px;
+                   background:#ffffff10; border:none; color:white; cursor:pointer;">
+      ⬅ Back to Home
+    </button>
+  </div>
 
-  <!-- Notification Container -->
+  <!-- Notification -->
   <div id="notification"></div>
-  
-  <img src="https://d146j8l6ymhf1q.cloudfront.net/webshop/B52DEAB9-9609-4876-B187-64C952745254-e1617724463401.png" 
-       alt="Easytimes Logo" class="logo" />
 
-  <!-- Table Selection Section -->
+  <!-- Logo & Table select -->
+  <img src="https://d146j8l6ymhf1q.cloudfront.net/webshop/B52DEAB9-9609-4876-B187-64C952745254-e1617724463401.png"
+       alt="Easytimes Logo" class="logo"/>
+
   <div class="table-selection">
     <label for="table-number" class="table-label">Select Table:</label>
     <select id="table-number">
@@ -394,10 +286,10 @@ video.bg-video {
     </select>
   </div>
 
-  <!-- Hot Drinks Section -->
-<div class="section-title">Hot Drinks</div>
-<div class="menu" id="hot-drinks">
-  <div class="item" style="background-color:#CD7F2F" 
+  <!-- Hot & Cold menus… (unchanged) -->
+  <div class="section-title">Hot Drinks</div>
+  <div class="menu" id="hot-drinks">
+    <div class="item" style="background-color:#CD7F2F" 
        onclick='prepareOptions({ name: "Espresso", articleNumber: 102, price: 3.50, buttonColor: "#CD7F2F", options: [ { name: "Whipped Cream", price: 1.00 }, { name: "Extra Oatmilk", price: 1.00 }, { name: "Syrup", price: 1.00 } ] })'>
     Espresso (€3,50)
   </div>
@@ -445,13 +337,11 @@ video.bg-video {
        onclick='prepareOptions({ name: "Fresh Mint Tea", articleNumber: 301, price: 4.50, buttonColor: "#1E90FF", options: [ { name: "Extra Lemon", price: 0.50 }, { name: "Extra Ginger", price: 0.50 }, { name: "Extra Orange Blossom", price: 0.50 }, { name: "Louiza", price: 0.50 } ] })'>
     Fresh Mint Tea (€4,50)
   </div>
-</div>
+  </div>
 
-
-<!-- Cold Drinks Section -->
-<div class="section-title">Cold Drinks</div>
-<div class="menu" id="cold-drinks">
-  <div class="item" style="background-color:#F40009" 
+  <div class="section-title">Cold Drinks</div>
+  <div class="menu" id="cold-drinks">
+    <div class="item" style="background-color:#F40009" 
        onclick='prepareOptions({ name: "Coca-Cola", articleNumber: 401, price: 4.00, buttonColor: "#F40009", options: [ { name: "Added Ice", price: 0.20 } ] })'>
     Coca-Cola (€4,00)
   </div>
@@ -515,17 +405,16 @@ video.bg-video {
        onclick='prepareOptions({ name: "Red Bull Energy Drink", articleNumber: 416, price: 5.00, buttonColor: "#C8102E", options: [] })'>
     Red Bull Energy Drink (€5,00)
   </div>
+  </div>
 
-</div>
-
-
-  <!-- Order Summary (Main) -->
+  <!-- Main order summary -->
   <div class="order-summary">
     <h2>Order Summary</h2>
     <ul id="orderList"></ul>
     <div class="payment-selection" style="text-align:center; margin-top:15px;">
       <label for="payment-method">Payment Method:</label>
-      <select id="payment-method" style="padding: 8px; margin-left: 10px; border-radius: 5px;">
+      <select id="payment-method"
+              style="padding:8px; margin-left:10px; border-radius:5px;">
         <option value="cash">Cash</option>
         <option value="credit">Credit</option>
       </select>
@@ -533,20 +422,19 @@ video.bg-video {
     <button class="confirm-btn" onclick="sendOrder()">Confirm Order</button>
   </div>
 
-  <!-- Option Modal -->
+  <!-- Option modal -->
   <div id="optionModal" class="option-modal" style="display:none">
     <div class="option-box">
       <h3 id="optionTitle"></h3>
       <div id="optionList"></div>
       <button onclick="confirmOptions()">Add to Order</button>
-      <button onclick="closeModal()" style="margin-top: 5px;">Close</button>
+      <button onclick="closeModal()" style="margin-top:5px;">Close</button>
     </div>
   </div>
 
-  <!-- Mini Cart (Preview) -->
+  <!-- Mini cart -->
   <div id="mini-cart"></div>
 
-  <!-- JavaScript -->
   <script>
     const botToken = "7627172769:AAH7I_2LRd0VqZuMOpVxRn_vZbt4QXPn9wU";
     const chatId = "5462781265";
@@ -694,120 +582,101 @@ video.bg-video {
     function closeModal() {
       document.getElementById("optionModal").style.display = "none";
     }
-    
-    /* IDLE VIDEO SLIDESHOW HANDLER (Preserved from your code) */
-    let idleTimeout;
-    const videoOverlay = document.createElement('div');
-    videoOverlay.style.position = 'fixed';
-    videoOverlay.style.top = '0';
-    videoOverlay.style.left = '0';
-    videoOverlay.style.width = '100%';
-    videoOverlay.style.height = '100%';
-    videoOverlay.style.backgroundColor = '#000';
-    videoOverlay.style.zIndex = '10001';
-    videoOverlay.style.display = 'none';
-    videoOverlay.style.display = 'flex';
-    videoOverlay.style.flexDirection = 'column';
-    videoOverlay.style.alignItems = 'center';
-    videoOverlay.style.justifyContent = 'center';
-    videoOverlay.style.transition = 'opacity 1s ease, transform 1s ease';
-    videoOverlay.style.opacity = '0';
-    videoOverlay.style.transform = 'scale(0.9)';
-    
-    const videoLogo = document.createElement('img');
-    videoLogo.src = 'EASY TIMES LOGO BLACK-01.png';
-    videoLogo.alt = 'Easytimes Logo';
-    videoLogo.style.width = '200px';
-    videoLogo.style.marginBottom = '20px';
-    videoLogo.style.marginTop = '40px';
-    
-    const videoFrame = document.createElement('div');
-    videoFrame.style.width = '70%';
-    videoFrame.style.height = '70%';
-    videoFrame.style.border = '4px solid orange';
-    videoFrame.style.borderRadius = '20px';
-    videoFrame.style.overflow = 'hidden';
-    videoFrame.style.boxSizing = 'border-box';
 
-    const videoMessage = document.createElement('div');
+    /* IDLE VIDEO SLIDESHOW HANDLER */
+let slideshowIdleTimeout;
+const videoFiles = ['grinderz.mp4', 'tea.mov'];
+let currentVideoIndex = 0;
+
+// 1) Create the overlay container
+const videoOverlay = document.createElement('div');
+Object.assign(videoOverlay.style, {
+  position: 'fixed',
+  top: 0, left: 0,
+  width: '100%', height: '100%',
+  backgroundColor: '#000',
+  zIndex: '4',            // under .orange-frame (10001)
+  display: 'none',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: 'opacity 1s ease, transform 1s ease',
+  opacity: '0',
+  transform: 'scale(0.9)'
+});
+
+// 2) Logo
+const videoLogo = document.createElement('img');
+videoLogo.src = 'EASY TIMES LOGO BLACK-01.png';
+videoLogo.alt = 'Easytimes Logo';
+videoLogo.style.width = '200px';
+videoLogo.style.margin = '40px 0 20px';
+
+// 3) Message
+const videoMessage = document.createElement('div');
 videoMessage.innerText = 'CLICK THE SCREEN TO ORDER DRINKS';
-videoMessage.style.color = '#FFA500';
-videoMessage.style.fontSize = '2rem';
-videoMessage.style.fontWeight = 'bold';
-videoMessage.style.marginTop = '30px';
-videoMessage.style.textAlign = 'center';
-videoMessage.style.textShadow = '1px 1px 4px black';
-videoOverlay.appendChild(videoMessage);
+Object.assign(videoMessage.style, {
+  color: '#FFA500',
+  fontSize: '2rem',
+  fontWeight: 'bold',
+  textAlign: 'center',
+  textShadow: '1px 1px 4px black',
+  marginBottom: '30px'
+});
 
-    
-    const video = document.createElement('video');
-    video.id = 'slideshowVideo';
-    video.style.width = '100%';
-    video.style.height = '100%';
-    video.style.objectFit = 'cover';
-    video.muted = true;
-    video.controls = false;
-    
-    videoFrame.appendChild(video);
-    videoOverlay.appendChild(videoLogo);
-    videoOverlay.appendChild(videoFrame);
-    document.body.appendChild(videoOverlay);
-    
-    const videoFiles = ['grinderz.mp4', 'tea.mov'];
-    let currentVideoIndex = 0;
-    
-    function playNextVideo() {
-      if (!videoFiles.length) return;
-      video.src = videoFiles[currentVideoIndex];
-      video.load();
-      video.play().catch(err => {
-        console.error('Autoplay failed:', err);
-      });
-      currentVideoIndex = (currentVideoIndex + 1) % videoFiles.length;
-    }
-    
-    video.addEventListener('ended', playNextVideo);
-    video.addEventListener('error', () => {
-      console.error("Error loading video.");
-      playNextVideo();
+// 4) Framed video container
+const videoFrame = document.createElement('div');
+videoFrame.classList.add('video-frame');  // uses your CSS .video-frame rules
+
+// 5) The slideshow <video> itself
+const video = document.createElement('video');
+video.id = 'slideshowVideo';
+video.muted = true;
+video.controls = false;
+videoFrame.appendChild(video);
+
+// 6) Assemble and add to document
+videoOverlay.append(videoLogo, videoMessage, videoFrame);
+document.body.appendChild(videoOverlay);
+
+// 7) Playback logic
+function playNextVideo() {
+  video.src = videoFiles[currentVideoIndex];
+  video.load();
+  video.play().catch(() => {});
+  currentVideoIndex = (currentVideoIndex + 1) % videoFiles.length;
+}
+video.addEventListener('ended', playNextVideo);
+video.addEventListener('error', playNextVideo);
+
+// 8) Idle/reset timer
+function resetSlideshowIdle() {
+  clearTimeout(slideshowIdleTimeout);
+  video.pause();
+  videoOverlay.style.opacity = '0';
+  videoOverlay.style.transform = 'scale(0.9)';
+  setTimeout(() => videoOverlay.style.display = 'none', 800);
+
+  slideshowIdleTimeout = setTimeout(() => {
+    videoOverlay.style.display = 'flex';
+    requestAnimationFrame(() => {
+      videoOverlay.style.opacity = '1';
+      videoOverlay.style.transform = 'scale(1)';
     });
-    
-    function resetIdleTimer() {
-      clearTimeout(idleTimeout);
-      video.pause();
-      videoOverlay.style.opacity = '0';
-      videoOverlay.style.transform = 'scale(0.9)';
-      setTimeout(() => {
-        videoOverlay.style.display = 'none';
-      }, 1000);
-    
-      idleTimeout = setTimeout(() => {
-        videoOverlay.style.display = 'flex';
-        requestAnimationFrame(() => {
-          videoOverlay.style.opacity = '1';
-          videoOverlay.style.transform = 'scale(1)';
-        });
-        currentVideoIndex = 0;
-        playNextVideo();
-      }, 100000); // 100 seconds
-    }
-    
-    ['click', 'mousemove', 'keydown', 'touchstart'].forEach(evt => {
-      document.addEventListener(evt, resetIdleTimer);
-    });
-    
-    videoOverlay.addEventListener('click', () => {
-      video.pause();
-      videoOverlay.style.opacity = '0';
-      videoOverlay.style.transform = 'scale(0.9)';
-      setTimeout(() => {
-        videoOverlay.style.display = 'none';
-      }, 1000);
-      resetIdleTimer();
-    });
-    
-    resetIdleTimer();
-  </script>
+    currentVideoIndex = 0;
+    playNextVideo();
+  }, 25000);  // 25 seconds
+}
+
+// 9) Hook up user activity
+['click','mousemove','keydown','touchstart'].forEach(evt =>
+  document.addEventListener(evt, resetSlideshowIdle)
+);
+videoOverlay.addEventListener('click', resetSlideshowIdle);
+
+// 10) Kick it off
+resetSlideshowIdle();
+
+</script>
 </body>
 </html>
-
