@@ -165,9 +165,6 @@
     video.style.objectFit = 'cover';
     frame.appendChild(video);
 
-    overlay.appendChild(overlayText);
-overlay.appendChild(logo);
-    overlay.appendChild(frame);
     const overlayText = document.createElement('div');
 overlayText.textContent = 'CLICK THE SCREEN TO ORDER DRINKS';
 overlayText.style.position = 'absolute';
@@ -181,6 +178,10 @@ overlayText.style.textShadow = '0 0 12px rgba(255,100,0,0.8)';
 overlayText.style.fontWeight = 'bold';
 overlayText.style.letterSpacing = '1px';
 overlayText.style.pointerEvents = 'none';
+
+overlay.appendChild(overlayText);
+overlay.appendChild(logo);
+
 
 document.body.appendChild(overlay);
 
