@@ -181,9 +181,9 @@ overlayText.style.pointerEvents = 'none';
 
 overlay.appendChild(overlayText);
 overlay.appendChild(logo);
-
-
+overlay.appendChild(frame); // <-- THIS WAS MISSING
 document.body.appendChild(overlay);
+
 
     const videos = ['smoke.mp4', 'grinderz.mp4'];
     let vidIndex = 0;
