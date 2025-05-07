@@ -663,11 +663,12 @@ document.body.appendChild(videoOverlay);
 
 // 7) Playback logic
 function playNextVideo() {
-  video.src = videoFiles[currentVideoIndex];
+  video.src = videos[currentVideoIndex];
   video.load();
   video.play().catch(() => {});
-  currentVideoIndex = (currentVideoIndex + 1) % videoFiles.length;
+  currentVideoIndex = (currentVideoIndex + 1) % videos.length;
 }
+
 video.addEventListener('ended', playNextVideo);
 video.addEventListener('error', playNextVideo);
 
