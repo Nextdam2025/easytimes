@@ -655,7 +655,10 @@ const video = document.createElement('video');
 video.id = 'slideshowVideo';
 video.muted = true;
 video.controls = false;
+video.autoplay = true;      // ✅ Needed for autoplay
+video.playsInline = true;   // ✅ Especially on iOS
 videoFrame.appendChild(video);
+
 
 // 6) Assemble and add to document
 videoOverlay.append(videoLogo, videoMessage, videoFrame);
