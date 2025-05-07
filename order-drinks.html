@@ -464,12 +464,12 @@
         return;
       }
       selectedArticle = article;
-      document.getElementById("optionTitle").innerText = Options for ${article.name};
+      document.getElementById("optionTitle").innerText = `Options for ${article.name}`;
       const optionList = document.getElementById("optionList");
       optionList.innerHTML = "";
       article.options.forEach((opt, index) => {
         const checkbox = document.createElement("label");
-        checkbox.innerHTML = <input type='checkbox' data-index='${index}'> ${opt.name} (+€${opt.price.toFixed(2)});
+        checkbox.innerHTML = `<input type='checkbox' data-index='${index}'> ${opt.name} (+€${opt.price.toFixed(2)})`;
         optionList.appendChild(checkbox);
       });
       document.getElementById("optionModal").style.display = "flex";
@@ -509,13 +509,13 @@
       list.innerHTML = "";
       orderList.forEach((item, index) => {
         const options = item.selectedOptions?.map(opt => opt.name).join(", ") || "";
-        list.innerHTML += 
+        list.innerHTML += `
           <li>
             #${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})
-            ${options ? <br><small>+ ${options}</small> : ""}
+            ${options ? `<br><small>+ ${options}</small>` : ""}
             <button class="remove-btn" onclick="removeFromOrder(${index})">×</button>
           </li>
-        ;
+        `;
       });
     }
     
@@ -523,13 +523,13 @@
     let miniCartIdleTimeout;
     function updateMiniCart() {
       const miniCart = document.getElementById("mini-cart");
-      let miniHTML = <h3>Basket</h3><ul>;
+      let miniHTML = `<h3>Basket</h3><ul>`;
       let total = 0;
       orderList.forEach(item => {
-        miniHTML += <li>${item.name} - €${item.totalPrice.toFixed(2)}</li>;
+        miniHTML += `<li>${item.name} - €${item.totalPrice.toFixed(2)}</li>`;
         total += item.totalPrice;
       });
-      miniHTML += </ul><div class="total">Total: €${total.toFixed(2)}</div>;
+      miniHTML += `</ul><div class="total">Total: €${total.toFixed(2)}</div>`;
       miniCart.innerHTML = miniHTML;
       miniCart.classList.add("show");
       resetMiniCartIdleTimer();
@@ -550,16 +550,16 @@
         return;
       }
       const paymentMethod = document.getElementById("payment-method").value;
-      let text = 🇎 New Order from Table ${selectedTable}:\n;
+      let text = `🇎 New Order from Table ${selectedTable}:\n`;
       orderList.forEach(item => {
-        text += #${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})\n;
+        text += `#${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})\n`;
         if (item.selectedOptions && item.selectedOptions.length > 0) {
-          text +=   → ${item.selectedOptions.map(o => o.name +  (+€${o.price.toFixed(2)})).join(", ")}\n;
+          text += `  → ${item.selectedOptions.map(o => o.name + ` (+€${o.price.toFixed(2)})`).join(", ")}\n`;
         }
       });
-      text += Payment: ${paymentMethod};
+      text += `Payment: ${paymentMethod}`;
     
-      fetch(https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)})
+      fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`)
         .then(res => res.json())
         .then(data => {
           if (data.ok) {
@@ -678,5 +678,19 @@ videoOverlay.addEventListener('click', resetSlideshowIdle);
 resetSlideshowIdle();
 
 </script>
+
+<script>
+function sendOrderToBackend(orderText) {
+    fetch("/send-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: orderText })
+    })
+    .then(res => res.json())
+    .then(data => console.log("Order sent:", data))
+    .catch(err => console.error("Error:", err));
+}
+</script>
+
 </body>
 </html>
