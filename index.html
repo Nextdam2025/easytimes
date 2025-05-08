@@ -227,13 +227,11 @@ video.muted = true;
   requestAnimationFrame(() => {
     overlay.style.opacity = '1';
     overlay.style.transform = 'scale(1)';
-    // Start video after transition begins
-    setTimeout(() => {
-      vidIndex = 0;
-      playNext();
-    }, 200); // Delay ensures overlay is visible before playback
+    vidIndex = 0;
+    playNext(); // ✅ call immediately once visible, not inside a timeout
   });
 }
+
 
     function hideOverlay() {
       video.pause();
