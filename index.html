@@ -212,7 +212,7 @@ video.muted = true;
     const videos = ['smoke.mp4', 'grinderz.mp4', 'cakes.mp4'];
     let vidIndex = 0;
     function playNext() {
-      video.src = videos[vidIndex];
+      video.src = videos[0];
       video.load();
       const promise = video.play();
       if (promise !== undefined) promise.catch(e => console.warn('Autoplay blocked:', e));
