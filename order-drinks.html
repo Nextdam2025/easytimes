@@ -745,6 +745,26 @@ function sendOrderToBackend(orderText) {
     width: 100%;
     z-index: 9999;
   }
+  #customAlert {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -30%);
+  background: rgba(34, 34, 34, 0.95); /* same as mini-cart */
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  z-index: 10000;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  border: 2px solid #CD7F2F; /* accent color */
+  display: none;
+  max-width: 300px;
+  width: 80%;
+}
+
   #modeIndicator {
     position: fixed;
     bottom: 10px;
