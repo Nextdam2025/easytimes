@@ -731,5 +731,89 @@ function sendOrderToBackend(orderText) {
        alt="Easytimes Logo" class="logo" />
 </div>
 
+
+<style>
+  #soloModeBanner {
+    display: none;
+    background: #ff9900;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+  }
+  #modeIndicator {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: #ff9900;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    z-index: 9999;
+  }
+</style>
+
+<div id="soloModeBanner">Self Pickup Mode: Please collect your drinks downstairs after ordering.</div>
+<div id="modeIndicator"></div>
+
+<script>
+  // Toggle mode by long-press top-left corner
+  let pressTimer;
+  const modeIndicator = document.getElementById("modeIndicator");
+
+  document.body.addEventListener("touchstart", function(e) {
+    if (e.touches[0].clientX < 100 && e.touches[0].clientY < 100) {
+      pressTimer = window.setTimeout(toggleSoloMode, 1500);
+    }
+  });
+  document.body.addEventListener("touchend", function() {
+    clearTimeout(pressTimer);
+  });
+
+  function toggleSoloMode() {
+    const current = localStorage.getItem("soloMode") === "true";
+    const newMode = !current;
+    localStorage.setItem("soloMode", newMode);
+    applySoloMode(newMode);
+    alert("Solo Staff Mode is now " + (newMode ? "ON" : "OFF"));
+  }
+
+  function applySoloMode(enabled) {
+    const banner = document.getElementById("soloModeBanner");
+    if (enabled) {
+      banner.style.display = "block";
+      if (modeIndicator) modeIndicator.innerText = "Solo Mode Active";
+    } else {
+      banner.style.display = "none";
+      if (modeIndicator) modeIndicator.innerText = "Full Staff Mode";
+    }
+  }
+
+  function getConfirmationMessage() {
+    return localStorage.getItem("soloMode") === "true"
+      ? "Thank you! Please pick up your drinks downstairs."
+      : "Thank you! Your drinks will be brought upstairs shortly.";
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const soloMode = localStorage.getItem("soloMode") === "true";
+    applySoloMode(soloMode);
+
+    const confirmBtn = document.querySelector(".confirm-order"); // Adjust selector if needed
+    if (confirmBtn) {
+      confirmBtn.addEventListener("click", () => {
+        setTimeout(() => {
+          alert(getConfirmationMessage());
+        }, 300); // Adjust delay if needed
+      });
+    }
+  });
+</script>
+
 </body>
 </html>
