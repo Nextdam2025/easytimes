@@ -734,17 +734,22 @@ function sendOrderToBackend(orderText) {
 
 <style>
   #soloModeBanner {
-    display: none;
-    background: #ff9900;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    font-weight: bold;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 9999;
-  }
+  display: none;
+  background: rgba(0, 0, 0, 0.95);
+  color: #FFA500;
+  text-align: center;
+  padding: 18px 24px;
+  font-weight: bold;
+  font-size: 1.3rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+  border-bottom: 4px solid #f26522;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  text-shadow: 1px 1px 4px black;
+  letter-spacing: 0.03em;
+}
   #customAlert {
   position: fixed;
   top: 30%;
@@ -766,16 +771,18 @@ function sendOrderToBackend(orderText) {
 }
 
   #modeIndicator {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    background: #ff9900;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 10px;
-    font-size: 12px;
-    z-index: 9999;
-  }
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background: #f26522;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: bold;
+  z-index: 9999;
+  box-shadow: 0 0 6px rgba(0,0,0,0.5);
+}
 </style>
 
 <div id="soloModeBanner">Self Pickup Mode: Please collect your drinks downstairs after ordering.</div>
