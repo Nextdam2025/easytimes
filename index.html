@@ -219,11 +219,18 @@
     video.addEventListener('ended', playNext);
     video.addEventListener('error', () => { console.error('Video error:', video.src); playNext(); });
     function showOverlay() {
-      overlay.style.display = 'flex';
-      requestAnimationFrame(() => { overlay.style.opacity = '1'; overlay.style.transform = 'scale(1)'; });
+  overlay.style.display = 'flex';
+  requestAnimationFrame(() => {
+    overlay.style.opacity = '1';
+    overlay.style.transform = 'scale(1)';
+    // Start video after transition begins
+    setTimeout(() => {
       vidIndex = 0;
-      setTimeout(playNext, 300);
-    }
+      playNext();
+    }, 200); // Delay ensures overlay is visible before playback
+  });
+}
+
     function hideOverlay() {
       video.pause();
       overlay.style.opacity = '0';
