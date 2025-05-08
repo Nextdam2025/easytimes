@@ -199,8 +199,11 @@
     const frame = document.createElement('div');
     frame.classList.add('frame');
     const video = document.createElement('video');
-    video.setAttribute('playsinline', ''); video.setAttribute('muted', '');
-    video.setAttribute('autoplay', ''); video.muted = true; video.autoplay = true;
+video.setAttribute('autoplay', '');
+video.setAttribute('playsinline', '');
+video.setAttribute('muted', '');
+video.autoplay = true;
+video.muted = true;
     video.controls = false; frame.appendChild(video);
 
     overlay.appendChild(logo); overlay.appendChild(overlayText); overlay.appendChild(frame);
@@ -218,6 +221,7 @@
 
     video.addEventListener('ended', playNext);
     video.addEventListener('error', () => { console.error('Video error:', video.src); playNext(); });
+    
     function showOverlay() {
   overlay.style.display = 'flex';
   requestAnimationFrame(() => {
