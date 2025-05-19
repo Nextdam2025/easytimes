@@ -460,7 +460,6 @@ body {
         showNotification("No items in order!");
         return;
       }
-      const paymentMethod = document.getElementById("payment-method").value;
       let text = `🇎 New Order:\n`;
       orderList.forEach(item => {
         text += `#${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})\n`;
@@ -468,7 +467,6 @@ body {
           text += `  → ${item.selectedOptions.map(o => o.name + ` (+€${o.price.toFixed(2)})`).join(", ")}\n`;
         }
       });
-      text += `Payment: ${paymentMethod}`;
     
       fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`)
         .then(res => res.json())
@@ -476,9 +474,6 @@ body {
           if (data.ok) {
             showNotification("✅ Order sent successfully!");
             orderList = [];
-            selectedTable = null;
-            document.getElementById("table-number").value = "";
-            document.getElementById("payment-method").value = "cash";
             updateOrderList();
             updateMiniCart();
             window.scrollTo({ top: 0, behavior: 'smooth' });
