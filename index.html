@@ -18,9 +18,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       overflow: hidden;
       color: white;
+      padding: 40px;
     }
 
     .orange-frame {
@@ -36,120 +37,83 @@
     }
 
     header {
-      position: relative;
-      top: 0;
       width: 100%;
-      padding: 60px 20px 30px;
-      background: none;
       display: flex;
-      justify-content: center;
-      align-items: center;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
       z-index: 10;
+      flex-grow: 1;
     }
+
     header img {
-      height: auto;
-      width: 200px;
-      max-width: 80vw;
-      margin-bottom: 15px;
+      width: 320px;
+      max-width: 90vw;
+      margin-bottom: 30px;
     }
+
     header h1 {
       font-family: 'Oleo Script', cursive;
-      font-size: 3.2rem;
+      font-size: 4rem;
       color: #f26522;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
     }
+
     .main-button {
-      margin-top: 60px;
       z-index: 10;
       animation: fadeIn 1s ease forwards;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
+
     .main-button button {
-      padding: 25px 60px;
-      font-size: 2rem;
+      padding: 30px 80px;
+      font-size: 2.5rem;
       border: none;
-      border-radius: 20px;
+      border-radius: 25px;
       background: linear-gradient(145deg, #f26522, #ff7e29);
       color: #fff;
       font-weight: bold;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
       transition: all 0.3s ease;
     }
+
     .main-button button:hover {
       background: #f0c040;
-      transform: scale(1.08);
+      transform: scale(1.1);
       cursor: pointer;
       color: #121212;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(40px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+
     footer {
-      position: absolute;
-      bottom: 10px;
       width: 100%;
       text-align: center;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       color: #aaa;
+      padding-bottom: 20px;
+      z-index: 10;
     }
-    .frame {
-      position: relative;
-      width: 80vw;
-      height: 80vh;
-      border: 10px solid orange;
-      border-radius: 20px;
-      overflow: hidden;
-      box-sizing: border-box;
-    }
-    .frame video {
-      position: absolute;
+
+    .overlay {
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: contain;
-    }
-    #soloModeBanner {
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 2rem;
       display: none;
-      background: #ff9900;
-      color: white;
-      text-align: center;
-      padding: 10px;
-      font-weight: bold;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 9999;
-    }
-    #modeIndicator {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      background: #ff9900;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 10px;
-      font-size: 12px;
-      z-index: 9999;
-    }
-    #customAlert {
-      position: fixed;
-      top: 30%;
-      left: 50%;
-      transform: translate(-50%, -30%);
-      background: black;
-      color: white;
-      padding: 30px;
-      border: 4px solid orange;
-      font-size: 20px;
-      font-weight: bold;
       z-index: 10000;
-      border-radius: 20px;
-      text-align: center;
-      display: none;
     }
+
   </style>
 </head>
 <body>
@@ -169,130 +133,37 @@
     <p>&copy; 2025 Easy Times Amsterdam. All rights reserved.</p>
   </footer>
 
-  <div id="soloModeBanner">Self Pickup Mode: Please collect your drinks downstairs after ordering.</div>
-  <div id="modeIndicator"></div>
-  <div id="customAlert"></div>
+  <div class="overlay" id="idleOverlay">
+    <p>CLICK THE SCREEN TO ORDER DRINKS</p>
+    <video id="overlayVideo" autoplay muted loop playsinline width="80%">
+      <source src="smoke.mp4" type="video/mp4">
+    </video>
+  </div>
 
   <script>
     let idleTimeout;
-    const overlay = document.createElement('div');
-    Object.assign(overlay.style, {
-      position: 'fixed', top: '0', left: '0', width: '100vw', height: '100vh',
-      zIndex: '4', background: '#000', display: 'none', flexDirection: 'column',
-      alignItems: 'center', justifyContent: 'center', transition: 'opacity 1s ease, transform 1s ease',
-      opacity: '0', transform: 'scale(0.95)'
-    });
+    const overlay = document.getElementById('idleOverlay');
 
-    const logo = document.createElement('img');
-    logo.src = 'EASY TIMES LOGO BLACK-01.png';
-    logo.alt = 'Easytimes Logo';
-    logo.style.width = '200px';
-    logo.style.marginBottom = '20px';
-
-    const overlayText = document.createElement('div');
-    overlayText.textContent = 'CLICK THE SCREEN TO ORDER DRINKS';
-    Object.assign(overlayText.style, {
-      color: '#f26522', fontSize: '2rem', fontWeight: 'bold', textAlign: 'center',
-      textShadow: '0 0 12px rgba(255,100,0,0.8)', margin: '20px 0', pointerEvents: 'none'
-    });
-
-    const frame = document.createElement('div');
-    frame.classList.add('frame');
-    const video = document.createElement('video');
-video.setAttribute('autoplay', '');
-video.setAttribute('muted', '');
-video.setAttribute('playsinline', '');
-video.autoplay = true;
-video.muted = true;
-    video.controls = false; frame.appendChild(video);
-
-    overlay.appendChild(logo); overlay.appendChild(overlayText); overlay.appendChild(frame);
-    document.body.appendChild(overlay);
-
-    const videos = ['smoke.mp4', 'Mascotte2.mp4, 'cakes.mp4', 'Mascotte1.mp4', 'bin.jpeg'];
-    let vidIndex = 0;
-    function playNext() {
-      video.src = videos[0];
-      video.load();
-      const promise = video.play();
-      if (promise !== undefined) promise.catch(e => console.warn('Autoplay blocked:', e));
-      vidIndex = (vidIndex + 1) % videos.length;
-    }
-
-    video.addEventListener('ended', playNext);
-    video.addEventListener('error', () => { console.error('Video error:', video.src); playNext(); });
-    
     function showOverlay() {
-  overlay.style.display = 'flex';
-  requestAnimationFrame(() => {
-    overlay.style.opacity = '1';
-    overlay.style.transform = 'scale(1)';
-    vidIndex = 0;
-    playNext(); // ✅ call immediately once visible, not inside a timeout
-  });
-}
-
+      overlay.style.display = 'flex';
+    }
 
     function hideOverlay() {
-      video.pause();
-      overlay.style.opacity = '0';
-      overlay.style.transform = 'scale(0.9)';
-      setTimeout(() => overlay.style.display = 'none', 800);
+      overlay.style.display = 'none';
     }
-    function resetIdle() {
-      clearTimeout(idleTimeout); hideOverlay(); idleTimeout = setTimeout(showOverlay, 25000);
+
+    function resetIdleTimer() {
+      clearTimeout(idleTimeout);
+      hideOverlay();
+      idleTimeout = setTimeout(showOverlay, 25000);
     }
-    ['click','mousemove','keydown','touchstart'].forEach(evt => document.addEventListener(evt, resetIdle));
-    overlay.addEventListener('click', resetIdle);
-    resetIdle();
 
-    let pressTimer;
-    const modeIndicator = document.getElementById("modeIndicator");
-    const customAlert = document.getElementById("customAlert");
-
-    document.body.addEventListener("touchstart", function(e) {
-  if (e.touches[0].clientX < 100 && e.touches[0].clientY < 100) {
-    pressTimer = window.setTimeout(toggleSoloMode, 10000);  // ✅ 10 seconds
-  }
-});
-
-    document.body.addEventListener("touchend", function() {
-      clearTimeout(pressTimer);
+    ['click','mousemove','keydown','touchstart'].forEach(evt => {
+      document.addEventListener(evt, resetIdleTimer);
     });
 
-    function showCustomAlert(message) {
-      if (customAlert) {
-        customAlert.innerText = message;
-        customAlert.style.display = "block";
-        setTimeout(() => {
-          customAlert.style.display = "none";
-        }, 4000);
-      }
-    }
-
-    function toggleSoloMode() {
-      const current = localStorage.getItem("soloMode") === "true";
-      const newMode = !current;
-      localStorage.setItem("soloMode", newMode);
-      applySoloMode(newMode);
-      showCustomAlert("Solo Staff Mode is now " + (newMode ? "ON" : "OFF"));
-    }
-
-    function applySoloMode(enabled) {
-      const banner = document.getElementById("soloModeBanner");
-      if (enabled) {
-        banner.style.display = "block";
-        if (modeIndicator) modeIndicator.innerText = "Solo Mode Active";
-      } else {
-        banner.style.display = "none";
-        if (modeIndicator) modeIndicator.innerText = "Full Staff Mode";
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const soloMode = localStorage.getItem("soloMode") === "true";
-      applySoloMode(soloMode);
-    });
+    overlay.addEventListener('click', resetIdleTimer);
+    resetIdleTimer();
   </script>
 
 </body>
