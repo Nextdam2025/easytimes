@@ -7,30 +7,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700&family=Oleo+Script&display=swap" rel="stylesheet">
   <style>
     /* Inside overlay logo and message */
-.overlay-logo {
-  width: 200px;
-  margin-top: 30px;
-  z-index: 2;
-  position: relative;
-}
-
-.overlay-text {
-  color: #FFA500;
-  font-size: 2rem;
-  font-weight: bold;
-  margin: 20px 0;
-  text-align: center;
-  z-index: 2;
-  position: relative;
-  text-shadow: 1px 1px 4px black;
-}
 
 /* Video goes behind */
-.media-slot {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  z-index: 1;
-}
+
 
 .video-frame {
   position: fixed;
@@ -142,17 +121,7 @@
     }
 
     /* Slideshow Overlay remains unchanged */
-    #slideshowOverlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: #000;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      z-index: 10000;
-    }
+
 
   
 @media (orientation: landscape) {
@@ -303,69 +272,7 @@
 </script>
 
 
-  <!-- Slideshow JavaScript (unchanged) -->
-  <script>
-    const mediaItems = [
-      { type: 'video', src: 'smoke.mp4' },
-      { type: 'video', src: 'Mascotte2.mp4' },
-      { type: 'video', src: 'cakes.mp4' },
-      { type: 'video', src: 'Mascotte1.mp4' }
-    ];
-
-    let currentMediaIndex = 0;
-    let idleTimeout;
-
-    const slideshowOverlay = document.getElementById('slideshowOverlay');
-    const mediaContainer = document.getElementById('mediaContainer');
-
-    function showOverlay() {
-      slideshowOverlay.style.display = 'flex';
-      playNextMedia();
-    }
-
-    function hideOverlay() {
-      slideshowOverlay.style.display = 'none';
-      mediaContainer.innerHTML = '';
-    }
-
-    function resetIdleTimer() {
-      clearTimeout(idleTimeout);
-      hideOverlay();
-      idleTimeout = setTimeout(showOverlay, 25000);
-    }
-
-    ['click', 'mousemove', 'keydown', 'touchstart'].forEach(evt =>
-      document.addEventListener(evt, resetIdleTimer)
-    );
-    slideshowOverlay.addEventListener('click', resetIdleTimer);
-
-    function playNextMedia() {
-      const item = mediaItems[currentMediaIndex];
-      mediaContainer.innerHTML = '';
-
-      if (item.type === 'video') {
-        const video = document.createElement('video');
-        video.src = item.src;
-        video.autoplay = true;
-        video.muted = true;
-        video.playsInline = true;
-        video.onended = nextMedia;
-        mediaContainer.appendChild(video);
-        video.play().catch(() => {});
-      } else if (item.type === 'image') {
-        const img = document.createElement('img');
-        img.src = item.src;
-        mediaContainer.appendChild(img);
-        setTimeout(nextMedia, item.duration);
-      }
-    }
-
-    function nextMedia() {
-      currentMediaIndex = (currentMediaIndex + 1) % mediaItems.length;
-      playNextMedia();
-    }
-
-    resetIdleTimer();
+  
   </script>
 </body>
 </html>
