@@ -6,6 +6,56 @@
   <title>EasyTimes Jukebox</title>
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700&family=Oleo+Script&display=swap" rel="stylesheet">
   <style>
+    /* Inside overlay logo and message */
+.overlay-logo {
+  width: 200px;
+  margin-top: 30px;
+  z-index: 2;
+  position: relative;
+}
+
+.overlay-text {
+  color: #FFA500;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 20px 0;
+  text-align: center;
+  z-index: 2;
+  position: relative;
+  text-shadow: 1px 1px 4px black;
+}
+
+/* Video goes behind */
+.media-slot {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 1;
+}
+
+.video-frame {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  max-width: 1280px;
+  aspect-ratio: 9/16;
+  border: 10px solid #f26522;
+  border-radius: 20px;
+  overflow: hidden;
+  background: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 20px;
+}
+
+@media (orientation: landscape) {
+  .video-frame {
+    aspect-ratio: 16 / 9;
+  }
+}
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
@@ -168,10 +218,12 @@
   </footer>
 
   <div id="slideshowOverlay">
-    <img src="EASY TIMES LOGO BLACK-01.png" alt="Logo">
-    <div class="text">CLICK THE SCREEN TO ORDER DRINKS</div>
-    <div class="video-frame" id="mediaContainer"></div>
+  <div class="video-frame">
+    <img src="EASY TIMES LOGO BLACK-01.png" alt="Logo" class="overlay-logo">
+    <div class="overlay-text">CLICK THE SCREEN TO ORDER DRINKS</div>
+    <div id="mediaContainer" class="media-slot"></div>
   </div>
+</div>
 
   <!-- Slideshow JavaScript (unchanged) -->
   <script>
