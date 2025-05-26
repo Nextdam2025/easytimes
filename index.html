@@ -124,7 +124,6 @@
   transform: translate(-50%, -50%);
   width: 90vw;
   max-height: 90vh;
-  aspect-ratio: 16 / 9;
   border: 10px solid #f26522;
   border-radius: 20px;
   background: black;
@@ -133,6 +132,13 @@
   align-items: center;
   justify-content: center;
   z-index: 10001;
+  aspect-ratio: 9 / 16; /* Default: portrait orientation */
+}
+
+@media (orientation: landscape) {
+  .video-frame {
+    aspect-ratio: 16 / 9; /* Landscape override */
+  }
 }
 
 .video-frame video,
