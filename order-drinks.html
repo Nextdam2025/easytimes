@@ -258,13 +258,21 @@ body {
   position: relative;
   width: 90vw;
   max-width: 1280px;
-  aspect-ratio: 16 / 9;
   border: 10px solid #f26522;
   border-radius: 20px;
   overflow: hidden;
   box-sizing: border-box;
   background: black;
+  aspect-ratio: 9 / 16; /* Default for vertical screens */
 }
+
+/* Landscape override */
+@media (orientation: landscape) {
+  .video-frame {
+    aspect-ratio: 16 / 9;
+  }
+}
+
 
     .video-frame video {
   position: absolute;
