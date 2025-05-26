@@ -682,57 +682,58 @@ function sendOrderToBackend(orderText) {
 <div id="modeIndicator"></div>
 
 <script>
-  // Toggle mode by long-press top-left corner
-  let pressTimer;
-  const modeIndicator = document.getElementById("modeIndicator");
+  <script>
+// Toggle mode by long-press top-left corner
+let pressTimer;
+const modeIndicator = document.getElementById("modeIndicator");
 
-  document.body.addEventListener("touchstart", function(e) {
-    if (e.touches[0].clientX < 100 && e.touches[0].clientY < 100) {
-      pressTimer = window.setTimeout(toggleSoloMode, 1500);
-    }
-  });
-  document.body.addEventListener("touchend", function() {
-    clearTimeout(pressTimer);
-  });
-
-  function toggleSoloMode() {
-    const current = localStorage.getItem("soloMode") === "true";
-    const newMode = !current;
-    localStorage.setItem("soloMode", newMode);
-    applySoloMode(newMode);
-    alert("Solo Staff Mode is now " + (newMode ? "ON" : "OFF"));
+document.body.addEventListener("touchstart", function(e) {
+  if (e.touches[0].clientX < 100 && e.touches[0].clientY < 100) {
+    pressTimer = window.setTimeout(toggleSoloMode, 1500);
   }
+});
+document.body.addEventListener("touchend", function() {
+  clearTimeout(pressTimer);
+});
 
-  function applySoloMode(enabled) {
-    const banner = document.getElementById("soloModeBanner");
-    if (enabled) {
-      banner.style.display = "block";
-      if (modeIndicator) modeIndicator.innerText = "Solo Mode Active";
-    } else {
-      banner.style.display = "none";
-      if (modeIndicator) modeIndicator.innerText = "Full Staff Mode";
-    }
+function toggleSoloMode() {
+  const current = localStorage.getItem("soloMode") === "true";
+  const newMode = !current;
+  localStorage.setItem("soloMode", newMode);
+  applySoloMode(newMode);
+  alert("Solo Staff Mode is now " + (newMode ? "ON" : "OFF"));
+}
+
+function applySoloMode(enabled) {
+  const banner = document.getElementById("soloModeBanner");
+  if (enabled) {
+    banner.style.display = "block";
+    if (modeIndicator) modeIndicator.innerText = "Solo Mode Active";
+  } else {
+    banner.style.display = "none";
+    if (modeIndicator) modeIndicator.innerText = "Full Staff Mode";
   }
+}
 
-  function getConfirmationMessage() {
-    return localStorage.getItem("soloMode") === "true"
-      ? "Thank you! Please pick up your drinks downstairs."
-      : "Thank you! Your drinks will be brought upstairs shortly.";
+function getConfirmationMessage() {
+  return localStorage.getItem("soloMode") === "true"
+    ? "Thank you! Please pick up your drinks downstairs."
+    : "Thank you! Your drinks will be brought upstairs shortly.";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const soloMode = localStorage.getItem("soloMode") === "true";
+  applySoloMode(soloMode);
+
+  const confirmBtn = document.querySelector(".confirm-order"); // Adjust selector if needed
+  if (confirmBtn) {
+    confirmBtn.addEventListener("click", () => {
+      setTimeout(() => {
+        alert(getConfirmationMessage());
+      }, 300); // Adjust delay if needed
+    });
   }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const soloMode = localStorage.getItem("soloMode") === "true";
-    applySoloMode(soloMode);
-
-    const confirmBtn = document.querySelector(".confirm-order"); // Adjust selector if needed
-    if (confirmBtn) {
-      confirmBtn.addEventListener("click", () => {
-        setTimeout(() => {
-          alert(getConfirmationMessage());
-        }, 300); // Adjust delay if needed
-      });
-    }
-  });
+});
 </script>
 
 </body>
