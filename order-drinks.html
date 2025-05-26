@@ -8,21 +8,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" 
         rel="stylesheet">
   <style>
-    .video-frame {
-      position: relative;
-      width: 70%; height: 70%;
-      border: 4px solid orange;
-      border-radius: 20px;
-      overflow: hidden;
-      box-sizing: border-box;
-    }
-    .video-frame video, .video-frame img {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      min-width: 100%; min-height: 100%;
-      object-fit: cover;
-    }
 /* Global Reset & Base */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body {
@@ -289,10 +274,10 @@ body {
 <body>
 
   <!-- Background & Orange Border -->
-<video class="bg-video" autoplay muted loop playsinline>
-  <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4">
-</video>
-<div class="orange-frame"></div>
+  <video class="bg-video" autoplay muted loop playsinline>
+    <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4">
+  </video>
+  <div class="orange-frame"></div>
 
   <!-- Back button -->
   <div style="text-align:center; margin:20px;">
@@ -506,7 +491,7 @@ body {
 
     /* IDLE VIDEO SLIDESHOW HANDLER */
 let slideshowIdleTimeout;
-const videos = ['smoke.mp4', 'Mascotte2.mp4', 'cakes.mp4', 'bin.jpeg', 'Mascotte1.mp4'];
+const videos = ['smoke.mp4', 'Mascotte2.mp4', 'cakes.mp4', 'Mascotte1.mp4'];
 let currentVideoIndex = 0;
 
 // 1) Create the overlay container
@@ -601,7 +586,7 @@ videoOverlay.addEventListener('click', resetSlideshowIdle);
 
 // 10) Kick it off
 resetSlideshowIdle();
-resetIdleTimer(); // Start timer on load
+
 </script>
 
 <script>
@@ -697,66 +682,6 @@ function sendOrderToBackend(orderText) {
 <div id="modeIndicator"></div>
 
 <script>
-  const mediaItems = [
-  { type: 'video', src: 'smoke.mp4' },
-  { type: 'video', src: 'grinderz.mp4' },
-  { type: 'video', src: 'cakes.mp4' },
-  { type: 'image', src: 'bin.jpeg', duration: 5000 }
-];
-
-let currentMediaIndex = 0;
-let idleTimeout;
-
-const slideshowOverlay = document.getElementById('slideshowOverlay');
-const mediaContainer = document.getElementById('mediaContainer');
-
-function showOverlay() {
-  slideshowOverlay.style.display = 'flex';
-  playNextMedia();
-}
-
-function hideOverlay() {
-  slideshowOverlay.style.display = 'none';
-  mediaContainer.innerHTML = '';
-}
-
-function resetIdleTimer() {
-  clearTimeout(idleTimeout);
-  hideOverlay();
-  idleTimeout = setTimeout(showOverlay, 25000);
-}
-
-['click', 'mousemove', 'keydown', 'touchstart'].forEach(evt => document.addEventListener(evt, resetIdleTimer));
-slideshowOverlay.addEventListener('click', resetIdleTimer);
-
-function playNextMedia() {
-  const item = mediaItems[currentMediaIndex];
-  mediaContainer.innerHTML = '';
-
-  if (item.type === 'video') {
-    const video = document.createElement('video');
-    video.src = item.src;
-    video.autoplay = true;
-    video.muted = true;
-    video.playsInline = true;
-    video.onended = nextMedia;
-    mediaContainer.appendChild(video);
-    video.play().catch(() => {});
-  } else if (item.type === 'image') {
-    const img = document.createElement('img');
-    img.src = item.src;
-    mediaContainer.appendChild(img);
-    setTimeout(nextMedia, item.duration);
-  }
-}
-
-function nextMedia() {
-  currentMediaIndex = (currentMediaIndex + 1) % mediaItems.length;
-  playNextMedia();
-}
-
-resetIdleTimer(); // Start timer on load
-</script>
   // Toggle mode by long-press top-left corner
   let pressTimer;
   const modeIndicator = document.getElementById("modeIndicator");
@@ -812,3 +737,4 @@ resetIdleTimer(); // Start timer on load
 
 </body>
 </html>
+
