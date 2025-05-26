@@ -187,13 +187,121 @@
     <p>&copy; 2025 Easy Times Amsterdam. All rights reserved.</p>
   </footer>
 
-  <div id="slideshowOverlay">
-  <div class="video-frame">
-    <img src="EASY TIMES LOGO BLACK-01.png" alt="Logo" class="overlay-logo">
-    <div class="overlay-text">CLICK THE SCREEN TO ORDER DRINKS</div>
-    <div id="mediaContainer" class="media-slot"></div>
-  </div>
-</div>
+  <script>
+  const videos = ['smoke.mp4', 'Mascotte2.mp4', 'cakes.mp4', 'Mascotte1.mp4'];
+  let currentVideoIndex = 0;
+  let slideshowIdleTimeout;
+
+  // Create the overlay container
+  const videoOverlay = document.createElement('div');
+  Object.assign(videoOverlay.style, {
+    position: 'fixed',
+    top: '10px',
+    left: '10px',
+    right: '10px',
+    bottom: '10px',
+    backgroundColor: '#000',
+    zIndex: '4',
+    display: 'none',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'opacity 1s ease, transform 1s ease',
+    opacity: '0',
+    transform: 'scale(0.9)',
+    borderRadius: '20px'
+  });
+
+  // Logo
+  const videoLogo = document.createElement('img');
+  videoLogo.src = 'EASY TIMES LOGO BLACK-01.png';
+  videoLogo.alt = 'Easytimes Logo';
+  videoLogo.style.width = '200px';
+  videoLogo.style.margin = '40px 0 20px';
+
+  // Message
+  const videoMessage = document.createElement('div');
+  videoMessage.innerText = 'CLICK THE SCREEN TO ORDER DRINKS';
+  Object.assign(videoMessage.style, {
+    color: '#FFA500',
+    fontSize: '2rem',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textShadow: '1px 1px 4px black',
+    marginBottom: '30px'
+  });
+
+  // Framed container
+  const videoFrame = document.createElement('div');
+  Object.assign(videoFrame.style, {
+    position: 'relative',
+    width: '90vw',
+    maxWidth: '1280px',
+    border: '10px solid #f26522',
+    borderRadius: '20px',
+    overflow: 'hidden',
+    boxSizing: 'border-box',
+    background: 'black',
+    aspectRatio: '9 / 16'
+  });
+
+  const video = document.createElement('video');
+  video.id = 'slideshowVideo';
+  video.muted = true;
+  video.controls = false;
+  video.autoplay = true;
+  video.playsInline = true;
+  Object.assign(video.style, {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover'
+  });
+
+  videoFrame.appendChild(video);
+  videoOverlay.append(videoLogo, videoMessage, videoFrame);
+  document.body.appendChild(videoOverlay);
+
+  // Playback
+  function playNextVideo() {
+    video.src = videos[currentVideoIndex];
+    video.load();
+    video.play().catch(() => {});
+    currentVideoIndex = (currentVideoIndex + 1) % videos.length;
+  }
+
+  video.addEventListener('ended', playNextVideo);
+  video.addEventListener('error', playNextVideo);
+
+  // Idle trigger
+  function resetSlideshowIdle() {
+    clearTimeout(slideshowIdleTimeout);
+    video.pause();
+    videoOverlay.style.opacity = '0';
+    videoOverlay.style.transform = 'scale(0.9)';
+    setTimeout(() => videoOverlay.style.display = 'none', 800);
+
+    slideshowIdleTimeout = setTimeout(() => {
+      videoOverlay.style.display = 'flex';
+      requestAnimationFrame(() => {
+        videoOverlay.style.opacity = '1';
+        videoOverlay.style.transform = 'scale(1)';
+      });
+      currentVideoIndex = 0;
+      playNextVideo();
+    }, 25000); // 25s
+  }
+
+  ['click','mousemove','keydown','touchstart'].forEach(evt =>
+    document.addEventListener(evt, resetSlideshowIdle)
+  );
+  videoOverlay.addEventListener('click', resetSlideshowIdle);
+  resetSlideshowIdle();
+</script>
+
 
   <!-- Slideshow JavaScript (unchanged) -->
   <script>
