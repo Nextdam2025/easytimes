@@ -44,9 +44,11 @@
     }
 
     header img {
-      width: clamp(200px, 25vw, 320px);
-      animation: pulseLogo 3s infinite ease-in-out;
-    }
+  width: clamp(280px, 40vw, 480px); /* Increased min/max limits */
+  max-width: 90vw;                  /* Prevents overflow */
+  height: auto;
+  animation: pulseLogo 3s infinite ease-in-out;
+}
 
     header h1 {
       font-family: 'Oleo Script', cursive;
