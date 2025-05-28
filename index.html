@@ -213,6 +213,20 @@
     background: 'black',
     aspectRatio: '9 / 16'
   });
+  const videoFrame = document.createElement('div');
+Object.assign(videoFrame.style, {
+  position: 'relative',
+  width: '90vw',
+  maxWidth: '1280px',
+  height: 'auto',
+  paddingTop: '177.77%', // fallback for 9:16 aspect ratio
+  border: '10px solid #f26522',
+  borderRadius: '20px',
+  overflow: 'hidden',
+  boxSizing: 'border-box',
+  background: 'black',
+  aspectRatio: '9 / 16'
+});
 
   const video = document.createElement('video');
   video.id = 'slideshowVideo';
