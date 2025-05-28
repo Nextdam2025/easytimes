@@ -257,14 +257,16 @@ Object.assign(videoFrame.style, {
     setTimeout(() => videoOverlay.style.display = 'none', 800);
 
     slideshowIdleTimeout = setTimeout(() => {
-      videoOverlay.style.display = 'flex';
-      requestAnimationFrame(() => {
-        videoOverlay.style.opacity = '1';
-        videoOverlay.style.transform = 'scale(1)';
-      });
-      currentVideoIndex = 0;
-      playNextVideo();
-    }, 25000); // 25s
+  console.log("Idle triggered: showing video overlay"); // 🔍 DEBUG LINE
+  videoOverlay.style.display = 'flex';
+  requestAnimationFrame(() => {
+    videoOverlay.style.opacity = '1';
+    videoOverlay.style.transform = 'scale(1)';
+  });
+  currentVideoIndex = 0;
+  playNextVideo();
+}, 25000);
+ // 25s
   }
 
   ['click','mousemove','keydown','touchstart'].forEach(evt =>
