@@ -96,6 +96,35 @@
       height: 100%;
       object-fit: cover;
     }
+    .container {
+  flex: 1;
+  padding: 4vh 2vw;
+  gap: 6vh; /* more vertical spacing */
+  justify-content: center;
+}
+
+header img {
+  width: clamp(320px, 50vw, 520px);
+  margin-bottom: 2vh;
+}
+
+header h1 {
+  font-size: clamp(3rem, 6vw, 5rem);
+  margin-bottom: 3vh;
+}
+
+.main-button button {
+  padding: 24px 64px;
+  font-size: 2.2rem;
+  border-radius: 30px;
+}
+
+footer {
+  margin-top: 6vh;
+  padding-bottom: 2vh;
+  font-size: 1rem;
+}
+
   </style>
 </head>
 <body>
