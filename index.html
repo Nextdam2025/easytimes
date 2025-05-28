@@ -6,35 +6,6 @@
   <title>EasyTimes Jukebox</title>
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700&family=Oleo+Script&display=swap" rel="stylesheet">
   <style>
-    /* Inside overlay logo and message */
-
-/* Video goes behind */
-
-
-.video-frame {
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 90vw;
-  max-width: 1280px;
-  aspect-ratio: 9/16;
-  border: 10px solid #f26522;
-  border-radius: 20px;
-  overflow: hidden;
-  background: black;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 20px;
-}
-
-@media (orientation: landscape) {
-  .video-frame {
-    aspect-ratio: 16 / 9;
-  }
-}
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
@@ -48,7 +19,7 @@
       display: grid;
       place-items: center;
       overflow: hidden;
-      padding: 2rem;
+      padding: 4rem 2rem 6rem;
     }
 
     .orange-frame {
@@ -68,16 +39,16 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      gap: 2rem;
+      gap: 4rem;
       max-width: 90vw;
     }
 
     header img {
-  width: clamp(280px, 40vw, 480px); /* Increased min/max limits */
-  max-width: 90vw;                  /* Prevents overflow */
-  height: auto;
-  animation: pulseLogo 3s infinite ease-in-out;
-}
+      width: clamp(280px, 40vw, 480px);
+      max-width: 90vw;
+      height: auto;
+      animation: pulseLogo 3s infinite ease-in-out;
+    }
 
     header h1 {
       font-family: 'Oleo Script', cursive;
@@ -107,11 +78,10 @@
     }
 
     footer {
-      position: absolute;
-      bottom: 10px;
-      width: 100%;
+      margin-top: auto;
+      padding-top: 2rem;
+      font-size: 0.9rem;
       text-align: center;
-      font-size: 0.85rem;
       color: #aaa;
     }
 
@@ -120,13 +90,12 @@
       50% { transform: scale(1.04); opacity: 0.95; }
     }
 
-.video-frame video,
-.video-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* or use 'cover' if you want the entire frame filled but may crop slightly */
-}
-
+    .video-frame video,
+    .video-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   </style>
 </head>
 <body>
@@ -147,124 +116,115 @@
   </footer>
 
   <script>
-  const videos = ['smoke.mp4', 'Mascotte2.mp4', 'cakes.mp4', 'Mascotte1.mp4'];
-  let currentVideoIndex = 0;
-  let slideshowIdleTimeout;
+    const videos = ['smoke.mp4', 'Mascotte2.mp4', 'cakes.mp4', 'Mascotte1.mp4'];
+    let currentVideoIndex = 0;
+    let slideshowIdleTimeout;
 
-  // Create the overlay container
-  const videoOverlay = document.createElement('div');
-  Object.assign(videoOverlay.style, {
-    position: 'fixed',
-    top: '10px',
-    left: '10px',
-    right: '10px',
-    bottom: '10px',
-    backgroundColor: '#000',
-    zIndex: '4',
-    display: 'none',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    transition: 'opacity 1s ease, transform 1s ease',
-    opacity: '0',
-    transform: 'scale(0.9)',
-    borderRadius: '20px'
-  });
+    const videoOverlay = document.createElement('div');
+    Object.assign(videoOverlay.style, {
+      position: 'fixed',
+      top: '10px',
+      left: '10px',
+      right: '10px',
+      bottom: '10px',
+      backgroundColor: '#000',
+      zIndex: '4',
+      display: 'none',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      transition: 'opacity 1s ease, transform 1s ease',
+      opacity: '0',
+      transform: 'scale(0.9)',
+      borderRadius: '20px'
+    });
 
-  // Logo
-  const videoLogo = document.createElement('img');
-  videoLogo.src = 'EASY TIMES LOGO BLACK-01.png';
-  videoLogo.alt = 'Easytimes Logo';
-  videoLogo.style.width = '200px';
-  videoLogo.style.margin = '40px 0 20px';
+    const videoLogo = document.createElement('img');
+    videoLogo.src = 'EASY TIMES LOGO BLACK-01.png';
+    videoLogo.alt = 'Easytimes Logo';
+    videoLogo.style.width = '200px';
+    videoLogo.style.margin = '40px 0 20px';
 
-  // Message
-  const videoMessage = document.createElement('div');
-  videoMessage.innerText = 'CLICK THE SCREEN TO ORDER DRINKS';
-  Object.assign(videoMessage.style, {
-    color: '#FFA500',
-    fontSize: '2rem',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    textShadow: '1px 1px 4px black',
-    marginBottom: '30px'
-  });
+    const videoMessage = document.createElement('div');
+    videoMessage.innerText = 'CLICK THE SCREEN TO ORDER DRINKS';
+    Object.assign(videoMessage.style, {
+      color: '#FFA500',
+      fontSize: '2rem',
+      fontWeight: 'bold',
+      textAlign: 'center',
+      textShadow: '1px 1px 4px black',
+      marginBottom: '30px'
+    });
 
-  // Framed container
+    const videoFrame = document.createElement('div');
+    Object.assign(videoFrame.style, {
+      position: 'relative',
+      width: '90vw',
+      maxWidth: '1280px',
+      height: 'auto',
+      paddingTop: '177.77%',
+      border: '10px solid #f26522',
+      borderRadius: '20px',
+      overflow: 'hidden',
+      boxSizing: 'border-box',
+      background: 'black',
+      aspectRatio: '9 / 16'
+    });
 
-  const videoFrame = document.createElement('div');
-Object.assign(videoFrame.style, {
-  position: 'relative',
-  width: '90vw',
-  maxWidth: '1280px',
-  height: 'auto',
-  paddingTop: '177.77%', // fallback for 9:16 aspect ratio
-  border: '10px solid #f26522',
-  borderRadius: '20px',
-  overflow: 'hidden',
-  boxSizing: 'border-box',
-  background: 'black',
-  aspectRatio: '9 / 16'
-});
+    const video = document.createElement('video');
+    video.id = 'slideshowVideo';
+    video.muted = true;
+    video.controls = false;
+    video.autoplay = true;
+    video.playsInline = true;
+    Object.assign(video.style, {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: '100%',
+      height: '100%',
+      objectFit: 'contain'
+    });
 
-  const video = document.createElement('video');
-  video.id = 'slideshowVideo';
-  video.muted = true;
-  video.controls = false;
-  video.autoplay = true;
-  video.playsInline = true;
-  Object.assign(video.style, {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '100%',
-    height: '100%',
-    objectFit: 'contain'
-  });
+    videoFrame.appendChild(video);
+    videoOverlay.append(videoLogo, videoMessage, videoFrame);
+    document.body.appendChild(videoOverlay);
 
-  videoFrame.appendChild(video);
-  videoOverlay.append(videoLogo, videoMessage, videoFrame);
-  document.body.appendChild(videoOverlay);
+    function playNextVideo() {
+      video.src = videos[currentVideoIndex];
+      video.load();
+      video.play().catch(() => {});
+      currentVideoIndex = (currentVideoIndex + 1) % videos.length;
+    }
 
-  // Playback
-  function playNextVideo() {
-    video.src = videos[currentVideoIndex];
-    video.load();
-    video.play().catch(() => {});
-    currentVideoIndex = (currentVideoIndex + 1) % videos.length;
-  }
+    video.addEventListener('ended', playNextVideo);
+    video.addEventListener('error', playNextVideo);
 
-  video.addEventListener('ended', playNextVideo);
-  video.addEventListener('error', playNextVideo);
+    function resetSlideshowIdle() {
+      clearTimeout(slideshowIdleTimeout);
+      video.pause();
+      videoOverlay.style.opacity = '0';
+      videoOverlay.style.transform = 'scale(0.9)';
+      setTimeout(() => videoOverlay.style.display = 'none', 800);
 
-  // Idle trigger
-  function resetSlideshowIdle() {
-    clearTimeout(slideshowIdleTimeout);
-    video.pause();
-    videoOverlay.style.opacity = '0';
-    videoOverlay.style.transform = 'scale(0.9)';
-    setTimeout(() => videoOverlay.style.display = 'none', 800);
+      slideshowIdleTimeout = setTimeout(() => {
+        videoOverlay.style.display = 'flex';
+        requestAnimationFrame(() => {
+          videoOverlay.style.opacity = '1';
+          videoOverlay.style.transform = 'scale(1)';
+        });
+        currentVideoIndex = 0;
+        playNextVideo();
+      }, 5000);
+    }
 
-    slideshowIdleTimeout = setTimeout(() => {
-  console.log("Idle triggered: showing video overlay"); // 🔍 DEBUG LINE
-  videoOverlay.style.display = 'flex';
-  requestAnimationFrame(() => {
-    videoOverlay.style.opacity = '1';
-    videoOverlay.style.transform = 'scale(1)';
-  });
-  currentVideoIndex = 0;
-  playNextVideo();
-}, 5000);
- // 5s
-  }
-
-  ['click','mousemove','keydown','touchstart'].forEach(evt =>
-    document.addEventListener(evt, resetSlideshowIdle)
-  );
-  videoOverlay.addEventListener('click', resetSlideshowIdle);
-  resetSlideshowIdle();
-</script>
-
+    ['click','mousemove','keydown','touchstart'].forEach(evt =>
+      document.addEventListener(evt, resetSlideshowIdle)
+    );
+    videoOverlay.addEventListener('click', resetSlideshowIdle);
+    resetSlideshowIdle();
+  </script>
 </body>
 </html>
+
