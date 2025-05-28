@@ -231,11 +231,23 @@ Object.assign(videoFrame.style, {
 
   // Playback
   function playNextVideo() {
-    video.src = videos[currentVideoIndex];
-    video.load();
-    video.play().catch(() => {});
-    currentVideoIndex = (currentVideoIndex + 1) % videos.length;
+  video.src = videos[currentVideoIndex];
+  video.load();
+
+  if (video.src.includes('Mascotte')) {
+    video.style.transform = 'translate(-50%, -50%) rotate(90deg)';
+    video.style.width = '177.77%'; // for 16:9 rotated into 9:16
+    video.style.height = '100%';
+  } else {
+    video.style.transform = 'translate(-50%, -50%)';
+    video.style.width = '100%';
+    video.style.height = '100%';
   }
+
+  video.play().catch(() => {});
+  currentVideoIndex = (currentVideoIndex + 1) % videos.length;
+}
+
 
   video.addEventListener('ended', playNextVideo);
   video.addEventListener('error', playNextVideo);
