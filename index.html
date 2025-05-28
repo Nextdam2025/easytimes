@@ -232,12 +232,13 @@ Object.assign(videoFrame.style, {
 
   // Playback
   function playNextVideo() {
-  video.src = videos[currentVideoIndex];
+  const filename = videos[currentVideoIndex];
+  video.src = filename;
   video.load();
 
-  if (video.src.includes('Mascotte')) {
+  if (filename.includes('Mascotte')) {
     video.style.transform = 'translate(-50%, -50%) rotate(90deg)';
-    video.style.width = '177.77%'; // for 16:9 rotated into 9:16
+    video.style.width = '177.77%';
     video.style.height = '100%';
   } else {
     video.style.transform = 'translate(-50%, -50%)';
@@ -248,6 +249,7 @@ Object.assign(videoFrame.style, {
   video.play().catch(() => {});
   currentVideoIndex = (currentVideoIndex + 1) % videos.length;
 }
+
 
 
   video.addEventListener('ended', playNextVideo);
