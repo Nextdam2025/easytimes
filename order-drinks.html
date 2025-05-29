@@ -9,6 +9,29 @@
   </title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&amp;display=swap" rel="stylesheet"/>
 <style>
+   .category-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 30px 0 10px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Match category title text to button colors */
+.category-title.hot {
+  color: #f26522; /* Orange for Hot Drinks */
+}
+.category-title.cold {
+  color: #00bfff; /* Blue for Cold Drinks */
+}
+.category-title.snacks {
+  color: #ffcc00; /* Yellow for Homemade Snacks */
+}
+.category-title.cakes {
+  color: #bb86fc; /* Purple for Space Cakes */
+}
+
    /* Global Reset & Base */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body {
@@ -358,9 +381,7 @@ img.logo {
 </div>
 <!-- Logo & Table select -->
 <!-- Hot & Cold menus… (harmonized color scheme) -->
-<div class="section-title">
-   Hot Drinks
-  </div>
+<h2 class="category-title hot">Hot Drinks</h2>
 <div class="menu" id="hot-drinks">
 <div class="item hot-drink" onclick='prepareOptions({ name: "Espresso", articleNumber: 102, price: 3.50, buttonColor: "#CC5A00", options: [ { name: "Whipped Cream", price: 1.00 }, { name: "Extra Oatmilk", price: 1.00 }, { name: "Syrup", price: 1.00 } ] })'>
     Espresso (€3,50)
@@ -399,9 +420,7 @@ img.logo {
     Fresh Mint Tea (€4,50)
    </div>
 </div>
-<div class="section-title">
-   Cold Drinks
-  </div>
+<h2 class="category-title cold">Cold Drinks</h2>
 <div class="menu" id="cold-drinks">
 <div class="item cold-drink" onclick='prepareOptions({ name: "Coca-Cola", articleNumber: 401, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
     Coca-Cola (€4,00)
@@ -451,9 +470,7 @@ img.logo {
 <div class="item cold-drink" onclick='prepareOptions({ name: "Red Bull Energy Drink", articleNumber: 416, price: 5.00, buttonColor: "#00BFA6", options: [] })'>
     Red Bull Energy Drink (€5,00)
    </div>
-<div class="section-title">
-    Homemade Snacks (0% THC)
-   </div>
+<h2 class="category-title snacks">Homemade Snacks</h2>
 <div class="menu" id="homemade-snacks">
 <div class="item" onclick='prepareOptions({ name: "Chocolate Chip Cookie", articleNumber: 501, price: 3.50, buttonColor: "#a16c2b", options: [] })' style="background: linear-gradient(145deg, #a16c2b, #c9883b);">
      Chocolate Chip Cookie (€3,50)
@@ -462,9 +479,7 @@ img.logo {
      Banana Cake (€4,00)
     </div>
 </div>
-<div class="section-title">
-    Space Cakes
-   </div>
+<h2 class="category-title cakes">Space Cakes</h2>
 <div class="menu" id="space-cakes">
 <div class="item" onclick='prepareOptions({ name: "Madeleine", articleNumber: 601, price: 6.00, buttonColor: "#6e2a8d", options: [] })' style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);">
      Madeleine (€6,00)
