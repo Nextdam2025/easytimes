@@ -41,9 +41,11 @@ img.logo {
   margin-bottom: 40px;
   width: 200px;
   display: block;
-  margin: 30px auto; /* vertical spacing + centering */
+  margin: 30px auto;
   animation: floatLogo 2s ease-in-out infinite alternate;
   border-radius: 20px;
+  max-height: calc(100vh - 100px); /* Prevents logo from overflowing screen */
+  object-fit: contain;              /* Keeps the aspect ratio */
 }
 
     @keyframes floatLogo {
