@@ -36,13 +36,14 @@ body {
 
     /* Logo animation */
 img.logo {
-  margin-bottom: 40px;
+  margin-top: 20px;   /* NEW: push it up slightly */
+  margin-bottom: 10px; /* Reduced to avoid cutoff */
   width: 200px;
   display: block;
-  margin: 30px auto; /* vertical spacing + centering */
   animation: floatLogo 2s ease-in-out infinite alternate;
   border-radius: 20px;
 }
+
 
     @keyframes floatLogo {
       to { transform: translateY(-8px); }
