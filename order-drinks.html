@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" 
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Easytimes Order Menu</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" 
-        rel="stylesheet">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+  <title>
+   Easytimes Order Menu
+  </title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&amp;display=swap" rel="stylesheet"/>
   <style>
-/* Global Reset & Base */
+   /* Global Reset & Base */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body {
   font-size: 16px; /* fixed size */
@@ -36,6 +36,7 @@ body {
 
     /* Logo animation */
 img.logo {
+  margin-bottom: 40px;
   width: 200px;
   display: block;
   margin: 30px auto; /* vertical spacing + centering */
@@ -329,108 +330,174 @@ img.logo {
   height: 100%;
   object-fit: cover;
 }
-
   </style>
-</head>
-<body>
-
+ </head>
+ <body>
   <!-- Background & Orange Border -->
-  <video class="bg-video" autoplay muted loop playsinline>
-    <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4">
+  <video autoplay="" class="bg-video" loop="" muted="" playsinline="">
+   <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4"/>
   </video>
-  <div class="orange-frame"></div>
-
+  <div class="orange-frame">
+  </div>
   <!-- Back button -->
   <div style="text-align:center; margin:20px;">
-    <button onclick="location.href='index.html'"
-            style="padding:10px 20px; font-size:1rem; border-radius:10px;
+   <button onclick="location.href='index.html'" style="padding:10px 20px; font-size:1rem; border-radius:10px;
                    background:#ffffff10; border:none; color:white; cursor:pointer;">
-      ⬅ Back to Home
-    </button>
+    ⬅ Back to Home
+   </button>
   </div>
-
   <!-- Notification -->
-  <div id="notification"></div>
-
+  <div id="notification">
+  </div>
   <!-- Logo & Table select -->
-  <img src="https://d146j8l6ymhf1q.cloudfront.net/webshop/B52DEAB9-9609-4876-B187-64C952745254-e1617724463401.png"
-       alt="Easytimes Logo" class="logo"/>
-
-<!-- Hot & Cold menus… (harmonized color scheme) -->
-<div class="section-title">Hot Drinks</div>
-<div class="menu" id="hot-drinks">
-  <div class="item hot-drink" onclick='prepareOptions({ name: "Espresso", articleNumber: 102, price: 3.50, buttonColor: "#CC5A00", options: [ { name: "Whipped Cream", price: 1.00 }, { name: "Extra Oatmilk", price: 1.00 }, { name: "Syrup", price: 1.00 } ] })'>Espresso (€3,50)</div>
-  <div class="item hot-drink" onclick='prepareOptions({ name: "Doppio", articleNumber: 202, price: 4.00, buttonColor: "#CC5A00", options: [ { name: "Extra Oatmilk", price: 1.00 }, { name: "Whipped Cream", price: 1.00 }, { name: "Syrup", price: 1.00 } ] })'>Doppio (€4,00)</div>
-  <div class="item hot-drink" onclick='prepareOptions({ name: "Black Coffee", articleNumber: 203, price: 3.50, buttonColor: "#CC5A00", options: [ { name: "Whipped Cream", price: 1.00 }, { name: "Extra Oatmilk", price: 1.00 }, { name: "Syrup", price: 1.00 } ] })'>Black Coffee (€3,50)</div>
-  <div class="item hot-drink" onclick='prepareOptions({ name: "Americano", articleNumber: 204, price: 3.50, buttonColor: "#CC5A00", options: [ { name: "Extra Oatmilk", price: 1.00 }, { name: "Whipped Cream", price: 1.00 }, { name: "Syrup", price: 1.00 } ] })'>Americano (€3,50)</div>
-  <div class="item hot-drink" onclick='prepareOptions({ name: "Cappuccino", articleNumber: 102, price: 4.00, buttonColor: "#CC5A00", options: [] })'>Cappuccino (€4,00)</div>
-  <div class="item hot-drink" onclick='prepareOptions({ name: "Flavored Latte", articleNumber: 205, price: 5.00, buttonColor: "#CC5A00", options: [ { name: "Hazelnuts", price: 0 }, { name: "Caramel", price: 0 } ] })'>Flavored Latte (€5,00)</div>
-  <div class="item hot-drink" onclick='prepareOptions({ name: "Cafe Latte", articleNumber: 206, price: 4.50, buttonColor: "#CC5A00", options: [] })'>Cafe Latte (€4,50)</div>
-  <div class="item hot-drink" onclick='prepareOptions({ name: "Latte Macchiato", articleNumber: 207, price: 4.50, buttonColor: "#CC5A00", options: [ { name: "Whipped Cream", price: 1.00 }, { name: "Syrup", price: 1.00 } ] })'>Latte Macchiato (€4,50)</div>
-  <div class="item hot-drink" onclick='prepareOptions({ name: "Coffee Mocca", articleNumber: 208, price: 5.00, buttonColor: "#CC5A00", options: [ { name: "Extra Shot Espresso", price: 1.00 }, { name: "Whipped Cream", price: 1.00 } ] })'>Coffee Mocca (€5,00)</div>
-  <div class="item hot-drink" onclick='prepareOptions({ name: "Hot Chocolate", articleNumber: 209, price: 4.00, buttonColor: "#CC5A00", options: [ { name: "Whipped Cream", price: 1.00 } ] })'>Hot Chocolate (€4,00)</div>
-  <div class="item hot-drink" onclick='prepareOptions({ name: "Tea", articleNumber: 301, price: 3.50, buttonColor: "#CC5A00", options: [ { name: "Extra Lemon", price: 1.00 }, { name: "Extra Ginger", price: 1.00 }, { name: "Extra Orange Blossom", price: 1.00 }, { name: "Louiza", price: 1.00 } ] })'>Tea (€3,50)</div>
-  <div class="item hot-drink" onclick='prepareOptions({ name: "Fresh Mint Tea", articleNumber: 301, price: 4.50, buttonColor: "#CC5A00", options: [ { name: "Extra Lemon", price: 0.50 }, { name: "Extra Ginger", price: 0.50 }, { name: "Extra Orange Blossom", price: 0.50 }, { name: "Louiza", price: 0.50 } ] })'>Fresh Mint Tea (€4,50)</div>
-</div>
-
-<div class="section-title">Cold Drinks</div>
-<div class="menu" id="cold-drinks">
-  <div class="item cold-drink" onclick='prepareOptions({ name: "Coca-Cola", articleNumber: 401, price: 4.00, buttonColor: "#00BFA6", options: [] })'>Coca-Cola (€4,00)</div>
-  <div class="item cold-drink" onclick='prepareOptions({ name: "Coca-Cola Zero", articleNumber: 402, price: 4.00, buttonColor: "#00BFA6", options: [] })'>Coca-Cola Zero (€4,00)</div>
-  <div class="item cold-drink" onclick='prepareOptions({ name: "Fanta Orange", articleNumber: 403, price: 4.00, buttonColor: "#00BFA6", options: [] })'>Fanta Orange (€4,00)</div>
-  <div class="item cold-drink" onclick='prepareOptions({ name: "Fanta Cassis", articleNumber: 404, price: 4.00, buttonColor: "#00BFA6", options: [] })'>Fanta Cassis (€4,00)</div>
-  <div class="item cold-drink" onclick='prepareOptions({ name: "Still Water", articleNumber: 405, price: 3.50, buttonColor: "#00BFA6", options: [] })'>Still Water (€3,50)</div>
-  <div class="item cold-drink" onclick='prepareOptions({ name: "Sparkling Water", articleNumber: 406, price: 3.50, buttonColor: "#00BFA6", options: [] })'>Sparkling Water (€3,50)</div>
-  <div class="item cold-drink" onclick='prepareOptions({ name: "Sprite", articleNumber: 407, price: 4.00, buttonColor: "#00BFA6", options: [] })'>Sprite (€4,00)</div>
-  <div class="item cold-drink" onclick='prepareOptions({ name: "Chocomel", articleNumber: 408, price: 4.00, buttonColor: "#00BFA6", options: [] })'>Chocomel (€4,00)</div>
-  <div class="item cold-drink" onclick='prepareOptions({ name: "Iced Tea Peach/Mango", articleNumber: 409, price: 4.00, buttonColor: "#00BFA6", options: [ { name: "Peach", price: 0 }, { name: "Mango", price: 0 } ] })'>Iced Tea Peach/Mango (€4,00)</div>
-  <div class="item cold-drink" onclick='prepareOptions({ name: "Iced Tea Lemon Sparkling", articleNumber: 410, price: 4.00, buttonColor: "#00BFA6", options: [] })'>Iced Tea Lemon Sparkling (€4,00)</div>
-  <div class="item cold-drink" onclick='prepareOptions({ name: "Royal Bliss Bitter Lemon", articleNumber: 411, price: 4.00, buttonColor: "#00BFA6", options: [] })'>Royal Bliss Bitter Lemon (€4,00)</div>
-  <div class="item cold-drink" onclick='prepareOptions({ name: "Royal Bliss Ginger Ale", articleNumber: 412, price: 4.00, buttonColor: "#00BFA6", options: [] })'>Royal Bliss Ginger Ale (€4,00)</div>
-  <div class="item cold-drink" onclick='prepareOptions({ name: "Looza (Pear/Strawberry/Peach)", articleNumber: 413, price: 4.00, buttonColor: "#00BFA6", options: [ { name: "Pear", price: 0 }, { name: "Strawberry", price: 0 }, { name: "Peach", price: 0 } ] })'>Looza (Pear/Strawberry/Peach) (€4,00)</div>
-  <div class="item cold-drink" onclick='prepareOptions({ name: "Minute Maid Juices", articleNumber: 414, price: 4.00, buttonColor: "#00BFA6", options: [ { name: "Orange", price: 0 }, { name: "Apple", price: 0 } ] })'>Minute Maid (Orange/Apple) (€4,00)</div>
-  <div class="item cold-drink" onclick='prepareOptions({ name: "AA Energy Drink", articleNumber: 415, price: 4.00, buttonColor: "#00BFA6", options: [] })'>AA Energy Drink (€4,00)</div>
-  <div class="item cold-drink" onclick='prepareOptions({ name: "Red Bull Energy Drink", articleNumber: 416, price: 5.00, buttonColor: "#00BFA6", options: [] })'>Red Bull Energy Drink (€5,00)</div>
-
-<div class="section-title">Homemade Snacks (0% THC)</div>
-<div class="menu" id="homemade-snacks">
-  <div class="item" style="background: linear-gradient(145deg, #a16c2b, #c9883b);" onclick='prepareOptions({ name: "Chocolate Chip Cookie", articleNumber: 501, price: 3.50, buttonColor: "#a16c2b", options: [] })'>Chocolate Chip Cookie (€3,50)</div>
-  <div class="item" style="background: linear-gradient(145deg, #a16c2b, #c9883b);" onclick='prepareOptions({ name: "Banana Cake", articleNumber: 502, price: 4.00, buttonColor: "#a16c2b", options: [] })'>Banana Cake (€4,00)</div>
-</div>
-
-<div class="section-title">Space Cakes</div>
-<div class="menu" id="space-cakes">
-  <div class="item" style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);" onclick='prepareOptions({ name: "Madeleine", articleNumber: 601, price: 6.00, buttonColor: "#6e2a8d", options: [] })'>Madeleine (€6,00)</div>
-  <div class="item" style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);" onclick='prepareOptions({ name: "Brownie Crunchy Caramel", articleNumber: 602, price: 8.00, buttonColor: "#6e2a8d", options: [] })'>Brownie Crunchy Caramel (€8,00)</div>
-  <div class="item" style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);" onclick='prepareOptions({ name: "Red Velvet Cheesecake Brownie", articleNumber: 603, price: 10.00, buttonColor: "#6e2a8d", options: [] })'>Red Velvet Cheesecake Brownie (€10,00)</div>
-  <div class="item" style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);" onclick='prepareOptions({ name: "Oreo White Chocolate Cake", articleNumber: 604, price: 10.00, buttonColor: "#6e2a8d", options: [] })'>Oreo White Chocolate Cake (€10,00)</div>
-  <div class="item" style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);" onclick='prepareOptions({ name: "Honey Date Biscuit Cake", articleNumber: 605, price: 13.00, buttonColor: "#6e2a8d", options: [] })'>Honey Date Biscuit Cake (€13,00)</div>
-  <div class="item" style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);" onclick='prepareOptions({ name: "Stroopwafel Pie", articleNumber: 606, price: 15.00, buttonColor: "#6e2a8d", options: [] })'>Stroopwafel Pie (€15,00)</div>
-</div>
-
-
-  <!-- Main order summary -->
-  <div class="order-summary">
-    <h2>Order Summary</h2>
-    <ul id="orderList"></ul>
-    
-    <button class="confirm-btn" onclick="sendOrder()">Confirm Order</button>
+  <!-- Hot & Cold menus… (harmonized color scheme) -->
+  <div class="section-title">
+   Hot Drinks
   </div>
-
-  <!-- Option modal -->
-  <div id="optionModal" class="option-modal" style="display:none">
-    <div class="option-box">
-      <h3 id="optionTitle"></h3>
-      <div id="optionList"></div>
-      <button onclick="confirmOptions()">Add to Order</button>
-      <button onclick="closeModal()" style="margin-top:5px;">Close</button>
+  <div class="menu" id="hot-drinks">
+   <div class="item hot-drink" onclick='prepareOptions({ name: "Espresso", articleNumber: 102, price: 3.50, buttonColor: "#CC5A00", options: [ { name: "Whipped Cream", price: 1.00 }, { name: "Extra Oatmilk", price: 1.00 }, { name: "Syrup", price: 1.00 } ] })'>
+    Espresso (&euro;3,50)
+   </div>
+   <div class="item hot-drink" onclick='prepareOptions({ name: "Doppio", articleNumber: 202, price: 4.00, buttonColor: "#CC5A00", options: [ { name: "Extra Oatmilk", price: 1.00 }, { name: "Whipped Cream", price: 1.00 }, { name: "Syrup", price: 1.00 } ] })'>
+    Doppio (&euro;4,00)
+   </div>
+   <div class="item hot-drink" onclick='prepareOptions({ name: "Black Coffee", articleNumber: 203, price: 3.50, buttonColor: "#CC5A00", options: [ { name: "Whipped Cream", price: 1.00 }, { name: "Extra Oatmilk", price: 1.00 }, { name: "Syrup", price: 1.00 } ] })'>
+    Black Coffee (&euro;3,50)
+   </div>
+   <div class="item hot-drink" onclick='prepareOptions({ name: "Americano", articleNumber: 204, price: 3.50, buttonColor: "#CC5A00", options: [ { name: "Extra Oatmilk", price: 1.00 }, { name: "Whipped Cream", price: 1.00 }, { name: "Syrup", price: 1.00 } ] })'>
+    Americano (&euro;3,50)
+   </div>
+   <div class="item hot-drink" onclick='prepareOptions({ name: "Cappuccino", articleNumber: 102, price: 4.00, buttonColor: "#CC5A00", options: [] })'>
+    Cappuccino (&euro;4,00)
+   </div>
+   <div class="item hot-drink" onclick='prepareOptions({ name: "Flavored Latte", articleNumber: 205, price: 5.00, buttonColor: "#CC5A00", options: [ { name: "Hazelnuts", price: 0 }, { name: "Caramel", price: 0 } ] })'>
+    Flavored Latte (&euro;5,00)
+   </div>
+   <div class="item hot-drink" onclick='prepareOptions({ name: "Cafe Latte", articleNumber: 206, price: 4.50, buttonColor: "#CC5A00", options: [] })'>
+    Cafe Latte (&euro;4,50)
+   </div>
+   <div class="item hot-drink" onclick='prepareOptions({ name: "Latte Macchiato", articleNumber: 207, price: 4.50, buttonColor: "#CC5A00", options: [ { name: "Whipped Cream", price: 1.00 }, { name: "Syrup", price: 1.00 } ] })'>
+    Latte Macchiato (&euro;4,50)
+   </div>
+   <div class="item hot-drink" onclick='prepareOptions({ name: "Coffee Mocca", articleNumber: 208, price: 5.00, buttonColor: "#CC5A00", options: [ { name: "Extra Shot Espresso", price: 1.00 }, { name: "Whipped Cream", price: 1.00 } ] })'>
+    Coffee Mocca (&euro;5,00)
+   </div>
+   <div class="item hot-drink" onclick='prepareOptions({ name: "Hot Chocolate", articleNumber: 209, price: 4.00, buttonColor: "#CC5A00", options: [ { name: "Whipped Cream", price: 1.00 } ] })'>
+    Hot Chocolate (&euro;4,00)
+   </div>
+   <div class="item hot-drink" onclick='prepareOptions({ name: "Tea", articleNumber: 301, price: 3.50, buttonColor: "#CC5A00", options: [ { name: "Extra Lemon", price: 1.00 }, { name: "Extra Ginger", price: 1.00 }, { name: "Extra Orange Blossom", price: 1.00 }, { name: "Louiza", price: 1.00 } ] })'>
+    Tea (&euro;3,50)
+   </div>
+   <div class="item hot-drink" onclick='prepareOptions({ name: "Fresh Mint Tea", articleNumber: 301, price: 4.50, buttonColor: "#CC5A00", options: [ { name: "Extra Lemon", price: 0.50 }, { name: "Extra Ginger", price: 0.50 }, { name: "Extra Orange Blossom", price: 0.50 }, { name: "Louiza", price: 0.50 } ] })'>
+    Fresh Mint Tea (&euro;4,50)
+   </div>
+  </div>
+  <div class="section-title">
+   Cold Drinks
+  </div>
+  <div class="menu" id="cold-drinks">
+   <div class="item cold-drink" onclick='prepareOptions({ name: "Coca-Cola", articleNumber: 401, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    Coca-Cola (&euro;4,00)
+   </div>
+   <div class="item cold-drink" onclick='prepareOptions({ name: "Coca-Cola Zero", articleNumber: 402, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    Coca-Cola Zero (&euro;4,00)
+   </div>
+   <div class="item cold-drink" onclick='prepareOptions({ name: "Fanta Orange", articleNumber: 403, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    Fanta Orange (&euro;4,00)
+   </div>
+   <div class="item cold-drink" onclick='prepareOptions({ name: "Fanta Cassis", articleNumber: 404, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    Fanta Cassis (&euro;4,00)
+   </div>
+   <div class="item cold-drink" onclick='prepareOptions({ name: "Still Water", articleNumber: 405, price: 3.50, buttonColor: "#00BFA6", options: [] })'>
+    Still Water (&euro;3,50)
+   </div>
+   <div class="item cold-drink" onclick='prepareOptions({ name: "Sparkling Water", articleNumber: 406, price: 3.50, buttonColor: "#00BFA6", options: [] })'>
+    Sparkling Water (&euro;3,50)
+   </div>
+   <div class="item cold-drink" onclick='prepareOptions({ name: "Sprite", articleNumber: 407, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    Sprite (&euro;4,00)
+   </div>
+   <div class="item cold-drink" onclick='prepareOptions({ name: "Chocomel", articleNumber: 408, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    Chocomel (&euro;4,00)
+   </div>
+   <div class="item cold-drink" onclick='prepareOptions({ name: "Iced Tea Peach/Mango", articleNumber: 409, price: 4.00, buttonColor: "#00BFA6", options: [ { name: "Peach", price: 0 }, { name: "Mango", price: 0 } ] })'>
+    Iced Tea Peach/Mango (&euro;4,00)
+   </div>
+   <div class="item cold-drink" onclick='prepareOptions({ name: "Iced Tea Lemon Sparkling", articleNumber: 410, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    Iced Tea Lemon Sparkling (&euro;4,00)
+   </div>
+   <div class="item cold-drink" onclick='prepareOptions({ name: "Royal Bliss Bitter Lemon", articleNumber: 411, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    Royal Bliss Bitter Lemon (&euro;4,00)
+   </div>
+   <div class="item cold-drink" onclick='prepareOptions({ name: "Royal Bliss Ginger Ale", articleNumber: 412, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    Royal Bliss Ginger Ale (&euro;4,00)
+   </div>
+   <div class="item cold-drink" onclick='prepareOptions({ name: "Looza (Pear/Strawberry/Peach)", articleNumber: 413, price: 4.00, buttonColor: "#00BFA6", options: [ { name: "Pear", price: 0 }, { name: "Strawberry", price: 0 }, { name: "Peach", price: 0 } ] })'>
+    Looza (Pear/Strawberry/Peach) (&euro;4,00)
+   </div>
+   <div class="item cold-drink" onclick='prepareOptions({ name: "Minute Maid Juices", articleNumber: 414, price: 4.00, buttonColor: "#00BFA6", options: [ { name: "Orange", price: 0 }, { name: "Apple", price: 0 } ] })'>
+    Minute Maid (Orange/Apple) (&euro;4,00)
+   </div>
+   <div class="item cold-drink" onclick='prepareOptions({ name: "AA Energy Drink", articleNumber: 415, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    AA Energy Drink (&euro;4,00)
+   </div>
+   <div class="item cold-drink" onclick='prepareOptions({ name: "Red Bull Energy Drink", articleNumber: 416, price: 5.00, buttonColor: "#00BFA6", options: [] })'>
+    Red Bull Energy Drink (&euro;5,00)
+   </div>
+   <div class="section-title">
+    Homemade Snacks (0% THC)
+   </div>
+   <div class="menu" id="homemade-snacks">
+    <div class="item" onclick='prepareOptions({ name: "Chocolate Chip Cookie", articleNumber: 501, price: 3.50, buttonColor: "#a16c2b", options: [] })' style="background: linear-gradient(145deg, #a16c2b, #c9883b);">
+     Chocolate Chip Cookie (&euro;3,50)
     </div>
-  </div>
-
-  <!-- Mini cart -->
-  <div id="mini-cart"></div>
-
-  <script>
+    <div class="item" onclick='prepareOptions({ name: "Banana Cake", articleNumber: 502, price: 4.00, buttonColor: "#a16c2b", options: [] })' style="background: linear-gradient(145deg, #a16c2b, #c9883b);">
+     Banana Cake (&euro;4,00)
+    </div>
+   </div>
+   <div class="section-title">
+    Space Cakes
+   </div>
+   <div class="menu" id="space-cakes">
+    <div class="item" onclick='prepareOptions({ name: "Madeleine", articleNumber: 601, price: 6.00, buttonColor: "#6e2a8d", options: [] })' style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);">
+     Madeleine (&euro;6,00)
+    </div>
+    <div class="item" onclick='prepareOptions({ name: "Brownie Crunchy Caramel", articleNumber: 602, price: 8.00, buttonColor: "#6e2a8d", options: [] })' style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);">
+     Brownie Crunchy Caramel (&euro;8,00)
+    </div>
+    <div class="item" onclick='prepareOptions({ name: "Red Velvet Cheesecake Brownie", articleNumber: 603, price: 10.00, buttonColor: "#6e2a8d", options: [] })' style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);">
+     Red Velvet Cheesecake Brownie (&euro;10,00)
+    </div>
+    <div class="item" onclick='prepareOptions({ name: "Oreo White Chocolate Cake", articleNumber: 604, price: 10.00, buttonColor: "#6e2a8d", options: [] })' style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);">
+     Oreo White Chocolate Cake (&euro;10,00)
+    </div>
+    <div class="item" onclick='prepareOptions({ name: "Honey Date Biscuit Cake", articleNumber: 605, price: 13.00, buttonColor: "#6e2a8d", options: [] })' style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);">
+     Honey Date Biscuit Cake (&euro;13,00)
+    </div>
+    <div class="item" onclick='prepareOptions({ name: "Stroopwafel Pie", articleNumber: 606, price: 15.00, buttonColor: "#6e2a8d", options: [] })' style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);">
+     Stroopwafel Pie (&euro;15,00)
+    </div>
+   </div>
+   <!-- Main order summary -->
+   <!-- Option modal -->
+   <div class="option-modal" id="optionModal" style="display:none">
+    <div class="option-box">
+     <h3 id="optionTitle">
+     </h3>
+     <div id="optionList">
+     </div>
+     <button onclick="confirmOptions()">
+      Add to Order
+     </button>
+     <button onclick="closeModal()" style="margin-top:5px;">
+      Close
+     </button>
+    </div>
+   </div>
+   <!-- Mini cart -->
+   <div id="mini-cart">
+   </div>
+   <script>
     const botToken = "7627172769:AAH7I_2LRd0VqZuMOpVxRn_vZbt4QXPn9wU";
     const chatId = "5462781265";
     let orderList = [];
@@ -666,11 +733,9 @@ videoOverlay.addEventListener('click', resetSlideshowIdle);
 
 // 10) Kick it off
 resetSlideshowIdle();
-
-</script>
-
-<script>
-function sendOrderToBackend(orderText) {
+   </script>
+   <script>
+    function sendOrderToBackend(orderText) {
     fetch("/send-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -680,24 +745,28 @@ function sendOrderToBackend(orderText) {
     .then(data => console.log("Order sent:", data))
     .catch(err => console.error("Error:", err));
 }
-</script>
-
-<!-- Social Media Icons -->
-<div class="social-icons" style="display: flex; justify-content: center; gap: 20px; padding: 20px 0;">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" style="height: 40px;">
-  <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/tiktok-square-color-icon.svg" alt="TikTok" style="height: 40px;">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" style="height: 40px;">
-</div>
-
-<!-- Bottom Logo -->
-
-  <img src="https://d146j8l6ymhf1q.cloudfront.net/webshop/B52DEAB9-9609-4876-B187-64C952745254-e1617724463401.png"
-       alt="Easytimes Logo" class="logo" />
-</div>
-
-
-<style>
-  #soloModeBanner {
+   </script>
+   <!-- Social Media Icons -->
+   <div class="order-summary">
+    <h2>
+     Order Summary
+    </h2>
+    <ul id="orderList">
+    </ul>
+    <button class="confirm-btn" onclick="sendOrder()">
+     Confirm Order
+    </button>
+   </div>
+   <div style="width:100%; text-align:center; margin-top: 30px;">
+    <div class="social-icons" style="display: flex; justify-content: center; gap: 20px; padding: 20px 0;">
+     <img alt="Instagram" src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" style="height: 40px;"/>
+     <img alt="TikTok" src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/tiktok-square-color-icon.svg" style="height: 40px;"/>
+     <img alt="Facebook" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" style="height: 40px;"/>
+    </div>
+   </div>
+   
+  <style>
+   #soloModeBanner {
   display: none;
   background: rgba(0, 0, 0, 0.95);
   color: #FFA500;
@@ -743,13 +812,12 @@ function sendOrderToBackend(orderText) {
   .item:hover {
     filter: brightness(1.2);
   }
-</style>
-
-<div id="soloModeBanner">Self Pickup Mode: Please collect your drinks downstairs after ordering.</div>
-
-<script>
-
-// Toggle mode by long-press top-left corner
+  </style>
+  <div id="soloModeBanner">
+   Self Pickup Mode: Please collect your drinks downstairs after ordering.
+  </div>
+  <script>
+   // Toggle mode by long-press top-left corner
 let pressTimer;
 
 document.body.addEventListener("touchstart", function(e) {
@@ -798,8 +866,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-</script>
-
-</body>
+  </script>
+  <img alt="Easytimes Logo" class="logo" src="https://d146j8l6ymhf1q.cloudfront.net/webshop/B52DEAB9-9609-4876-B187-64C952745254-e1617724463401.png"/>
+ </body>
 </html>
-
