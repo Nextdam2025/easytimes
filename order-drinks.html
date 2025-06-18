@@ -12,9 +12,6 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body {
   height: 100vh;
-  max-height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
   font-size: 16px; /* fixed size */
   width: 1080px;   /* or whatever fits your design */
   margin: 0 auto;
@@ -152,7 +149,7 @@ img.logo {
     }
 
     /* Order summary */
-    .order-summary {
+    ..order-summary {
   margin: 40px auto 60px;    /* balanced spacing */
   text-align: center;
 }
@@ -749,24 +746,25 @@ resetSlideshowIdle();
     .catch(err => console.error("Error:", err));
 }
    </script>
-<!-- Order Summary -->
+<!-- Social Media Icons -->
 <div class="order-summary">
-  <h2>Order Summary</h2>
-  <ul id="orderList"></ul>
-  <button class="confirm-btn" onclick="sendOrder()">Confirm Order</button>
+<h2>
+     Order Summary
+    </h2>
+<ul id="orderList">
+</ul>
+<button class="confirm-btn" onclick="sendOrder()">
+     Confirm Order
+    </button>
 </div>
-
-<!-- Social Media Icons (Properly Positioned Below) -->
-<div style="width:100%; text-align:center; margin-top: 10px;">
-  <div class="social-icons" style="display: inline-flex; justify-content: center; gap: 20px; padding: 20px 0;">
-    <img alt="Instagram" src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" style="height: 40px;">
-    <img alt="TikTok" src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png" style="height: 40px;">
-    <img alt="Facebook" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" style="height: 40px;">
-  </div>
+<div style="width:100%; text-align:center; margin-top: 30px;">
+<div class="social-icons" style="display: flex; justify-content: center; gap: 20px; padding: 20px 0;">
+<img alt="Instagram" src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" style="height: 40px;"/>
+  <img src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png" alt="TikTok" style="height: 40px;">
+</a>
+<img alt="Facebook" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" style="height: 40px;"/>
 </div>
-
-
-
+</div>
 <div style="width:100%; text-align:center; margin-top: 30px;">
 <p style="color:#FFA500; font-weight:bold; font-size:1.1rem; margin-bottom:10px;">
      Please leave us a Google review!
@@ -876,10 +874,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
   </script>
-<div style="width:100%; text-align:center; margin-top: 10px; padding-bottom: 20px;">
-  <img alt="Easytimes Logo" class="logo" src="https://d146j8l6ymhf1q.cloudfront.net/webshop/B52DEAB9-9609-4876-B187-64C952745254-e1617724463401.png" style="margin: 10px auto 0; height: 60px;">
-</div>
-
+<img alt="Easytimes Logo" class="logo" src="https://d146j8l6ymhf1q.cloudfront.net/webshop/B52DEAB9-9609-4876-B187-64C952745254-e1617724463401.png"/>
 </body>
 </html>
-
