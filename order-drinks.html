@@ -746,25 +746,22 @@ resetSlideshowIdle();
     .catch(err => console.error("Error:", err));
 }
    </script>
-<!-- Social Media Icons -->
+<!-- Order Summary -->
 <div class="order-summary">
-<h2>
-     Order Summary
-    </h2>
-<ul id="orderList">
-</ul>
-<button class="confirm-btn" onclick="sendOrder()">
-     Confirm Order
-    </button>
+  <h2>Order Summary</h2>
+  <ul id="orderList"></ul>
+  <button class="confirm-btn" onclick="sendOrder()">Confirm Order</button>
 </div>
-<!-- Social Media Icons -->
-<div style="width:100%; text-align:center; margin-top: 30px;">
-  <div class="social-icons" style="display: flex; justify-content: center; gap: 20px; padding: 20px 0;">
+
+<!-- Social Media Icons (Properly Positioned Below) -->
+<div style="width:100%; text-align:center; margin-top: 30px; display: block;">
+  <div class="social-icons" style="display: inline-flex; justify-content: center; gap: 20px; padding: 20px 0;">
     <img alt="Instagram" src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" style="height: 40px;">
     <img alt="TikTok" src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png" style="height: 40px;">
     <img alt="Facebook" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" style="height: 40px;">
   </div>
 </div>
+
 
 
 <div style="width:100%; text-align:center; margin-top: 30px;">
