@@ -8,6 +8,11 @@
   </title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&amp;display=swap" rel="stylesheet"/>
 <style>
+   #slideshowVideo {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
    /* Global Reset & Base */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body {
@@ -697,10 +702,22 @@ document.body.appendChild(videoOverlay);
 
 // 7) Playback logic
 function playNextVideo() {
-  video.src = videos[currentVideoIndex];
-  video.load();
-  video.play().catch(() => {});
-  currentVideoIndex = (currentVideoIndex + 1) % videos.length;
+  const video = document.getElementById('slideshowVideo');
+
+  // Fade out
+  video.style.opacity = '0';
+
+  setTimeout(() => {
+    video.src = videos[currentVideoIndex];
+    video.load();
+
+    video.oncanplay = () => {
+      video.play().catch(() => {});
+      video.style.opacity = '1'; // Fade in
+    };
+
+    currentVideoIndex = (currentVideoIndex + 1) % videos.length;
+  }, 500); // Delay for fade
 }
 
 video.addEventListener('ended', playNextVideo);
