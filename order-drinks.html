@@ -8,11 +8,6 @@
   </title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&amp;display=swap" rel="stylesheet"/>
 <style>
-   #slideshowVideo {
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
-}
-
    /* Global Reset & Base */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body {
@@ -154,7 +149,7 @@ img.logo {
     }
 
     /* Order summary */
-    .order-summary {
+    ..order-summary {
   margin: 40px auto 60px;    /* balanced spacing */
   text-align: center;
 }
@@ -338,7 +333,6 @@ img.logo {
   </style>
 </head>
 <body>
-<img alt="Easytimes Logo" class="logo" src="https://d146j8l6ymhf1q.cloudfront.net/webshop/B52DEAB9-9609-4876-B187-64C952745254-e1617724463401.png"/>
 <!-- Background & Orange Border -->
 <video autoplay="" class="bg-video" loop="" muted="" playsinline="">
 <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4"/>
@@ -524,12 +518,12 @@ img.logo {
     function prepareOptions(article) {
       
       selectedArticle = article;
-      document.getElementById("optionTitle").innerText = `Options for ${article.name}`;
+      document.getElementById("optionTitle").innerText = Options for ${article.name};
       const optionList = document.getElementById("optionList");
       optionList.innerHTML = "";
       article.options.forEach((opt, index) => {
         const checkbox = document.createElement("label");
-        checkbox.innerHTML = `<input type='checkbox' data-index='${index}'> ${opt.name} (+€${opt.price.toFixed(2)})`;
+        checkbox.innerHTML = <input type='checkbox' data-index='${index}'> ${opt.name} (+€${opt.price.toFixed(2)});
         optionList.appendChild(checkbox);
       });
       document.getElementById("optionModal").style.display = "flex";
@@ -569,13 +563,13 @@ img.logo {
       list.innerHTML = "";
       orderList.forEach((item, index) => {
         const options = item.selectedOptions?.map(opt => opt.name).join(", ") || "";
-        list.innerHTML += `
+        list.innerHTML += 
           <li>
             #${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})
-            ${options ? `<br><small>+ ${options}</small>` : ""}
+            ${options ? <br><small>+ ${options}</small> : ""}
             <button class="remove-btn" onclick="removeFromOrder(${index})">×</button>
           </li>
-        `;
+        ;
       });
     }
     
@@ -583,13 +577,13 @@ img.logo {
     let miniCartIdleTimeout;
     function updateMiniCart() {
       const miniCart = document.getElementById("mini-cart");
-      let miniHTML = `<h3>Basket</h3><ul>`;
+      let miniHTML = <h3>Basket</h3><ul>;
       let total = 0;
       orderList.forEach(item => {
-        miniHTML += `<li>${item.name} - €${item.totalPrice.toFixed(2)}</li>`;
+        miniHTML += <li>${item.name} - €${item.totalPrice.toFixed(2)}</li>;
         total += item.totalPrice;
       });
-      miniHTML += `</ul><div class="total">Total: €${total.toFixed(2)}</div>`;
+      miniHTML += </ul><div class="total">Total: €${total.toFixed(2)}</div>;
       miniCart.innerHTML = miniHTML;
       miniCart.classList.add("show");
       resetMiniCartIdleTimer();
@@ -609,15 +603,15 @@ img.logo {
         showNotification("No items in order!");
         return;
       }
-      let text = `🇎 New Order:\n`;
+      let text = 🇎 New Order:\n;
       orderList.forEach(item => {
-        text += `#${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})\n`;
+        text += #${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})\n;
         if (item.selectedOptions && item.selectedOptions.length > 0) {
-          text += `  → ${item.selectedOptions.map(o => o.name + ` (+€${o.price.toFixed(2)})`).join(", ")}\n`;
+          text +=   → ${item.selectedOptions.map(o => o.name +  (+€${o.price.toFixed(2)})).join(", ")}\n;
         }
       });
     
-      fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`)
+      fetch(https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)})
         .then(res => res.json())
         .then(data => {
           if (data.ok) {
@@ -640,7 +634,7 @@ img.logo {
 
     /* IDLE VIDEO SLIDESHOW HANDLER */
 let slideshowIdleTimeout;
-const videos = ['smoke.mp4', 'mascotte.mp4', 'Mascotte2.mp4'];
+const videos = ['smoke.mp4', 'Mascotte2.mp4', 'mascotte.mp4'];
 let currentVideoIndex = 0;
 
 // 1) Create the overlay container
@@ -703,22 +697,10 @@ document.body.appendChild(videoOverlay);
 
 // 7) Playback logic
 function playNextVideo() {
-  const video = document.getElementById('slideshowVideo');
-
-  // Fade out
-  video.style.opacity = '0';
-
-  setTimeout(() => {
-    video.src = videos[currentVideoIndex];
-    video.load();
-
-    video.oncanplay = () => {
-      video.play().catch(() => {});
-      video.style.opacity = '1'; // Fade in
-    };
-
-    currentVideoIndex = (currentVideoIndex + 1) % videos.length;
-  }, 500); // Delay for fade
+  video.src = videos[currentVideoIndex];
+  video.load();
+  video.play().catch(() => {});
+  currentVideoIndex = (currentVideoIndex + 1) % videos.length;
 }
 
 video.addEventListener('ended', playNextVideo);
@@ -892,6 +874,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
   </script>
-
+<img alt="Easytimes Logo" class="logo" src="https://d146j8l6ymhf1q.cloudfront.net/webshop/B52DEAB9-9609-4876-B187-64C952745254-e1617724463401.png"/>
 </body>
 </html>
