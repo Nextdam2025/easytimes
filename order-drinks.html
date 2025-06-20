@@ -3,155 +3,877 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<title>Easytimes Order Menu</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet"/>
+<title>
+   Easytimes Order Menu
+  </title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&amp;display=swap" rel="stylesheet"/>
 <style>
-  /* Global Reset & Base */
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body {
-    height: 100vh;
-    font-size: 16px;
-    width: 1080px;
-    margin: 0 auto;
-    overflow: hidden;
-    background: #000;
-    color: #fff;
-    font-family: 'Roboto', sans-serif;
-  }
-  body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    position: relative;
-  }
+   /* Global Reset & Base */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100vh;
+  font-size: 16px; /* fixed size */
+  width: 1080px;   /* or whatever fits your design */
+  margin: 0 auto;
+  overflow: hidden;
+  background: #000; /* black background */
+  color: #fff;      /* ensures white text */
+}
 
-  /* Video Slideshow Frame */
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes floatLogo {
+  to { transform: translateY(-8px); }
+}
+
+
+    /* Logo animation */
+img.logo {
+  margin-bottom: 40px;
+  width: 200px;
+  display: block;
+  margin: 30px auto; /* vertical spacing + centering */
+  animation: floatLogo 2s ease-in-out infinite alternate;
+  border-radius: 20px;
+}
+
+    @keyframes floatLogo {
+      to { transform: translateY(-8px); }
+    }
+
+    /* Notification */
+    #notification {
+      position: fixed;
+      top: 20px; left: 50%;
+      transform: translateX(-50%);
+      background: #1e4d1e; color: #d4f7d4;
+      padding: 14px 24px; border-radius: 8px;
+      font-size: 1.1rem; font-weight: bold;
+      display: none; opacity: 0;
+      transition: opacity 0.5s, transform 0.3s;
+      z-index: 10000;
+      box-shadow: 0 0 12px rgba(0,255,0,0.5);
+      border: 2px solid #4CAF50;
+    }
+    #notification.show {
+      display: block; opacity: 1;
+      transform: translateX(-50%) scale(1.05);
+    }
+
+    /* Table selection */
+    .table-selection {
+  background: #111;
+  padding: 40px;              /* was 20px */
+  border-radius: 16px;        /* was 10px */
+  width: 100%;
+  max-width: 600px;           /* was 500px */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+  text-align: center;
+  margin: 30px auto;          /* more vertical space */
+  transform: scale(1.1);      /* optional: scales entire box */
+}
+
+    .table-label {
+      font-weight: bold; color: #CD7F2F;
+      font-size: 1.2rem; margin-bottom: 10px;
+      display: block; text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    #table-number {
+      font-size: 1rem; padding: 10px 14px;
+      border: 2px solid #CD7F2F; border-radius: 8px;
+      background: #222; color: #fff;
+      width: 100%; max-width: 220px;
+      transition: border-color 0.3s;
+    }
+
+    #table-number:focus {
+      outline: none; border-color: #FFA500;
+    }
+
+    /* Section titles */
+    .section-title {
+  text-align: center;
+  font-size: 1.5rem;
+  margin: 40px 0 20px;
+}
+
+    /* Menu items */
+    .menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* centers the buttons */
+  gap: 16px;               /* more balanced spacing */
+  width: 100%;             /* allow it to adapt */
+  max-width: 1080px;
+  margin: 0 auto;          /* center horizontally */
+}
+
+    .item {
+  width: 250px;
+  height: 60px;
+  font-size: 1rem;
+  border-radius: 16px;
+  padding: 10px;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;              /* ADD this */
+  align-items: center;        /* Vertically center text */
+  justify-content: center;    /* Horizontally center text */
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+
+    .item:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        inset 0 0 3px rgba(255,255,255,0.3),
+        0 4px 8px rgba(0,0,0,0.6);
+      text-shadow:
+        0 0 4px rgba(255,255,255,0.8),
+        0 0 12px rgba(255,255,255,0.4);
+    }
+    .item:active {
+      opacity: 0.9; transform: translateY(0);
+    }
+
+    /* Order summary */
+    ..order-summary {
+  margin: 40px auto 60px;    /* balanced spacing */
+  text-align: center;
+}
+
+    .order-summary h2 {
+      font-size: 1.4rem; margin-bottom: 10px;
+      color: #CD7F2F; text-align: center;
+    }
+    .order-summary ul {
+      list-style: none; padding: 0; margin: 10px 0;
+    }
+    .order-summary li {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 8px;
+      font-size: 1rem; border-bottom: 1px solid #333;
+      padding-bottom: 5px;
+    }
+    .remove-btn {
+      background: transparent; border: none;
+      color: #CD7F2F; font-size: 1.2rem;
+      cursor: pointer; padding: 5px;
+    }
+    .confirm-btn {
+  margin: 30px auto 0;
+  display: block;
+  font-size: 1.2rem;
+  padding: 14px 28px;
+  background: linear-gradient(145deg, #f26522, #ff914d);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.confirm-btn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(145deg, #ff7a1a, #ffa45c);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+}
+
+.confirm-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+
+    /* Modal */
+    .option-modal {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex; justify-content: center;
+      align-items: center; z-index: 9999;
+      animation: fadeIn 0.3s;
+    }
+    @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+    .option-box {
+      background: #222; padding: 20px;
+      border-radius: 10px; max-width: 300px;
+      width: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+      text-align: left;
+    }
+    .option-box h3 { margin-top: 0; color: #CD7F2F; }
+    .option-box label { display: block; margin: 8px 0; }
+    .option-box button {
+      margin-top: 10px; padding: 10px 14px;
+      border: none; border-radius: 6px;
+      background: #CD7F2F; color: #fff;
+      cursor: pointer; font-size: 1rem;
+      transition: background 0.3s; width: 100%;
+    }
+    .option-box button:hover { background: #e89a4a; }
+
+    /* Mini-cart */
+    #mini-cart {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(20, 20, 20, 0.95);
+  border: 3px solid #f26522;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+  padding: 16px;
+  width: 300px;
+  max-width: 90%;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 1000;
+}
+
+#mini-cart.show {
+  opacity: 1;
+}
+
+#mini-cart h3 {
+  color: #f26522;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+#mini-cart ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 180px;
+  overflow-y: hidden;
+}
+
+#mini-cart li {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px dashed #444;
+  font-size: 0.95rem;
+}
+
+#mini-cart .total {
+  margin-top: 12px;
+  font-weight: bold;
+  text-align: right;
+  color: #ffa94d;
+  font-size: 1rem;
+}
+
+
+    /* Background video (greyed out) */
+    video.bg-video {
+      position: fixed;
+      top: 50%; left: 50%;
+      min-width: 100%; height: 100%;
+      width: auto; height: 100%;
+      z-index: -1;
+      transform: translate(-50%, -50%);
+      object-fit: cover; opacity: 0.3;
+    }
+
+    /* Always-on-top orange frame */
+    .orange-frame {
+      position: fixed; top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      border: 10px solid #f26522;
+      box-sizing: border-box; pointer-events: none;
+      z-index: 10001;
+    }
+
+    /* NEW: centered & cover slideshow frame */
+    .video-frame {
+  position: relative;
+  width: 90vw;
+  max-width: 1280px;
+  border: 10px solid #f26522;
+  border-radius: 20px;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: black;
+  aspect-ratio: 9 / 16; /* Default for vertical screens */
+}
+
+/* Landscape override */
+@media (orientation: landscape) {
   .video-frame {
-    position: relative;
-    width: 607px;
-    height: 1080px;
-    border: 10px solid #f26522;
-    border-radius: 20px;
-    overflow: hidden;
-    background: black;
+    aspect-ratio: 16 / 9;
   }
-  .video-frame video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+}
 
-  /* Star Wars Transition Overlay */
-  .transition-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: black; color: #ffd700;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    z-index: 9999;
-  }
-  .crawl-container {
-    perspective: 400px;
-    width: 100%; height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center; /* centered vertically */
-  }
-  .crawl-text {
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
-    transform-origin: center;
-    animation: crawl 8s linear forwards;
-    opacity: 0;
-  }
-  @keyframes crawl {
-    0% { transform: rotateX(20deg) translateY(50%); opacity: 1; }
-    100% { transform: rotateX(25deg) translateY(-50%); opacity: 0; }
-  }
-</style>
+
+    .video-frame video {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+  </style>
 </head>
 <body>
-
-<!-- Video Slideshow -->
-<div class="video-frame">
-  <video id="slideshowVideo" autoplay muted playsinline>
-    <source src="smoke.mp4" type="video/mp4">
-    <source src="mascotte.mp4" type="video/mp4">
-    <source src="mascotte2.mp4" type="video/mp4">
-  </video>
+<!-- Background & Orange Border -->
+<video autoplay="" class="bg-video" loop="" muted="" playsinline="">
+<source src="Smoke_4___45s___4k_res.mp4" type="video/mp4"/>
+</video>
+<div class="orange-frame">
 </div>
-
-<!-- Transition Overlay -->
-<div id="videoTransition" class="transition-overlay">
-  <div class="crawl-container">
-    <div id="crawlText" class="crawl-text"></div>
+<!-- Back button -->
+<div style="text-align:center; margin:20px;">
+<button onclick="location.href='index.html'" style="padding:10px 20px; font-size:1rem; border-radius:10px;
+                   background:#ffffff10; border:none; color:white; cursor:pointer;">
+    ⬅ Back to Home
+   </button>
+</div>
+<!-- Notification -->
+<div id="notification">
+</div>
+<!-- Logo & Table select -->
+<!-- Hot & Cold menus… (harmonized color scheme) -->
+<div class="section-title">
+   Hot Drinks
   </div>
+<div class="menu" id="hot-drinks">
+<div class="item hot-drink" onclick='prepareOptions({ name: "Espresso", articleNumber: 102, price: 3.50, buttonColor: "#CC5A00", options: [ { name: "Whipped Cream", price: 1.00 }, { name: "Extra Oatmilk", price: 1.00 }, { name: "Syrup", price: 1.00 } ] })'>
+    Espresso (€3,50)
+   </div>
+<div class="item hot-drink" onclick='prepareOptions({ name: "Doppio", articleNumber: 202, price: 4.00, buttonColor: "#CC5A00", options: [ { name: "Extra Oatmilk", price: 1.00 }, { name: "Whipped Cream", price: 1.00 }, { name: "Syrup", price: 1.00 } ] })'>
+    Doppio (€4,00)
+   </div>
+<div class="item hot-drink" onclick='prepareOptions({ name: "Black Coffee", articleNumber: 203, price: 3.50, buttonColor: "#CC5A00", options: [ { name: "Whipped Cream", price: 1.00 }, { name: "Extra Oatmilk", price: 1.00 }, { name: "Syrup", price: 1.00 } ] })'>
+    Black Coffee (€3,50)
+   </div>
+<div class="item hot-drink" onclick='prepareOptions({ name: "Americano", articleNumber: 204, price: 3.50, buttonColor: "#CC5A00", options: [ { name: "Extra Oatmilk", price: 1.00 }, { name: "Whipped Cream", price: 1.00 }, { name: "Syrup", price: 1.00 } ] })'>
+    Americano (€3,50)
+   </div>
+<div class="item hot-drink" onclick='prepareOptions({ name: "Cappuccino", articleNumber: 102, price: 4.00, buttonColor: "#CC5A00", options: [] })'>
+    Cappuccino (€4,00)
+   </div>
+<div class="item hot-drink" onclick='prepareOptions({ name: "Flavored Latte", articleNumber: 205, price: 5.00, buttonColor: "#CC5A00", options: [ { name: "Hazelnuts", price: 0 }, { name: "Caramel", price: 0 } ] })'>
+    Flavored Latte (€5,00)
+   </div>
+<div class="item hot-drink" onclick='prepareOptions({ name: "Cafe Latte", articleNumber: 206, price: 4.50, buttonColor: "#CC5A00", options: [] })'>
+    Cafe Latte (€4,50)
+   </div>
+<div class="item hot-drink" onclick='prepareOptions({ name: "Latte Macchiato", articleNumber: 207, price: 4.50, buttonColor: "#CC5A00", options: [ { name: "Whipped Cream", price: 1.00 }, { name: "Syrup", price: 1.00 } ] })'>
+    Latte Macchiato (€4,50)
+   </div>
+<div class="item hot-drink" onclick='prepareOptions({ name: "Coffee Mocca", articleNumber: 208, price: 5.00, buttonColor: "#CC5A00", options: [ { name: "Extra Shot Espresso", price: 1.00 }, { name: "Whipped Cream", price: 1.00 } ] })'>
+    Coffee Mocca (€5,00)
+   </div>
+<div class="item hot-drink" onclick='prepareOptions({ name: "Hot Chocolate", articleNumber: 209, price: 4.00, buttonColor: "#CC5A00", options: [ { name: "Whipped Cream", price: 1.00 } ] })'>
+    Hot Chocolate (€4,00)
+   </div>
+<div class="item hot-drink" onclick='prepareOptions({ name: "Tea", articleNumber: 301, price: 3.50, buttonColor: "#CC5A00", options: [ { name: "Extra Lemon", price: 1.00 }, { name: "Extra Ginger", price: 1.00 }, { name: "Extra Orange Blossom", price: 1.00 }, { name: "Louiza", price: 1.00 } ] })'>
+    Tea (€3,50)
+   </div>
+<div class="item hot-drink" onclick='prepareOptions({ name: "Fresh Mint Tea", articleNumber: 301, price: 4.50, buttonColor: "#CC5A00", options: [ { name: "Extra Lemon", price: 0.50 }, { name: "Extra Ginger", price: 0.50 }, { name: "Extra Orange Blossom", price: 0.50 }, { name: "Louiza", price: 0.50 } ] })'>
+    Fresh Mint Tea (€4,50)
+   </div>
 </div>
-
+<div class="section-title">
+   Cold Drinks
+  </div>
+<div class="menu" id="cold-drinks">
+<div class="item cold-drink" onclick='prepareOptions({ name: "Coca-Cola", articleNumber: 401, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    Coca-Cola (€4,00)
+   </div>
+<div class="item cold-drink" onclick='prepareOptions({ name: "Coca-Cola Zero", articleNumber: 402, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    Coca-Cola Zero (€4,00)
+   </div>
+<div class="item cold-drink" onclick='prepareOptions({ name: "Fanta Orange", articleNumber: 403, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    Fanta Orange (€4,00)
+   </div>
+<div class="item cold-drink" onclick='prepareOptions({ name: "Fanta Cassis", articleNumber: 404, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    Fanta Cassis (€4,00)
+   </div>
+<div class="item cold-drink" onclick='prepareOptions({ name: "Still Water", articleNumber: 405, price: 3.50, buttonColor: "#00BFA6", options: [] })'>
+    Still Water (€3,50)
+   </div>
+<div class="item cold-drink" onclick='prepareOptions({ name: "Sparkling Water", articleNumber: 406, price: 3.50, buttonColor: "#00BFA6", options: [] })'>
+    Sparkling Water (€3,50)
+   </div>
+<div class="item cold-drink" onclick='prepareOptions({ name: "Sprite", articleNumber: 407, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    Sprite (€4,00)
+   </div>
+<div class="item cold-drink" onclick='prepareOptions({ name: "Chocomel", articleNumber: 408, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    Chocomel (€4,00)
+   </div>
+<div class="item cold-drink" onclick='prepareOptions({ name: "Iced Tea Peach/Mango", articleNumber: 409, price: 4.00, buttonColor: "#00BFA6", options: [ { name: "Peach", price: 0 }, { name: "Mango", price: 0 } ] })'>
+    Iced Tea Peach/Mango (€4,00)
+   </div>
+<div class="item cold-drink" onclick='prepareOptions({ name: "Iced Tea Lemon Sparkling", articleNumber: 410, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    Iced Tea Lemon Sparkling (€4,00)
+   </div>
+<div class="item cold-drink" onclick='prepareOptions({ name: "Royal Bliss Bitter Lemon", articleNumber: 411, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    Royal Bliss Bitter Lemon (€4,00)
+   </div>
+<div class="item cold-drink" onclick='prepareOptions({ name: "Royal Bliss Ginger Ale", articleNumber: 412, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    Royal Bliss Ginger Ale (€4,00)
+   </div>
+<div class="item cold-drink" onclick='prepareOptions({ name: "Looza (Pear/Strawberry/Peach)", articleNumber: 413, price: 4.00, buttonColor: "#00BFA6", options: [ { name: "Pear", price: 0 }, { name: "Strawberry", price: 0 }, { name: "Peach", price: 0 } ] })'>
+    Looza (Pear/Strawberry/Peach) (€4,00)
+   </div>
+<div class="item cold-drink" onclick='prepareOptions({ name: "Minute Maid Juices", articleNumber: 414, price: 4.00, buttonColor: "#00BFA6", options: [ { name: "Orange", price: 0 }, { name: "Apple", price: 0 } ] })'>
+    Minute Maid (Orange/Apple) (€4,00)
+   </div>
+<div class="item cold-drink" onclick='prepareOptions({ name: "AA Energy Drink", articleNumber: 415, price: 4.00, buttonColor: "#00BFA6", options: [] })'>
+    AA Energy Drink (€4,00)
+   </div>
+<div class="item cold-drink" onclick='prepareOptions({ name: "Red Bull Energy Drink", articleNumber: 416, price: 5.00, buttonColor: "#00BFA6", options: [] })'>
+    Red Bull Energy Drink (€5,00)
+   </div>
+<div class="section-title">
+    Homemade Snacks (0% THC)
+   </div>
+<div class="menu" id="homemade-snacks">
+<div class="item" onclick='prepareOptions({ name: "Chocolate Chip Cookie", articleNumber: 501, price: 3.50, buttonColor: "#a16c2b", options: [] })' style="background: linear-gradient(145deg, #a16c2b, #c9883b);">
+     Chocolate Chip Cookie (€3,50)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Banana Cake", articleNumber: 502, price: 4.00, buttonColor: "#a16c2b", options: [] })' style="background: linear-gradient(145deg, #a16c2b, #c9883b);">
+     Banana Cake (€4,00)
+    </div>
+</div>
+<div class="section-title">
+    Space Cakes
+   </div>
+<div class="menu" id="space-cakes">
+<div class="item" onclick='prepareOptions({ name: "Madeleine", articleNumber: 601, price: 6.00, buttonColor: "#6e2a8d", options: [] })' style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);">
+     Madeleine (€6,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Brownie Crunchy Caramel", articleNumber: 602, price: 8.00, buttonColor: "#6e2a8d", options: [] })' style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);">
+     Brownie Crunchy Caramel (€8,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Red Velvet Cheesecake Brownie", articleNumber: 603, price: 10.00, buttonColor: "#6e2a8d", options: [] })' style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);">
+     Red Velvet Cheesecake Brownie (€10,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Oreo White Chocolate Cake", articleNumber: 604, price: 10.00, buttonColor: "#6e2a8d", options: [] })' style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);">
+     Oreo White Chocolate Cake (€10,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Honey Date Biscuit Cake", articleNumber: 605, price: 13.00, buttonColor: "#6e2a8d", options: [] })' style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);">
+     Honey Date Biscuit Cake (€13,00)
+    </div>
+<div class="item" onclick='prepareOptions({ name: "Stroopwafel Pie", articleNumber: 606, price: 15.00, buttonColor: "#6e2a8d", options: [] })' style="background: linear-gradient(145deg, #6e2a8d, #8e4bb5);">
+     Stroopwafel Pie (€15,00)
+    </div>
+</div>
+<!-- Main order summary -->
+<!-- Option modal -->
+<div class="option-modal" id="optionModal" style="display:none">
+<div class="option-box">
+<h3 id="optionTitle">
+</h3>
+<div id="optionList">
+</div>
+<button onclick="confirmOptions()">
+      Add to Order
+     </button>
+<button onclick="closeModal()" style="margin-top:5px;">
+      Close
+     </button>
+</div>
+</div>
+<!-- Mini cart -->
+<div id="mini-cart">
+</div>
 <script>
-const slogans = [
-  "EasyTimes Amsterdam — Where the World Comes to Chill.",
-  "One Love. One Coffeeshop. A Thousand Stories.",
-  "Relax Like a Local, Float Like a Tourist.",
-  "Welcome to the Heartbeat of Chill in Amsterdam.",
-  "Your Couch Away from Home — Only at EasyTimes.",
-  "From Tokyo to Toronto — Everyone Finds Peace at EasyTimes.",
-  "Across Borders, One Destination: EasyTimes Amsterdam.",
-  "Jetlagged? High Spirits Only Here.",
-  "EasyTimes: The Pilgrimage for Chill Seekers.",
-  "Travel Light, Relax Heavy.",
-  "Where Time Slows Down and Smiles Light Up.",
-  "No Rush. No Worries. Just EasyTimes.",
-  "The Art of Relaxation — Served Daily.",
-  "Escape the Noise, Embrace the Vibe.",
-  "Let Go. Light Up. Live Easy.",
-  "Malik’s Arms Are Open. So Are Our Doors.",
-  "Come as a Stranger, Leave as Family.",
-  "It’s Not Just a Coffeeshop. It’s Malik’s House of Chill.",
-  "EasyTimes Amsterdam — Born to Relax. Built to Remember.",
-  "EasyTimes. The Legend Lives on Reguliers."
-];
+    const botToken = "7627172769:AAH7I_2LRd0VqZuMOpVxRn_vZbt4QXPn9wU";
+    const chatId = "5462781265";
+    let orderList = [];
+    let selectedArticle = null;
+    let selectedTable = null;
+    
+    // Notification Function
+    function showNotification(message) {
+      const notification = document.getElementById("notification");
+      notification.textContent = message;
+      notification.classList.add("show");
+      setTimeout(() => {
+        notification.classList.remove("show");
+      }, 3000);
+    }
+    
+    // Prepare Options Modal
+    function prepareOptions(article) {
+      
+      selectedArticle = article;
+      document.getElementById("optionTitle").innerText = `Options for ${article.name}`;
+      const optionList = document.getElementById("optionList");
+      optionList.innerHTML = "";
+      article.options.forEach((opt, index) => {
+        const checkbox = document.createElement("label");
+        checkbox.innerHTML = `<input type='checkbox' data-index='${index}'> ${opt.name} (+€${opt.price.toFixed(2)})`;
+        optionList.appendChild(checkbox);
+      });
+      document.getElementById("optionModal").style.display = "flex";
+    }
+    
+    // Confirm Options and Update Order
+    function confirmOptions() {
+      const selectedOptions = [];
+      let extraPrice = 0;
+      const inputs = document.querySelectorAll("#optionList input[type=checkbox]");
+      inputs.forEach((input) => {
+        if (input.checked) {
+          const opt = selectedArticle.options[parseInt(input.dataset.index)];
+          selectedOptions.push(opt);
+          extraPrice += opt.price;
+        }
+      });
+      orderList.push({
+        ...selectedArticle,
+        selectedOptions: selectedOptions,
+        totalPrice: selectedArticle.price + extraPrice
+      });
+      updateOrderList();
+      updateMiniCart();
+      document.getElementById("optionModal").style.display = "none";
+    }
+    
+    function removeFromOrder(index) {
+      orderList.splice(index, 1);
+      updateOrderList();
+      updateMiniCart();
+    }
+    
+    // Update Main Order List
+    function updateOrderList() {
+      const list = document.getElementById("orderList");
+      list.innerHTML = "";
+      orderList.forEach((item, index) => {
+        const options = item.selectedOptions?.map(opt => opt.name).join(", ") || "";
+        list.innerHTML += `
+          <li>
+            #${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})
+            ${options ? `<br><small>+ ${options}</small>` : ""}
+            <button class="remove-btn" onclick="removeFromOrder(${index})">×</button>
+          </li>
+        `;
+      });
+    }
+    
+    // Update Mini Cart with Live Order Preview and Total Price
+    let miniCartIdleTimeout;
+    function updateMiniCart() {
+      const miniCart = document.getElementById("mini-cart");
+      let miniHTML = `<h3>Basket</h3><ul>`;
+      let total = 0;
+      orderList.forEach(item => {
+        miniHTML += `<li>${item.name} - €${item.totalPrice.toFixed(2)}</li>`;
+        total += item.totalPrice;
+      });
+      miniHTML += `</ul><div class="total">Total: €${total.toFixed(2)}</div>`;
+      miniCart.innerHTML = miniHTML;
+      miniCart.classList.add("show");
+      resetMiniCartIdleTimer();
+    }
+    
+    // Auto-hide Mini Cart after 10 seconds of inactivity
+    function resetMiniCartIdleTimer() {
+      clearTimeout(miniCartIdleTimeout);
+      miniCartIdleTimeout = setTimeout(() => {
+        document.getElementById("mini-cart").classList.remove("show");
+      }, 10000);
+    }
+    
+    // Send Order Functionality
+    function sendOrder() {
+      if (orderList.length === 0) {
+        showNotification("No items in order!");
+        return;
+      }
+      let text = `🇎 New Order:\n`;
+      orderList.forEach(item => {
+        text += `#${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})\n`;
+        if (item.selectedOptions && item.selectedOptions.length > 0) {
+          text += `  → ${item.selectedOptions.map(o => o.name + ` (+€${o.price.toFixed(2)})`).join(", ")}\n`;
+        }
+      });
+    
+      fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.ok) {
+            showNotification("✅ Order sent successfully!");
+            orderList = [];
+            updateOrderList();
+            updateMiniCart();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(() => { window.location.href = 'index.html'; }, 3000);
+          } else {
+            showNotification("Error sending order");
+          }
+        });
+    }
+    
+    // Option Modal Close Function
+    function closeModal() {
+      document.getElementById("optionModal").style.display = "none";
+    }
 
-let currentSloganIndex = 0;
-const videoTransition = document.getElementById('videoTransition');
-const crawlText = document.getElementById('crawlText');
-const slideshowVideo = document.getElementById('slideshowVideo');
-let slideshowSources = slideshowVideo.querySelectorAll('source');
+    /* IDLE VIDEO SLIDESHOW HANDLER */
+let slideshowIdleTimeout;
+const videos = ['smoke.mp4', 'mascotte.mp4', 'mascotte2.mp4'];
 let currentVideoIndex = 0;
 
-function showSloganTransition() {
-  crawlText.textContent = slogans[currentSloganIndex % slogans.length];
-  currentSloganIndex++;
+// 1) Create the overlay container
+const videoOverlay = document.createElement('div');
+Object.assign(videoOverlay.style, {
+  position: 'fixed',
+  top: '10px',
+  left: '10px',
+  right: '10px',
+  bottom: '10px',
+  backgroundColor: '#000',
+  zIndex: '4',
+  display: 'none',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: 'opacity 1s ease, transform 1s ease',
+  opacity: '0',
+  transform: 'scale(0.9)',
+  borderRadius: '20px' // optional, to match the frame shape
+});
 
-  videoTransition.style.display = "flex";
-  crawlText.style.animation = 'none';
-  void crawlText.offsetWidth;
-  crawlText.style.animation = 'crawl 8s linear forwards';
 
-  setTimeout(() => {
-    videoTransition.style.display = "none";
-    playNextVideo();
-  }, 8000);
-}
+// 2) Logo
+const videoLogo = document.createElement('img');
+videoLogo.src = 'EASY TIMES LOGO BLACK-01.png';
+videoLogo.alt = 'Easytimes Logo';
+videoLogo.style.width = '200px';
+videoLogo.style.margin = '40px 0 20px';
 
+// 3) Message
+const videoMessage = document.createElement('div');
+videoMessage.innerText = 'CLICK THE SCREEN TO ORDER DRINKS';
+Object.assign(videoMessage.style, {
+  color: '#FFA500',
+  fontSize: '2rem',
+  fontWeight: 'bold',
+  textAlign: 'center',
+  textShadow: '1px 1px 4px black',
+  marginBottom: '30px'
+});
+
+// 4) Framed video container
+const videoFrame = document.createElement('div');
+videoFrame.classList.add('video-frame');  // uses your CSS .video-frame rules
+
+// 5) The slideshow <video> itself
+const video = document.createElement('video');
+video.id = 'slideshowVideo';
+video.muted = true;
+video.controls = false;
+video.autoplay = true;      // ✅ Needed for autoplay
+video.playsInline = true;   // ✅ Especially on iOS
+videoFrame.appendChild(video);
+
+
+// 6) Assemble and add to document
+videoOverlay.append(videoLogo, videoMessage, videoFrame);
+document.body.appendChild(videoOverlay);
+
+// 7) Playback logic
 function playNextVideo() {
-  currentVideoIndex = (currentVideoIndex + 1) % slideshowSources.length;
-  slideshowVideo.src = slideshowSources[currentVideoIndex].src;
-  slideshowVideo.load();
-  slideshowVideo.play();
+  video.src = videos[currentVideoIndex];
+  video.load();
+  video.play().catch(() => {});
+  currentVideoIndex = (currentVideoIndex + 1) % videos.length;
 }
 
-slideshowVideo.addEventListener('ended', showSloganTransition);
+video.addEventListener('ended', playNextVideo);
+video.addEventListener('error', playNextVideo);
 
-window.onload = () => {
-  slideshowVideo.play();
-};
-</script>
+// 8) Idle/reset timer
+function resetSlideshowIdle() {
+  clearTimeout(slideshowIdleTimeout);
+  video.pause();
+  videoOverlay.style.opacity = '0';
+  videoOverlay.style.transform = 'scale(0.9)';
+  setTimeout(() => videoOverlay.style.display = 'none', 800);
 
+  slideshowIdleTimeout = setTimeout(() => {
+    videoOverlay.style.display = 'flex';
+    requestAnimationFrame(() => {
+      videoOverlay.style.opacity = '1';
+      videoOverlay.style.transform = 'scale(1)';
+    });
+    currentVideoIndex = 0;
+    playNextVideo();
+  }, 25000);  // 25 seconds
+}
+
+// 9) Hook up user activity
+['click','mousemove','keydown','touchstart'].forEach(evt =>
+  document.addEventListener(evt, resetSlideshowIdle)
+);
+videoOverlay.addEventListener('click', resetSlideshowIdle);
+
+// 10) Kick it off
+resetSlideshowIdle();
+   </script>
+<script>
+    function sendOrderToBackend(orderText) {
+    fetch("/send-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: orderText })
+    })
+    .then(res => res.json())
+    .then(data => console.log("Order sent:", data))
+    .catch(err => console.error("Error:", err));
+}
+   </script>
+<!-- Social Media Icons -->
+<div class="order-summary">
+<h2>
+     Order Summary
+    </h2>
+<ul id="orderList">
+</ul>
+<button class="confirm-btn" onclick="sendOrder()">
+     Confirm Order
+    </button>
+</div>
+<div style="width:100%; text-align:center; margin-top: 30px;">
+<div class="social-icons" style="display: flex; justify-content: center; gap: 20px; padding: 20px 0;">
+<img alt="Instagram" src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" style="height: 40px;"/>
+<img alt="TikTok" src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/tiktok-square-color-icon.svg" alt="TikTok" style="height: 40px;">
+<img alt="Facebook" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" style="height: 40px;"/>
+</div>
+</div>
+<div style="width:100%; text-align:center; margin-top: 30px;">
+<p style="color:#FFA500; font-weight:bold; font-size:1.1rem; margin-bottom:10px;">
+     Please leave us a Google review!
+    </p>
+<img alt="Google Review QR" src="qr-code.png" style="height:160px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.4);"/>
+</div>
+
+<style>
+   #soloModeBanner {
+  display: none;
+  background: rgba(0, 0, 0, 0.95);
+  color: #FFA500;
+  text-align: center;
+  padding: 18px 24px;
+  font-weight: bold;
+  font-size: 1.3rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+  border-bottom: 4px solid #f26522;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  text-shadow: 1px 1px 4px black;
+  letter-spacing: 0.03em;
+}
+  #customAlert {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -30%);
+  background: rgba(34, 34, 34, 0.95); /* same as mini-cart */
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  z-index: 10000;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  border: 2px solid #CD7F2F; /* accent color */
+  display: none;
+  max-width: 300px;
+  width: 80%;
+}
+
+  .hot-drink {
+    background: linear-gradient(145deg, #CC5A00, #E67300);
+  }
+  .cold-drink {
+    background: linear-gradient(145deg, #00BFA6, #00D7C3);
+  }
+  .item:hover {
+    filter: brightness(1.2);
+  }
+  </style>
+<div id="soloModeBanner">
+   Self Pickup Mode: Please collect your drinks downstairs after ordering.
+  </div>
+<script>
+   // Toggle mode by long-press top-left corner
+let pressTimer;
+
+document.body.addEventListener("touchstart", function(e) {
+  if (e.touches[0].clientX < 100 && e.touches[0].clientY < 100) {
+    pressTimer = window.setTimeout(toggleSoloMode, 1500);
+  }
+});
+document.body.addEventListener("touchend", function() {
+  clearTimeout(pressTimer);
+});
+
+function toggleSoloMode() {
+  const current = localStorage.getItem("soloMode") === "true";
+  const newMode = !current;
+  localStorage.setItem("soloMode", newMode);
+  applySoloMode(newMode);
+  alert("Solo Staff Mode is now " + (newMode ? "ON" : "OFF"));
+}
+
+function applySoloMode(enabled) {
+  const banner = document.getElementById("soloModeBanner");
+  if (enabled) {
+    banner.style.display = "block";
+  } else {
+    banner.style.display = "none";
+  }
+}
+
+
+function getConfirmationMessage() {
+  return localStorage.getItem("soloMode") === "true"
+    ? "Thank you! Please pick up your drinks downstairs."
+    : "Thank you! Your drinks will be brought upstairs shortly.";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const soloMode = localStorage.getItem("soloMode") === "true";
+  applySoloMode(soloMode);
+
+  const confirmBtn = document.querySelector(".confirm-order"); // Adjust selector if needed
+  if (confirmBtn) {
+    confirmBtn.addEventListener("click", () => {
+      setTimeout(() => {
+        alert(getConfirmationMessage());
+      }, 300); // Adjust delay if needed
+    });
+  }
+});
+  </script>
+<img alt="Easytimes Logo" class="logo" src="https://d146j8l6ymhf1q.cloudfront.net/webshop/B52DEAB9-9609-4876-B187-64C952745254-e1617724463401.png"/>
 </body>
 </html>
+
