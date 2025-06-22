@@ -121,6 +121,20 @@
   object-fit: cover;
 }
 
+    /* ensure the click-to-order text sits over the video */
+#slideshow-overlay .overlay-msg {
+  position: absolute;           /* take it out of the normal flow */
+  z-index: 10001;               /* above the video (which is z-auto) */
+  top: 50%;                     /* vertically centered */
+  left: 50%;                    /* horizontally centered */
+  transform: translate(-50%, -50%);
+  pointer-events: none;         /* clicks still fall through */
+  font-size: 2rem;              
+  font-weight: bold;
+  color: #FFA500;
+  text-shadow: 0 0 8px black;   /* same as your old overlay-msg */
+}
+    
 
     #slideshow-container {
       margin-top:2em; width:100%; max-width:1080px; height:360px;
@@ -504,8 +518,9 @@
     logoEl.src = "https://d146j8l6ymhf1q.cloudfront.net/webshop/B52DEAB9-9609-4876-B187-64C952745254-e1617724463401.png";
     logoEl.style.width = "200px";
 
-    msg.innerText = "CLICK THE SCREEN TO ORDER DRINKS";
-    msg.style.cssText = "color:#FFA500;font-size:2rem;font-weight:bold;margin:1rem 0;";
+msg.className = "overlay-msg";
+msg.textContent = "CLICK THE SCREEN TO ORDER DRINKS";
+
 
     vf.className = "video-frame";
     vid.id = "slideshowVideo";
@@ -542,4 +557,3 @@
   </script>
 </body>
 </html>
-
