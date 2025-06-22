@@ -9,84 +9,99 @@
     /* Reset & Base */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
-      height: 100vh;
-      width: 100vw;
-      overflow: hidden;
-      background: #000;
-      color: #fef5e6;
+      height: 100vh; width: 100vw; overflow: hidden;
+      background: #000; color: #fef5e6;
       font-family: 'Barlow Condensed', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
     }
-    /* Logo */
-    .logo { margin: 30px 0; animation: floatLogo 2s ease-in-out infinite alternate; }
-    .logo h1 { font-size: 3rem; letter-spacing: .1em; }
-    .logo h2.sub { font-size: 1.2rem; color: #f26522; margin-top: .2em; }
+
+    /* Background & Orange Frame */
+    video.bg-video {
+      position: fixed; top:50%; left:50%;
+      min-width:100%; height:100%;
+      transform:translate(-50%,-50%);
+      object-fit:cover; opacity:0.3; z-index:-1;
+    }
+    .orange-frame {
+      position:fixed; top:0; left:0;
+      width:100vw; height:100vh;
+      border:10px solid #f26522;
+      box-sizing:border-box; pointer-events:none; z-index:10000;
+    }
 
     @keyframes floatLogo { to { transform: translateY(-8px); } }
 
+    /* Back Button */
+    .back-btn { margin:20px 0; }
+    .back-btn button {
+      padding:10px 20px; font-size:1rem; border-radius:10px;
+      background:rgba(255,255,255,0.1); border:none; color:#fff; cursor:pointer;
+    }
+
+    /* Logo */
+    .logo { animation:floatLogo 2s ease-in-out infinite alternate; }
+    .logo h1 { font-size:3rem; letter-spacing:.1em; }
+    .logo h2.sub { font-size:1.2rem; color:#f26522; margin-top:.2em; }
+
     /* Tabs */
-    .tabs { display: flex; gap:1em; margin-bottom:2em; flex-wrap: wrap; }
+    .tabs { display:flex; gap:1em; margin-bottom:2em; flex-wrap:wrap; }
     .tab {
-      padding: .6em 1.5em;
-      border:2px solid #f26522;
-      border-radius:999px;
-      color:#fef5e6;
-      background:transparent;
-      cursor:pointer;
-      font-weight:600;
-      transition: .3s;
+      padding:.6em 1.5em; border:2px solid #f26522; border-radius:999px;
+      color:#fef5e6; background:transparent; cursor:pointer; font-weight:600;
+      transition:.3s;
     }
     .tab.active { background:#f26522; color:#000; }
 
     /* Menu grid */
     .menu-section {
-      display:none;
-      width:100%; max-width:1080px;
+      display:none; width:100%; max-width:1080px;
       margin:0 auto;
-      grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
-      gap:1em;
-      padding:0 1em;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:1em; padding:0 1em;
     }
-    .menu-section.active { display: grid; }
-
+    .menu-section.active { display:grid; }
     .item {
-      background:#111;
-      border:2px solid #f26522;
-      border-radius:16px;
-      padding:1em;
-      color:#fef5e6;
+      background:#111; border:2px solid #f26522; border-radius:16px;
+      padding:1em; color:#fef5e6; cursor:pointer;
     }
     .item h3 { font-size:1.4rem; margin-bottom:.5em; }
-    .item p { font-size:1.1rem; margin-bottom:.8em; }
+    .item p  { font-size:1.1rem; margin-bottom:.8em; }
     .item button {
-      padding:.5em 1.2em;
-      background:#f26522; color:#000;
-      border:none; border-radius:8px;
-      font-weight:600; cursor:pointer;
+      padding:.5em 1.2em; background:#f26522; color:#000;
+      border:none; border-radius:8px; font-weight:600;
     }
-    .item.hot-drink   { background:linear-gradient(145deg,#CC5A00,#E67300); }
-    .item.cold-drink  { background:linear-gradient(145deg,#00BFA6,#00D7C3); }
-    .item:hover       { filter:brightness(1.1); }
+    .item.hot-drink  { background:linear-gradient(145deg,#CC5A00,#E67300); }
+    .item.cold-drink { background:linear-gradient(145deg,#00BFA6,#00D7C3); }
+    .item:hover     { filter:brightness(1.1); }
 
     /* Basket */
     #basket {
       background:#1c1c1c; border-top:2px solid #f26522;
-      width:100%; max-width:1080px; margin-top:2em;
-      padding:1em; text-align:left;
+      width:100%; max-width:1080px; margin-top:2em; padding:1em; text-align:left;
     }
     #basket h2 { color:#f26522; margin-bottom:.5em; }
-    #basket ul { list-style:none; }
-    #basket li { margin:.4em 0; display:flex; justify-content:space-between; }
+    #basket ul { list-style:none; margin:0; padding:0; }
+    #basket li { display:flex; justify-content:space-between; margin:.4em 0; }
     #confirmOrder {
-      margin-top:1em;
-      padding:.6em 1.5em;
-      background:#f26522; color:#000;
-      border:none; border-radius:12px;
-      font-weight:600; cursor:pointer;
-      width:100%;
+      margin-top:1em; padding:.6em 1.5em;
+      background:#f26522; color:#000; border:none; border-radius:12px;
+      font-weight:600; cursor:pointer; width:100%;
+    }
+
+    /* Slideshow always under basket */
+    #slideshow-container {
+      margin-top:2em; width:100%; max-width:1080px; height:360px;
+      background:#000; position:relative;
+      border:2px solid #f26522; border-radius:12px; overflow:hidden;
+    }
+    #slideshow-container video {
+      width:100%; height:100%; object-fit:cover;
+    }
+    #slideshow-container .overlay-msg {
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      color:#FFA500; font-size:2rem; font-weight:bold;
+      text-shadow:0 0 8px black;
     }
 
     /* Notification */
@@ -94,10 +109,8 @@
       position:fixed; top:20px; left:50%;
       transform:translateX(-50%);
       background:#1e4d1e; color:#d4f7d4;
-      padding:1em 2em; border-radius:8px;
-      display:none; opacity:0;
-      transition:.3s;
-      z-index:10000;
+      padding:1em 2em; border-radius:8px; font-weight:600;
+      display:none; opacity:0; transition:.3s; z-index:10000;
     }
     #notification.show { display:block; opacity:1; }
 
@@ -111,23 +124,22 @@
     @keyframes fadeIn { to { opacity:1; } }
     .option-box {
       background:#222; padding:1.5em; border-radius:12px;
-      max-width:320px; width:90%;
-      text-align:left; color:#fef5e6;
+      max-width:320px; width:90%; text-align:left; color:#fef5e6;
     }
     .option-box h3 { color:#f26522; margin-bottom:.8em; }
     .option-box label { display:block; margin:.6em 0; font-size:1rem; }
     .option-box button {
-      margin-top:1em; width:100%;
-      padding:.6em; background:#f26522; color:#000;
-      border:none; border-radius:8px; cursor:pointer;
+      margin-top:1em; width:100%; padding:.6em;
+      background:#f26522; color:#000; border:none; border-radius:8px;
+      cursor:pointer;
     }
 
     /* Mini-cart */
     #mini-cart {
       position:fixed; bottom:20px; right:20px;
       background:rgba(20,20,20,.95); border:3px solid #f26522;
-      border-radius:16px; padding:1em; width:260px;
-      opacity:0; transition:.5s; z-index:1000;
+      border-radius:16px; padding:1em; width:260px; opacity:0;
+      transition:.5s; z-index:1000;
     }
     #mini-cart.show { opacity:1; }
     #mini-cart h3 { color:#f26522; margin-bottom:.5em; }
@@ -135,42 +147,27 @@
     #mini-cart li { display:flex; justify-content:space-between; margin:.4em 0; }
     #mini-cart .total { text-align:right; margin-top:.8em; font-weight:600; }
 
-    /* Idle video slideshow */
-    video.bg-video {
-      position:fixed; top:50%; left:50%;
-      width:auto; height:100vh;
-      transform:translate(-50%,-50%);
-      object-fit:cover; opacity:.3; z-index:-1;
-    }
-    .orange-frame {
-      position:fixed; top:0; left:0;
-      width:100vw; height:100vh;
-      border:10px solid #f26522; box-sizing:border-box;
-      pointer-events:none; z-index:10000;
-    }
-    .video-frame {
-      position:relative; width:90vw; max-width:1280px;
-      aspect-ratio:9/16; border:10px solid #f26522;
-      border-radius:20px; overflow:hidden; background:#000;
-      margin-top:1em;
-    }
-    @media (orientation:landscape) {
-      .video-frame { aspect-ratio:16/9; }
-    }
-    .video-frame video {
-      position:absolute; top:50%; left:50%;
-      width:100%; height:100%; object-fit:cover;
-      transform:translate(-50%,-50%);
+    /* Solo Mode Banner */
+    #soloModeBanner {
+      position:fixed; top:0; left:0; width:100%;
+      background:rgba(0,0,0,0.95); color:#FFA500;
+      text-align:center; padding:1em; display:none;
+      z-index:10000; border-bottom:4px solid #f26522;
     }
   </style>
 </head>
 <body>
 
-  <!-- Background loop -->
+  <!-- Background & Frame -->
   <video class="bg-video" autoplay muted loop playsinline>
     <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4">
   </video>
   <div class="orange-frame"></div>
+
+  <!-- Back to Home -->
+  <div class="back-btn">
+    <button onclick="location.href='index.html'">⬅ Back to Home</button>
+  </div>
 
   <!-- Logo -->
   <div class="logo">
@@ -188,104 +185,92 @@
 
   <!-- Hot Drinks -->
   <div id="hot" class="menu-section active">
-    <!-- repeat for each hot item: -->
-    <div class="item hot-drink" onclick="prepareOptions({ name:'Espresso', articleNumber:102, price:3.50, options:[{name:'Whipped Cream',price:1},{name:'Extra Oatmilk',price:1},{name:'Syrup',price:1}] })">
+    <div class="item hot-drink" onclick="prepareOptions({name:'Espresso',articleNumber:102,price:3.50,options:[{name:'Whipped Cream',price:1},{name:'Extra Oatmilk',price:1},{name:'Syrup',price:1}]})">
       <h3>Espresso</h3><p>€3.50</p><button>Add</button>
     </div>
-    <!-- Doppio -->
-    <div class="item hot-drink" onclick="prepareOptions({ name:'Doppio', articleNumber:202, price:4.00, options:[{name:'Extra Oatmilk',price:1},{name:'Whipped Cream',price:1},{name:'Syrup',price:1}] })">
+    <div class="item hot-drink" onclick="prepareOptions({name:'Doppio',articleNumber:202,price:4.00,options:[{name:'Extra Oatmilk',price:1},{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})">
       <h3>Doppio</h3><p>€4.00</p><button>Add</button>
     </div>
-    <!-- Black Coffee -->
-    <div class="item hot-drink" onclick="prepareOptions({ name:'Black Coffee', articleNumber:203, price:3.50, options:[] })">
+    <div class="item hot-drink" onclick="prepareOptions({name:'Black Coffee',articleNumber:203,price:3.50,options:[]})">
       <h3>Black Coffee</h3><p>€3.50</p><button>Add</button>
     </div>
-    <!-- Americano -->
-    <div class="item hot-drink" onclick="prepareOptions({ name:'Americano', articleNumber:204, price:3.50, options:[] })">
+    <div class="item hot-drink" onclick="prepareOptions({name:'Americano',articleNumber:204,price:3.50,options:[]})">
       <h3>Americano</h3><p>€3.50</p><button>Add</button>
     </div>
-    <!-- Cappuccino -->
-    <div class="item hot-drink" onclick="prepareOptions({ name:'Cappuccino', articleNumber:102, price:4.00, options:[] })">
+    <div class="item hot-drink" onclick="prepareOptions({name:'Cappuccino',articleNumber:205,price:4.00,options:[]})">
       <h3>Cappuccino</h3><p>€4.00</p><button>Add</button>
     </div>
-    <!-- Flavored Latte -->
-    <div class="item hot-drink" onclick="prepareOptions({ name:'Flavored Latte', articleNumber:205, price:5.00, options:[{name:'Hazelnuts',price:0},{name:'Caramel',price:0}] })">
+    <div class="item hot-drink" onclick="prepareOptions({name:'Flavored Latte',articleNumber:206,price:5.00,options:[{name:'Hazelnuts',price:0},{name:'Caramel',price:0}]})">
       <h3>Flavored Latte</h3><p>€5.00</p><button>Add</button>
     </div>
-    <!-- Café Latte -->
-    <div class="item hot-drink" onclick="prepareOptions({ name:'Café Latte', articleNumber:206, price:4.50, options:[] })">
+    <div class="item hot-drink" onclick="prepareOptions({name:'Café Latte',articleNumber:207,price:4.50,options:[]})">
       <h3>Café Latte</h3><p>€4.50</p><button>Add</button>
     </div>
-    <!-- Latte Macchiato -->
-    <div class="item hot-drink" onclick="prepareOptions({ name:'Latte Macchiato', articleNumber:207, price:4.50, options:[{name:'Whipped Cream',price:1},{name:'Syrup',price:1}] })">
+    <div class="item hot-drink" onclick="prepareOptions({name:'Latte Macchiato',articleNumber:208,price:4.50,options:[{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})">
       <h3>Latte Macchiato</h3><p>€4.50</p><button>Add</button>
     </div>
-    <!-- Coffee Mocca -->
-    <div class="item hot-drink" onclick="prepareOptions({ name:'Coffee Mocca', articleNumber:208, price:5.00, options:[{name:'Extra Shot Espresso',price:1},{name:'Whipped Cream',price:1}] })">
+    <div class="item hot-drink" onclick="prepareOptions({name:'Coffee Mocca',articleNumber:209,price:5.00,options:[{name:'Extra Shot Espresso',price:1},{name:'Whipped Cream',price:1}]})">
       <h3>Coffee Mocca</h3><p>€5.00</p><button>Add</button>
     </div>
-    <!-- Hot Chocolate -->
-    <div class="item hot-drink" onclick="prepareOptions({ name:'Hot Chocolate', articleNumber:209, price:4.00, options:[{name:'Whipped Cream',price:1}] })">
+    <div class="item hot-drink" onclick="prepareOptions({name:'Hot Chocolate',articleNumber:210,price:4.00,options:[{name:'Whipped Cream',price:1}]})">
       <h3>Hot Chocolate</h3><p>€4.00</p><button>Add</button>
     </div>
-    <!-- Tea -->
-    <div class="item hot-drink" onclick="prepareOptions({ name:'Tea', articleNumber:301, price:3.50, options:[{name:'Extra Lemon',price:1},{name:'Extra Ginger',price:1},{name:'Extra Orange Blossom',price:1},{name:'Louiza',price:1}] })">
+    <div class="item hot-drink" onclick="prepareOptions({name:'Tea',articleNumber:301,price:3.50,options:[{name:'Extra Lemon',price:1},{name:'Extra Ginger',price:1},{name:'Orange Blossom',price:1},{name:'Louiza',price:1}]})">
       <h3>Tea</h3><p>€3.50</p><button>Add</button>
     </div>
-    <!-- Fresh Mint Tea -->
-    <div class="item hot-drink" onclick="prepareOptions({ name:'Fresh Mint Tea', articleNumber:302, price:4.50, options:[{name:'Extra Lemon',price:.5},{name:'Extra Ginger',price:.5},{name:'Extra Blossom',price:.5},{name:'Louiza',price:.5}] })">
+    <div class="item hot-drink" onclick="prepareOptions({name:'Fresh Mint Tea',articleNumber:302,price:4.50,options:[{name:'Extra Lemon',price:0.50},{name:'Extra Ginger',price:0.50},{name:'Extra Blossom',price:0.50},{name:'Louiza',price:0.50}]})">
       <h3>Fresh Mint Tea</h3><p>€4.50</p><button>Add</button>
     </div>
   </div>
 
   <!-- Cold Drinks -->
   <div id="cold" class="menu-section">
-    <div class="item cold-drink" onclick="prepareOptions({ name:'Coca-Cola',articleNumber:401,price:4.00,options:[] })">
+    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola',articleNumber:401,price:4.00,options:[]})">
       <h3>Coca-Cola</h3><p>€4.00</p><button>Add</button>
     </div>
-    <div class="item cold-drink" onclick="prepareOptions({ name:'Coca-Cola Zero',articleNumber:402,price:4.00,options:[] })">
+    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola Zero',articleNumber:402,price:4.00,options:[]})">
       <h3>Coca-Cola Zero</h3><p>€4.00</p><button>Add</button>
     </div>
-    <div class="item cold-drink" onclick="prepareOptions({ name:'Fanta Orange',articleNumber:403,price:4.00,options:[] })">
+    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Orange',articleNumber:403,price:4.00,options:[]})">
       <h3>Fanta Orange</h3><p>€4.00</p><button>Add</button>
     </div>
-    <div class="item cold-drink" onclick="prepareOptions({ name:'Fanta Cassis',articleNumber:404,price:4.00,options:[] })">
+    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Cassis',articleNumber:404,price:4.00,options:[]})">
       <h3>Fanta Cassis</h3><p>€4.00</p><button>Add</button>
     </div>
-    <div class="item cold-drink" onclick="prepareOptions({ name:'Still Water',articleNumber:405,price:3.50,options:[] })">
+    <div class="item cold-drink" onclick="prepareOptions({name:'Still Water',articleNumber:405,price:3.50,options:[]})">
       <h3>Still Water</h3><p>€3.50</p><button>Add</button>
     </div>
-    <div class="item cold-drink" onclick="prepareOptions({ name:'Sparkling Water',articleNumber:406,price:3.50,options:[] })">
+    <div class="item cold-drink" onclick="prepareOptions({name:'Sparkling Water',articleNumber:406,price:3.50,options:[]})">
       <h3>Sparkling Water</h3><p>€3.50</p><button>Add</button>
     </div>
-    <div class="item cold-drink" onclick="prepareOptions({ name:'Sprite',articleNumber:407,price:4.00,options:[] })">
+    <div class="item cold-drink" onclick="prepareOptions({name:'Sprite',articleNumber:407,price:4.00,options:[]})">
       <h3>Sprite</h3><p>€4.00</p><button>Add</button>
     </div>
-    <div class="item cold-drink" onclick="prepareOptions({ name:'Chocomel',articleNumber:408,price:4.00,options:[] })">
+    <div class="item cold-drink" onclick="prepareOptions({name:'Chocomel',articleNumber:408,price:4.00,options:[]})">
       <h3>Chocomel</h3><p>€4.00</p><button>Add</button>
     </div>
-    <div class="item cold-drink" onclick="prepareOptions({ name:'Iced Tea Peach/Mango',articleNumber:409,price:4.00,options:[{name:'Peach',price:0},{name:'Mango',price:0}] })">
+    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Peach/Mango',articleNumber:409,price:4.00,options:[{name:'Peach',price:0},{name:'Mango',price:0}]})">
       <h3>Iced Tea Peach/Mango</h3><p>€4.00</p><button>Add</button>
     </div>
-    <div class="item cold-drink" onclick="prepareOptions({ name:'Iced Tea Lemon Sparkling',articleNumber:410,price:4.00,options:[] })">
+    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Lemon Sparkling',articleNumber:410,price:4.00,options:[]})">
       <h3>Iced Tea Lemon Sparkling</h3><p>€4.00</p><button>Add</button>
     </div>
-    <div class="item cold-drink" onclick="prepareOptions({ name:'Royal Bliss Bitter Lemon',articleNumber:411,price:4.00,options:[] })">
+    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Bitter Lemon',articleNumber:411,price:4.00,options:[]})">
       <h3>Royal Bliss Bitter Lemon</h3><p>€4.00</p><button>Add</button>
     </div>
-    <div class="item cold-drink" onclick="prepareOptions({ name:'Royal Bliss Ginger Ale',articleNumber:412,price:4.00,options:[] })">
+    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Ginger Ale',articleNumber:412,price:4.00,options:[]})">
       <h3>Royal Bliss Ginger Ale</h3><p>€4.00</p><button>Add</button>
     </div>
-    <div class="item cold-drink" onclick="prepareOptions({ name:'Looza (Pear/Straw/Peach)',articleNumber:413,price:4.00,options:[{name:'Pear',price:0},{name:'Straw',price:0},{name:'Peach',price:0}] })">
-      <h3>Looza (Pear/Straw/Peach)</h3><p>€4.00</p><button>Add</button>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Looza (Pear/Straw/Peach)',articleNumber:413,price:4.00,options:[{name:'Pear',price:0},{name:'Strawberry',price:0},{name:'Peach',price:0}]})">
+      <h3>Looza (Pear/Strawberry/Peach)</h3><p>€4.00</p><button>Add</button>
     </div>
-    <div class="item cold-drink" onclick="prepareOptions({ name:'Minute Maid Orange/Apple',articleNumber:414,price:4.00,options:[{name:'Orange',price:0},{name:'Apple',price:0}] })">
+    <div class="item cold-drink" onclick="prepareOptions({name:'Minute Maid Orange/Apple',articleNumber:414,price:4.00,options:[{name:'Orange',price:0},{name:'Apple',price:0}]})">
       <h3>Minute Maid Orange/Apple</h3><p>€4.00</p><button>Add</button>
     </div>
-    <div class="item cold-drink" onclick="prepareOptions({ name:'AA Energy Drink',articleNumber:415,price:4.00,options:[] })">
+    <div class="item cold-drink" onclick="prepareOptions({name:'AA Energy Drink',articleNumber:415,price:4.00,options:[]})">
       <h3>AA Energy Drink</h3><p>€4.00</p><button>Add</button>
     </div>
-    <div class="item cold-drink" onclick="prepareOptions({ name:'Red Bull',articleNumber:416,price:5.00,options:[] })">
+    <div class="item cold-drink" onclick="prepareOptions({name:'Red Bull',articleNumber:416,price:5.00,options:[]})">
       <h3>Red Bull Energy Drink</h3><p>€5.00</p><button>Add</button>
     </div>
   </div>
@@ -322,7 +307,7 @@
     </div>
   </div>
 
-  <!-- Basket Summary -->
+  <!-- Basket -->
   <div id="basket">
     <h2>Your Order</h2>
     <ul id="basketList"></ul>
@@ -330,10 +315,14 @@
     <button id="confirmOrder" onclick="submitOrder()">Send Order</button>
   </div>
 
-  <!-- Notification -->
-  <div id="notification"></div>
+  <!-- Slideshow -->
+  <div id="slideshow-container">
+    <video id="slideshowVideo" muted playsinline></video>
+    <div class="overlay-msg">CLICK THE SCREEN TO ORDER DRINKS</div>
+  </div>
 
-  <!-- Options Modal -->
+  <!-- Notification / Modal / Mini-cart / Solo banner -->
+  <div id="notification"></div>
   <div class="option-modal" id="optionModal" style="display:none">
     <div class="option-box">
       <h3 id="optionTitle"></h3>
@@ -342,11 +331,7 @@
       <button style="margin-top:.5em;" onclick="closeModal()">Close</button>
     </div>
   </div>
-
-  <!-- Mini-Cart -->
   <div id="mini-cart"></div>
-
-  <!-- Solo-Mode Banner -->
   <div id="soloModeBanner" style="display:none">
     Self Pickup Mode: Please collect your drinks downstairs after ordering.
   </div>
@@ -381,24 +366,26 @@
       let extra=0, chosen=[]
       document.querySelectorAll("#optionList input").forEach(cb=>{
         if(cb.checked){
-          const o=selectedArticle.options[cb.dataset.index];
-          chosen.push(o); extra+=o.price;
+          const o = selectedArticle.options[cb.dataset.index];
+          chosen.push(o); extra += o.price;
         }
       });
-      orderList.push({...selectedArticle, selectedOptions:chosen, totalPrice:selectedArticle.price+extra});
+      orderList.push({...selectedArticle, selectedOptions:chosen, totalPrice: selectedArticle.price + extra});
       updateOrderList(); updateMiniCart(); closeModal();
     }
 
     function closeModal(){
-      document.getElementById("optionModal").style.display="none";
+      document.getElementById("optionModal").style.display = "none";
     }
 
     function updateOrderList(){
-      const ul=document.getElementById("basketList"); ul.innerHTML="";
+      const ul = document.getElementById("basketList"); ul.innerHTML = "";
       orderList.forEach((it,i)=>{
-        ul.innerHTML+=`<li>#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)}) <button onclick="removeFromOrder(${i})">×</button></li>`;
+        ul.innerHTML += `<li>#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)}) 
+           <button onclick="removeFromOrder(${i})">×</button></li>`;
       });
-      document.getElementById("totalPrice").innerText = orderList.reduce((s,x)=>s+x.totalPrice,0).toFixed(2);
+      document.getElementById("totalPrice").innerText =
+        orderList.reduce((s,x)=>s+x.totalPrice,0).toFixed(2);
     }
 
     function removeFromOrder(idx){
@@ -415,18 +402,18 @@
       });
       fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(txt)}`)
         .then(r=>r.json()).then(d=>{
-          if(d.ok){ showNotification("✅ Order sent!"); orderList=[]; updateOrderList(); updateMiniCart();}
+          if(d.ok){ showNotification("✅ Order sent!"); orderList=[]; updateOrderList(); updateMiniCart(); }
         });
     }
 
     function updateMiniCart(){
-      const m=document.getElementById("mini-cart");
-      let html="<h3>Basket</h3><ul>", tot=0;
-      orderList.forEach(it=>{ html+=`<li>${it.name} - €${it.totalPrice.toFixed(2)}</li>`; tot+=it.totalPrice; });
-      html+=`</ul><div class="total">Total: €${tot.toFixed(2)}</div>`;
-      m.innerHTML=html; m.classList.add("show");
+      const m = document.getElementById("mini-cart");
+      let html = "<h3>Basket</h3><ul>", tot=0;
+      orderList.forEach(it=>{ html += `<li>${it.name} - €${it.totalPrice.toFixed(2)}</li>`; tot+=it.totalPrice; });
+      html += `</ul><div class="total">Total: €${tot.toFixed(2)}</div>`;
+      m.innerHTML = html; m.classList.add("show");
       clearTimeout(window._miniTO);
-      window._miniTO=setTimeout(()=>m.classList.remove("show"),10000);
+      window._miniTO = setTimeout(()=>m.classList.remove("show"),10000);
     }
 
     /* --- TAB SWITCHING --- */
@@ -440,40 +427,71 @@
     /* --- SOLO MODE TOGGLE --- */
     let pressTimer;
     document.body.addEventListener("touchstart",e=>{
-      if(e.touches[0].clientX<100&&e.touches[0].clientY<100)
-        pressTimer=setTimeout(toggleSoloMode,1500);
+      if(e.touches[0].clientX<100 && e.touches[0].clientY<100)
+        pressTimer = setTimeout(toggleSoloMode,1500);
     });
     document.body.addEventListener("touchend",()=>clearTimeout(pressTimer));
 
     function toggleSoloMode(){
-      const on=!JSON.parse(localStorage.getItem("soloMode")||"false");
-      localStorage.setItem("soloMode",on);
-      document.getElementById("soloModeBanner").style.display=on?"block":"none";
+      const on = !JSON.parse(localStorage.getItem("soloMode")||"false");
+      localStorage.setItem("soloMode", on);
+      document.getElementById("soloModeBanner").style.display = on ? "block" : "none";
     }
     document.addEventListener("DOMContentLoaded",()=>{
       if(JSON.parse(localStorage.getItem("soloMode")||"false"))
-        document.getElementById("soloModeBanner").style.display="block";
+        document.getElementById("soloModeBanner").style.display = "block";
     });
 
     /* --- IDLE VIDEO SLIDESHOW --- */
-    const videos=['smoke.mp4','mascotte.mp4','mascotte2.mp4'];
+    const videos = ['smoke.mp4','mascotte.mp4','mascotte2.mp4'];
     let vidIdx=0, slideshowTO;
-    const overlay=document.createElement("div"), logo=document.createElement("img"), msg=document.createElement("div"), vf=document.createElement("div"), vid=document.createElement("video");
-    overlay.className="option-modal"; overlay.style.background="transparent"; overlay.id="slideshow-overlay";
-    logo.src="https://d146j8l6ymhf1q.cloudfront.net/webshop/B52DEAB9-9609-4876-B187-64C952745254-e1617724463401.png";
-    logo.style.width="200px"; msg.innerText="CLICK THE SCREEN TO ORDER DRINKS"; msg.style.cssText="color:#FFA500;font-size:2rem;font-weight:bold;";
-    vf.className="video-frame"; vid.id="slideshowVideo"; vid.muted=true; vid.autoplay=true; vid.playsInline=true; vf.appendChild(vid);
-    overlay.append(logo,msg,vf); document.body.appendChild(overlay);
-    function playNext(){ vid.src=videos[vidIdx]; vid.load(); vid.play().catch(()=>{}); vidIdx=(vidIdx+1)%videos.length; }
-    vid.addEventListener("ended",playNext); vid.addEventListener("error",playNext);
-    function resetIdle(){
-      clearTimeout(slideshowTO); vid.pause(); overlay.style.display="none";
-      slideshowTO=setTimeout(()=>{
-        overlay.style.display="flex"; playNext();
-      },25000);
+    const overlay = document.createElement("div"),
+          logoEl  = document.createElement("img"),
+          msg     = document.createElement("div"),
+          vf      = document.createElement("div"),
+          vid     = document.createElement("video");
+
+    overlay.className = "option-modal";
+    overlay.style.background = "transparent";
+    overlay.id = "slideshow-overlay";
+
+    logoEl.src = "https://d146j8l6ymhf1q.cloudfront.net/webshop/B52DEAB9-9609-4876-B187-64C952745254-e1617724463401.png";
+    logoEl.style.width = "200px";
+
+    msg.innerText = "CLICK THE SCREEN TO ORDER DRINKS";
+    msg.style.cssText = "color:#FFA500;font-size:2rem;font-weight:bold;margin:1rem 0;";
+
+    vf.className = "video-frame";
+    vid.id = "slideshowVideo";
+    vid.muted = true;
+    vid.autoplay = true;
+    vid.playsInline = true;
+    vf.appendChild(vid);
+
+    overlay.append(logoEl, msg, vf);
+    document.body.appendChild(overlay);
+
+    function playNext(){
+      vid.src = videos[vidIdx];
+      vid.load();
+      vid.play().catch(()=>{});
+      vidIdx = (vidIdx + 1) % videos.length;
     }
-    ["click","mousemove","touchstart","keydown"].forEach(e=>document.addEventListener(e,resetIdle));
-    overlay.addEventListener("click",resetIdle);
+    vid.addEventListener("ended", playNext);
+    vid.addEventListener("error", playNext);
+
+    function resetIdle(){
+      clearTimeout(slideshowTO);
+      vid.pause();
+      overlay.style.display = "none";
+      slideshowTO = setTimeout(()=>{
+        overlay.style.display = "flex";
+        playNext();
+      }, 25000);
+    }
+    ["click","mousemove","touchstart","keydown"].forEach(ev => document.addEventListener(ev, resetIdle));
+    overlay.addEventListener("click", resetIdle);
+
     resetIdle();
   </script>
 </body>
