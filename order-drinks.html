@@ -374,10 +374,10 @@
 </div>
 <!-- Slideshow -->
 <div id="slideshow-container">
-<video id="slideshowVideo" muted="" playsinline=""></video><img alt="EasyTimes Logo" src="https://d146j8l6ymhf1q.cloudfront.net/webshop/B52DEAB9-9609-4876-B187-64C952745254-e1617724463401.png" style="display: block; margin: 20px auto; height: 120px;"/>
-<div class="starwars-crawl-wrapper">
+<video id="slideshowVideo" muted="" playsinline=""></video>
+<div class="starwars-crawl-wrapper" style="position: absolute; bottom: 0; width: 100%; height: 100%; perspective: 300px; overflow: hidden; z-index: 10; pointer-events: none;">
 <div class="starwars-crawl">
-<div class="crawl-text">
+<div class="crawl-text" style="position: absolute; bottom: -100%; width: 100%; text-align: center; font-size: 1.4rem; font-weight: bold; color: #FFA500; animation: crawlUp 90s linear infinite;">
 <p>EasyTimes Amsterdam — Where the World Comes to Chill.</p>
 <p>One Love. One Coffeeshop. A Thousand Stories.</p>
 <p>Relax Like a Local, Float Like a Tourist.</p>
@@ -670,15 +670,7 @@
 
     resetIdle();
   </script>
-<div class="starwars-intro">
-<div class="starwars-content">
-<p>“EasyTimes Amsterdam — Where the World Comes to Chill.”</p>
-<p>“One Love. One Coffeeshop. A Thousand Stories.”</p>
-<p>“Relax Like a Local, Float Like a Tourist.”</p>
-<p>“Welcome to the Heartbeat of Chill in Amsterdam.”</p>
-<p>“Your Couch Away from Home — Only at EasyTimes.”</p>
-</div>
-</div>
+
 <style>
 .starwars-intro {
   position: fixed;
