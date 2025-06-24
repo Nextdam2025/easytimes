@@ -374,7 +374,7 @@
 </div>
 <!-- Slideshow -->
 <div id="slideshow-container">
-<video id="slideshowVideo" muted="" playsinline=""></video>
+<video id="slideshowVideo" muted="" playsinline=""></video><img alt="EasyTimes Logo" src="https://d146j8l6ymhf1q.cloudfront.net/webshop/B52DEAB9-9609-4876-B187-64C952745254-e1617724463401.png" style="display: block; margin: 20px auto; height: 120px;"/>
 <div class="starwars-crawl-wrapper">
 <div class="starwars-crawl">
 <div class="crawl-text">
@@ -434,7 +434,30 @@
   100% { bottom: 200%; }
 }
 </style>
-
+<style>
+  .slogan-fader {
+    position: absolute;
+    bottom: 60px;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: #FFA500;
+    pointer-events: none;
+  }
+  .slogan-line {
+    display: none;
+    animation: fadeInOut 5s ease-in-out forwards;
+  }
+  @keyframes fadeInOut {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+</style>
 <script>
   const slogans = document.querySelectorAll('.slogan-line');
   let index = 0;
@@ -647,7 +670,15 @@
 
     resetIdle();
   </script>
-
+<div class="starwars-intro">
+<div class="starwars-content">
+<p>“EasyTimes Amsterdam — Where the World Comes to Chill.”</p>
+<p>“One Love. One Coffeeshop. A Thousand Stories.”</p>
+<p>“Relax Like a Local, Float Like a Tourist.”</p>
+<p>“Welcome to the Heartbeat of Chill in Amsterdam.”</p>
+<p>“Your Couch Away from Home — Only at EasyTimes.”</p>
+</div>
+</div>
 <style>
 .starwars-intro {
   position: fixed;
