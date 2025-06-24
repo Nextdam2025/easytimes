@@ -624,6 +624,15 @@
     const overlay = document.createElement("div"),
           logoEl  = document.createElement("img"),
           msg     = document.createElement("div"),
+msg.innerText = 'CLICK THE SCREEN TO ORDER DRINKS';
+Object.assign(msg.style, {
+  color: '#FFA500',
+  fontSize: '2rem',
+  fontWeight: 'bold',
+  textAlign: 'center',
+  textShadow: '1px 1px 4px black',
+  marginBottom: '30px'
+});
           vf      = document.createElement("div"),
           vid     = document.createElement("video");
 
@@ -663,7 +672,7 @@
       slideshowTO = setTimeout(()=>{
         overlay.style.display = "flex";
         playNext();
-      }, 50000);
+      }, 25000);
     }
     ["click","mousemove","touchstart","keydown"].forEach(ev => document.addEventListener(ev, resetIdle));
     overlay.addEventListener("click", resetIdle);
