@@ -516,7 +516,14 @@
       });
       fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(txt)}`)
         .then(r=>r.json()).then(d=>{
-          if(d.ok){ showNotification("✅ Order sent!"); orderList=[]; updateOrderList(); updateMiniCart(); }
+          if(d.ok){
+  showNotification("✅ Order sent!");
+  orderList = [];
+  updateOrderList();
+  updateMiniCart();
+  setTimeout(() => location.href = "index.html", 3000); // wait 3s then go back
+}
+
         });
     }
 
