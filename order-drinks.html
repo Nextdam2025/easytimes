@@ -631,16 +631,6 @@ overlay.appendChild(vf);
 document.body.appendChild(overlay);
 
 
-    vf.className = "video-frame";
-    vid.id = "slideshowVideo";
-    vid.muted = true;
-    vid.autoplay = true;
-    vid.playsInline = true;
-    vf.appendChild(vid);
-
-    overlay.append(logoEl, msg, vf);
-    document.body.appendChild(overlay);
-
     function playNext(){
       vid.src = videos[vidIdx];
       vid.load();
