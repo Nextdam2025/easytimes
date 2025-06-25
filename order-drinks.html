@@ -204,7 +204,7 @@
     }
   </style>
 </head>
-<body>
+<body><canvas id="particles" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-2;pointer-events:none;"></canvas>
 <!-- Background & Frame -->
 <video autoplay="" class="bg-video" loop="" muted="" playsinline="">
 <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4"/>
@@ -225,7 +225,7 @@
 <div class="tab" onclick="switchTab('cold')">Cold Drinks</div>
 <div class="tab" onclick="switchTab('snacks')">Homemade Snacks</div>
 <div class="tab" onclick="switchTab('cakes')">Space Cakes</div>
-</div>
+</div><div style="margin: 1em auto; text-align: center;"><button onclick="magicOrder()" style="padding: 10px 25px; font-size: 1.2rem; border-radius: 12px;background: linear-gradient(145deg, #f26522, #ff7e29); color: #fff; border: none; cursor: pointer;box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-weight: bold;">🎲 Surprise Me!</button></div>
 <!-- Hot Drinks -->
 <div class="menu-section active" id="hot">
 <div class="item hot-drink" onclick="prepareOptions({name:'Espresso',articleNumber:102,price:3.50,options:[{name:'Whipped Cream',price:1},{name:'Extra Oatmilk',price:1},{name:'Syrup',price:1}]})">
@@ -435,9 +435,6 @@
   100% { bottom: 200%; }
 }
 </style>
-
-
-
 </div>
 <!-- Notification / Modal / Mini-cart / Solo banner -->
 <div id="notification"></div>
@@ -620,7 +617,59 @@ Object.assign(msg.style, {
 
     resetIdle();
   </script>
+<script>
+function magicOrder(){
+  const allItems = [...document.querySelectorAll('.item')];
+  const random = allItems[Math.floor(Math.random() * allItems.length)];
+  random.click();
+}
 
-</body>
+window.addEventListener("DOMContentLoaded", () => {
+  const canvas = document.getElementById("particles");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  let stars = [];
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  function initStars(count = 100) {
+    stars = [];
+    for (let i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 1.5 + 0.3,
+        speed: Math.random() * 0.5 + 0.1
+      });
+    }
+  }
+
+  function animateStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let star of stars) {
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+      ctx.fill();
+      star.y += star.speed;
+      if (star.y > canvas.height) {
+        star.y = 0;
+        star.x = Math.random() * canvas.width;
+      }
+    }
+    requestAnimationFrame(animateStars);
+  }
+
+  initStars();
+  animateStars();
+});
+</script></body>
 </html>
+
 
