@@ -559,18 +559,70 @@
     /* --- IDLE VIDEO SLIDESHOW --- */
     const videos = ['smoke.mp4','mascotte.mp4','mascotte2.mp4'];
     let vidIdx=0, slideshowTO;
-    const overlay = document.createElement("div"),
-          logoEl  = document.createElement("img"),
-          msg     = document.createElement("div");
-msg.innerText = 'CLICK THE SCREEN TO ORDER DRINKS';
+    const overlay = document.createElement("div");
+overlay.id = "slideshow-overlay";
+overlay.style.display = "none";
+overlay.style.position = "fixed";
+overlay.style.top = "0";
+overlay.style.left = "0";
+overlay.style.width = "100vw";
+overlay.style.height = "100vh";
+overlay.style.zIndex = "10001";
+overlay.style.backgroundColor = "rgba(0, 0, 0, 0.9)";
+overlay.style.display = "none";
+overlay.style.flexDirection = "column";
+overlay.style.alignItems = "center";
+overlay.style.justifyContent = "center";
+
+const videoLogo = document.createElement("img");
+videoLogo.src = "EASY TIMES LOGO BLACK-01.png";
+videoLogo.alt = "EasyTimes Logo";
+videoLogo.style.width = "200px";
+videoLogo.style.margin = "30px 0";
+
+const msg = document.createElement("div");
+msg.innerText = "CLICK THE SCREEN TO ORDER DRINKS";
 Object.assign(msg.style, {
-  color: '#FFA500',
-  fontSize: '2rem',
-  fontWeight: 'bold',
-  textAlign: 'center',
-  textShadow: '1px 1px 4px black',
-  marginBottom: '30px'
+  color: "#FFA500",
+  fontSize: "2rem",
+  fontWeight: "bold",
+  textAlign: "center",
+  textShadow: "1px 1px 4px black",
+  marginBottom: "30px"
 });
+
+const vf = document.createElement("div");
+vf.className = "video-frame";
+vf.style.width = "90vw";
+vf.style.maxWidth = "1280px";
+vf.style.aspectRatio = "9 / 16";
+vf.style.border = "10px solid #f26522";
+vf.style.borderRadius = "20px";
+vf.style.overflow = "hidden";
+vf.style.background = "black";
+vf.style.position = "relative";
+
+const vid = document.createElement("video");
+vid.id = "slideshowVideo";
+vid.muted = true;
+vid.autoplay = true;
+vid.playsInline = true;
+Object.assign(vid.style, {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "100%",
+  height: "100%",
+  objectFit: "cover"
+});
+
+vf.appendChild(vid);
+overlay.appendChild(videoLogo);
+overlay.appendChild(msg);
+overlay.appendChild(vf);
+document.body.appendChild(overlay);
+
           vf      = document.createElement("div"),
           vid     = document.createElement("video");
 
