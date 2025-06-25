@@ -600,9 +600,9 @@ Object.assign(msg.style, {
 
 const vf = document.createElement("div");
 vf.className = "video-frame";
-vf.style.width = "90vw";
-vf.style.maxWidth = "1280px";
-vf.style.aspectRatio = "9 / 16";
+vf.style.width = "calc(100vh * 9 / 16)";
+vf.style.maxWidth = "90vw";
+vf.style.height = "90vh"; // ensures it stays within frame
 vf.style.border = "10px solid #f26522";
 vf.style.borderRadius = "20px";
 vf.style.overflow = "hidden";
