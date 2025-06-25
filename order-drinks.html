@@ -662,7 +662,7 @@ document.body.appendChild(overlay);
       slideshowTO = setTimeout(()=>{
         overlay.style.display = "flex";
         playNext();
-      }, 25000);
+      }, 50000);
     }
     ["click","mousemove","touchstart","keydown"].forEach(ev => document.addEventListener(ev, resetIdle));
     overlay.addEventListener("click", resetIdle);
