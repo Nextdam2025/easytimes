@@ -156,15 +156,32 @@
       text-shadow:0 0 8px black;
     }
 
-    /* Notification */
-    #notification {
-      position:fixed; top:50%; left:50%;
-      transform:translate(-50%, -50%); font-size: 1.5rem;
-      background:#1e4d1e; color:#d4f7d4;
-      padding:1em 2em; border-radius:8px; font-weight:600;
-      display:none; opacity:0; transition:.3s; z-index:10000;
-    }
-    #notification.show { display:block; opacity:1; }
+/* Notification — updated */
+#notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 400px;
+  background: #28a745;           /* bright green */
+  border: 8px solid #155724;     /* darker green frame */
+  color: #ffffff;
+  padding: 1.5em 2em;
+  border-radius: 12px;
+  font-size: 2.5rem;             /* big, readable letters */
+  font-weight: 700;
+  text-align: center;
+  display: none;
+  opacity: 0;
+  transition: opacity .3s ease;
+  z-index: 10000;
+}
+#notification.show {
+  display: block;
+  opacity: 1;
+}
+
 
     /* Option Modal */
     .option-modal {
@@ -228,7 +245,6 @@
 <div class="tab active" onclick="switchTab('hot')">Hot Drinks</div>
 <div class="tab" onclick="switchTab('cold')">Cold Drinks</div>
 <div class="tab" onclick="switchTab('snacks')">Homemade Snacks</div>
-<div class="tab" onclick="switchTab('cakes')">Space Cakes</div>
 </div><div style="margin: 1em auto; text-align: center;"><button onclick="magicOrder()" style="padding: 10px 25px; font-size: 1.2rem; border-radius: 12px;background: linear-gradient(145deg, #f26522, #ff7e29); color: #fff; border: none; cursor: pointer;box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-weight: bold;">🎲 Surprise Me!</button></div>
 <!-- Hot Drinks -->
 <div class="menu-section active" id="hot">
@@ -329,27 +345,7 @@
 <h3>Banana Cake</h3><p>€4.00</p><button>Add</button>
 </div>
 </div>
-<!-- Space Cakes -->
-<div class="menu-section" id="cakes">
-<div class="item" onclick="prepareOptions({name:'Madeleine',articleNumber:601,price:6.00,options:[]})">
-<h3>Madeleine</h3><p>€6.00</p><button>Add</button>
-</div>
-<div class="item" onclick="prepareOptions({name:'Brownie Crunchy Caramel',articleNumber:602,price:8.00,options:[]})">
-<h3>Brownie Crunchy Caramel</h3><p>€8.00</p><button>Add</button>
-</div>
-<div class="item" onclick="prepareOptions({name:'Red Velvet Cheesecake Brownie',articleNumber:603,price:10.00,options:[]})">
-<h3>Red Velvet Cheesecake Brownie</h3><p>€10.00</p><button>Add</button>
-</div>
-<div class="item" onclick="prepareOptions({name:'Oreo White Chocolate Cake',articleNumber:604,price:10.00,options:[]})">
-<h3>Oreo White Chocolate Cake</h3><p>€10.00</p><button>Add</button>
-</div>
-<div class="item" onclick="prepareOptions({name:'Honey Date Biscuit Cake',articleNumber:605,price:13.00,options:[]})">
-<h3>Honey Date Biscuit Cake</h3><p>€13.00</p><button>Add</button>
-</div>
-<div class="item" onclick="prepareOptions({name:'Stroopwafel Pie',articleNumber:606,price:15.00,options:[]})">
-<h3>Stroopwafel Pie</h3><p>€15.00</p><button>Add</button>
-</div>
-</div>
+
 <!-- Basket -->
 <div id="basket">
 <h2>Your Order</h2>
