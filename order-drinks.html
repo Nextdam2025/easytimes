@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, user-scalable=no" name="viewport"/>
-<title>Easy Times Menu</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600&amp;display=swap" rel="stylesheet"/>
-<style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>Easy Times Menu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600&display=swap" rel="stylesheet"/>
+  <style>
     /* Reset & Base */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
@@ -89,58 +88,28 @@
       font-weight:600; cursor:pointer; width:100%;
     }
 
-    /* Slideshow always under basket */
+    /* Slideshow overlay */
+    #slideshow-overlay {
+      position: fixed; top: 0; left: 0;
+      width: 100vw; height: 100vh; display: none;
+      align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.9); z-index: 9999;
+      pointer-events: none;
+    }
+    #slideshow-overlay .video-frame {
+      width: calc(100vh * 9 / 16); max-width: 90vw; height: 90vh;
+      border: 10px solid #f26522; border-radius: 20px;
+      overflow: hidden; background: black; display: flex;
+      align-items: center; justify-content: center;
+    }
+    #slideshow-overlay .overlay-msg {
+      position: absolute; z-index: 10001;
+      top:50%; left:50%; transform: translate(-50%,-50%);
+      font-size:2rem; font-weight:bold;
+      color:#FFA500; text-shadow:0 0 8px black;
+    }
 
-    /* Make the slideshow overlay and its video fill the viewport */
-#slideshow-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  display: none;             /* toggled by JS */
-  align-items: center;       
-  justify-content: center;
-  background: transparent;    /* keep the orange frame visible */
-  z-index: 9999;              /* on top of everything except your frame */
-  pointer-events: none;       /* so clicks fall through to resetIdle() */
-}
-
-#slideshow-overlay .video-frame {
-  width: calc(100vh * 9 / 16);
-  max-width: 90vw;
-  height: 90vh;
-  border: 10px solid #f26522;
-  border-radius: 20px;
-  overflow: hidden;
-  background: black;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#slideshow-overlay .video-frame video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-    /* ensure the click-to-order text sits over the video */
-#slideshow-overlay .overlay-msg {
-  position: absolute;           /* take it out of the normal flow */
-  z-index: 10001;               /* above the video (which is z-auto) */
-  top: 50%;                     /* vertically centered */
-  left: 50%;                    /* horizontally centered */
-  transform: translate(-50%, -50%);
-  pointer-events: none;         /* clicks still fall through */
-  font-size: 2rem;              
-  font-weight: bold;
-  color: #FFA500;
-  text-shadow: 0 0 8px black;   /* same as your old overlay-msg */
-}
-    
-
+    /* Idle Slideshow container */
     #slideshow-container {
       margin-top:2em; width:100%; max-width:1080px; height:360px;
       background:#000; position:relative;
@@ -156,32 +125,25 @@
       text-shadow:0 0 8px black;
     }
 
-/* Notification — updated */
-#notification {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  max-width: 400px;
-  background: #28a745;           /* bright green */
-  border: 8px solid #155724;     /* darker green frame */
-  color: #ffffff;
-  padding: 1.5em 2em;
-  border-radius: 12px;
-  font-size: 2.5rem;             /* big, readable letters */
-  font-weight: 700;
-  text-align: center;
-  display: none;
-  opacity: 0;
-  transition: opacity .3s ease;
-  z-index: 10000;
-}
-#notification.show {
-  display: block;
-  opacity: 1;
-}
-
+    /* Notification */
+    #notification {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%; max-width: 400px;
+      background: #28a745;
+      border: 8px solid #155724;
+      color: #ffffff;
+      padding: 1.5em 2em;
+      border-radius: 12px;
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+      display: none; opacity: 0;
+      transition: opacity .3s ease;
+      z-index: 10000;
+    }
+    #notification.show { display: block; opacity: 1; }
 
     /* Option Modal */
     .option-modal {
@@ -223,257 +185,186 @@
       text-align:center; padding:1em; display:none;
       z-index:10000; border-bottom:4px solid #f26522;
     }
+
+    /* Star Wars Crawl */
+    .starwars-crawl-wrapper {
+      position: absolute; bottom: 0; width: 100%; height: 100%;
+      perspective: 800px; overflow: hidden; z-index: 10;
+      pointer-events: none;
+    }
+    .starwars-crawl {
+      position: relative; height: 100%;
+      transform: rotateX(25deg); transform-origin: bottom center;
+      overflow: hidden;
+    }
+    .crawl-text {
+      position: absolute; bottom: -20%; width: 90%; left: 5%;
+      text-align: center; font-size: 6.5rem; font-weight: bold;
+      line-height: 1.6; color: #FFA500;
+      animation: crawlUp 90s linear infinite;
+    }
+    @keyframes crawlUp {
+      0% { bottom: -100%; }
+      100% { bottom: 230%; }
+    }
   </style>
 </head>
-<body><canvas id="particles" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-2;pointer-events:none;"></canvas>
-<!-- Background & Frame -->
-<video autoplay="" class="bg-video" loop="" muted="" playsinline="">
-<source src="Smoke_4___45s___4k_res.mp4" type="video/mp4"/>
-</video>
-<div class="orange-frame"></div>
-<!-- Back to Home -->
-<div class="back-btn">
-<button onclick="location.href='index.html'">⬅ Back to Home</button>
-</div>
-<!-- Logo -->
-<div class="logo">
-<h1>EASY TIMES</h1>
-<h2 class="sub">1985 – Amsterdam</h2>
-</div>
-<!-- Tabs -->
-<div class="tabs">
-<div class="tab active" onclick="switchTab('hot')">Hot Drinks</div>
-<div class="tab" onclick="switchTab('cold')">Cold Drinks</div>
-<div class="tab" onclick="switchTab('snacks')">Homemade Snacks</div>
-</div><div style="margin: 1em auto; text-align: center;"><button onclick="magicOrder()" style="padding: 10px 25px; font-size: 1.2rem; border-radius: 12px;background: linear-gradient(145deg, #f26522, #ff7e29); color: #fff; border: none; cursor: pointer;box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-weight: bold;">🎲 Surprise Me!</button></div>
-<!-- Hot Drinks -->
-<div class="menu-section active" id="hot">
-<div class="item hot-drink" onclick="prepareOptions({name:'Espresso',articleNumber:102,price:3.50,options:[{name:'Whipped Cream',price:1},{name:'Extra Oatmilk',price:1},{name:'Syrup',price:1}]})">
-<h3>Espresso</h3><p>€3.50</p><button>Add</button>
-</div>
-<div class="item hot-drink" onclick="prepareOptions({name:'Doppio',articleNumber:202,price:4.00,options:[{name:'Extra Oatmilk',price:1},{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})">
-<h3>Doppio</h3><p>€4.00</p><button>Add</button>
-</div>
-<div class="item hot-drink" onclick="prepareOptions({name:'Black Coffee',articleNumber:203,price:3.50,options:[]})">
-<h3>Black Coffee</h3><p>€3.50</p><button>Add</button>
-</div>
-<div class="item hot-drink" onclick="prepareOptions({name:'Americano',articleNumber:204,price:3.50,options:[]})">
-<h3>Americano</h3><p>€3.50</p><button>Add</button>
-</div>
-<div class="item hot-drink" onclick="prepareOptions({name:'Cappuccino',articleNumber:205,price:4.00,options:[]})">
-<h3>Cappuccino</h3><p>€4.00</p><button>Add</button>
-</div>
-<div class="item hot-drink" onclick="prepareOptions({name:'Flavored Latte',articleNumber:206,price:5.00,options:[{name:'Hazelnuts',price:0},{name:'Caramel',price:0}]})">
-<h3>Flavored Latte</h3><p>€5.00</p><button>Add</button>
-</div>
-<div class="item hot-drink" onclick="prepareOptions({name:'Café Latte',articleNumber:207,price:4.50,options:[]})">
-<h3>Café Latte</h3><p>€4.50</p><button>Add</button>
-</div>
-<div class="item hot-drink" onclick="prepareOptions({name:'Latte Macchiato',articleNumber:208,price:4.50,options:[{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})">
-<h3>Latte Macchiato</h3><p>€4.50</p><button>Add</button>
-</div>
-<div class="item hot-drink" onclick="prepareOptions({name:'Coffee Mocca',articleNumber:209,price:5.00,options:[{name:'Extra Shot Espresso',price:1},{name:'Whipped Cream',price:1}]})">
-<h3>Coffee Mocca</h3><p>€5.00</p><button>Add</button>
-</div>
-<div class="item hot-drink" onclick="prepareOptions({name:'Hot Chocolate',articleNumber:210,price:4.00,options:[{name:'Whipped Cream',price:1}]})">
-<h3>Hot Chocolate</h3><p>€4.00</p><button>Add</button>
-</div>
-<div class="item hot-drink" onclick="prepareOptions({name:'Tea',articleNumber:301,price:3.50,options:[{name:'Extra Lemon',price:1},{name:'Extra Ginger',price:1},{name:'Orange Blossom',price:1},{name:'Louiza',price:1}]})">
-<h3>Tea</h3><p>€3.50</p><button>Add</button>
-</div>
-<div class="item hot-drink" onclick="prepareOptions({name:'Fresh Mint Tea',articleNumber:302,price:4.50,options:[{name:'Extra Lemon',price:0.50},{name:'Extra Ginger',price:0.50},{name:'Extra Blossom',price:0.50},{name:'Louiza',price:0.50}]})">
-<h3>Fresh Mint Tea</h3><p>€4.50</p><button>Add</button>
-</div>
-</div>
-<!-- Cold Drinks -->
-<div class="menu-section" id="cold">
-<div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola',articleNumber:401,price:4.00,options:[]})">
-<h3>Coca-Cola</h3><p>€4.00</p><button>Add</button>
-</div>
-<div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola Zero',articleNumber:402,price:4.00,options:[]})">
-<h3>Coca-Cola Zero</h3><p>€4.00</p><button>Add</button>
-</div>
-<div class="item cold-drink" onclick="prepareOptions({name:'Fanta Orange',articleNumber:403,price:4.00,options:[]})">
-<h3>Fanta Orange</h3><p>€4.00</p><button>Add</button>
-</div>
-<div class="item cold-drink" onclick="prepareOptions({name:'Fanta Cassis',articleNumber:404,price:4.00,options:[]})">
-<h3>Fanta Cassis</h3><p>€4.00</p><button>Add</button>
-</div>
-<div class="item cold-drink" onclick="prepareOptions({name:'Still Water',articleNumber:405,price:3.50,options:[]})">
-<h3>Still Water</h3><p>€3.50</p><button>Add</button>
-</div>
-<div class="item cold-drink" onclick="prepareOptions({name:'Sparkling Water',articleNumber:406,price:3.50,options:[]})">
-<h3>Sparkling Water</h3><p>€3.50</p><button>Add</button>
-</div>
-<div class="item cold-drink" onclick="prepareOptions({name:'Sprite',articleNumber:407,price:4.00,options:[]})">
-<h3>Sprite</h3><p>€4.00</p><button>Add</button>
-</div>
-<div class="item cold-drink" onclick="prepareOptions({name:'Chocomel',articleNumber:408,price:4.00,options:[]})">
-<h3>Chocomel</h3><p>€4.00</p><button>Add</button>
-</div>
-<div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Peach/Mango',articleNumber:409,price:4.00,options:[{name:'Peach',price:0},{name:'Mango',price:0}]})">
-<h3>Iced Tea Peach/Mango</h3><p>€4.00</p><button>Add</button>
-</div>
-<div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Lemon Sparkling',articleNumber:410,price:4.00,options:[]})">
-<h3>Iced Tea Lemon Sparkling</h3><p>€4.00</p><button>Add</button>
-</div>
-<div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Bitter Lemon',articleNumber:411,price:4.00,options:[]})">
-<h3>Royal Bliss Bitter Lemon</h3><p>€4.00</p><button>Add</button>
-</div>
-<div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Ginger Ale',articleNumber:412,price:4.00,options:[]})">
-<h3>Royal Bliss Ginger Ale</h3><p>€4.00</p><button>Add</button>
-</div>
-<div class="item cold-drink" onclick="prepareOptions({name:'Looza (Pear/Straw/Peach)',articleNumber:413,price:4.00,options:[{name:'Pear',price:0},{name:'Strawberry',price:0},{name:'Peach',price:0}]})">
-<h3>Looza (Pear/Strawberry/Peach)</h3><p>€4.00</p><button>Add</button>
-</div>
-<div class="item cold-drink" onclick="prepareOptions({name:'Minute Maid Orange/Apple',articleNumber:414,price:4.00,options:[{name:'Orange',price:0},{name:'Apple',price:0}]})">
-<h3>Minute Maid Orange/Apple</h3><p>€4.00</p><button>Add</button>
-</div>
-<div class="item cold-drink" onclick="prepareOptions({name:'AA Energy Drink',articleNumber:415,price:4.00,options:[]})">
-<h3>AA Energy Drink</h3><p>€4.00</p><button>Add</button>
-</div>
-<div class="item cold-drink" onclick="prepareOptions({name:'Red Bull',articleNumber:416,price:5.00,options:[]})">
-<h3>Red Bull Energy Drink</h3><p>€5.00</p><button>Add</button>
-</div>
-</div>
-<!-- Homemade Snacks -->
-<div class="menu-section" id="snacks">
-<div class="item" onclick="prepareOptions({name:'Chocolate Chip Cookie',articleNumber:501,price:3.50,options:[]})">
-<h3>Chocolate Chip Cookie</h3><p>€3.50</p><button>Add</button>
-</div>
-<div class="item" onclick="prepareOptions({name:'Banana Cake',articleNumber:502,price:4.00,options:[]})">
-<h3>Banana Cake</h3><p>€4.00</p><button>Add</button>
-</div>
-</div>
+<body>
+  <canvas id="particles" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-2;pointer-events:none;"></canvas>
+  <!-- Background & Frame -->
+  <video autoplay class="bg-video" loop muted playsinline>
+    <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4"/>
+  </video>
+  <div class="orange-frame"></div>
 
-<!-- Basket -->
-<div id="basket">
-<h2>Your Order</h2>
-<ul id="basketList"></ul>
-<strong>Total: €<span id="totalPrice">0.00</span></strong>
-<button id="confirmOrder" onclick="submitOrder()">Send Order</button>
-</div>
-<div style="width:100%; text-align:center; margin-top: 30px;">
-<div class="social-icons" style="display: flex; justify-content: center; gap: 20px; padding: 20px 0;">
-<img alt="Instagram" src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" style="height: 40px;"/>
-<img alt="TikTok" src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/tiktok-square-color-icon.svg" style="height: 40px;"/>
-<img alt="Facebook" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" style="height: 40px;"/>
-</div>
-</div>
-<div style="width:100%; text-align:center; margin-top: 30px;">
-<p style="color:#FFA500; font-weight:bold; font-size:1.1rem; margin-bottom:10px;">
-     Please leave us a Google review!
-    </p>
-<img alt="Google Review QR" src="qr-code.png" style="height:160px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.4);"/>
-<style>
-      @keyframes crawl {
-        0% { transform: translateX(100%); }
-        100% { transform: translateX(-100%); }
-      }
-    </style>
-</div>
-<!-- Slideshow -->
-<div id="slideshow-container" style="position:relative; width:100%; height:100%; border:none; background:none; overflow:hidden;">
-<video id="slideshowVideo" muted="" playsinline=""></video>
-<div class="starwars-crawl-wrapper" style="position:absolute; bottom:0; width:100%; height:100%; perspective:500px; overflow:hidden; z-index:10; pointer-events:none;">
-<div class="starwars-crawl">
-<div class="crawl-text" style="position: absolute; bottom: -100%; width: 100%; text-align: center; font-size: 1.4rem; font-weight: bold; color: #FFA500; animation: crawlUp 90s linear infinite;">
-<p>EasyTimes Amsterdam — Where the World Comes to Chill.</p>
-<p>One Love. One Coffeeshop. A Thousand Stories.</p>
-<p>Relax Like a Local, Float Like a Tourist.</p>
-<p>Welcome to the Heartbeat of Chill in Amsterdam.</p>
-<p>Your Couch Away from Home — Only at EasyTimes.</p>
-<p>From Tokyo to Toronto — Everyone Finds Peace at EasyTimes.</p>
-<p>Across Borders, One Destination: EasyTimes Amsterdam.</p>
-<p>Jetlagged? High Spirits Only Here.</p>
-<p>EasyTimes: The Pilgrimage for Chill Seekers.</p>
-<p>Travel Light, Relax Heavy.</p>
-<p>Where Time Slows Down and Smiles Light Up.</p>
-<p>No Rush. No Worries. Just EasyTimes.</p>
-<p>The Art of Relaxation — Served Daily.</p>
-<p>Escape the Noise, Embrace the Vibe.</p>
-<p>Let Go. Light Up. Live Easy.</p>
-<p>Malik’s Arms Are Open. So Are Our Doors.</p>
-<p>Come as a Stranger, Leave as Family.</p>
-<p>It’s Not Just a Coffeeshop. It’s Malik’s House of Chill.</p>
-<p>EasyTimes Amsterdam — Born to Relax. Built to Remember.</p>
-<p>EasyTimes. The Legend Lives on Reguliers.</p>
-</div>
-</div>
-</div>
-<style>
-<!-- Adjusted Star Wars Crawl Styling -->
-
-.starwars-crawl-wrapper {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  perspective: 800px; /* More depth */
-  overflow: hidden;
-  z-index: 10;
-  pointer-events: none;
-}
-.starwars-crawl {
-  position: relative;
-  height: 100%;
-  transform: rotateX(25deg);
-  transform-origin: bottom center;
-  overflow: hidden;
-}
-.crawl-text {
-  position: absolute;
-  bottom: -20%;
-  width: 90%; /* Wider crawl */
-  left: 5%;
-  text-align: center;
-  font-size: 6.5rem; /* Increased size (5rem × 1.3) */
-  font-weight: bold;
-  line-height: 1.6;
-  color: #FFA500;
-  animation: crawlUp 90s linear infinite;
-}
-@keyframes crawlUp {
-  0% { bottom: -100%; }
-  100% { bottom: 230%; } /* Crawl higher to reach bottom right near QR */
-}
-</style>
-
-</style>
-</div>
-<!-- Notification / Modal / Mini-cart / Solo banner -->
-<div id="notification"></div>
-<div class="option-modal" id="optionModal" style="display:none">
-<div class="option-box">
-<h3 id="optionTitle"></h3>
-<div id="optionList"></div>
-<button onclick="confirmOptions()">Add to Order</button>
-<button onclick="closeModal()" style="margin-top:.5em;">Close</button>
-</div>
-</div>
-<div id="mini-cart"></div>
-<div id="soloModeBanner" style="display:none">
-    Self Pickup Mode: Please collect your drinks downstairs after ordering.
+  <!-- Back to Home -->
+  <div class="back-btn">
+    <button onclick="location.href='index.html'">⬅ Back to Home</button>
   </div>
-<!-- Idle Slideshow JS & All Logic -->
-<script>
-    /* --- TELEGRAM & BASKET LOGIC --- */
-    const botToken = "7627172769:AAH7I_2LRd0VqZuMOpVxRn_vZbt4QXPn9wU",
-          chatId   = "5462781265";
+
+  <!-- Logo -->
+  <div class="logo">
+    <h1>EASY TIMES</h1>
+    <h2 class="sub">1985 – Amsterdam</h2>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('hot')">Hot Drinks</div>
+    <div class="tab" onclick="switchTab('cold')">Cold Drinks</div>
+    <div class="tab" onclick="switchTab('snacks')">Homemade Snacks</div>
+  </div>
+  <div style="margin:1em auto; text-align:center;">
+    <button onclick="magicOrder()" style="padding:10px 25px; font-size:1.2rem; border-radius:12px; background:linear-gradient(145deg,#f26522,#ff7e29); color:#fff; border:none; cursor:pointer; box-shadow:0 5px 15px rgba(0,0,0,0.3); font-weight:bold;">
+      🎲 Surprise Me!
+    </button>
+  </div>
+
+  <!-- Hot Drinks -->
+  <div class="menu-section active" id="hot">
+    <div class="item hot-drink" onclick="prepareOptions({name:'Espresso',articleNumber:102,price:3.50,options:[{name:'Whipped Cream',price:1},{name:'Extra Oatmilk',price:1},{name:'Syrup',price:1}]})"> <h3>Espresso</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Doppio',articleNumber:202,price:4.00,options:[{name:'Extra Oatmilk',price:1},{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})"> <h3>Doppio</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Black Coffee',articleNumber:203,price:3.50,options:[]})"> <h3>Black Coffee</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Americano',articleNumber:204,price:3.50,options:[]})"> <h3>Americano</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Cappuccino',articleNumber:205,price:4.00,options:[]})"> <h3>Cappuccino</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Flavored Latte',articleNumber:206,price:5.00,options:[{name:'Hazelnuts',price:0},{name:'Caramel',price:0}]})"> <h3>Flavored Latte</h3><p>€5.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Café Latte',articleNumber:207,price:4.50,options:[]})"> <h3>Café Latte</h3><p>€4.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Latte Macchiato',articleNumber:208,price:4.50,options:[{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})"> <h3>Latte Macchiato</h3><p>€4.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Coffee Mocca',articleNumber:209,price:5.00,options:[{name:'Extra Shot Espresso',price:1},{name:'Whipped Cream',price:1}]})"> <h3>Coffee Mocca</h3><p>€5.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Hot Chocolate',articleNumber:210,price:4.00,options:[{name:'Whipped Cream',price:1}]})"> <h3>Hot Chocolate</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Tea',articleNumber:301,price:3.50,options:[{name:'Extra Lemon',price:1},{name:'Extra Ginger',price:1},{name:'Orange Blossom',price:1},{name:'Louiza',price:1}]})"> <h3>Tea</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Fresh Mint Tea',articleNumber:302,price:4.50,options:[{name:'Extra Lemon',price:0.50},{name:'Extra Ginger',price:0.50},{name:'Extra Blossom',price:0.50},{name:'Louiza',price:0.50}]})"> <h3>Fresh Mint Tea</h3><p>€4.50</p><button>Add</button></div>
+  </div>
+
+  <!-- Cold Drinks -->
+  <div class="menu-section" id="cold">
+    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola',articleNumber:401,price:4.00,options:[]})"> <h3>Coca-Cola</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola Zero',articleNumber:402,price:4.00,options:[]})"> <h3>Coca-Cola Zero</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Orange',articleNumber:403,price:4.00,options:[]})"> <h3>Fanta Orange</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Cassis',articleNumber:404,price:4.00,options:[]})"> <h3>Fanta Cassis</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Still Water',articleNumber:405,price:3.50,options:[]})"> <h3>Still Water</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Sparkling Water',articleNumber:406,price:3.50,options:[]})"> <h3>Sparkling Water</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Sprite',articleNumber:407,price:4.00,options:[]})"> <h3>Sprite</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Chocomel',articleNumber:408,price:4.00,options:[]})"> <h3>Chocomel</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Peach/Mango',articleNumber:409,price:4.00,options:[{name:'Peach',price:0},{name:'Mango',price:0}]})"> <h3>Iced Tea Peach/Mango</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Lemon Sparkling',articleNumber:410,price:4.00,options:[]})"> <h3>Iced Tea Lemon Sparkling</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Bitter Lemon',articleNumber:411,price:4.00,options:[]})"> <h3>Royal Bliss Bitter Lemon</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Ginger Ale',articleNumber:412,price:4.00,options:[]})"> <h3>Royal Bliss Ginger Ale</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Looza (Pear/Strawberry/Peach)',articleNumber:413,price:4.00,options:[{name:'Pear',price:0},{name:'Strawberry',price:0},{name:'Peach',price:0}]})"> <h3>Looza (Pear/Strawberry/Peach)</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Minute Maid Orange/Apple',articleNumber:414,price:4.00,options:[{name:'Orange',price:0},{name:'Apple',price:0}]})"> <h3>Minute Maid Orange/Apple</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'AA Energy Drink',articleNumber:415,price:4.00,options:[]})"> <h3>AA Energy Drink</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Red Bull',articleNumber:416,price:5.00,options:[]})"> <h3>Red Bull Energy Drink</h3><p>€5.00</p><button>Add</button></div>
+  </div>
+
+  <!-- Homemade Snacks -->
+  <div class="menu-section" id="snacks">
+    <div class="item" onclick="prepareOptions({name:'Chocolate Chip Cookie',articleNumber:501,price:3.50,options:[]})"> <h3>Chocolate Chip Cookie</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item" onclick="prepareOptions({name:'Banana Cake',articleNumber:502,price:4.00,options:[]})"> <h3>Banana Cake</h3><p>€4.00</p><button>Add</button></div>
+  </div>
+
+  <!-- Basket -->
+  <div id="basket">
+    <h2>Your Order</h2>
+    <ul id="basketList"></ul>
+    <strong>Total: €<span id="totalPrice">0.00</span></strong>
+    <button id="confirmOrder" onclick="submitOrder()">Send Order</button>
+  </div>
+
+  <!-- Social Icons -->
+  <div style="width:100%; text-align:center; margin-top:30px;">
+    <div class="social-icons" style="display:flex; justify-content:center; gap:20px; padding:20px 0;">
+      <img alt="Instagram" src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" style="height:40px;"/>
+      <img alt="TikTok" src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/tiktok-square-color-icon.svg" style="height:40px;"/>
+      <img alt="Facebook" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" style="height:40px;"/>
+    </div>
+  </div>
+
+  <!-- Google Review QR -->
+  <div style="width:100%; text-align:center; margin-top:30px;">
+    <p style="color:#FFA500; font-weight:bold; font-size:1.1rem; margin-bottom:10px;">Please leave us a Google review!</p>
+    <img alt="Google Review QR" src="qr-code.png" style="height:160px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.4);"/>
+  </div>
+
+  <!-- Slideshow Container & Crawl -->
+  <div id="slideshow-container" style="position:relative; width:100%; height:100%; border:none; background:none; overflow:hidden;">
+    <video id="slideshowVideo" muted playsinline></video>
+    <div class="starwars-crawl-wrapper">
+      <div class="starwars-crawl">
+        <div class="crawl-text">
+          <p>EasyTimes Amsterdam — Where the World Comes to Chill.</p>
+          <p>One Love. One Coffeeshop. A Thousand Stories.</p>
+          <p>Relax Like a Local, Float Like a Tourist.</p>
+          <p>Welcome to the Heartbeat of Chill in Amsterdam.</p>
+          <p>Your Couch Away from Home — Only at EasyTimes.</p>
+          <p>From Tokyo to Toronto — Everyone Finds Peace at EasyTimes.</p>
+          <p>Across Borders, One Destination: EasyTimes Amsterdam.</p>
+          <p>Jetlagged? High Spirits Only Here.</p>
+          <p>EasyTimes: The Pilgrimage for Chill Seekers.</p>
+          <p>Travel Light, Relax Heavy.</p>
+          <p>Where Time Slows Down and Smiles Light Up.</p>
+          <p>No Rush. No Worries. Just EasyTimes.</p>
+          <p>The Art of Relaxation — Served Daily.</p>
+          <p>Escape the Noise, Embrace the Vibe.</p>
+          <p>Let Go. Light Up. Live Easy.</p>
+          <p>Malik’s Arms Are Open. So Are Our Doors.</p>
+          <p>Come as a Stranger, Leave as Family.</p>
+          <p>It’s Not Just a Coffeeshop. It’s Malik’s House of Chill.</p>
+          <p>EasyTimes Amsterdam — Born to Relax. Built to Remember.</p>
+          <p>EasyTimes. The Legend Lives on Reguliers.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification / Modal / Mini-cart / Solo banner -->
+  <div id="notification"></div>
+  <div class="option-modal" id="optionModal" style="display:none;">
+    <div class="option-box">
+      <h3 id="optionTitle"></h3>
+      <div id="optionList"></div>
+      <button onclick="confirmOptions()">Add to Order</button>
+      <button onclick="closeModal()" style="margin-top:.5em;">Close</button>
+    </div>
+  </div>
+  <div id="mini-cart"></div>
+  <div id="soloModeBanner" style="display:none;">Self Pickup Mode: Please collect your drinks downstairs after ordering.</div>
+
+  <!-- JS Logic -->
+  <script>
+    const botToken = "7627172769:AAH7I_2LRd0VqZuMOpVxRn_vZbt4QXPn9wU", chatId = "5462781265";
     let orderList = [], selectedArticle = null;
 
-    function showNotification(msg){
+    function showNotification(msg) {
       const n = document.getElementById("notification");
-      n.textContent = msg; n.classList.add("show");
-      setTimeout(()=>n.classList.remove("show"),3000);
+      n.innerHTML = msg; n.classList.add("show");
+      setTimeout(() => n.classList.remove("show"), 3000);
     }
 
-    function prepareOptions(article){
+    function prepareOptions(article) {
       selectedArticle = article;
       document.getElementById("optionTitle").innerText = `Options for ${article.name}`;
-      const optList = document.getElementById("optionList");
-      optList.innerHTML = "";
-      article.options.forEach((o,i)=>{
+      const optList = document.getElementById("optionList"); optList.innerHTML = "";
+      article.options.forEach((o,i) => {
         const lbl = document.createElement("label");
         lbl.innerHTML = `<input type="checkbox" data-index="${i}"> ${o.name} (+€${o.price.toFixed(2)})`;
         optList.appendChild(lbl);
@@ -481,237 +372,156 @@
       document.getElementById("optionModal").style.display = "flex";
     }
 
-    function confirmOptions(){
-      let extra=0, chosen=[]
-      document.querySelectorAll("#optionList input").forEach(cb=>{
-        if(cb.checked){
-          const o = selectedArticle.options[cb.dataset.index];
-          chosen.push(o); extra += o.price;
-        }
+    function confirmOptions() {
+      let extra = 0, chosen = [];
+      document.querySelectorAll("#optionList input").forEach(cb => {
+        if (cb.checked) { const o = selectedArticle.options[cb.dataset.index]; chosen.push(o); extra += o.price; }
       });
-      orderList.push({...selectedArticle, selectedOptions:chosen, totalPrice: selectedArticle.price + extra});
+      orderList.push({ ...selectedArticle, selectedOptions: chosen, totalPrice: selectedArticle.price + extra });
       updateOrderList(); updateMiniCart(); closeModal();
     }
 
-    function closeModal(){
-      document.getElementById("optionModal").style.display = "none";
-    }
+    function closeModal() { document.getElementById("optionModal").style.display = "none"; }
 
-    function updateOrderList(){
+    function updateOrderList() {
       const ul = document.getElementById("basketList"); ul.innerHTML = "";
-      orderList.forEach((it,i)=>{
-        ul.innerHTML += `<li>#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)}) 
-           <button onclick="removeFromOrder(${i})">×</button></li>`;
+      orderList.forEach((it,i) => {
+        ul.innerHTML += `<li>#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)}) <button onclick="removeFromOrder(${i})">×</button></li>`;
       });
-      document.getElementById("totalPrice").innerText =
-        orderList.reduce((s,x)=>s+x.totalPrice,0).toFixed(2);
+      document.getElementById("totalPrice").innerText = orderList.reduce((s,x) => s + x.totalPrice, 0).toFixed(2);
     }
 
-    function removeFromOrder(idx){
-      orderList.splice(idx,1); updateOrderList(); updateMiniCart();
-    }
+    function removeFromOrder(idx) { orderList.splice(idx,1); updateOrderList(); updateMiniCart(); }
 
-    function submitOrder(){
-      if(!orderList.length){ showNotification("No items in order!"); return; }
+    function submitOrder() {
+      if (!orderList.length) { showNotification("No items in order!"); return; }
       let txt = "🇎 New Order:\n";
-      orderList.forEach(it=>{
+      orderList.forEach(it => {
         txt += `#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)})\n`;
-        if(it.selectedOptions.length)
-          txt += "  → "+it.selectedOptions.map(o=>o.name).join(", ")+"\n";
+        if (it.selectedOptions.length) txt += '  → ' + it.selectedOptions.map(o=>o.name).join(', ') + '\n';
       });
       fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(txt)}`)
-        .then(r=>r.json()).then(d=>{
-          if(d.ok){
-  showNotification("✅ Order sent!");
-  orderList = [];
-  updateOrderList();
-  updateMiniCart();
-  setTimeout(() => location.href = "index.html", 3000); // wait 3s then go back
-}
-
+        .then(r => r.json()).then(d => {
+          if (d.ok) {
+            const isSolo = JSON.parse(localStorage.getItem("soloMode") || "false");
+            const extraMsg = isSolo
+              ? "<br><strong>Self-Pickup Mode:</strong> Please collect your drinks downstairs."
+              : "";
+            showNotification("✅ Order sent!" + extraMsg);
+            orderList = []; updateOrderList(); updateMiniCart();
+            setTimeout(() => location.href = "index.html", 3000);
+          }
         });
     }
 
-    function updateMiniCart(){
-      const m = document.getElementById("mini-cart");
-      let html = "<h3>Basket</h3><ul>", tot=0;
-      orderList.forEach(it=>{ html += `<li>${it.name} - €${it.totalPrice.toFixed(2)}</li>`; tot+=it.totalPrice; });
-      html += `</ul><div class="total">Total: €${tot.toFixed(2)}</div>`;
+    function updateMiniCart() {
+      const m = document.getElementById("mini-cart"); let html = "<h3>Basket</h3><ul>", tot=0;
+      orderList.forEach(it => { html += `<li>${it.name} - €${it.totalPrice.toFixed(2)}</li>`; tot += it.totalPrice; });
+      html += `</ul><div class='total'>Total: €${tot.toFixed(2)}</div>`;
       m.innerHTML = html; m.classList.add("show");
-      clearTimeout(window._miniTO);
-      window._miniTO = setTimeout(()=>m.classList.remove("show"),10000);
+      clearTimeout(window._miniTO); window._miniTO = setTimeout(() => m.classList.remove("show"), 10000);
     }
 
-    /* --- TAB SWITCHING --- */
-    function switchTab(id){
-      document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-      document.querySelectorAll(".menu-section").forEach(s=>s.classList.remove("active"));
+    function switchTab(id) {
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".menu-section").forEach(s => s.classList.remove("active"));
       document.querySelector(`.tab[onclick="switchTab('${id}')"]`).classList.add("active");
       document.getElementById(id).classList.add("active");
     }
 
-    /* --- SOLO MODE TOGGLE --- */
     let pressTimer;
-    document.body.addEventListener("touchstart",e=>{
-      if(e.touches[0].clientX<100 && e.touches[0].clientY<100)
-        pressTimer = setTimeout(toggleSoloMode,1500);
+    document.body.addEventListener("touchstart", e => {
+      if (e.touches[0].clientX < 100 && e.touches[0].clientY < 100)
+        pressTimer = setTimeout(toggleSoloMode, 1500);
     });
-    document.body.addEventListener("touchend",()=>clearTimeout(pressTimer));
+    document.body.addEventListener("touchend", () => clearTimeout(pressTimer));
 
-    function toggleSoloMode(){
-      const on = !JSON.parse(localStorage.getItem("soloMode")||"false");
+    function toggleSoloMode() {
+      const on = !JSON.parse(localStorage.getItem("soloMode") || "false");
       localStorage.setItem("soloMode", on);
       document.getElementById("soloModeBanner").style.display = on ? "block" : "none";
     }
-    document.addEventListener("DOMContentLoaded",()=>{
-      if(JSON.parse(localStorage.getItem("soloMode")||"false"))
+    document.addEventListener("DOMContentLoaded", () => {
+      if (JSON.parse(localStorage.getItem("soloMode") || "false"))
         document.getElementById("soloModeBanner").style.display = "block";
     });
 
-    /* --- IDLE VIDEO SLIDESHOW --- */
+    /* Idle Slideshow Logic */
     const videos = ['smoke.mp4','mascotte.mp4'];
-    let vidIdx=0, slideshowTO;
+    let vidIdx = 0, slideshowTO;
     const overlay = document.createElement("div");
-overlay.id = "slideshow-overlay";
-overlay.style.display = "none";
-overlay.style.position = "fixed";
-overlay.style.top = "0";
-overlay.style.left = "0";
-overlay.style.width = "100vw";
-overlay.style.height = "100vh";
-overlay.style.zIndex = "10001";
-overlay.style.backgroundColor = "rgba(0, 0, 0, 0.9)";
-overlay.style.display = "none";
-overlay.style.flexDirection = "column";
-overlay.style.alignItems = "center";
-overlay.style.justifyContent = "center";
+    overlay.id = "slideshow-overlay";
+    overlay.style.display = "none";
+    overlay.style.position = "fixed";
+    overlay.style.top = "0";
+    overlay.style.left = "0";
+    overlay.style.width = "100vw";
+    overlay.style.height = "100vh";
+    overlay.style.zIndex = "10001";
+    overlay.style.backgroundColor = "rgba(0, 0, 0, 0.9)";
+    overlay.style.display = "none";
+    overlay.style.flexDirection = "column";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
 
-const videoLogo = document.createElement("img");
-videoLogo.src = "EASY TIMES LOGO BLACK-01.png";
-videoLogo.alt = "EasyTimes Logo";
-videoLogo.style.width = "200px";
-videoLogo.style.margin = "30px 0";
+    const videoLogo = document.createElement("img");
+    videoLogo.src = "EASY TIMES LOGO BLACK-01.png";
+    videoLogo.alt = "EasyTimes Logo";
+    videoLogo.style.width = "200px";
+    videoLogo.style.margin = "30px 0";
 
-const msg = document.createElement("div");
-msg.innerText = "CLICK THE SCREEN TO ORDER DRINKS";
-Object.assign(msg.style, {
-  color: "#FFA500",
-  fontSize: "2rem",
-  fontWeight: "bold",
-  textAlign: "center",
-  textShadow: "1px 1px 4px black",
-  marginBottom: "30px"
-});
+    const msg = document.createElement("div");
+    msg.innerText = "CLICK THE SCREEN TO ORDER DRINKS";
+    Object.assign(msg.style, { color: "#FFA500", fontSize: "2rem", fontWeight: "bold", textAlign: "center", textShadow: "1px 1px 4px black", marginBottom: "30px" });
 
-const vf = document.createElement("div");
-vf.className = "video-frame";
-vf.style.width = "calc(100vh * 9 / 16)";
-vf.style.maxWidth = "90vw";
-vf.style.height = "90vh"; // ensures it stays within frame
-vf.style.border = "10px solid #f26522";
-vf.style.borderRadius = "20px";
-vf.style.overflow = "hidden";
-vf.style.background = "black";
-vf.style.position = "relative";
+    const vf = document.createElement("div");
+    vf.className = "video-frame";
+    vf.style.width = "calc(100vh * 9 / 16)";
+    vf.style.maxWidth = "90vw";
+    vf.style.height = "90vh";
+    vf.style.border = "10px solid #f26522";
+    vf.style.borderRadius = "20px";
+    vf.style.overflow = "hidden";
+    vf.style.background = "black";
+    vf.style.position = "relative";
 
-const vid = document.createElement("video");
-vid.id = "slideshowVideo";
-vid.muted = true;
-vid.autoplay = true;
-vid.playsInline = true;
-Object.assign(vid.style, {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "100%",
-  height: "100%",
-  objectFit: "cover"
-});
+    const vid = document.createElement("video");
+    vid.id = "slideshowVideo";
+    vid.muted = true;
+    vid.autoplay = true;
+    vid.playsInline = true;
+    Object.assign(vid.style, { position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "100%", height: "100%", objectFit: "cover" });
 
-vf.appendChild(vid);
-overlay.appendChild(videoLogo);
-overlay.appendChild(msg);
-overlay.appendChild(vf);
-document.body.appendChild(overlay);
+    vf.appendChild(vid);
+    overlay.appendChild(videoLogo);
+    overlay.appendChild(msg);
+    overlay.appendChild(vf);
+    document.body.appendChild(overlay);
 
-
-    function playNext(){
-      vid.src = videos[vidIdx];
-      vid.load();
-      vid.play().catch(()=>{});
+    function playNext() {
+      vid.src = videos[vidIdx]; vid.load(); vid.play().catch(() =>{});
       vidIdx = (vidIdx + 1) % videos.length;
     }
     vid.addEventListener("ended", playNext);
     vid.addEventListener("error", playNext);
 
-    function resetIdle(){
+    function resetIdle() {
       clearTimeout(slideshowTO);
-      vid.pause();
-      overlay.style.display = "none";
-      slideshowTO = setTimeout(()=>{
-        overlay.style.display = "flex";
-        playNext();
-      }, 50000);
+      vid.pause(); overlay.style.display = "none";
+      slideshowTO = setTimeout(() => { overlay.style.display = "flex"; playNext(); }, 50000);
     }
+
     ["click","mousemove","touchstart","keydown"].forEach(ev => document.addEventListener(ev, resetIdle));
     overlay.addEventListener("click", resetIdle);
-
     resetIdle();
+
+    function magicOrder() {
+      const allItems = [...document.querySelectorAll('.item')];
+      allItems[Math.floor(Math.random() * allItems.length)].click();
+    }
   </script>
-<script>
-function magicOrder(){
-  const allItems = [...document.querySelectorAll('.item')];
-  const random = allItems[Math.floor(Math.random() * allItems.length)];
-  random.click();
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-  const canvas = document.getElementById("particles");
-  if (!canvas) return;
-
-  const ctx = canvas.getContext("2d");
-  let stars = [];
-
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  window.addEventListener('resize', resizeCanvas);
-  resizeCanvas();
-
-  function initStars(count = 100) {
-    stars = [];
-    for (let i = 0; i < count; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        radius: Math.random() * 1.5 + 0.3,
-        speed: Math.random() * 0.5 + 0.1
-      });
-    }
-  }
-
-  function animateStars() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let star of stars) {
-      ctx.beginPath();
-      ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
-      ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
-      ctx.fill();
-      star.y += star.speed;
-      if (star.y > canvas.height) {
-        star.y = 0;
-        star.x = Math.random() * canvas.width;
-      }
-    }
-    requestAnimationFrame(animateStars);
-  }
-
-  initStars();
-  animateStars();
-});
-</script></body>
+</body>
 </html>
+
 
 
