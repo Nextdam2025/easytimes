@@ -39,3 +39,103 @@
     "502": { "price": 4.00, "available": true }    // Banana Cake
   }
 }
+
+<script>
+/* === live-config.js === */
+
+(() => {
+  // 1) Point to your chosen raw JSON URL:
+  // Option A (second repo):
+  const CONFIG_URL = "https://raw.githubusercontent.com/Nextdam2025/easytimes-live/main/config.json";
+  // Option B (same repo):
+  // const CONFIG_URL = "https://raw.githubusercontent.com/Nextdam2025/easytimes/main/data/config.json";
+
+  const POLL_MS = 15000; // how often to check for updates
+  let LIVE = { serviceMode: null, items: {} };
+  let itemIndex = []; // [{el, article, priceEl}...]
+
+  // Format currency (Euro)
+  const euro = v => "€" + (Number(v || 0)).toFixed(2);
+
+  // 2) Find all menu item blocks and extract article numbers from onclick
+  function indexItems() {
+    itemIndex = [];
+    document.querySelectorAll('.item').forEach(el => {
+      const oc = el.getAttribute('onclick') || "";
+      const m = oc.match(/articleNumber\s*:\s*(\d+)/);
+      if (!m) return;
+      const article = m[1];
+      const priceEl =
+        el.querySelector('.price') ||
+        el.querySelector('p'); // your HTML has <p> with price
+      itemIndex.push({ el, article, priceEl });
+    });
+  }
+
+  // 3) Apply config to DOM
+  function applyConfig() {
+    // service mode → reuse your existing soloMode banner logic
+    const sm = LIVE.serviceMode === "self_pickup";
+    localStorage.setItem("soloMode", JSON.stringify(sm));
+    const banner = document.getElementById("soloModeBanner");
+    if (banner) banner.style.display = sm ? "block" : "none";
+
+    // each item: price + availability
+    itemIndex.forEach(({ el, article, priceEl }) => {
+      const cfg = LIVE.items[article];
+      // Price
+      if (cfg && priceEl) priceEl.textContent = euro(cfg.price);
+
+      // Availability badge + disable
+      const available = cfg ? cfg.available !== false : true;
+      el.classList.toggle('sold-out', !available);
+      // ensure the main button also looks disabled
+      const btn = el.querySelector('button');
+      if (btn) btn.disabled = !available;
+    });
+  }
+
+  // 4) Fetch config.json (no caching) and apply
+  async function refreshConfig() {
+    try {
+      const url = CONFIG_URL + "?t=" + Date.now();
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) throw new Error(res.status + " " + res.statusText);
+      const json = await res.json();
+      LIVE = {
+        serviceMode: json.serviceMode || "counter",
+        items: json.items || {}
+      };
+      applyConfig();
+    } catch (e) {
+      // fail silently; keep previous LIVE
+      // console.debug("Config fetch error:", e);
+    }
+  }
+
+  // 5) Override prepareOptions so live price is always used
+  const _origPrepare = window.prepareOptions;
+  window.prepareOptions = function(article) {
+    try {
+      const cfg = LIVE.items[String(article.articleNumber)];
+      if (cfg) {
+        article.price = Number(cfg.price);
+        // if somehow sold out, block
+        if (cfg.available === false) {
+          const n = window.showNotification || (msg => alert(msg));
+          n("⚠ This item is currently sold out.");
+          return;
+        }
+      }
+    } catch(_) {}
+    return _origPrepare.call(this, article);
+  };
+
+  // 6) Boot
+  document.addEventListener('DOMContentLoaded', () => {
+    indexItems();
+    refreshConfig();
+    setInterval(refreshConfig, POLL_MS);
+  });
+})();
+</script>
