@@ -373,11 +373,22 @@ body { padding-top: var(--banner-offset); }
     const botToken = "7627172769:AAH7I_2LRd0VqZuMOpVxRn_vZbt4QXPn9wU", chatId = "5462781265";
     let orderList = [], selectedArticle = null;
 
-    function showNotification(msg) {
-      const n = document.getElementById("notification");
-      n.innerHTML = msg; n.classList.add("show");
-      setTimeout(() => n.classList.remove("show"), 3000);
-    }
+    function showNotification(msg, ms = 8000) { // default: 8s
+  const n = document.getElementById("notification");
+  n.innerHTML = msg + '<div style="margin-top:.6em;font-size:1rem;opacity:.9">Tap to close</div>';
+  n.classList.add("show");
+
+  // allow manual dismiss
+  clearTimeout(n._hideTO);
+  n.onclick = () => { n.classList.remove("show"); clearTimeout(n._hideTO); n.onclick = null; };
+
+  // auto-hide after ms
+  n._hideTO = setTimeout(() => {
+    n.classList.remove("show");
+    n.onclick = null;
+  }, ms);
+}
+
 
     function prepareOptions(article) {
       selectedArticle = article;
@@ -538,6 +549,33 @@ body { padding-top: var(--banner-offset); }
       const allItems = [...document.querySelectorAll('.item')];
       allItems[Math.floor(Math.random() * allItems.length)].click();
     }
+    // Reserve space for the fixed banner so it doesn't cover the logo
+function reflowForBanner() {
+  const b = document.getElementById('soloModeBanner');
+  if (!b) return;
+  const visible = getComputedStyle(b).display !== 'none';
+  const h = visible ? b.getBoundingClientRect().height : 0;
+  // Add a little extra breathing room
+  document.body.style.setProperty('--banner-offset', (h ? h + 8 : 0) + 'px');
+}
+document.addEventListener('DOMContentLoaded', reflowForBanner);
+window.addEventListener('resize', reflowForBanner);
+
+// after you set the banner display in toggleSoloMode():
+function toggleSoloMode() {
+  const on = !JSON.parse(localStorage.getItem("soloMode") || "false");
+  localStorage.setItem("soloMode", on);
+  document.getElementById("soloModeBanner").style.display = on ? "block" : "none";
+  reflowForBanner(); // <-- add this
+}
+
+// if you set solo mode on startup:
+document.addEventListener("DOMContentLoaded", () => {
+  if (JSON.parse(localStorage.getItem("soloMode") || "false"))
+    document.getElementById("soloModeBanner").style.display = "block";
+  reflowForBanner(); // <-- add this
+});
+
   </script>
 
   <!-- Live config must load AFTER your main JS so it can wrap prepareOptions -->
