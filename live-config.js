@@ -1,21 +1,23 @@
-<script>
 /* ============================================================
-   EasyTimes — live-config.js (debug version)
+   EasyTimes — live-config.js (debug version, NO <script> tags)
+   Reads config.json from GitHub and updates:
+   - Prices on cards
+   - Sold-out status
+   - Self pickup banner (serviceMode)
+   Polls every 15s.
    ============================================================ */
 
 (() => {
-  // Your config URL (public raw). Make sure this matches where Staff Console writes!
+  // Must match where the Staff Console writes the JSON:
   const CONFIG_URL = "https://raw.githubusercontent.com/Nextdam2025/easytimes/main/data/config.json";
 
   const POLL_MS = 15000;
   let LIVE = { serviceMode: "counter", items: {} };
   let indexed = []; // [{el, article, priceEl, addBtn}...]
 
-  // --- Debug helpers ---
+  // --- Debug helpers (visible in the dev console + small status pill) ---
   window.ET_CONFIG_URL = CONFIG_URL;
   const log = (...a) => console.log("[ET]", ...a);
-
-  // On-screen status pill
   const dot = document.createElement('div');
   dot.style.cssText = 'position:fixed;right:10px;bottom:10px;padding:6px 10px;border-radius:999px;background:#1c1c1c;border:2px solid #f26522;color:#ffa;z-index:99999;font:12px/1.2 monospace';
   function showStatus(txt){ dot.textContent = 'CFG: ' + txt; }
@@ -41,7 +43,7 @@
 
   // 2) Apply config to DOM + local solo mode
   function applyConfig() {
-    // Service mode → keep using your existing solo banner
+    // Service mode → show/hide banner
     const isSelf = LIVE.serviceMode === "self_pickup";
     localStorage.setItem("soloMode", JSON.stringify(isSelf));
     const banner = document.getElementById("soloModeBanner");
@@ -67,7 +69,7 @@
       log("Fetch", url, "→", res.status, res.statusText);
       if (!res.ok) { showStatus('ERR ' + res.status); return; }
       const json = await res.json();
-      window.ET_LAST_CFG = json; // expose for quick inspection
+      window.ET_LAST_CFG = json; // quick inspection
       LIVE = {
         serviceMode: json.serviceMode === "self_pickup" ? "self_pickup" : "counter",
         items: json.items || {}
@@ -80,7 +82,7 @@
     }
   }
 
-  // 4) Ensure the live price is used when adding to basket, and block if sold out
+  // 4) Ensure live price is used when adding to basket; block if sold out
   const _origPrepare = window.prepareOptions;
   window.prepareOptions = function (article) {
     try {
@@ -104,4 +106,3 @@
     setInterval(refreshConfig, POLL_MS);
   });
 })();
-</script>
