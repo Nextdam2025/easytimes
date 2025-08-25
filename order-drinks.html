@@ -219,11 +219,6 @@
 <!-- Live config for prices/availability/service mode -->
 <script src="./live-config.js"></script>
 
-  
-  // in live-config.js
-const CONFIG_URL = "https://raw.githubusercontent.com/Nextdam2025/easytimes-live/main/config.json";
-// or: https://raw.githubusercontent.com/Nextdam2025/easytimes/main/data/config.json
-
 <body>
   <canvas id="particles" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-2;pointer-events:none;"></canvas>
   <!-- Background & Frame -->
@@ -501,7 +496,7 @@ const CONFIG_URL = "https://raw.githubusercontent.com/Nextdam2025/easytimes-live
     vf.style.position = "relative";
 
     const vid = document.createElement("video");
-    vid.id = "slideshowVideo";
+    vid.id = "slideshowVideoOverlay"; /* renamed to avoid duplicate ID */
     vid.muted = true;
     vid.autoplay = true;
     vid.playsInline = true;
@@ -535,8 +530,12 @@ const CONFIG_URL = "https://raw.githubusercontent.com/Nextdam2025/easytimes-live
       allItems[Math.floor(Math.random() * allItems.length)].click();
     }
   </script>
+
+  <!-- Live config must load AFTER your main JS so it can wrap prepareOptions -->
+  <script src="./live-config.js"></script>
 </body>
 </html>
+
 
 
 
