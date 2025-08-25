@@ -1,22 +1,25 @@
 <script>
 /* ============================================================
-   EasyTimes — live-config.js
-   Reads config.json from GitHub and updates:
-   - item prices (UI + the price used when adding to basket)
-   - availability (adds “Sold out”, disables click)
-   - service mode (counter vs self-pickup banner)
-   Polls every 15s. Works with your current HTML as-is.
+   EasyTimes — live-config.js (debug version)
    ============================================================ */
 
 (() => {
-  // —— Pick where your config.json lives:
-
-  // Option B (existing repo, e.g. /data/config.json):
+  // Your config URL (public raw). Make sure this matches where Staff Console writes!
   const CONFIG_URL = "https://raw.githubusercontent.com/Nextdam2025/easytimes/main/data/config.json";
 
   const POLL_MS = 15000;
   let LIVE = { serviceMode: "counter", items: {} };
   let indexed = []; // [{el, article, priceEl, addBtn}...]
+
+  // --- Debug helpers ---
+  window.ET_CONFIG_URL = CONFIG_URL;
+  const log = (...a) => console.log("[ET]", ...a);
+
+  // On-screen status pill
+  const dot = document.createElement('div');
+  dot.style.cssText = 'position:fixed;right:10px;bottom:10px;padding:6px 10px;border-radius:999px;background:#1c1c1c;border:2px solid #f26522;color:#ffa;z-index:99999;font:12px/1.2 monospace';
+  function showStatus(txt){ dot.textContent = 'CFG: ' + txt; }
+  document.addEventListener("DOMContentLoaded", () => { document.body.appendChild(dot); showStatus('loading…'); });
 
   // Format € price
   const euro = v => "€" + Number(v || 0).toFixed(2);
@@ -33,6 +36,7 @@
       const addBtn = el.querySelector("button");
       indexed.push({ el, article, priceEl, addBtn });
     });
+    log("Indexed items:", indexed.map(x=>x.article));
   }
 
   // 2) Apply config to DOM + local solo mode
@@ -51,28 +55,28 @@
       el.classList.toggle("sold-out", !available);
       if (addBtn) addBtn.disabled = !available;
     });
+
+    showStatus('OK @ ' + new Date().toLocaleTimeString());
   }
 
   // 3) Fetch config.json (no cache) and update
   async function refreshConfig() {
     try {
-      const res = await fetch(CONFIG_URL + "?t=" + Date.now(), { cache: "no-store" });
-      if (!res.ok) {
-        // If file doesn't exist yet or temporary error, keep old LIVE
-        // console.debug("Config fetch:", res.status, res.statusText);
-        return;
-      }
+      const url = CONFIG_URL + "?t=" + Date.now();
+      const res = await fetch(url, { cache: "no-store" });
+      log("Fetch", url, "→", res.status, res.statusText);
+      if (!res.ok) { showStatus('ERR ' + res.status); return; }
       const json = await res.json();
+      window.ET_LAST_CFG = json; // expose for quick inspection
       LIVE = {
         serviceMode: json.serviceMode === "self_pickup" ? "self_pickup" : "counter",
         items: json.items || {}
       };
-       window.ET_CONFIG_URL = CONFIG_URL;
-console.log("[ET] Config fetched", CONFIG_URL, json.updatedAt || "(no timestamp)");
-
+      log("Config applied:", json.updatedAt || "(no timestamp)", Object.keys(LIVE.items).length, "items");
       applyConfig();
     } catch (e) {
-      // console.debug("Config fetch error:", e);
+      log("Config fetch error:", e);
+      showStatus('ERR (fetch)');
     }
   }
 
@@ -94,6 +98,7 @@ console.log("[ET] Config fetched", CONFIG_URL, json.updatedAt || "(no timestamp)
 
   // 5) Boot
   document.addEventListener("DOMContentLoaded", () => {
+    log("live-config.js loaded. CONFIG_URL:", CONFIG_URL);
     indexItems();
     refreshConfig();
     setInterval(refreshConfig, POLL_MS);
