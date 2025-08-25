@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Easy Times — Staff Console</title>
+  <meta name="theme-color" content="#f26522" />
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23f26522'/%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background:#0a0a0a; color:#faf7ef; -webkit-tap-highlight-color: transparent; }
+    .card { background:#121212; border:2px solid #f26522; border-radius:16px; }
+    .btn  { background:linear-gradient(145deg,#f26522,#ff7e29); color:#000; font-weight:800; }
+    .btn:disabled{ opacity:.5; filter:grayscale(1); }
+    .pill { border:2px solid #f26522; border-radius:999px; padding:.4rem .9rem; }
+    .row:hover { background: rgba(242,101,34,.05); }
+    .switch { position:relative; display:inline-block; width:52px; height:30px; }
+    .switch input{ opacity:0; width:0; height:0; }
+    .slider{ position:absolute; inset:0; cursor:pointer; background:#333; transition:.2s; border-radius:999px; border:1px solid #555; }
+    .slider:before{ content:""; position:absolute; height:22px; width:22px; left:4px; top:3px; background:#fff; border-radius:50%; transition:.2s; }
+    input:checked + .slider { background:#f26522; }
+    input:checked + .slider:before { transform: translateX(22px); }
+    .kbd{ background:#222; border:1px solid #444; border-radius:.5rem; padding:.1rem .4rem; font-size:.8rem; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+  <!-- Top Bar -->
+  <header class="sticky top-0 z-30 border-b border-orange-500/40 bg-black/70 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
+      <div class="w-9 h-9 rounded-full" style="background:radial-gradient(circle at 30% 30%,#ffb17a,#f26522 60%,#4a1c00)"></div>
+      <div class="flex-1">
+        <h1 class="text-xl font-extrabold tracking-wide">Easy Times — Staff Console</h1>
+        <p class="text-xs text-orange-300/80">Update prices • Mark items sold out • Toggle service mode</p>
+      </div>
+      <button id="saveBtn" class="btn px-4 py-2 rounded-xl text-sm disabled:cursor-not-allowed" disabled>💾 Save</button>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto w-full px-4 py-6 grid gap-6">
+
+    <!-- Service Mode & Repo -->
+    <section class="card p-4">
+      <div class="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+        <div class="flex items-center gap-5">
+          <div>
+            <div class="text-sm text-orange-300/80">Service mode</div>
+            <div class="mt-1 inline-flex items-center gap-2">
+              <button id="modeCounter" class="pill text-sm" aria-pressed="true">Counter</button>
+              <button id="modePickup"  class="pill text-sm">Self-Pickup</button>
+            </div>
+          </div>
+          <div class="hidden md:block w-px h-10 bg-orange-500/30"></div>
+          <div>
+            <div class="text-sm text-orange-300/80">Last loaded</div>
+            <div id="lastLoaded" class="mt-1 text-sm">—</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="reloadBtn" class="pill text-sm">↻ Reload</button>
+          <button id="openGitHub" class="pill text-sm">Open on GitHub</button>
+        </div>
+      </div>
+
+      <details class="mt-4">
+        <summary class="cursor-pointer text-sm text-orange-300/90">Repository & Access</summary>
+        <div class="grid md:grid-cols-4 gap-3 mt-3">
+          <label class="text-sm">Owner
+            <input id="owner" class="w-full mt-1 px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30" value="Nextdam2025">
+          </label>
+          <label class="text-sm">Repo
+            <input id="repo" class="w-full mt-1 px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30" value="easytimes">
+          </label>
+          <label class="text-sm">File path
+            <input id="path" class="w-full mt-1 px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30" value="data/config.json">
+          </label>
+          <label class="text-sm">Branch
+            <input id="branch" class="w-full mt-1 px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30" value="main">
+          </label>
+        </div>
+        <div class="grid md:grid-cols-3 gap-3 mt-3">
+          <label class="text-sm md:col-span-2">GitHub token (fine-grained; this repo only; contents: read/write)
+            <input id="token" type="password" class="w-full mt-1 px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30" placeholder="ghp_...">
+          </label>
+          <label class="text-sm flex items-center gap-2 mt-1">
+            <input id="remember" type="checkbox" class="scale-125"> Remember on this device
+          </label>
+        </div>
+        <p class="text-xs text-orange-300/70 mt-2">
+          Token lives only in this browser (localStorage) if “Remember” is on. Prefer short expiry & fine-grained scopes.
+          Reading public config needs no token; writing always needs a token.
+        </p>
+      </details>
+    </section>
+
+    <!-- Filter / Quick tools -->
+    <section class="card p-4">
+      <div class="flex flex-col md:flex-row items-start md:items-center gap-3 justify-between">
+        <div class="flex items-center gap-3">
+          <input id="search" class="px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30 w-64" placeholder="Search name or #">
+          <div class="text-sm text-orange-300/80">Quick raise (visible)</div>
+          <button data-bulk="-0.5" class="pill text-sm">−0.5</button>
+          <button data-bulk="0.5"  class="pill text-sm">+0.5</button>
+          <button data-bulk="1"    class="pill text-sm">+1</button>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="text-sm flex items-center gap-2">
+            <input id="showOnlyAvailable" type="checkbox" class="scale-125"> Show only available
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Items -->
+    <section class="card overflow-hidden">
+      <table class="w-full text-left">
+        <thead class="bg-black/60">
+          <tr class="text-orange-300/90">
+            <th class="px-4 py-3">#</th>
+            <th class="px-4 py-3">Name</th>
+            <th class="px-4 py-3">Category</th>
+            <th class="px-4 py-3">Price (€)</th>
+            <th class="px-4 py-3">Available</th>
+            <th class="px-4 py-3">Quick</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-xl border border-green-500/60 bg-green-700 text-white font-bold">Saved!</div>
+
+  <script>
+    // ------- Catalog (article -> name/category) -------
+    const CATALOG = [
+      { id:102, name:'Espresso', cat:'Hot' },
+      { id:202, name:'Doppio', cat:'Hot' },
+      { id:203, name:'Black Coffee', cat:'Hot' },
+      { id:204, name:'Americano', cat:'Hot' },
+      { id:205, name:'Cappuccino', cat:'Hot' },
+      { id:206, name:'Flavored Latte', cat:'Hot' },
+      { id:207, name:'Café Latte', cat:'Hot' },
+      { id:208, name:'Latte Macchiato', cat:'Hot' },
+      { id:209, name:'Coffee Mocca', cat:'Hot' },
+      { id:210, name:'Hot Chocolate', cat:'Hot' },
+      { id:301, name:'Tea', cat:'Hot' },
+      { id:302, name:'Fresh Mint Tea', cat:'Hot' },
+      { id:401, name:'Coca-Cola', cat:'Cold' },
+      { id:402, name:'Coca-Cola Zero', cat:'Cold' },
+      { id:403, name:'Fanta Orange', cat:'Cold' },
+      { id:404, name:'Fanta Cassis', cat:'Cold' },
+      { id:405, name:'Still Water', cat:'Cold' },
+      { id:406, name:'Sparkling Water', cat:'Cold' },
+      { id:407, name:'Sprite', cat:'Cold' },
+      { id:408, name:'Chocomel', cat:'Cold' },
+      { id:409, name:'Iced Tea Peach/Mango', cat:'Cold' },
+      { id:410, name:'Iced Tea Lemon Sparkling', cat:'Cold' },
+      { id:411, name:'Royal Bliss Bitter Lemon', cat:'Cold' },
+      { id:412, name:'Royal Bliss Ginger Ale', cat:'Cold' },
+      { id:413, name:'Looza (Pear/Strawberry/Peach)', cat:'Cold' },
+      { id:414, name:'Minute Maid Orange/Apple', cat:'Cold' },
+      { id:415, name:'AA Energy Drink', cat:'Cold' },
+      { id:416, name:'Red Bull', cat:'Cold' },
+      { id:501, name:'Chocolate Chip Cookie', cat:'Snacks' },
+      { id:502, name:'Banana Cake', cat:'Snacks' }
+    ];
+
+    // ------- Elements & State -------
+    const els = (ids => Object.fromEntries(ids.map(id => [id, document.getElementById(id)])))([
+      'saveBtn','reloadBtn','lastLoaded','rows','search','showOnlyAvailable',
+      'modeCounter','modePickup','owner','repo','path','branch','token','remember',
+      'toast','openGitHub'
+    ]);
+
+    let fileSHA = null;       // GitHub blob SHA (needed for update)
+    let serviceMode = 'counter';
+    let items = {};           // { [id]: { price, available } }
+    let dirty = false;
+
+    // ------- Helpers -------
+    function setDirty(v=true){ dirty=v; els.saveBtn.disabled = !dirty; }
+    function euro(num){ return Number(num||0).toFixed(2); }
+    function toast(msg='Saved!'){ const t=els.toast; t.textContent=msg; t.classList.remove('hidden'); setTimeout(()=>t.classList.add('hidden'),1600); }
+    function nowIso(){ return new Date().toISOString(); }
+
+    function getAuth(){ return els.token.value.trim(); }
+    function rawUrl(){
+      const owner=els.owner.value.trim(), repo=els.repo.value.trim(),
+            path=els.path.value.trim(), branch=els.branch.value.trim();
+      return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`;
+    }
+    function apiUrl(){
+      const owner=els.owner.value.trim(), repo=els.repo.value.trim(),
+            path=encodeURIComponent(els.path.value.trim());
+      return `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+    }
+    function repoUiUrl(){
+      const owner=els.owner.value.trim(), repo=els.repo.value.trim(),
+            path=els.path.value.trim(), branch=els.branch.value.trim();
+      return `https://github.com/${owner}/${repo}/blob/${branch}/${path}`;
+    }
+
+    function saveLocal(){
+      if(!els.remember.checked) return localStorage.removeItem('et_admin');
+      const data = {
+        owner:els.owner.value, repo:els.repo.value, path:els.path.value, branch:els.branch.value,
+        token: els.token.value ? btoa(els.token.value) : ''
+      };
+      localStorage.setItem('et_admin', JSON.stringify(data));
+    }
+    function loadLocal(){
+      const raw = localStorage.getItem('et_admin'); if(!raw) return;
+      try{
+        const d = JSON.parse(raw);
+        els.owner.value  = d.owner  || els.owner.value;
+        els.repo.value   = d.repo   || els.repo.value;
+        els.path.value   = d.path   || els.path.value;
+        els.branch.value = d.branch || els.branch.value;
+        if(d.token){ els.token.value = atob(d.token); els.remember.checked = true; }
+      }catch{}
+    }
+
+    // ------- Render -------
+    function renderRows(){
+      const q = els.search.value.toLowerCase().trim();
+      const onlyAvail = els.showOnlyAvailable.checked;
+      const rows = CATALOG.filter(it=>{
+        const match = `${it.id} ${it.name}`.toLowerCase().includes(q);
+        const av = items[it.id]?.available !== false;
+        return match && (!onlyAvail || av);
+      }).map(it=>{
+        const conf = items[it.id] || { price:0, available:true };
+        const checked = conf.available !== false ? 'checked' : '';
+        return `
+          <tr class="row border-t border-orange-500/20" data-id="${it.id}">
+            <td class="px-4 py-3 font-bold text-orange-300/90">${it.id}</td>
+            <td class="px-4 py-3">${it.name}</td>
+            <td class="px-4 py-3 text-sm text-orange-300/80">${it.cat}</td>
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-2">
+                <button class="pill text-sm px-2 py-1" data-step="-0.5">−0.5</button>
+                <input type="number" step="0.1" min="0" value="${euro(conf.price)}"
+                       class="price w-28 px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30">
+                <button class="pill text-sm px-2 py-1" data-step="0.5">+0.5</button>
+              </div>
+            </td>
+            <td class="px-4 py-3">
+              <label class="switch">
+                <input type="checkbox" class="avail" ${checked}>
+                <span class="slider"></span>
+              </label>
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-2">
+                <button class="pill text-sm px-2 py-1" data-step="-0.1">−0.1</button>
+                <button class="pill text-sm px-2 py-1" data-step="+0.1">+0.1</button>
+                <button class="pill text-sm px-2 py-1" data-step="+1">+1</button>
+              </div>
+            </td>
+          </tr>`;
+      }).join('');
+      els.rows.innerHTML = rows || `<tr><td class="px-4 py-6 text-orange-300/70" colspan="6">No items match your filter.</td></tr>`;
+    }
+
+    // ------- Load config (from GitHub Contents API so we get SHA) -------
+    async function loadConfig(){
+      fileSHA = null;
+      const headers = { 'Accept':'application/vnd.github+json' };
+      if(getAuth()) headers['Authorization'] = 'token ' + getAuth();
+
+      const res = await fetch(apiUrl(), { headers });
+      if(res.status === 404){
+        // New file bootstrap
+        items = Object.fromEntries(CATALOG.map(it=>[it.id,{ price: defaultPrice(it.id), available:true }]));
+        serviceMode = 'counter';
+        els.lastLoaded.textContent = 'New file (to be created)';
+        setDirty(true);
+        updateModeUI();
+        renderRows();
+        return;
+      }
+      if(!res.ok){
+        const txt = await res.text();
+        throw new Error(`Load failed: ${res.status} ${txt}`);
+      }
+      const json = await res.json();
+      fileSHA = json.sha || null;
+
+      let cfg = { serviceMode:'counter', items:{} };
+      if(json.content){
+        try {
+          const decoded = atob(json.content.replace(/\n/g,''));
+          cfg = JSON.parse(decoded);
+        } catch(e){ console.error('Parse error:', e); }
+      }
+
+      // Merge onto catalog
+      items = Object.fromEntries(CATALOG.map(it=>{
+        const ex = cfg.items?.[it.id] ?? cfg.items?.[String(it.id)] ?? {};
+        return [it.id, { price: Number(ex.price ?? defaultPrice(it.id)), available: ex.available !== false }];
+      }));
+      serviceMode = (cfg.serviceMode === 'self_pickup') ? 'self_pickup' : 'counter';
+
+      els.lastLoaded.textContent = new Date().toLocaleString();
+      updateModeUI();
+      renderRows();
+      setDirty(false);
+    }
+
+    function defaultPrice(id){
+      const d = {102:3.5,202:4,203:3.5,204:3.5,205:4,206:5,207:4.5,208:4.5,209:5,210:4,301:3.5,302:4.5,
+                 401:4,402:4,403:4,404:4,405:3.5,406:3.5,407:4,408:4,409:4,410:4,411:4,412:4,413:4,414:4,415:4,416:5,501:3.5,502:4};
+      return d[id] ?? 0;
+    }
+
+    function updateModeUI(){
+      els.modeCounter.setAttribute('aria-pressed', String(serviceMode==='counter'));
+      els.modePickup.setAttribute('aria-pressed', String(serviceMode==='self_pickup'));
+      [els.modeCounter, els.modePickup].forEach(btn=>{
+        const on = btn.getAttribute('aria-pressed')==='true';
+        btn.style.background = on ? 'linear-gradient(145deg,#f26522,#ff7e29)' : 'transparent';
+        btn.style.color = on ? '#000' : '#faf7ef';
+      });
+    }
+
+    // ------- Save config (create or update) -------
+    async function saveConfig(){
+      const token = getAuth();
+      if(!token){ alert('Paste a GitHub token (fine-grained, contents read/write)'); return; }
+
+      const cfg = {
+        updatedAt: nowIso(),
+        serviceMode,
+        items: Object.fromEntries(CATALOG.map(it=>{
+          const row = document.querySelector(`tr[data-id="${it.id}"]`);
+          const price = Number(row.querySelector('input.price').value);
+          const available = row.querySelector('input.avail').checked;
+          return [it.id, { price, available }];
+        }))
+      };
+      const content = btoa(unescape(encodeURIComponent(JSON.stringify(cfg, null, 2))));
+      const body = {
+        message: `chore: update menu config ${nowIso()}`,
+        content,
+        branch: els.branch.value.trim()
+      };
+      if(fileSHA) body.sha = fileSHA; // needed when updating existing file
+
+      const res = await fetch(apiUrl(), {
+        method:'PUT',
+        headers:{
+          'Accept':'application/vnd.github+json',
+          'Authorization':'token '+token,
+          'Content-Type':'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+
+      if(!res.ok){
+        const txt = await res.text();
+        throw new Error(`Save failed: ${res.status} ${txt}`);
+      }
+      const out = await res.json();
+      fileSHA = out.content?.sha || null;
+      setDirty(false);
+      toast('Saved to GitHub');
+      els.lastLoaded.textContent = new Date().toLocaleString();
+    }
+
+    // ------- Events -------
+    els.reloadBtn.addEventListener('click', loadConfig);
+    els.saveBtn.addEventListener('click', async () => {
+  try {
+    await saveConfig();
+  } catch (err) {
+    console.error(err);
+    alert('Save failed: ' + (err?.message || err));
+  }
+});
+
+    els.openGitHub.addEventListener('click', ()=> window.open(repoUiUrl(), '_blank'));
+
+    els.search.addEventListener('input', renderRows);
+    els.showOnlyAvailable.addEventListener('change', renderRows);
+
+    document.querySelectorAll('[data-bulk]').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        const delta = Number(b.getAttribute('data-bulk'));
+        document.querySelectorAll('#rows tr').forEach(tr=>{
+          const inp = tr.querySelector('input.price');
+          inp.value = (Number(inp.value) + delta).toFixed(2);
+        });
+        setDirty(true);
+      });
+    });
+
+    els.rows.addEventListener('click', e=>{
+      const stepBtn = e.target.closest('[data-step]');
+      if(stepBtn){
+        const tr = e.target.closest('tr');
+        const inp = tr.querySelector('input.price');
+        const delta = Number(stepBtn.getAttribute('data-step'));
+        inp.value = (Number(inp.value) + delta).toFixed(2);
+        setDirty(true);
+      }
+    });
+    els.rows.addEventListener('input', e=>{
+      if(e.target.matches('input.price') || e.target.matches('input.avail')) setDirty(true);
+    });
+
+    els.modeCounter.addEventListener('click', ()=>{ serviceMode='counter'; updateModeUI(); setDirty(true); });
+    els.modePickup .addEventListener('click', ()=>{ serviceMode='self_pickup'; updateModeUI(); setDirty(true); });
+
+    [els.owner,els.repo,els.path,els.branch,els.token,els.remember].forEach(x=>x.addEventListener('change', saveLocal));
+
+    // PWA
+    if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js').catch(()=>{}); }
+
+    // Boot
+    loadLocal();
+    loadConfig().catch(err=>{
+      console.error(err);
+      alert('Could not load config. Check repo/branch/path and token (if the repo is private).');
+    });
+  </script>
+</body>
+</html>
