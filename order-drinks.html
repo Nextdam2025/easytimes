@@ -207,18 +207,16 @@
       0% { bottom: -100%; }
       100% { bottom: 230%; }
     }
-    .item.sold-out { opacity:.45; filter:grayscale(1); position:relative; pointer-events:none; }
-.item.sold-out::after {
-  content:"Sold out"; position:absolute; top:8px; right:8px;
-  background:#f26522; color:#000; font-weight:800; padding:4px 10px;
-  border-radius:10px; font-size:.95rem;
-}
 
+    /* Sold-out styles for live-config */
+    .item.sold-out { opacity:.45; filter:grayscale(1); position:relative; pointer-events:none; }
+    .item.sold-out::after {
+      content:"Sold out"; position:absolute; top:8px; right:8px;
+      background:#f26522; color:#000; font-weight:800; padding:4px 10px;
+      border-radius:10px; font-size:.95rem;
+    }
   </style>
 </head>
-<!-- Live config for prices/availability/service mode -->
-<script src="./live-config.js"></script>
-
 <body>
   <canvas id="particles" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-2;pointer-events:none;"></canvas>
   <!-- Background & Frame -->
@@ -252,44 +250,44 @@
 
   <!-- Hot Drinks -->
   <div class="menu-section active" id="hot">
-    <div class="item hot-drink" onclick="prepareOptions({name:'Espresso',articleNumber:102,price:3.50,options:[{name:'Whipped Cream',price:1},{name:'Extra Oatmilk',price:1},{name:'Syrup',price:1}]})"> <h3>Espresso</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Doppio',articleNumber:202,price:4.00,options:[{name:'Extra Oatmilk',price:1},{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})"> <h3>Doppio</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Black Coffee',articleNumber:203,price:3.50,options:[]})"> <h3>Black Coffee</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Americano',articleNumber:204,price:3.50,options:[]})"> <h3>Americano</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Cappuccino',articleNumber:205,price:4.00,options:[]})"> <h3>Cappuccino</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Flavored Latte',articleNumber:206,price:5.00,options:[{name:'Hazelnuts',price:0},{name:'Caramel',price:0}]})"> <h3>Flavored Latte</h3><p>€5.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Café Latte',articleNumber:207,price:4.50,options:[]})"> <h3>Café Latte</h3><p>€4.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Latte Macchiato',articleNumber:208,price:4.50,options:[{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})"> <h3>Latte Macchiato</h3><p>€4.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Coffee Mocca',articleNumber:209,price:5.00,options:[{name:'Extra Shot Espresso',price:1},{name:'Whipped Cream',price:1}]})"> <h3>Coffee Mocca</h3><p>€5.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Hot Chocolate',articleNumber:210,price:4.00,options:[{name:'Whipped Cream',price:1}]})"> <h3>Hot Chocolate</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Tea',articleNumber:301,price:3.50,options:[{name:'Extra Lemon',price:1},{name:'Extra Ginger',price:1},{name:'Orange Blossom',price:1},{name:'Louiza',price:1}]})"> <h3>Tea</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Fresh Mint Tea',articleNumber:302,price:4.50,options:[{name:'Extra Lemon',price:0.50},{name:'Extra Ginger',price:0.50},{name:'Extra Blossom',price:0.50},{name:'Louiza',price:0.50}]})"> <h3>Fresh Mint Tea</h3><p>€4.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Espresso',articleNumber:102,price:3.50,options:[{name:'Whipped Cream',price:1},{name:'Extra Oatmilk',price:1},{name:'Syrup',price:1}]})"> <h3>Espresso</h3><p class="price">€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Doppio',articleNumber:202,price:4.00,options:[{name:'Extra Oatmilk',price:1},{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})"> <h3>Doppio</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Black Coffee',articleNumber:203,price:3.50,options:[]})"> <h3>Black Coffee</h3><p class="price">€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Americano',articleNumber:204,price:3.50,options:[]})"> <h3>Americano</h3><p class="price">€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Cappuccino',articleNumber:205,price:4.00,options:[]})"> <h3>Cappuccino</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Flavored Latte',articleNumber:206,price:5.00,options:[{name:'Hazelnuts',price:0},{name:'Caramel',price:0}]})"> <h3>Flavored Latte</h3><p class="price">€5.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Café Latte',articleNumber:207,price:4.50,options:[]})"> <h3>Café Latte</h3><p class="price">€4.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Latte Macchiato',articleNumber:208,price:4.50,options:[{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})"> <h3>Latte Macchiato</h3><p class="price">€4.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Coffee Mocca',articleNumber:209,price:5.00,options:[{name:'Extra Shot Espresso',price:1},{name:'Whipped Cream',price:1}]})"> <h3>Coffee Mocca</h3><p class="price">€5.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Hot Chocolate',articleNumber:210,price:4.00,options:[{name:'Whipped Cream',price:1}]})"> <h3>Hot Chocolate</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Tea',articleNumber:301,price:3.50,options:[{name:'Extra Lemon',price:1},{name:'Extra Ginger',price:1},{name:'Orange Blossom',price:1},{name:'Louiza',price:1}]})"> <h3>Tea</h3><p class="price">€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Fresh Mint Tea',articleNumber:302,price:4.50,options:[{name:'Extra Lemon',price:0.50},{name:'Extra Ginger',price:0.50},{name:'Extra Blossom',price:0.50},{name:'Louiza',price:0.50}]})"> <h3>Fresh Mint Tea</h3><p class="price">€4.50</p><button>Add</button></div>
   </div>
 
   <!-- Cold Drinks -->
   <div class="menu-section" id="cold">
-    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola',articleNumber:401,price:4.00,options:[]})"> <h3>Coca-Cola</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola Zero',articleNumber:402,price:4.00,options:[]})"> <h3>Coca-Cola Zero</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Orange',articleNumber:403,price:4.00,options:[]})"> <h3>Fanta Orange</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Cassis',articleNumber:404,price:4.00,options:[]})"> <h3>Fanta Cassis</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Still Water',articleNumber:405,price:3.50,options:[]})"> <h3>Still Water</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Sparkling Water',articleNumber:406,price:3.50,options:[]})"> <h3>Sparkling Water</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Sprite',articleNumber:407,price:4.00,options:[]})"> <h3>Sprite</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Chocomel',articleNumber:408,price:4.00,options:[]})"> <h3>Chocomel</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Peach/Mango',articleNumber:409,price:4.00,options:[{name:'Peach',price:0},{name:'Mango',price:0}]})"> <h3>Iced Tea Peach/Mango</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Lemon Sparkling',articleNumber:410,price:4.00,options:[]})"> <h3>Iced Tea Lemon Sparkling</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Bitter Lemon',articleNumber:411,price:4.00,options:[]})"> <h3>Royal Bliss Bitter Lemon</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Ginger Ale',articleNumber:412,price:4.00,options:[]})"> <h3>Royal Bliss Ginger Ale</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Looza (Pear/Strawberry/Peach)',articleNumber:413,price:4.00,options:[{name:'Pear',price:0},{name:'Strawberry',price:0},{name:'Peach',price:0}]})"> <h3>Looza (Pear/Strawberry/Peach)</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Minute Maid Orange/Apple',articleNumber:414,price:4.00,options:[{name:'Orange',price:0},{name:'Apple',price:0}]})"> <h3>Minute Maid Orange/Apple</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'AA Energy Drink',articleNumber:415,price:4.00,options:[]})"> <h3>AA Energy Drink</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Red Bull',articleNumber:416,price:5.00,options:[]})"> <h3>Red Bull Energy Drink</h3><p>€5.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola',articleNumber:401,price:4.00,options:[]})"> <h3>Coca-Cola</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola Zero',articleNumber:402,price:4.00,options:[]})"> <h3>Coca-Cola Zero</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Orange',articleNumber:403,price:4.00,options:[]})"> <h3>Fanta Orange</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Cassis',articleNumber:404,price:4.00,options:[]})"> <h3>Fanta Cassis</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Still Water',articleNumber:405,price:3.50,options:[]})"> <h3>Still Water</h3><p class="price">€3.50</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Sparkling Water',articleNumber:406,price:3.50,options:[]})"> <h3>Sparkling Water</h3><p class="price">€3.50</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Sprite',articleNumber:407,price:4.00,options:[]})"> <h3>Sprite</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Chocomel',articleNumber:408,price:4.00,options:[]})"> <h3>Chocomel</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Peach/Mango',articleNumber:409,price:4.00,options:[{name:'Peach',price:0},{name:'Mango',price:0}]})"> <h3>Iced Tea Peach/Mango</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Lemon Sparkling',articleNumber:410,price:4.00,options:[]})"> <h3>Iced Tea Lemon Sparkling</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Bitter Lemon',articleNumber:411,price:4.00,options:[]})"> <h3>Royal Bliss Bitter Lemon</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Ginger Ale',articleNumber:412,price:4.00,options:[]})"> <h3>Royal Bliss Ginger Ale</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Looza (Pear/Strawberry/Peach)',articleNumber:413,price:4.00,options:[{name:'Pear',price:0},{name:'Strawberry',price:0},{name:'Peach',price:0}]})"> <h3>Looza (Pear/Strawberry/Peach)</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Minute Maid Orange/Apple',articleNumber:414,price:4.00,options:[{name:'Orange',price:0},{name:'Apple',price:0}]})"> <h3>Minute Maid Orange/Apple</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'AA Energy Drink',articleNumber:415,price:4.00,options:[]})"> <h3>AA Energy Drink</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Red Bull',articleNumber:416,price:5.00,options:[]})"> <h3>Red Bull Energy Drink</h3><p class="price">€5.00</p><button>Add</button></div>
   </div>
 
   <!-- Homemade Snacks -->
   <div class="menu-section" id="snacks">
-    <div class="item" onclick="prepareOptions({name:'Chocolate Chip Cookie',articleNumber:501,price:3.50,options:[]})"> <h3>Chocolate Chip Cookie</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item" onclick="prepareOptions({name:'Banana Cake',articleNumber:502,price:4.00,options:[]})"> <h3>Banana Cake</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item" onclick="prepareOptions({name:'Chocolate Chip Cookie',articleNumber:501,price:3.50,options:[]})"> <h3>Chocolate Chip Cookie</h3><p class="price">€3.50</p><button>Add</button></div>
+    <div class="item" onclick="prepareOptions({name:'Banana Cake',articleNumber:502,price:4.00,options:[]})"> <h3>Banana Cake</h3><p class="price">€4.00</p><button>Add</button></div>
   </div>
 
   <!-- Basket -->
@@ -405,7 +403,7 @@
 
     function submitOrder() {
       if (!orderList.length) { showNotification("No items in order!"); return; }
-      let txt = "🇎 New Order:\n";
+      let txt = "🇦 New Order:\n";
       orderList.forEach(it => {
         txt += `#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)})\n`;
         if (it.selectedOptions.length) txt += '  → ' + it.selectedOptions.map(o=>o.name).join(', ') + '\n';
