@@ -1,0 +1,41 @@
+{
+  "updatedAt": "2025-08-25T10:00:00Z",
+  "serviceMode": "counter", 
+  /* "counter" = no banner, "self_pickup" = show orange banner text 
+     and the “Self-Pickup Mode” line in your success message. */
+
+  "items": {
+    "102": { "price": 3.50, "available": true },   // Espresso
+    "202": { "price": 4.00, "available": true },   // Doppio
+    "203": { "price": 3.50, "available": true },   // Black Coffee
+    "204": { "price": 3.50, "available": true },   // Americano
+    "205": { "price": 4.00, "available": true },   // Cappuccino
+    "206": { "price": 5.00, "available": true },   // Flavored Latte
+    "207": { "price": 4.50, "available": true },   // Café Latte
+    "208": { "price": 4.50, "available": true },   // Latte Macchiato
+    "209": { "price": 5.00, "available": true },   // Coffee Mocca
+    "210": { "price": 4.00, "available": true },   // Hot Chocolate
+    "301": { "price": 3.50, "available": true },   // Tea
+    "302": { "price": 4.50, "available": true },   // Fresh Mint Tea
+
+    "401": { "price": 4.00, "available": true },   // Coca-Cola
+    "402": { "price": 4.00, "available": true },   // Coca-Cola Zero
+    "403": { "price": 4.00, "available": true },   // Fanta Orange
+    "404": { "price": 4.00, "available": true },   // Fanta Cassis
+    "405": { "price": 3.50, "available": true },   // Still Water
+    "406": { "price": 3.50, "available": true },   // Sparkling Water
+    "407": { "price": 4.00, "available": true },   // Sprite
+    "408": { "price": 4.00, "available": true },   // Chocomel
+    "409": { "price": 4.00, "available": true },   // Iced Tea Peach/Mango
+    "410": { "price": 4.00, "available": true },   // Iced Tea Lemon Sparkling
+    "411": { "price": 4.00, "available": true },   // Royal Bliss Bitter Lemon
+    "412": { "price": 4.00, "available": true },   // Royal Bliss Ginger Ale
+    "413": { "price": 4.00, "available": true },   // Looza (Pear/Strawberry/Peach)
+    "414": { "price": 4.00, "available": true },   // Minute Maid Orange/Apple
+    "415": { "price": 4.00, "available": true },   // AA Energy Drink
+    "416": { "price": 5.00, "available": true },   // Red Bull
+
+    "501": { "price": 3.50, "available": true },   // Chocolate Chip Cookie
+    "502": { "price": 4.00, "available": true }    // Banana Cake
+  }
+}
