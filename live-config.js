@@ -67,6 +67,9 @@
         serviceMode: json.serviceMode === "self_pickup" ? "self_pickup" : "counter",
         items: json.items || {}
       };
+       window.ET_CONFIG_URL = CONFIG_URL;
+console.log("[ET] Config fetched", CONFIG_URL, json.updatedAt || "(no timestamp)");
+
       applyConfig();
     } catch (e) {
       // console.debug("Config fetch error:", e);
