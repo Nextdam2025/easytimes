@@ -187,12 +187,16 @@
     #mini-cart .total { text-align:right; margin-top:.8em; font-weight:600; }
 
     /* Solo Mode Banner */
-    #soloModeBanner {
-      position:fixed; top:0; left:0; width:100%;
-      background:rgba(0,0,0,0.95); color:#FFA500;
-      text-align:center; padding:1em; display:none;
-      z-index:10000; border-bottom:4px solid #f26522;
-    }
+    #soloModeBanner{
+  position:fixed; top:0; left:0; width:100%;
+  background:rgba(0,0,0,0.95); color:#FFA500;
+  text-align:center; padding:1em; display:none;
+  z-index:10020;              /* was 10000 */
+  border-bottom:4px solid #f26522;
+}
+:root { --banner-offset: 0px; }
+body { padding-top: var(--banner-offset); }
+
 
     /* Star Wars Crawl */
     .starwars-crawl-wrapper {
@@ -562,19 +566,41 @@ document.addEventListener('DOMContentLoaded', reflowForBanner);
 window.addEventListener('resize', reflowForBanner);
 
 // after you set the banner display in toggleSoloMode():
+// --- Reserve space for the fixed banner so it doesn't cover the logo
+function reflowForBanner() {
+  const b = document.getElementById('soloModeBanner');
+  if (!b) return;
+  const visible = getComputedStyle(b).display !== 'none';
+  const h = visible ? b.getBoundingClientRect().height : 0;
+  document.body.style.setProperty('--banner-offset', (h ? h + 8 : 0) + 'px');
+}
+
+// Single, final version of toggleSoloMode
 function toggleSoloMode() {
   const on = !JSON.parse(localStorage.getItem("soloMode") || "false");
   localStorage.setItem("soloMode", on);
   document.getElementById("soloModeBanner").style.display = on ? "block" : "none";
-  reflowForBanner(); // <-- add this
+  reflowForBanner();
 }
 
-// if you set solo mode on startup:
+// On load, show banner if needed + reflow
 document.addEventListener("DOMContentLoaded", () => {
-  if (JSON.parse(localStorage.getItem("soloMode") || "false"))
+  if (JSON.parse(localStorage.getItem("soloMode") || "false")) {
     document.getElementById("soloModeBanner").style.display = "block";
-  reflowForBanner(); // <-- add this
+  }
+  reflowForBanner();
+
+  // Reflow whenever live-config toggles the banner (style/class changes)
+  const b = document.getElementById('soloModeBanner');
+  if (b) {
+    new MutationObserver(reflowForBanner)
+      .observe(b, { attributes: true, attributeFilter: ['style', 'class'] });
+  }
 });
+
+// Keep reflow in sync on resize
+window.addEventListener('resize', reflowForBanner);
+
 
   </script>
 
