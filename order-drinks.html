@@ -166,6 +166,14 @@
     }
 
     /* Mini-cart */
+    /* Bigger mini-cart text */
+#mini-cart { font-size: 1.2rem; }          /* everything inside */
+#mini-cart h3 { font-size: 1.4rem; }
+#mini-cart li, #mini-cart .total { font-size: 1.2rem; }
+
+/* Bigger self-pickup banner text */
+#soloModeBanner { font-size: 2rem; font-weight: 800; letter-spacing: .02em; }
+
     #mini-cart {
       position:fixed; bottom:20px; right:20px;
       background:rgba(20,20,20,.95); border:3px solid #f26522;
@@ -530,7 +538,8 @@
   </script>
 
   <!-- Live config must load AFTER your main JS so it can wrap prepareOptions -->
-  <script src="./live-config.js"></script>
+  <script src="./live-config.js?v=2"></script>
+
 </body>
 </html>
 
