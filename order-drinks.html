@@ -223,6 +223,9 @@
       background:#f26522; color:#000; font-weight:800; padding:4px 10px;
       border-radius:10px; font-size:.95rem;
     }
+    :root { --banner-offset: 0px; }   /* updated by JS */
+body { padding-top: var(--banner-offset); }
+
   </style>
 </head>
 <body>
@@ -406,7 +409,7 @@
       });
       document.getElementById("totalPrice").innerText = orderList.reduce((s,x) => s + x.totalPrice, 0).toFixed(2);
     }
-
+    
     function removeFromOrder(idx) { orderList.splice(idx,1); updateOrderList(); updateMiniCart(); }
 
     function submitOrder() {
