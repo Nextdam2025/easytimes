@@ -207,6 +207,13 @@
       0% { bottom: -100%; }
       100% { bottom: 230%; }
     }
+    .item.sold-out { opacity:.45; filter:grayscale(1); position:relative; pointer-events:none; }
+.item.sold-out::after {
+  content:"Sold out"; position:absolute; top:8px; right:8px;
+  background:#f26522; color:#000; font-weight:800; padding:4px 10px;
+  border-radius:10px; font-size:.95rem;
+}
+
   </style>
 </head>
   // in live-config.js
