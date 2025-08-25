@@ -10,8 +10,6 @@
 
 (() => {
   // —— Pick where your config.json lives:
-  // Option A (separate live repo):
-  // const CONFIG_URL = "https://raw.githubusercontent.com/Nextdam2025/easytimes-live/main/config.json";
 
   // Option B (existing repo, e.g. /data/config.json):
   const CONFIG_URL = "https://raw.githubusercontent.com/Nextdam2025/easytimes/main/data/config.json";
