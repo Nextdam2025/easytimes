@@ -269,7 +269,7 @@
     async function loadConfig(){
       fileSHA = null;
       const headers = { 'Accept':'application/vnd.github+json' };
-      f (getAuth()) headers['Authorization'] = 'Bearer ' + getAuth();
+      if (getAuth()) headers['Authorization'] = 'Bearer ' + getAuth();
 
       const res = await fetch(apiUrl(), { headers });
       if(res.status === 404){
@@ -428,3 +428,4 @@
   </script>
 </body>
 </html>
+
