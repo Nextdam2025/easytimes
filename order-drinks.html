@@ -120,7 +120,7 @@
     }
     #slideshow-container .overlay-msg {
       position:absolute; top:50%; left:50%;
-      transform:translate(-50%,-50%);
+      transform:translate(-50%, -50%);
       color:#FFA500; font-size:2rem; font-weight:bold;
       text-shadow:0 0 8px black;
     }
@@ -166,13 +166,12 @@
     }
 
     /* Mini-cart */
-    /* Bigger mini-cart text */
-#mini-cart { font-size: 1.2rem; }          /* everything inside */
-#mini-cart h3 { font-size: 1.4rem; }
-#mini-cart li, #mini-cart .total { font-size: 1.2rem; }
+    #mini-cart { font-size: 1.2rem; }
+    #mini-cart h3 { font-size: 1.4rem; }
+    #mini-cart li, #mini-cart .total { font-size: 1.2rem; }
 
-/* Bigger self-pickup banner text */
-#soloModeBanner { font-size: 1.5rem; font-weight: 800; letter-spacing: .02em; }
+    /* Bigger self-pickup banner text */
+    #soloModeBanner { font-size: 1.5rem; font-weight: 800; letter-spacing: .02em; }
 
     #mini-cart {
       position:fixed; bottom:20px; right:20px;
@@ -188,12 +187,12 @@
 
     /* Solo Mode Banner */
     #soloModeBanner{
-  position:fixed; top:0; left:0; width:100%;
-  background:rgba(0,0,0,0.95); color:#FFA500;
-  text-align:center; padding:1em; display:none;
-  z-index:10020;              /* was 10000 */
-  border-bottom:4px solid #f26522;
-}
+      position:fixed; top:0; left:0; width:100%;
+      background:rgba(0,0,0,0.95); color:#FFA500;
+      text-align:center; padding:1em; display:none;
+      z-index:10020;
+      border-bottom:4px solid #f26522;
+    }
 
     /* Star Wars Crawl */
     .starwars-crawl-wrapper {
@@ -224,13 +223,13 @@
       background:#f26522; color:#000; font-weight:800; padding:4px 10px;
       border-radius:10px; font-size:.95rem;
     }
-    :root { --banner-offset: 0px; }   /* updated by JS */
-body { padding-top: var(--banner-offset); }
-
+    :root { --banner-offset: 0px; }
+    body { padding-top: var(--banner-offset); }
   </style>
 </head>
 <body>
   <canvas id="particles" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-2;pointer-events:none;"></canvas>
+
   <!-- Background & Frame -->
   <video autoplay class="bg-video" loop muted playsinline>
     <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4"/>
@@ -286,14 +285,41 @@ body { padding-top: var(--banner-offset); }
     <div class="item cold-drink" onclick="prepareOptions({name:'Sparkling Water',articleNumber:406,price:3.50,options:[]})"> <h3>Sparkling Water</h3><p class="price">€3.50</p><button>Add</button></div>
     <div class="item cold-drink" onclick="prepareOptions({name:'Sprite',articleNumber:407,price:4.00,options:[]})"> <h3>Sprite</h3><p class="price">€4.00</p><button>Add</button></div>
     <div class="item cold-drink" onclick="prepareOptions({name:'Chocomel',articleNumber:408,price:4.00,options:[]})"> <h3>Chocomel</h3><p class="price">€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Peach/Mango',articleNumber:409,price:4.00,options:[{name:'Peach',price:0},{name:'Mango',price:0}]})"> <h3>Iced Tea Peach/Mango</h3><p class="price">€4.00</p><button>Add</button></div>
+
+    <!-- Iced Tea changed to one-of variants -->
+    <div class="item cold-drink" onclick="prepareOptions({
+      name:'Iced Tea',
+      articleNumber:409,
+      price:4.00,
+      variants:{ group:'Flavor', type:'oneOf', choices:[
+        {label:'Peach', articleNumber:4091, priceDelta:0},
+        {label:'Mango', articleNumber:4092, priceDelta:0}
+      ]},
+      options:[]
+    })">
+      <h3>Iced Tea (Peach/Mango)</h3><p class="price">€4.00</p><button>Add</button>
+    </div>
+
     <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Lemon Sparkling',articleNumber:410,price:4.00,options:[]})"> <h3>Iced Tea Lemon Sparkling</h3><p class="price">€4.00</p><button>Add</button></div>
     <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Bitter Lemon',articleNumber:411,price:4.00,options:[]})"> <h3>Royal Bliss Bitter Lemon</h3><p class="price">€4.00</p><button>Add</button></div>
     <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Tonic',articleNumber:412,price:4.00,options:[]})"> <h3>Royal Bliss Tonic</h3><p class="price">€4.00</p><button>Add</button></div>
     <div class="item cold-drink" onclick="prepareOptions({name:'Looza (Pear/Strawberry/Peach)',articleNumber:413,price:4.00,options:[{name:'Pear',price:0},{name:'Strawberry',price:0},{name:'Peach',price:0}]})"> <h3>Looza (Pear/Strawberry/Peach)</h3><p class="price">€4.00</p><button>Add</button></div>
     <div class="item cold-drink" onclick="prepareOptions({name:'Minute Maid Orange/Apple',articleNumber:414,price:4.00,options:[{name:'Orange',price:0},{name:'Apple',price:0}]})"> <h3>Minute Maid Orange/Apple</h3><p class="price">€4.00</p><button>Add</button></div>
     <div class="item cold-drink" onclick="prepareOptions({name:'AA Energy Drink',articleNumber:415,price:4.00,options:[]})"> <h3>AA Energy Drink</h3><p class="price">€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Red Bull',articleNumber:416,price:5.00,options:[{name:'Light',price:0.00}]})"> <h3>Red Bull Energy Drink</h3><p class="price">€5.00</p><button>Add</button></div>
+
+    <!-- Red Bull changed to one-of variants (Regular vs Light/Sugarfree) -->
+    <div class="item cold-drink" onclick="prepareOptions({
+      name:'Red Bull Energy Drink',
+      articleNumber:416,
+      price:5.00,
+      variants:{ group:'Choose type', type:'oneOf', choices:[
+        {label:'Regular', articleNumber:416, priceDelta:0},
+        {label:'Light (Sugarfree)', articleNumber:417, priceDelta:0}
+      ]},
+      options:[]
+    })">
+      <h3>Red Bull Energy Drink</h3><p class="price">€5.00</p><button>Add</button>
+    </div>
   </div>
 
   <!-- Homemade Snacks -->
@@ -374,41 +400,84 @@ body { padding-top: var(--banner-offset); }
     const botToken = "7627172769:AAH7I_2LRd0VqZuMOpVxRn_vZbt4QXPn9wU", chatId = "5462781265";
     let orderList = [], selectedArticle = null;
 
-    function showNotification(msg, ms = 8000) { // default: 8s
-  const n = document.getElementById("notification");
-  n.innerHTML = msg + '<div style="margin-top:.6em;font-size:1rem;opacity:.9">Tap to close</div>';
-  n.classList.add("show");
+    function showNotification(msg, ms = 8000) {
+      const n = document.getElementById("notification");
+      n.innerHTML = msg + '<div style="margin-top:.6em;font-size:1rem;opacity:.9">Tap to close</div>';
+      n.classList.add("show");
+      clearTimeout(n._hideTO);
+      n.onclick = () => { n.classList.remove("show"); clearTimeout(n._hideTO); n.onclick = null; };
+      n._hideTO = setTimeout(() => { n.classList.remove("show"); n.onclick = null; }, ms);
+    }
 
-  // allow manual dismiss
-  clearTimeout(n._hideTO);
-  n.onclick = () => { n.classList.remove("show"); clearTimeout(n._hideTO); n.onclick = null; };
-
-  // auto-hide after ms
-  n._hideTO = setTimeout(() => {
-    n.classList.remove("show");
-    n.onclick = null;
-  }, ms);
-}
-
+    /* ========== VARIANTS SUPPORT (one-of) ========== */
+    function renderVariantsIfAny(article) {
+      const box = document.getElementById("optionList");
+      if (!article.variants || article.variants.type !== 'oneOf') return;
+      const g = document.createElement('div');
+      g.style.margin = '0 0 0.8em 0';
+      const title = document.createElement('div');
+      title.style.margin = '0 0 0.4em 0';
+      title.style.fontWeight = '700';
+      title.textContent = article.variants.group || 'Variant';
+      g.appendChild(title);
+      article.variants.choices.forEach((c, idx) => {
+        const lbl = document.createElement("label");
+        lbl.style.display = "block";
+        lbl.innerHTML = `
+          <input type="radio" name="variantOneOf" value="${idx}" ${idx===0?'checked':''}>
+          ${c.label} ${c.priceDelta ? `(+€${c.priceDelta.toFixed(2)})` : ''}
+        `;
+        g.appendChild(lbl);
+      });
+      box.appendChild(g);
+    }
 
     function prepareOptions(article) {
       selectedArticle = article;
       document.getElementById("optionTitle").innerText = `Options for ${article.name}`;
       const optList = document.getElementById("optionList"); optList.innerHTML = "";
-      article.options.forEach((o,i) => {
+
+      // 1) Variants (radio)
+      renderVariantsIfAny(article);
+
+      // 2) Regular add-ons (checkboxes)
+      (article.options || []).forEach((o,i) => {
         const lbl = document.createElement("label");
         lbl.innerHTML = `<input type="checkbox" data-index="${i}"> ${o.name} (+€${o.price.toFixed(2)})`;
         optList.appendChild(lbl);
       });
+
       document.getElementById("optionModal").style.display = "flex";
     }
 
     function confirmOptions() {
       let extra = 0, chosen = [];
-      document.querySelectorAll("#optionList input").forEach(cb => {
-        if (cb.checked) { const o = selectedArticle.options[cb.dataset.index]; chosen.push(o); extra += o.price; }
+      // Add-ons
+      document.querySelectorAll("#optionList input[type='checkbox']").forEach(cb => {
+        if (cb.checked) {
+          const o = selectedArticle.options[cb.dataset.index];
+          chosen.push(o);
+          extra += o.price;
+        }
       });
-      orderList.push({ ...selectedArticle, selectedOptions: chosen, totalPrice: selectedArticle.price + extra });
+      // Variant
+      let variantLabel = null, variantAN = selectedArticle.articleNumber, variantDelta = 0;
+      const sel = document.querySelector("#optionList input[name='variantOneOf']:checked");
+      if (sel && selectedArticle.variants && selectedArticle.variants.choices[+sel.value]) {
+        const v = selectedArticle.variants.choices[+sel.value];
+        variantLabel = v.label;
+        variantAN = v.articleNumber || variantAN;
+        variantDelta = v.priceDelta || 0;
+      }
+      const finalName = variantLabel ? `${selectedArticle.name} – ${variantLabel}` : selectedArticle.name;
+      const total = (selectedArticle.price + variantDelta + extra);
+      orderList.push({
+        ...selectedArticle,
+        name: finalName,
+        articleNumber: variantAN,
+        selectedOptions: chosen,
+        totalPrice: total
+      });
       updateOrderList(); updateMiniCart(); closeModal();
     }
 
@@ -421,7 +490,6 @@ body { padding-top: var(--banner-offset); }
       });
       document.getElementById("totalPrice").innerText = orderList.reduce((s,x) => s + x.totalPrice, 0).toFixed(2);
     }
-    
     function removeFromOrder(idx) { orderList.splice(idx,1); updateOrderList(); updateMiniCart(); }
 
     function submitOrder() {
@@ -429,7 +497,8 @@ body { padding-top: var(--banner-offset); }
       let txt = "🇦 New Order:\n";
       orderList.forEach(it => {
         txt += `#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)})\n`;
-        if (it.selectedOptions.length) txt += '  → ' + it.selectedOptions.map(o=>o.name).join(', ') + '\n';
+        if (it.selectedOptions && it.selectedOptions.length)
+          txt += '  → ' + it.selectedOptions.map(o=>o.name).join(', ') + '\n';
       });
       fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(txt)}`)
         .then(r => r.json()).then(d => {
@@ -517,7 +586,7 @@ body { padding-top: var(--banner-offset); }
     vf.style.position = "relative";
 
     const vid = document.createElement("video");
-    vid.id = "slideshowVideoOverlay"; /* renamed to avoid duplicate ID */
+    vid.id = "slideshowVideoOverlay";
     vid.muted = true;
     vid.autoplay = true;
     vid.playsInline = true;
@@ -550,46 +619,31 @@ body { padding-top: var(--banner-offset); }
       const allItems = [...document.querySelectorAll('.item')];
       allItems[Math.floor(Math.random() * allItems.length)].click();
     }
+
     // Reserve space for the fixed banner so it doesn't cover the logo
+    function reflowForBanner() {
+      const b = document.getElementById('soloModeBanner');
+      if (!b) return;
+      const visible = getComputedStyle(b).display !== 'none';
+      const h = visible ? b.getBoundingClientRect().height : 0;
+      document.body.style.setProperty('--banner-offset', (h ? h + 8 : 0) + 'px');
+    }
 
-
-// after you set the banner display in toggleSoloMode():
-// --- Reserve space for the fixed banner so it doesn't cover the logo
-function reflowForBanner() {
-  const b = document.getElementById('soloModeBanner');
-  if (!b) return;
-  const visible = getComputedStyle(b).display !== 'none';
-  const h = visible ? b.getBoundingClientRect().height : 0;
-  document.body.style.setProperty('--banner-offset', (h ? h + 8 : 0) + 'px');
-}
-
-// On load, show banner if needed + reflow
-document.addEventListener("DOMContentLoaded", () => {
-  if (JSON.parse(localStorage.getItem("soloMode") || "false")) {
-    document.getElementById("soloModeBanner").style.display = "block";
-  }
-  reflowForBanner();
-
-  // Reflow whenever live-config toggles the banner (style/class changes)
-  const b = document.getElementById('soloModeBanner');
-  if (b) {
-    new MutationObserver(reflowForBanner)
-      .observe(b, { attributes: true, attributeFilter: ['style', 'class'] });
-  }
-});
-
-// Keep reflow in sync on resize
-window.addEventListener('resize', reflowForBanner);
-
-
+    document.addEventListener("DOMContentLoaded", () => {
+      if (JSON.parse(localStorage.getItem("soloMode") || "false")) {
+        document.getElementById("soloModeBanner").style.display = "block";
+      }
+      reflowForBanner();
+      const b = document.getElementById('soloModeBanner');
+      if (b) {
+        new MutationObserver(reflowForBanner)
+          .observe(b, { attributes: true, attributeFilter: ['style', 'class'] });
+      }
+    });
+    window.addEventListener('resize', reflowForBanner);
   </script>
 
   <!-- Live config must load AFTER your main JS so it can wrap prepareOptions -->
   <script src="./live-config.js?v=2"></script>
-
 </body>
 </html>
-
-
-
-
