@@ -507,9 +507,9 @@
             const extraMsg = isSolo
               ? "<br><strong>Self-Pickup Mode:</strong> Please collect your drinks downstairs."
               : "";
-            showNotification("✅ Order sent!" + extraMsg);
+            showNotification("✅ Order sent!" + extraMsg, 15000);
             orderList = []; updateOrderList(); updateMiniCart();
-            setTimeout(() => location.href = "index.html", 8000);
+            setTimeout(() => location.href = "index.html", 10000);
           }
         });
     }
