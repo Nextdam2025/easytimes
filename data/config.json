@@ -1,126 +1,45 @@
 {
-  "updatedAt": "2025-08-25T16:25:15.734Z",
+  "updatedAt": "2025-08-26T09:30:00.000Z",
   "serviceMode": "self_pickup",
   "items": {
-    "102": {
-      "price": 3.5,
-      "available": true
-    },
-    "202": {
-      "price": 4,
-      "available": true
-    },
-    "203": {
-      "price": 3.5,
-      "available": true
-    },
-    "204": {
-      "price": 3.5,
-      "available": true
-    },
-    "205": {
-      "price": 4,
-      "available": true
-    },
-    "206": {
-      "price": 5,
-      "available": true
-    },
-    "207": {
-      "price": 4.5,
-      "available": true
-    },
-    "208": {
-      "price": 4.5,
-      "available": true
-    },
-    "209": {
-      "price": 5,
-      "available": true
-    },
-    "210": {
-      "price": 4,
-      "available": true
-    },
-    "301": {
-      "price": 3.5,
-      "available": true
-    },
-    "302": {
-      "price": 4.5,
-      "available": true
-    },
-    "401": {
-      "price": 4,
-      "available": true
-    },
-    "402": {
-      "price": 4,
-      "available": true
-    },
-    "403": {
-      "price": 4,
-      "available": true
-    },
-    "404": {
-      "price": 4,
-      "available": true
-    },
-    "405": {
-      "price": 3.5,
-      "available": true
-    },
-    "406": {
-      "price": 3.5,
-      "available": true
-    },
-    "407": {
-      "price": 4,
-      "available": true
-    },
-    "408": {
-      "price": 4,
-      "available": true
-    },
-    "409": {
-      "price": 4,
-      "available": true
-    },
-    "410": {
-      "price": 4,
-      "available": true
-    },
-    "411": {
-      "price": 4,
-      "available": true
-    },
-    "412": {
-      "price": 4,
-      "available": true
-    },
-    "413": {
-      "price": 4,
-      "available": true
-    },
-    "414": {
-      "price": 4,
-      "available": true
-    },
-    "415": {
-      "price": 4,
-      "available": true
-    },
-    "416": {
-      "price": 5,
-      "available": true
-    },
-    "501": {
-      "price": 3.5,
-      "available": true
-    },
-    "502": {
-      "price": 4,
-      "available": true
-    }
+    "102": { "price": 3.5, "available": true },
+    "202": { "price": 4, "available": true },
+    "203": { "price": 3.5, "available": true },
+    "204": { "price": 3.5, "available": true },
+    "205": { "price": 4, "available": true },
+    "206": { "price": 5, "available": true },
+    "207": { "price": 4.5, "available": true },
+    "208": { "price": 4.5, "available": true },
+    "209": { "price": 5, "available": true },
+    "210": { "price": 4, "available": true },
+    "301": { "price": 3.5, "available": true },
+    "302": { "price": 4.5, "available": true },
+
+    "401": { "price": 4, "available": true },
+    "402": { "price": 4, "available": true },
+    "403": { "price": 4, "available": true },
+    "404": { "price": 4, "available": true },
+    "405": { "price": 3.5, "available": true },
+    "406": { "price": 3.5, "available": true },
+    "407": { "price": 4, "available": true },
+    "408": { "price": 4, "available": true },
+
+    /* Iced Tea variants (replaces old 409) */
+    "4091": { "price": 4, "available": true },  /* Peach  */
+    "4092": { "price": 4, "available": true },  /* Mango  */
+
+    "410": { "price": 4, "available": true },
+    "411": { "price": 4, "available": true },
+    "412": { "price": 4, "available": true },
+    "413": { "price": 4, "available": true },
+    "414": { "price": 4, "available": true },
+    "415": { "price": 4, "available": true },
+
+    /* Red Bull variants */
+    "416": { "price": 5, "available": true },   /* Regular */
+    "417": { "price": 5, "available": true },   /* Light / Sugarfree */
+
+    "501": { "price": 3.5, "available": true },
+    "502": { "price": 4, "available": true }
   }
 }
