@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-08-28T06:11:54.080Z",
+  "updatedAt": "2025-08-28T09:37:29.899Z",
   "serviceMode": "self_pickup",
   "catalog": [
     {
@@ -34,7 +34,7 @@
     },
     {
       "id": 207,
-      "name": "Café Latte",
+      "name": "CafÃ© Latte",
       "cat": "Hot"
     },
     {
