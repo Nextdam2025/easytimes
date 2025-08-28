@@ -1,7 +1,12 @@
 {
-  "updatedAt": "2025-08-28T09:37:29.899Z",
+  "updatedAt": "2025-08-28T12:09:39.794Z",
   "serviceMode": "self_pickup",
   "catalog": [
+    {
+      "id": 101,
+      "name": "Test",
+      "cat": "Hot"
+    },
     {
       "id": 102,
       "name": "Espresso",
@@ -34,7 +39,7 @@
     },
     {
       "id": 207,
-      "name": "CafÃ© Latte",
+      "name": "CafÃÂ© Latte",
       "cat": "Hot"
     },
     {
@@ -154,6 +159,10 @@
     }
   ],
   "items": {
+    "101": {
+      "price": 4,
+      "available": true
+    },
     "102": {
       "price": 3.5,
       "available": true
