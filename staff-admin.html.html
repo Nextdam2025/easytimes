@@ -165,6 +165,36 @@
       </div>
     </div>
   </div>
+// map 'Hot'/'Cold'/'Snacks' -> 'hot'|'cold'|'snacks'
+const catToId = c => ({ Hot:'hot', Cold:'cold', Snacks:'snacks' }[c] || 'cold');
+const idToCat = id => ({ hot:'Hot', cold:'Cold', snacks:'Snacks' }[id] || 'Cold');
+
+function legacyFromArticles(articles){
+  const catalog = articles.map(a => ({
+    id: Number(a.sku ?? a.id),
+    name: a.name,
+    cat: idToCat(a.categoryId || 'cold')
+  }));
+  const items = Object.fromEntries(articles.map(a => {
+    const id = String(a.sku ?? a.id);
+    return [id, { price: Number(a.price || 0), available: a.active !== false }];
+  }));
+  return { catalog, items };
+}
+
+function articlesFromLegacy(catalog, items){
+  return catalog.map(it => ({
+    id: String(it.id),
+    sku: Number(it.id),
+    name: it.name,
+    price: Number(items?.[it.id]?.price ?? 0),
+    active: items?.[it.id]?.available !== false,
+    categoryId: catToId(it.cat),
+    sort: Number(it.id),
+    options: [],
+    variants: null
+  }));
+}
 
   <!-- SINGLE, valid module (original flow) -->
   <script type="module">
@@ -526,3 +556,4 @@
   </script>
 </body>
 </html>
+
