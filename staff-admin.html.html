@@ -168,6 +168,59 @@
   </div>
 
   <script>
+    <script type="module">
+  import { getConfig, saveConfig, addArticle, updateArticle, removeArticle, subscribeConfig } from '/js/live-config.js';
+
+  let cfg = await getConfig();
+
+  // reflect to UI
+  subscribeConfig(next => {
+    cfg = structuredClone(next);
+    renderArticles(cfg.articles);
+  });
+
+  // Add
+  document.querySelector('#btnAdd').addEventListener('click', () => {
+    const fields = readForm(); // build from your inputs
+    addArticle(fields);
+    renderArticles(cfg.articles);
+  });
+
+  // Update (price/name/etc.)
+  function onInlineEdit(id, patch) {
+    updateArticle(id, patch);
+  }
+
+  // Remove
+  function onRemove(id) {
+    removeArticle(id);
+    renderArticles(cfg.articles);
+  }
+
+  // Save
+  document.querySelector('#btnSave').addEventListener('click', async () => {
+    // bump version & times locally before sending
+    const next = {
+      ...cfg,
+      version: cfg.version + 1,
+      updatedAt: new Date().toISOString(),
+      updatedBy: "staff-admin"
+    };
+
+    const result = await saveConfig(next, { expectedVersion: cfg.version });
+
+    if (!result.ok && result.reason === "version-conflict") {
+      // someone else saved → show message and allow merge
+      showToast("⚠️ Config changed in another tab. Reloading latest…");
+      cfg = result.latest;
+      renderArticles(cfg.articles);
+      return;
+    }
+
+    showToast("✅ Saved");
+  });
+</script>
+
     // ------- Base (original catalog kept for boot/back-compat) -------
     const DEFAULT_CATALOG = [
       { id:102, name:'Espresso', cat:'Hot' },
@@ -523,3 +576,4 @@
   </script>
 </body>
 </html>
+
