@@ -1,13 +1,287 @@
 {
-  "schema": 1,
-  "version": 1,
-  "updatedAt": "2025-08-29T10:00:00.000Z",
-  "updatedBy": "bootstrap",
-  "serviceMode": "counter",
-  "categories": [
-    { "id": "hot",    "title": "Hot Drinks",      "order": 1 },
-    { "id": "cold",   "title": "Cold Drinks",     "order": 2 },
-    { "id": "snacks", "title": "Homemade Snacks", "order": 3 }
+  "updatedAt": "2025-08-29T10:28:16.420Z",
+  "serviceMode": "self_pickup",
+  "catalog": [
+    {
+      "id": 101,
+      "name": "Test",
+      "cat": "Hot"
+    },
+    {
+      "id": 102,
+      "name": "Espresso",
+      "cat": "Hot"
+    },
+    {
+      "id": 202,
+      "name": "Doppio",
+      "cat": "Hot"
+    },
+    {
+      "id": 203,
+      "name": "Black Coffee",
+      "cat": "Hot"
+    },
+    {
+      "id": 204,
+      "name": "Americano",
+      "cat": "Hot"
+    },
+    {
+      "id": 205,
+      "name": "Cappuccino",
+      "cat": "Hot"
+    },
+    {
+      "id": 206,
+      "name": "Flavored Latte",
+      "cat": "Hot"
+    },
+    {
+      "id": 207,
+      "name": "Café Latte",
+      "cat": "Hot"
+    },
+    {
+      "id": 208,
+      "name": "Latte Macchiato",
+      "cat": "Hot"
+    },
+    {
+      "id": 209,
+      "name": "Coffee Mocca",
+      "cat": "Hot"
+    },
+    {
+      "id": 210,
+      "name": "Hot Chocolate",
+      "cat": "Hot"
+    },
+    {
+      "id": 301,
+      "name": "Tea",
+      "cat": "Hot"
+    },
+    {
+      "id": 302,
+      "name": "Fresh Mint Tea",
+      "cat": "Hot"
+    },
+    {
+      "id": 401,
+      "name": "Coca-Cola",
+      "cat": "Cold"
+    },
+    {
+      "id": 402,
+      "name": "Coca-Cola Zero",
+      "cat": "Cold"
+    },
+    {
+      "id": 403,
+      "name": "Fanta Orange",
+      "cat": "Cold"
+    },
+    {
+      "id": 404,
+      "name": "Fanta Cassis",
+      "cat": "Cold"
+    },
+    {
+      "id": 405,
+      "name": "Still Water",
+      "cat": "Cold"
+    },
+    {
+      "id": 406,
+      "name": "Sparkling Water",
+      "cat": "Cold"
+    },
+    {
+      "id": 407,
+      "name": "Sprite",
+      "cat": "Cold"
+    },
+    {
+      "id": 408,
+      "name": "Chocomel",
+      "cat": "Cold"
+    },
+    {
+      "id": 409,
+      "name": "Iced Tea Peach/Mango",
+      "cat": "Cold"
+    },
+    {
+      "id": 410,
+      "name": "Iced Tea Lemon Sparkling",
+      "cat": "Cold"
+    },
+    {
+      "id": 411,
+      "name": "Royal Bliss Bitter Lemon",
+      "cat": "Cold"
+    },
+    {
+      "id": 412,
+      "name": "Royal Bliss Ginger Ale",
+      "cat": "Cold"
+    },
+    {
+      "id": 413,
+      "name": "Looza (Pear/Strawberry/Peach)",
+      "cat": "Cold"
+    },
+    {
+      "id": 414,
+      "name": "Minute Maid Orange/Apple",
+      "cat": "Cold"
+    },
+    {
+      "id": 415,
+      "name": "AA Energy Drink",
+      "cat": "Cold"
+    },
+    {
+      "id": 416,
+      "name": "Red Bull",
+      "cat": "Cold"
+    },
+    {
+      "id": 501,
+      "name": "Chocolate Chip Cookie",
+      "cat": "Snacks"
+    },
+    {
+      "id": 502,
+      "name": "Banana Cake",
+      "cat": "Snacks"
+    }
   ],
-  "articles": []
+  "items": {
+    "101": {
+      "price": 4,
+      "available": true
+    },
+    "102": {
+      "price": 3.5,
+      "available": true
+    },
+    "202": {
+      "price": 4,
+      "available": true
+    },
+    "203": {
+      "price": 3.5,
+      "available": true
+    },
+    "204": {
+      "price": 3.5,
+      "available": true
+    },
+    "205": {
+      "price": 4,
+      "available": true
+    },
+    "206": {
+      "price": 5,
+      "available": true
+    },
+    "207": {
+      "price": 4.5,
+      "available": true
+    },
+    "208": {
+      "price": 4.5,
+      "available": true
+    },
+    "209": {
+      "price": 5,
+      "available": true
+    },
+    "210": {
+      "price": 4,
+      "available": true
+    },
+    "301": {
+      "price": 3.5,
+      "available": true
+    },
+    "302": {
+      "price": 4.5,
+      "available": true
+    },
+    "401": {
+      "price": 4,
+      "available": true
+    },
+    "402": {
+      "price": 4,
+      "available": true
+    },
+    "403": {
+      "price": 4,
+      "available": true
+    },
+    "404": {
+      "price": 4,
+      "available": true
+    },
+    "405": {
+      "price": 3.5,
+      "available": true
+    },
+    "406": {
+      "price": 3.5,
+      "available": true
+    },
+    "407": {
+      "price": 4,
+      "available": true
+    },
+    "408": {
+      "price": 4,
+      "available": true
+    },
+    "409": {
+      "price": 4,
+      "available": true
+    },
+    "410": {
+      "price": 4,
+      "available": true
+    },
+    "411": {
+      "price": 4,
+      "available": true
+    },
+    "412": {
+      "price": 4,
+      "available": true
+    },
+    "413": {
+      "price": 4,
+      "available": true
+    },
+    "414": {
+      "price": 4,
+      "available": true
+    },
+    "415": {
+      "price": 4,
+      "available": true
+    },
+    "416": {
+      "price": 5,
+      "available": true
+    },
+    "501": {
+      "price": 3.5,
+      "available": true
+    },
+    "502": {
+      "price": 4,
+      "available": true
+    }
+  }
 }
