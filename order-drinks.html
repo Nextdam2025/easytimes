@@ -396,16 +396,9 @@
   <div id="soloModeBanner" style="display:none;">Self Pickup Mode: Please collect your drinks downstairs after ordering.</div>
 
   <!-- JS Logic -->
-  <script type="module">
+  
+<script type="module">
   import { getConfig, subscribeConfig } from './live-config.js';
-
-  let cfg = await getConfig();
-  renderAll(cfg);
-
-  subscribeConfig(next => {
-    cfg = next;
-    renderAll(cfg);
-  });
 
   // Map categoryId -> section element id and item styling class
   const CAT = {
@@ -414,10 +407,16 @@
     snacks: { el: 'snacks', cls: '' }
   };
 
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, m => (
+      {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]
+    ));
+  }
+
   function renderAll(cfg) {
     const groups = {};
     (cfg.articles || []).forEach(a => {
-      if (a.active === false) return; // hidden items
+      if (a.active === false) return;
       const cat = a.categoryId || 'cold';
       (groups[cat] ||= []).push(a);
     });
@@ -434,10 +433,8 @@
           articleNumber: a.sku || a.id,
           price: Number(a.price || 0),
           options: a.options || [],
-          // Optional variants support if you put a `variants` field in config
           variants: a.variants || null
         };
-        // safely embed a JS object in inline handler
         const data = JSON.stringify(payload).replace(/</g,'\\u003c');
         return `
           <div class="${cls}" ${soldOut ? 'style="pointer-events:none;opacity:.45;filter:grayscale(1)"' : ''}
@@ -450,14 +447,30 @@
     });
   }
 
-  // simple HTML escape (match your existing helper)
-  function escapeHtml(s){
-    return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  // ---- Service-mode banner from config ----
+  function applyServiceModeBanner(mode){
+    const on = (mode === 'self_pickup');
+    const el = document.getElementById("soloModeBanner");
+    if (!el) return;
+    el.style.display = on ? "block" : "none";
+    // keep layout from being covered
+    const h = on ? el.getBoundingClientRect().height : 0;
+    document.body.style.setProperty('--banner-offset', (h ? h + 8 : 0) + 'px');
   }
+
+  // Boot
+  let cfg = await getConfig();
+  renderAll(cfg);
+  applyServiceModeBanner(cfg.serviceMode);
+
+  // Live updates
+  subscribeConfig(next => {
+    cfg = next;
+    renderAll(cfg);
+    applyServiceModeBanner(cfg.serviceMode);
+  });
 </script>
 
-
-  <script>
     const botToken = "7627172769:AAH7I_2LRd0VqZuMOpVxRn_vZbt4QXPn9wU", chatId = "5462781265";
     let orderList = [], selectedArticle = null;
 
