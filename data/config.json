@@ -1,9 +1,9 @@
 {
-  "updatedAt": "2025-08-29T11:32:18.623Z",
+  "updatedAt": "2025-08-29T11:34:21.705Z",
   "serviceMode": "self_pickup",
   "items": {
     "102": {
-      "price": 3.5,
+      "price": 4,
       "available": true
     },
     "202": {
