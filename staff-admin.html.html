@@ -89,7 +89,7 @@
           </label>
         </div>
         <p class="text-xs text-orange-300/70 mt-2">
-          Token panel kept for convenience; loading/saving now goes through <code>live-config.js</code>.
+          Token lives only in this browser (localStorage) if “Remember” is on. Reading public config needs no token; writing always needs a token.
         </p>
       </details>
     </section>
@@ -98,7 +98,7 @@
     <section class="card p-4">
       <div class="flex flex-col md:flex-row items-start md:items-center gap-3 justify-between">
         <div class="flex items-center gap-3">
-          <input id="search" class="px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30 w-64" placeholder="Search name or ID/SKU">
+          <input id="search" class="px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30 w-64" placeholder="Search name or #">
           <div class="text-sm text-orange-300/80">Quick raise (visible)</div>
           <button data-bulk="-0.5" class="pill text-sm">−0.5</button>
           <button data-bulk="0.5"  class="pill text-sm">+0.5</button>
@@ -118,7 +118,7 @@
       <table class="w-full text-left">
         <thead class="bg-black/60">
           <tr class="text-orange-300/90">
-            <th class="px-4 py-3">ID/SKU</th>
+            <th class="px-4 py-3">#</th>
             <th class="px-4 py-3">Name</th>
             <th class="px-4 py-3">Category</th>
             <th class="px-4 py-3">Price (€)</th>
@@ -145,11 +145,11 @@
       </div>
       <div class="p-4 grid gap-3">
         <div class="grid md:grid-cols-3 gap-3">
-          <label class="text-sm">Article ID/SKU
-            <input id="newId" class="w-full mt-1 px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30" placeholder="e.g., 417 or RB-LIGHT-250">
+          <label class="text-sm">Article #
+            <input id="newId" type="number" class="w-full mt-1 px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30" placeholder="e.g., 417">
           </label>
           <label class="text-sm md:col-span-2">Name
-            <input id="newName" class="w-full mt-1 px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30" placeholder="e.g., Red Bull Light (Sugarfree)">
+            <input id="newName" class="w-full mt-1 px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30" placeholder="e.g., Red Bull Light">
           </label>
         </div>
         <div class="grid md:grid-cols-3 gap-3">
@@ -166,139 +166,130 @@
     </div>
   </div>
 
-  <!-- SINGLE module synced with live-config.js -->
+  <!-- SINGLE, valid module (original flow) -->
   <script type="module">
-    import { getConfig, saveConfig, subscribeConfig } from "./live-config.js";
-
-    // --- Defaults (used ONLY if config is empty) ---
-    const DEFAULT_CATEGORIES = [
-      { id: "hot",    title: "Hot Drinks",      order: 1 },
-      { id: "cold",   title: "Cold Drinks",     order: 2 },
-      { id: "snacks", title: "Homemade Snacks", order: 3 },
+    // ------- Base (original catalog for boot/back-compat) -------
+    const DEFAULT_CATALOG = [
+      { id:102, name:'Espresso', cat:'Hot' },
+      { id:202, name:'Doppio', cat:'Hot' },
+      { id:203, name:'Black Coffee', cat:'Hot' },
+      { id:204, name:'Americano', cat:'Hot' },
+      { id:205, name:'Cappuccino', cat:'Hot' },
+      { id:206, name:'Flavored Latte', cat:'Hot' },
+      { id:207, name:'Café Latte', cat:'Hot' },
+      { id:208, name:'Latte Macchiato', cat:'Hot' },
+      { id:209, name:'Coffee Mocca', cat:'Hot' },
+      { id:210, name:'Hot Chocolate', cat:'Hot' },
+      { id:301, name:'Tea', cat:'Hot' },
+      { id:302, name:'Fresh Mint Tea', cat:'Hot' },
+      { id:401, name:'Coca-Cola', cat:'Cold' },
+      { id:402, name:'Coca-Cola Zero', cat:'Cold' },
+      { id:403, name:'Fanta Orange', cat:'Cold' },
+      { id:404, name:'Fanta Cassis', cat:'Cold' },
+      { id:405, name:'Still Water', cat:'Cold' },
+      { id:406, name:'Sparkling Water', cat:'Cold' },
+      { id:407, name:'Sprite', cat:'Cold' },
+      { id:408, name:'Chocomel', cat:'Cold' },
+      { id:409, name:'Iced Tea (Peach/Mango)', cat:'Cold' },
+      { id:410, name:'Iced Tea Lemon Sparkling', cat:'Cold' },
+      { id:411, name:'Royal Bliss Bitter Lemon', cat:'Cold' },
+      { id:412, name:'Royal Bliss Tonic', cat:'Cold' },
+      { id:413, name:'Looza (Pear/Strawberry/Peach)', cat:'Cold' },
+      { id:414, name:'Minute Maid Orange/Apple', cat:'Cold' },
+      { id:415, name:'AA Energy Drink', cat:'Cold' },
+      { id:416, name:'Red Bull Energy Drink', cat:'Cold' },
+      { id:501, name:'Chocolate Chip Cookie', cat:'Snacks' },
+      { id:502, name:'Banana Cake', cat:'Snacks' }
     ];
-    const LEGACY_DEFAULTS = [
-      { id: 102, name:'Espresso',                   categoryId:'hot',    price:3.5 },
-      { id: 202, name:'Doppio',                     categoryId:'hot',    price:4.0 },
-      { id: 203, name:'Black Coffee',               categoryId:'hot',    price:3.5 },
-      { id: 204, name:'Americano',                  categoryId:'hot',    price:3.5 },
-      { id: 205, name:'Cappuccino',                 categoryId:'hot',    price:4.0 },
-      { id: 206, name:'Flavored Latte',             categoryId:'hot',    price:5.0 },
-      { id: 207, name:'Café Latte',                 categoryId:'hot',    price:4.5 },
-      { id: 208, name:'Latte Macchiato',            categoryId:'hot',    price:4.5 },
-      { id: 209, name:'Coffee Mocca',               categoryId:'hot',    price:5.0 },
-      { id: 210, name:'Hot Chocolate',              categoryId:'hot',    price:4.0 },
-      { id: 301, name:'Tea',                        categoryId:'hot',    price:3.5 },
-      { id: 302, name:'Fresh Mint Tea',             categoryId:'hot',    price:4.5 },
-      { id: 401, name:'Coca-Cola',                  categoryId:'cold',   price:4.0 },
-      { id: 402, name:'Coca-Cola Zero',             categoryId:'cold',   price:4.0 },
-      { id: 403, name:'Fanta Orange',               categoryId:'cold',   price:4.0 },
-      { id: 404, name:'Fanta Cassis',               categoryId:'cold',   price:4.0 },
-      { id: 405, name:'Still Water',                categoryId:'cold',   price:3.5 },
-      { id: 406, name:'Sparkling Water',            categoryId:'cold',   price:3.5 },
-      { id: 407, name:'Sprite',                     categoryId:'cold',   price:4.0 },
-      { id: 408, name:'Chocomel',                   categoryId:'cold',   price:4.0 },
-      { id: 409, name:'Iced Tea (Peach/Mango)',     categoryId:'cold',   price:4.0 },
-      { id: 410, name:'Iced Tea Lemon Sparkling',   categoryId:'cold',   price:4.0 },
-      { id: 411, name:'Royal Bliss Bitter Lemon',   categoryId:'cold',   price:4.0 },
-      { id: 412, name:'Royal Bliss Tonic',          categoryId:'cold',   price:4.0 },
-      { id: 413, name:'Looza (Pear/Straw/Peach)',   categoryId:'cold',   price:4.0 },
-      { id: 414, name:'Minute Maid Orange/Apple',   categoryId:'cold',   price:4.0 },
-      { id: 415, name:'AA Energy Drink',            categoryId:'cold',   price:4.0 },
-      { id: 416, name:'Red Bull Energy Drink',      categoryId:'cold',   price:5.0 },
-      { id: 501, name:'Chocolate Chip Cookie',      categoryId:'snacks', price:3.5 },
-      { id: 502, name:'Banana Cake',                categoryId:'snacks', price:4.0 },
-    ];
-    const toArticle = a => ({
-      id: String(a.id),
-      sku: String(a.id),
-      name: a.name,
-      categoryId: a.categoryId,
-      price: Number(a.price || 0),
-      vat: 0.09,
-      active: true,
-      options: [],
-      sort: 999
-    });
 
-    // ------- State -------
-    let cfg = await getConfig();  // { schema, version, categories[], articles[], serviceMode? }
-    let dirty = false;
-
-    // ------- Elements -------
+    // ------- Elements & State -------
     const els = (ids => Object.fromEntries(ids.map(id => [id, document.getElementById(id)])))([
       'saveBtn','reloadBtn','lastLoaded','rows','search','showOnlyAvailable',
       'modeCounter','modePickup','owner','repo','path','branch','token','remember',
       'toast','openGitHub','addArticleBtn','modalBg','closeModal','newId','newName','newCat','newPrice','confirmAdd'
     ]);
 
+    let fileSHA = null;       // GitHub blob SHA (needed for update)
+    let serviceMode = 'counter';
+    let items = {};           // { [id]: { price, available } }
+    let catalog = [...DEFAULT_CATALOG]; // dynamic catalog editable in UI
+    let dirty = false;
+
     // ------- Helpers -------
-    const euro = n => Number(n||0).toFixed(2);
-    const setDirty = (v=true) => { dirty=v; els.saveBtn.disabled = !dirty; };
-    const toast = (msg='Saved!') => { const t=els.toast; t.textContent=msg; t.classList.remove('hidden'); setTimeout(()=>t.classList.add('hidden'),1600); };
-    const escapeHtml = s => String(s).replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
-
-    // Ensure categories + articles exist and have required fields
-    function bootstrapIfEmpty(){
-      let touched = false;
-      if (!Array.isArray(cfg.categories) || !cfg.categories.length) {
-        cfg.categories = DEFAULT_CATEGORIES.map(c => ({...c}));
-        touched = true;
-      }
-      if (!Array.isArray(cfg.articles) || !cfg.articles.length) {
-        cfg.articles = LEGACY_DEFAULTS.map(toArticle);
-        touched = true;
-      }
-      // Normalize existing articles
-      cfg.articles = cfg.articles.map(a => ({
-        id: String(a.id ?? a.sku ?? crypto.randomUUID()),
-        sku: String(a.sku ?? a.id),
-        name: a.name ?? 'Untitled',
-        categoryId: a.categoryId ?? 'cold',
-        price: Number(a.price ?? 0),
-        vat: a.vat ?? 0.09,
-        active: a.active !== false,
-        options: Array.isArray(a.options) ? a.options : [],
-        sort: Number.isFinite(a.sort) ? a.sort : 999
-      }));
-      if (touched) setDirty(true);
+    function setDirty(v=true){ dirty=v; els.saveBtn.disabled = !dirty; }
+    function euro(num){ return Number(num||0).toFixed(2); }
+    function toast(msg='Saved!'){ const t=els.toast; t.textContent=msg; t.classList.remove('hidden'); setTimeout(()=>t.classList.add('hidden'),1600); }
+    function nowIso(){ return new Date().toISOString(); }
+    function uniqCats(){
+      const s = new Set(catalog.map(c=>c.cat));
+      if(s.size===0){ ['Hot','Cold','Snacks'].forEach(x=>s.add(x)); }
+      return Array.from(s);
     }
-    bootstrapIfEmpty();
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, m => (
+        { "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;", "'":"&#39;" }[m]
+      ));
+    }
 
-    const categoryMap = () => Object.fromEntries((cfg.categories||[]).map(c => [c.id, c.title || c.id]));
-    function hydrateCategorySelect(){
-      const map = categoryMap();
-      els.newCat.innerHTML = Object.entries(map)
-        .map(([id,title]) => `<option value="${escapeHtml(id)}">${escapeHtml(title)}</option>`).join('');
+    function getAuth(){ return els.token.value.trim(); }
+    function apiUrl(){
+      const owner=els.owner.value.trim(), repo=els.repo.value.trim(),
+            path=encodeURIComponent(els.path.value.trim());
+      return `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+    }
+    function repoUiUrl(){
+      const owner=els.owner.value.trim(), repo=els.repo.value.trim(),
+            path=els.path.value.trim(), branch=els.branch.value.trim();
+      return `https://github.com/${owner}/${repo}/blob/${branch}/${path}`;
+    }
+
+    function saveLocal(){
+      if(!els.remember.checked) return localStorage.removeItem('et_admin');
+      const data = {
+        owner:els.owner.value, repo:els.repo.value, path:els.path.value, branch:els.branch.value,
+        token: els.token.value ? btoa(els.token.value) : ''
+      };
+      localStorage.setItem('et_admin', JSON.stringify(data));
+    }
+    function loadLocal(){
+      const raw = localStorage.getItem('et_admin'); if(!raw) return;
+      try{
+        const d = JSON.parse(raw);
+        els.owner.value  = d.owner  || els.owner.value;
+        els.repo.value   = d.repo   || els.repo.value;
+        els.path.value   = d.path   || els.path.value;
+        els.branch.value = d.branch || els.branch.value;
+        if(d.token){ els.token.value = atob(d.token); els.remember.checked = true; }
+      }catch{}
     }
 
     // ------- Render -------
-    function render(){
-      const q = (els.search.value||'').toLowerCase().trim();
+    function renderRows(){
+      const q = els.search.value.toLowerCase().trim();
       const onlyAvail = els.showOnlyAvailable.checked;
-      const cats = categoryMap();
-
-      const rows = (cfg.articles||[])
-        .filter(a => (!q || `${a.id} ${a.sku||''} ${a.name}`.toLowerCase().includes(q)))
-        .filter(a => !onlyAvail || a.active !== false)
-        .sort((a,b) => (a.sort??999) - (b.sort??999))
-        .map(a => {
-          const avail = a.active !== false;
-          return `
-          <tr class="row border-t border-orange-500/20" data-id="${escapeHtml(a.id)}">
-            <td class="px-4 py-3 font-bold text-orange-300/90">${escapeHtml(a.sku || a.id)}</td>
-            <td class="px-4 py-3">${escapeHtml(a.name)}</td>
-            <td class="px-4 py-3 text-sm text-orange-300/80">${escapeHtml(cats[a.categoryId] || a.categoryId || '')}</td>
+      const rows = catalog.filter(it=>{
+        const match = `${it.id} ${it.name}`.toLowerCase().includes(q);
+        const av = (items[it.id]?.available !== false);
+        return match && (!onlyAvail || av);
+      }).sort((a,b)=>a.id-b.id).map(it=>{
+        const conf = items[it.id] || { price:0, available:true };
+        const checked = conf.available !== false ? 'checked' : '';
+        return `
+          <tr class="row border-t border-orange-500/20" data-id="${it.id}">
+            <td class="px-4 py-3 font-bold text-orange-300/90">${it.id}</td>
+            <td class="px-4 py-3">${escapeHtml(it.name)}</td>
+            <td class="px-4 py-3 text-sm text-orange-300/80">${escapeHtml(it.cat)}</td>
             <td class="px-4 py-3">
               <div class="flex items-center gap-2">
                 <button class="pill text-sm px-2 py-1" data-step="-0.5">−0.5</button>
-                <input type="number" step="0.1" min="0" value="${euro(a.price)}"
+                <input type="number" step="0.1" min="0" value="${euro(conf.price)}"
                        class="price w-28 px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30">
                 <button class="pill text-sm px-2 py-1" data-step="0.5">+0.5</button>
               </div>
             </td>
             <td class="px-4 py-3">
               <label class="switch">
-                <input type="checkbox" class="avail" ${avail ? 'checked' : ''}>
+                <input type="checkbox" class="avail" ${checked}>
                 <span class="slider"></span>
               </label>
             </td>
@@ -313,89 +304,66 @@
               <button class="pill text-sm px-2 py-1 text-red-300/90" data-action="delete">🗑 Delete</button>
             </td>
           </tr>`;
-        }).join('');
-
-      els.rows.innerHTML = rows || `<tr><td class="px-4 py-6 text-orange-300/70" colspan="7">No items.</td></tr>`;
-      els.lastLoaded.textContent = new Date().toLocaleString();
-      hydrateCategorySelect();
+      }).join('');
+      els.rows.innerHTML = rows || `<tr><td class="px-4 py-6 text-orange-300/70" colspan="7">No items match your filter.</td></tr>`;
     }
 
-    // ------- Sync / Hot reload -------
-    subscribeConfig(next => {
-      cfg = structuredClone(next);
-      bootstrapIfEmpty();
-      render();
-      setDirty(false);
-      updateModeUI();
-    });
+    // ------- Load config (GitHub Contents API) -------
+    async function loadConfig(){
+      fileSHA = null;
+      const headers = { 'Accept':'application/vnd.github+json' };
+      if(getAuth()) headers['Authorization'] = 'token ' + getAuth();
 
-    // ------- Events -------
-    els.reloadBtn.addEventListener('click', async () => {
-      cfg = await getConfig(true);
-      bootstrapIfEmpty();
-      render();
-      setDirty(false);
-      updateModeUI();
-    });
-
-    els.saveBtn.addEventListener('click', async () => {
-      // read current UI back into cfg.articles
-      const map = new Map((cfg.articles||[]).map(a => [String(a.id), a]));
-      document.querySelectorAll('#rows tr[data-id]').forEach(tr => {
-        const id = tr.getAttribute('data-id');
-        const price = Number(tr.querySelector('input.price').value);
-        const avail = tr.querySelector('input.avail').checked;
-        const a = map.get(id);
-        if (a) { a.price = price; a.active = avail; }
-      });
-
-      const next = {
-        ...cfg,
-        serviceMode, // persist current service mode toggle
-        version: Number(cfg.version||0) + 1,
-        updatedAt: new Date().toISOString(),
-        updatedBy: 'staff-admin'
-      };
-
-      const res = await saveConfig(next, { expectedVersion: cfg.version });
-      if (!res.ok && res.reason === 'version-conflict') {
-        alert('Config changed elsewhere. Reloaded latest; please re-apply your edits.');
+      const res = await fetch(apiUrl(), { headers });
+      if(res.status === 404){
+        // New file bootstrap
+        catalog = [...DEFAULT_CATALOG];
+        items = Object.fromEntries(catalog.map(it=>[it.id,{ price: defaultPrice(it.id), available:true }]));        
+        serviceMode = 'counter';
+        els.lastLoaded.textContent = 'New file (to be created)';
+        setDirty(true);
+        updateModeUI();
+        hydrateCategorySelect();
+        renderRows();
         return;
       }
-      toast('Saved!');
+      if(!res.ok){
+        const txt = await res.text();
+        throw new Error(`Load failed: ${res.status} ${txt}`);
+      }
+      const json = await res.json();
+      fileSHA = json.sha || null;
+
+      let cfg = { serviceMode:'counter', items:{}, catalog: DEFAULT_CATALOG };
+      if(json.content){
+        try {
+          const decoded = atob(json.content.replace(/\n/g,''));
+          cfg = JSON.parse(decoded);
+        } catch(e){ console.error('Parse error:', e); }
+      }
+
+      catalog = Array.isArray(cfg.catalog) && cfg.catalog.length ? cfg.catalog : [...DEFAULT_CATALOG];
+
+      // Merge onto catalog
+      items = Object.fromEntries(catalog.map(it=>{
+        const ex = cfg.items?.[it.id] ?? cfg.items?.[String(it.id)] ?? {};
+        return [it.id, { price: Number(ex.price ?? defaultPrice(it.id)), available: ex.available !== false }];
+      }));
+      serviceMode = (cfg.serviceMode === 'self_pickup') ? 'self_pickup' : 'counter';
+
+      els.lastLoaded.textContent = new Date().toLocaleString();
+      updateModeUI();
+      hydrateCategorySelect();
+      renderRows();
       setDirty(false);
-    });
+    }
 
-    // table interactions
-    els.rows.addEventListener('click', e => {
-      const stepBtn = e.target.closest('[data-step]');
-      if (stepBtn) {
-        const tr = e.target.closest('tr');
-        const inp = tr.querySelector('input.price');
-        const delta = Number(stepBtn.getAttribute('data-step'));
-        inp.value = (Number(inp.value) + delta).toFixed(2);
-        setDirty(true);
-      }
-      const delBtn = e.target.closest('[data-action="delete"]');
-      if (delBtn) {
-        const tr = e.target.closest('tr');
-        const id = tr.getAttribute('data-id');
-        if (confirm(`Delete article ${id}?`)) {
-          cfg.articles = cfg.articles.filter(a => String(a.id) !== id);
-          render(); setDirty(true);
-        }
-      }
-    });
-    els.rows.addEventListener('input', e => {
-      if (e.target.matches('input.price') || e.target.matches('input.avail')) setDirty(true);
-    });
+    function defaultPrice(id){
+      const d = {102:3.5,202:4,203:3.5,204:3.5,205:4,206:5,207:4.5,208:4.5,209:5,210:4,301:3.5,302:4.5,
+                 401:4,402:4,403:4,404:4,405:3.5,406:3.5,407:4,408:4,409:4,410:4,411:4,412:4,413:4,414:4,415:4,416:5,501:3.5,502:4};
+      return d[id] ?? 0;
+    }
 
-    // search / filters
-    els.search.addEventListener('input', render);
-    els.showOnlyAvailable.addEventListener('change', render);
-
-    // service mode (cfg.serviceMode <-> UI)
-    let serviceMode = cfg.serviceMode === 'self_pickup' ? 'self_pickup' : 'counter';
     function updateModeUI(){
       els.modeCounter.setAttribute('aria-pressed', String(serviceMode==='counter'));
       els.modePickup.setAttribute('aria-pressed', String(serviceMode==='self_pickup'));
@@ -405,61 +373,156 @@
         btn.style.color = on ? '#000' : '#faf7ef';
       });
     }
-    updateModeUI();
-    els.modeCounter.addEventListener('click', ()=>{ serviceMode='counter'; cfg.serviceMode='counter'; updateModeUI(); setDirty(true); });
-    els.modePickup .addEventListener('click', ()=>{ serviceMode='self_pickup'; cfg.serviceMode='self_pickup'; updateModeUI(); setDirty(true); });
 
-    // Add / modal
-    const openModal = () => { els.modalBg.style.display='flex'; hydrateCategorySelect(); setTimeout(()=>els.newId.focus(), 50); };
-    const closeModal = () => { els.modalBg.style.display='none'; };
-    els.addArticleBtn.addEventListener('click', openModal);
-    els.closeModal.addEventListener('click', closeModal);
-    els.modalBg.addEventListener('click', e => { if (e.target === els.modalBg) closeModal(); });
-    els.confirmAdd.addEventListener('click', () => {
-      const idRaw = (els.newId.value || '').trim();
-      const id = idRaw || crypto.randomUUID();
-      const name = (els.newName.value || '').trim();
-      const cat  = els.newCat.value || 'cold';
-      const price = Number(els.newPrice.value || 0);
+    // ------- Save config (create or update) -------
+    async function saveToGitHub(){
+      const token = getAuth();
+      if(!token){ alert('Paste a GitHub token (fine-grained, contents read/write)'); return; }
 
-      if (!name) return alert('Please fill Name');
-      if ((cfg.articles||[]).some(a => String(a.id) === String(id))) return alert('This ID already exists');
+      // Read latest table values before saving
+      const curr = Object.fromEntries(catalog.map(it=>{
+        const row = document.querySelector(`tr[data-id="${it.id}"]`);
+        const price = row ? Number(row.querySelector('input.price').value) : (items[it.id]?.price || 0);
+        const available = row ? row.querySelector('input.avail').checked : (items[it.id]?.available !== false);
+        return [it.id, { price, available }];
+      }));
 
-      cfg.articles = [...(cfg.articles||[]), {
-        id: String(id), sku:String(id), name, categoryId:cat, price,
-        vat:0.09, active:true, options:[], sort:999
-      }];
-      render(); setDirty(true); closeModal();
+      const cfg = {
+        updatedAt: nowIso(),
+        serviceMode,
+        catalog,
+        items: curr
+      };
+      const content = btoa(unescape(encodeURIComponent(JSON.stringify(cfg, null, 2))));
+      const body = {
+        message: `chore: update menu config ${nowIso()}`,
+        content,
+        branch: els.branch.value.trim()
+      };
+      if(fileSHA) body.sha = fileSHA; // required for update
+
+      const res = await fetch(apiUrl(), {
+        method:'PUT',
+        headers:{
+          'Accept':'application/vnd.github+json',
+          'Authorization':'token '+token,
+          'Content-Type':'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+
+      if(!res.ok){
+        const txt = await res.text();
+        throw new Error(`Save failed: ${res.status} ${txt}`);
+      }
+      const out = await res.json();
+      fileSHA = out.content?.sha || null;
+      setDirty(false);
+      toast('Saved to GitHub');
+      els.lastLoaded.textContent = new Date().toLocaleString();
+    }
+
+    // ------- Add / Remove Articles -------
+    function openModal(){ els.modalBg.style.display='flex'; hydrateCategorySelect(); setTimeout(()=>els.newId.focus(), 50); }
+    function closeModal(){ els.modalBg.style.display='none'; }
+
+    function hydrateCategorySelect(){
+      const list = uniqCats();
+      els.newCat.innerHTML = list.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+    }
+
+    function addArticle(){
+      const id = Number(els.newId.value);
+      const name = (els.newName.value||'').trim();
+      const cat  = els.newCat.value.trim() || 'Cold';
+      const price = Number(els.newPrice.value||0);
+
+      if(!id || !name){ alert('Please fill Article # and Name'); return; }
+      if(catalog.some(x=>x.id===id)){ alert('This article # already exists'); return; }
+
+      catalog.push({ id, name, cat });
+      catalog.sort((a,b)=>a.id-b.id);
+      items[id] = { price: price>0 ? price : 0, available:true };
+      renderRows();
+      setDirty(true);
+      closeModal();
       els.newId.value = els.newName.value = els.newPrice.value = '';
-    });
+    }
 
-    // bulk price raise (visible rows)
+    function deleteArticle(id){
+      if(!confirm(`Delete article #${id}?`)) return;
+      catalog = catalog.filter(x=>x.id!==id);
+      delete items[id];
+      renderRows();
+      setDirty(true);
+    }
+
+    // ------- Events -------
+    els.reloadBtn.addEventListener('click', loadConfig);
+    els.saveBtn.addEventListener('click', async () => {
+      try { await saveToGitHub(); } catch (err) { console.error(err); alert('Save failed: ' + (err?.message || err)); }
+    });
+    els.openGitHub.addEventListener('click', ()=> window.open(repoUiUrl(), '_blank'));
+
+    els.search.addEventListener('input', renderRows);
+    els.showOnlyAvailable.addEventListener('change', renderRows);
+
     document.querySelectorAll('[data-bulk]').forEach(b=>{
       b.addEventListener('click', ()=>{
         const delta = Number(b.getAttribute('data-bulk'));
         document.querySelectorAll('#rows tr').forEach(tr=>{
           const inp = tr.querySelector('input.price');
-          if (inp) inp.value = (Number(inp.value) + delta).toFixed(2);
+          if(inp){ inp.value = (Number(inp.value) + delta).toFixed(2); }
         });
         setDirty(true);
       });
     });
 
-    // GitHub button (opens UI only; saving is via live-config.js)
-    function repoUiUrl(){
-      const owner=els.owner.value.trim(), repo=els.repo.value.trim(),
-            path=els.path.value.trim(), branch=els.branch.value.trim();
-      return `https://github.com/${owner}/${repo}/blob/${branch}/${path}`;
-    }
-    els.openGitHub.addEventListener('click', ()=> window.open(repoUiUrl(), '_blank'));
+    els.rows.addEventListener('click', e=>{
+      const stepBtn = e.target.closest('[data-step]');
+      if(stepBtn){
+        const tr = e.target.closest('tr');
+        const inp = tr.querySelector('input.price');
+        const delta = Number(stepBtn.getAttribute('data-step'));
+        inp.value = (Number(inp.value) + delta).toFixed(2);
+        setDirty(true);
+        return;
+      }
+      const delBtn = e.target.closest('[data-action="delete"]');
+      if(delBtn){
+        const tr = e.target.closest('tr');
+        const id = Number(tr.getAttribute('data-id'));
+        deleteArticle(id);
+        return;
+      }
+    });
 
-    // initial render
-    render();
+    els.rows.addEventListener('input', e=>{
+      if(e.target.matches('input.price') || e.target.matches('input.avail')) setDirty(true);
+    });
+
+    els.modeCounter.addEventListener('click', ()=>{ serviceMode='counter'; updateModeUI(); setDirty(true); });
+    els.modePickup .addEventListener('click', ()=>{ serviceMode='self_pickup'; updateModeUI(); setDirty(true); });
+
+    ['owner','repo','path','branch','token','remember'].forEach(id=>{
+      els[id].addEventListener('change', saveLocal);
+    });
+
+    // Modal events
+    els.addArticleBtn.addEventListener('click', openModal);
+    els.closeModal.addEventListener('click', closeModal);
+    els.modalBg.addEventListener('click', (e)=>{ if(e.target===els.modalBg) closeModal(); });
+    els.confirmAdd.addEventListener('click', addArticle);
 
     // PWA
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').catch(()=>{});
-    }
+    if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js').catch(()=>{}); }
+
+    // Boot
+    loadLocal();
+    loadConfig().catch(err=>{
+      console.error(err);
+      alert('Could not load config. Check repo/branch/path and token (if the repo is private).');
+    });
   </script>
 </body>
 </html>
