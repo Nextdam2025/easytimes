@@ -396,6 +396,67 @@
   <div id="soloModeBanner" style="display:none;">Self Pickup Mode: Please collect your drinks downstairs after ordering.</div>
 
   <!-- JS Logic -->
+  <script type="module">
+  import { getConfig, subscribeConfig } from './live-config.js';
+
+  let cfg = await getConfig();
+  renderAll(cfg);
+
+  subscribeConfig(next => {
+    cfg = next;
+    renderAll(cfg);
+  });
+
+  // Map categoryId -> section element id and item styling class
+  const CAT = {
+    hot:    { el: 'hot',    cls: 'hot-drink'  },
+    cold:   { el: 'cold',   cls: 'cold-drink' },
+    snacks: { el: 'snacks', cls: '' }
+  };
+
+  function renderAll(cfg) {
+    const groups = {};
+    (cfg.articles || []).forEach(a => {
+      if (a.active === false) return; // hidden items
+      const cat = a.categoryId || 'cold';
+      (groups[cat] ||= []).push(a);
+    });
+
+    Object.entries(CAT).forEach(([catId, meta]) => {
+      const host = document.getElementById(meta.el);
+      if (!host) return;
+      const list = (groups[catId] || []).sort((a,b)=>(a.sort??999)-(b.sort??999));
+      host.innerHTML = list.map(a => {
+        const soldOut = a.active === false;
+        const cls = `item ${meta.cls}${soldOut ? ' sold-out' : ''}`;
+        const payload = {
+          name: a.name,
+          articleNumber: a.sku || a.id,
+          price: Number(a.price || 0),
+          options: a.options || [],
+          // Optional variants support if you put a `variants` field in config
+          variants: a.variants || null
+        };
+        // safely embed a JS object in inline handler
+        const data = JSON.stringify(payload).replace(/</g,'\\u003c');
+        return `
+          <div class="${cls}" ${soldOut ? 'style="pointer-events:none;opacity:.45;filter:grayscale(1)"' : ''}
+               onclick='prepareOptions(${data})'>
+            <h3>${escapeHtml(a.name)}</h3>
+            <p class="price">€${Number(a.price||0).toFixed(2)}</p>
+            <button>Add</button>
+          </div>`;
+      }).join('') || `<div style="opacity:.7;padding:1em;">No items</div>`;
+    });
+  }
+
+  // simple HTML escape (match your existing helper)
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+</script>
+
+
   <script>
     const botToken = "7627172769:AAH7I_2LRd0VqZuMOpVxRn_vZbt4QXPn9wU", chatId = "5462781265";
     let orderList = [], selectedArticle = null;
@@ -643,7 +704,5 @@
     window.addEventListener('resize', reflowForBanner);
   </script>
 
-  <!-- Live config must load AFTER your main JS so it can wrap prepareOptions -->
-  <script src="./live-config.js?v=2"></script>
 </body>
 </html>
