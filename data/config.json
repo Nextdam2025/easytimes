@@ -1,12 +1,7 @@
 {
-  "updatedAt": "2025-08-29T10:53:47.422Z",
+  "updatedAt": "2025-08-29T11:07:19.897Z",
   "serviceMode": "self_pickup",
   "catalog": [
-    {
-      "id": 101,
-      "name": "Test",
-      "cat": "Hot"
-    },
     {
       "id": 102,
       "name": "Espresso",
@@ -159,13 +154,9 @@
     }
   ],
   "items": {
-    "101": {
-      "price": 5,
-      "available": true
-    },
     "102": {
       "price": 3.5,
-      "available": false
+      "available": true
     },
     "202": {
       "price": 4,
