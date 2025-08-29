@@ -128,9 +128,6 @@
     </div>
   </div>
 
-  <script type="module">
-    import { getConfig, saveConfig, subscribeConfig } from "./live-config.js";
-
     // ------- State -------
     let cfg = await getConfig();            // {schema, version, categories[], articles[]...}
     let dirty = false;
@@ -600,4 +597,5 @@
 
 </body>
 </html>
+
 
