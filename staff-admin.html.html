@@ -89,8 +89,7 @@
           </label>
         </div>
         <p class="text-xs text-orange-300/70 mt-2">
-          Token lives only in this browser (localStorage) if “Remember” is on. Prefer short expiry & fine-grained scopes.
-          Reading public config needs no token; writing always needs a token.
+          Token lives only in this browser (localStorage) if “Remember” is on. Reading public config needs no token; writing always needs a token.
         </p>
       </details>
     </section>
@@ -167,61 +166,9 @@
     </div>
   </div>
 
-  <script>
-    <script type="module">
-  import { getConfig, saveConfig, addArticle, updateArticle, removeArticle, subscribeConfig } from '/js/live-config.js';
-
-  let cfg = await getConfig();
-
-  // reflect to UI
-  subscribeConfig(next => {
-    cfg = structuredClone(next);
-    renderArticles(cfg.articles);
-  });
-
-  // Add
-  document.querySelector('#btnAdd').addEventListener('click', () => {
-    const fields = readForm(); // build from your inputs
-    addArticle(fields);
-    renderArticles(cfg.articles);
-  });
-
-  // Update (price/name/etc.)
-  function onInlineEdit(id, patch) {
-    updateArticle(id, patch);
-  }
-
-  // Remove
-  function onRemove(id) {
-    removeArticle(id);
-    renderArticles(cfg.articles);
-  }
-
-  // Save
-  document.querySelector('#btnSave').addEventListener('click', async () => {
-    // bump version & times locally before sending
-    const next = {
-      ...cfg,
-      version: cfg.version + 1,
-      updatedAt: new Date().toISOString(),
-      updatedBy: "staff-admin"
-    };
-
-    const result = await saveConfig(next, { expectedVersion: cfg.version });
-
-    if (!result.ok && result.reason === "version-conflict") {
-      // someone else saved → show message and allow merge
-      showToast("⚠️ Config changed in another tab. Reloading latest…");
-      cfg = result.latest;
-      renderArticles(cfg.articles);
-      return;
-    }
-
-    showToast("✅ Saved");
-  });
-</script>
-
-    // ------- Base (original catalog kept for boot/back-compat) -------
+  <!-- SINGLE, valid module -->
+  <script type="module">
+    // ------- Base (original catalog for boot/back-compat) -------
     const DEFAULT_CATALOG = [
       { id:102, name:'Espresso', cat:'Hot' },
       { id:202, name:'Doppio', cat:'Hot' },
@@ -259,7 +206,7 @@
     const els = (ids => Object.fromEntries(ids.map(id => [id, document.getElementById(id)])))([
       'saveBtn','reloadBtn','lastLoaded','rows','search','showOnlyAvailable',
       'modeCounter','modePickup','owner','repo','path','branch','token','remember',
-      'toast','openGitHub','addArticleBtn','modalBg','closeModal','newId','newName','newCat','newPrice'
+      'toast','openGitHub','addArticleBtn','modalBg','closeModal','newId','newName','newCat','newPrice','confirmAdd'
     ]);
 
     let fileSHA = null;       // GitHub blob SHA (needed for update)
@@ -356,7 +303,7 @@
       els.rows.innerHTML = rows || `<tr><td class="px-4 py-6 text-orange-300/70" colspan="7">No items match your filter.</td></tr>`;
     }
 
-    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m])); }
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;","<": "&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m])); }
 
     // ------- Load config (GitHub Contents API) -------
     async function loadConfig(){
@@ -425,7 +372,7 @@
     }
 
     // ------- Save config (create or update) -------
-    async function saveConfig(){
+    async function saveToGitHub(){
       const token = getAuth();
       if(!token){ alert('Paste a GitHub token (fine-grained, contents read/write)'); return; }
 
@@ -449,7 +396,7 @@
         content,
         branch: els.branch.value.trim()
       };
-      if(fileSHA) body.sha = fileSHA; // needed when updating existing file
+      if(fileSHA) body.sha = fileSHA; // required for update
 
       const res = await fetch(apiUrl(), {
         method:'PUT',
@@ -510,7 +457,7 @@
     // ------- Events -------
     els.reloadBtn.addEventListener('click', loadConfig);
     els.saveBtn.addEventListener('click', async () => {
-      try { await saveConfig(); } catch (err) { console.error(err); alert('Save failed: ' + (err?.message || err)); }
+      try { await saveToGitHub(); } catch (err) { console.error(err); alert('Save failed: ' + (err?.message || err)); }
     });
     els.openGitHub.addEventListener('click', ()=> window.open(repoUiUrl(), '_blank'));
 
@@ -562,7 +509,7 @@
     els.addArticleBtn.addEventListener('click', openModal);
     els.closeModal.addEventListener('click', closeModal);
     els.modalBg.addEventListener('click', (e)=>{ if(e.target===els.modalBg) closeModal(); });
-    document.getElementById('confirmAdd').addEventListener('click', addArticle);
+    els.confirmAdd.addEventListener('click', addArticle);
 
     // PWA
     if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js').catch(()=>{}); }
