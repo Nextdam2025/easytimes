@@ -1,95 +1,108 @@
-// live-config.js  (ES module)
-const CONFIG_STORAGE_KEY = "ez_config_cache_v2";
-const LISTENERS = new Set();
+<script>
+/* ============================================================
+   EasyTimes — live-config.js (debug version)
+   ============================================================ */
 
-// configure where to load from (public repo = no token needed)
-let SOURCE = {
-  owner: "Nextdam2025",
-  repo: "easytimes",
-  branch: "main",
-  path: "data/config.json"
-};
+(() => {
+  // Your config URL (public raw). Make sure this matches where Staff Console writes!
+  const CONFIG_URL = "https://raw.githubusercontent.com/Nextdam2025/easytimes/main/data/config.json";
 
-export function configureSource({ owner, repo, branch = "main", path = "data/config.json" } = {}) {
-  SOURCE = { owner, repo, branch, path };
-}
+  const POLL_MS = 15000;
+  let LIVE = { serviceMode: "counter", items: {} };
+  let indexed = []; // [{el, article, priceEl, addBtn}...]
 
-let config = null;
+  // --- Debug helpers ---
+  window.ET_CONFIG_URL = CONFIG_URL;
+  const log = (...a) => console.log("[ET]", ...a);
 
-export function subscribeConfig(fn) {
-  LISTENERS.add(fn);
-  if (config) fn(config);
-  return () => LISTENERS.delete(fn);
-}
+  // On-screen status pill
+  const dot = document.createElement('div');
+  dot.style.cssText = 'position:fixed;right:10px;bottom:10px;padding:6px 10px;border-radius:999px;background:#1c1c1c;border:2px solid #f26522;color:#ffa;z-index:99999;font:12px/1.2 monospace';
+  function showStatus(txt){ dot.textContent = 'CFG: ' + txt; }
+  document.addEventListener("DOMContentLoaded", () => { document.body.appendChild(dot); showStatus('loading…'); });
 
-function broadcast() { for (const fn of LISTENERS) fn(config); }
+  // Format € price
+  const euro = v => "€" + Number(v || 0).toFixed(2);
 
-function readCache() {
-  try { const raw = localStorage.getItem(CONFIG_STORAGE_KEY); return raw ? JSON.parse(raw) : null; }
-  catch { return null; }
-}
-function writeCache(cfg) { localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(cfg)); broadcast(); }
-
-/* Public: get config (cached, then remote refresh) */
-export async function getConfig(forceRemote = false) {
-  if (config && !forceRemote) return config;
-  if (!forceRemote) {
-    const cached = readCache();
-    if (cached) { config = cached; refreshFromRemote().catch(()=>{}); return config; }
+  // 1) Index all product cards by articleNumber taken from onclick string
+  function indexItems() {
+    indexed = [];
+    document.querySelectorAll(".item").forEach(el => {
+      const oc = el.getAttribute("onclick") || "";
+      const m = oc.match(/articleNumber\s*:\s*(\d+)/);
+      if (!m) return;
+      const article = m[1];
+      const priceEl = el.querySelector(".price") || el.querySelector("p");
+      const addBtn = el.querySelector("button");
+      indexed.push({ el, article, priceEl, addBtn });
+    });
+    log("Indexed items:", indexed.map(x=>x.article));
   }
-  await refreshFromRemote();
-  return config;
-}
 
-/* Hit GitHub Contents API to avoid Pages lag */
-async function refreshFromRemote() {
-  const { owner, repo, branch, path } = SOURCE;
-  const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`;
-  const res = await fetch(url, { headers: { "Accept": "application/vnd.github+json" }, cache: "no-store" });
-  if (!res.ok) throw new Error(`Failed to fetch config (${res.status})`);
-  const j = await res.json();
-  const decoded = JSON.parse(atob((j.content || "").replace(/\n/g, "")));
+  // 2) Apply config to DOM + local solo mode
+  function applyConfig() {
+    // Service mode → keep using your existing solo banner
+    const isSelf = LIVE.serviceMode === "self_pickup";
+    localStorage.setItem("soloMode", JSON.stringify(isSelf));
+    const banner = document.getElementById("soloModeBanner");
+    if (banner) banner.style.display = isSelf ? "block" : "none";
 
-  validateConfig(decoded);
-  config = decoded;
-  writeCache(config);
-}
+    // Items: set price & availability
+    indexed.forEach(({ el, article, priceEl, addBtn }) => {
+      const cfg = LIVE.items[article];
+      if (cfg && priceEl) priceEl.textContent = euro(cfg.price);
+      const available = cfg ? cfg.available !== false : true;
+      el.classList.toggle("sold-out", !available);
+      if (addBtn) addBtn.disabled = !available;
+    });
 
-function validateConfig(cfg) {
-  if (typeof cfg !== "object" || !cfg) throw new Error("Invalid config");
-  if (typeof cfg.version !== "number") throw new Error("Missing version");
-  if (!Array.isArray(cfg.articles)) throw new Error("Invalid articles");
-}
+    showStatus('OK @ ' + new Date().toLocaleTimeString());
+  }
 
-/* Optional helper writers for UIs that keep everything in-memory first */
-export function addArticle(fields) {
-  const id = fields.id ?? String(crypto.randomUUID());
-  const base = { active: true, options: [], variants: null, sort: 999 };
-  const art = { ...base, ...fields, id: String(id) };
-  config.articles.push(art);
-  return art;
-}
-export function updateArticle(id, patch) {
-  const i = config.articles.findIndex(a => String(a.id) === String(id));
-  if (i < 0) throw new Error("Article not found");
-  config.articles[i] = { ...config.articles[i], ...patch };
-  return config.articles[i];
-}
-export function removeArticle(id) {
-  const i = config.articles.findIndex(a => String(a.id) === String(id));
-  if (i < 0) return false;
-  config.articles.splice(i, 1);
-  return true;
-}
-
-/* Cross-tab sync */
-window.addEventListener("storage", (e) => {
-  if (e.key === CONFIG_STORAGE_KEY && e.newValue) {
+  // 3) Fetch config.json (no cache) and update
+  async function refreshConfig() {
     try {
-      const next = JSON.parse(e.newValue);
-      validateConfig(next);
-      config = next;
-      broadcast();
-    } catch {}
+      const url = CONFIG_URL + "?t=" + Date.now();
+      const res = await fetch(url, { cache: "no-store" });
+      log("Fetch", url, "→", res.status, res.statusText);
+      if (!res.ok) { showStatus('ERR ' + res.status); return; }
+      const json = await res.json();
+      window.ET_LAST_CFG = json; // expose for quick inspection
+      LIVE = {
+        serviceMode: json.serviceMode === "self_pickup" ? "self_pickup" : "counter",
+        items: json.items || {}
+      };
+      log("Config applied:", json.updatedAt || "(no timestamp)", Object.keys(LIVE.items).length, "items");
+      applyConfig();
+    } catch (e) {
+      log("Config fetch error:", e);
+      showStatus('ERR (fetch)');
+    }
   }
-});
+
+  // 4) Ensure the live price is used when adding to basket, and block if sold out
+  const _origPrepare = window.prepareOptions;
+  window.prepareOptions = function (article) {
+    try {
+      const cfg = LIVE.items[String(article.articleNumber)];
+      if (cfg) {
+        if (cfg.available === false) {
+          (window.showNotification || (m => alert(m)))("⚠ This item is currently sold out.");
+          return;
+        }
+        article.price = Number(cfg.price);
+      }
+    } catch {}
+    return _origPrepare.call(this, article);
+  };
+
+  // 5) Boot
+  document.addEventListener("DOMContentLoaded", () => {
+    log("live-config.js loaded. CONFIG_URL:", CONFIG_URL);
+    indexItems();
+    refreshConfig();
+    setInterval(refreshConfig, POLL_MS);
+  });
+})();
+</script>
+
