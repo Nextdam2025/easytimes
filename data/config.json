@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-08-29T11:07:19.897Z",
+  "updatedAt": "2025-08-29T11:12:01.602Z",
   "serviceMode": "self_pickup",
   "catalog": [
     {
@@ -34,7 +34,7 @@
     },
     {
       "id": 207,
-      "name": "CafÃ© Latte",
+      "name": "CafÃÂ© Latte",
       "cat": "Hot"
     },
     {
@@ -155,7 +155,7 @@
   ],
   "items": {
     "102": {
-      "price": 3.5,
+      "price": 4,
       "available": true
     },
     "202": {
