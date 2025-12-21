@@ -109,6 +109,21 @@
       color:#FFA500; text-shadow:0 0 8px black;
     }
 
+    /* ✅ QR always visible during idle slideshow overlay */
+    #slideshow-overlay .qr-popup {
+      position: absolute;
+      right: 22px;
+      bottom: 22px;
+      width: min(260px, 32vw);
+      height: auto;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.55);
+      border: 3px solid rgba(242,101,34,.9);
+      z-index: 10005;          /* above the video */
+      pointer-events: none;    /* don’t block clicks/taps */
+      opacity: .98;
+    }
+
     /* Idle Slideshow container */
     #slideshow-container {
       margin-top:2em; width:100%; max-width:1080px; height:360px;
@@ -227,6 +242,7 @@
     body { padding-top: var(--banner-offset); }
   </style>
 </head>
+
 <body>
   <canvas id="particles" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-2;pointer-events:none;"></canvas>
 
@@ -253,6 +269,7 @@
     <div class="tab" onclick="switchTab('cold')">Cold Drinks</div>
     <div class="tab" onclick="switchTab('snacks')">Homemade Snacks</div>
   </div>
+
   <div style="margin:1em auto; text-align:center;">
     <button onclick="magicOrder()" style="padding:10px 25px; font-size:1.2rem; border-radius:12px; background:linear-gradient(145deg,#f26522,#ff7e29); color:#fff; border:none; cursor:pointer; box-shadow:0 5px 15px rgba(0,0,0,0.3); font-weight:bold;">
       🎲 Surprise Me!
@@ -261,30 +278,30 @@
 
   <!-- Hot Drinks -->
   <div class="menu-section active" id="hot">
-    <div class="item hot-drink" onclick="prepareOptions({name:'Espresso',articleNumber:102,price:3.50,options:[{name:'Whipped Cream',price:1},{name:'Extra Oatmilk',price:1},{name:'Syrup',price:1}]})"> <h3>Espresso</h3><p class="price">€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Doppio',articleNumber:202,price:4.00,options:[{name:'Extra Oatmilk',price:1},{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})"> <h3>Doppio</h3><p class="price">€4.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Black Coffee',articleNumber:203,price:3.50,options:[]})"> <h3>Black Coffee</h3><p class="price">€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Americano',articleNumber:204,price:3.50,options:[]})"> <h3>Americano</h3><p class="price">€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Cappuccino',articleNumber:205,price:4.00,options:[]})"> <h3>Cappuccino</h3><p class="price">€4.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Flavored Latte',articleNumber:206,price:5.00,options:[{name:'Hazelnuts',price:0},{name:'Caramel',price:0}]})"> <h3>Flavored Latte</h3><p class="price">€5.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Café Latte',articleNumber:207,price:4.50,options:[]})"> <h3>Café Latte</h3><p class="price">€4.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Latte Macchiato',articleNumber:208,price:4.50,options:[{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})"> <h3>Latte Macchiato</h3><p class="price">€4.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Coffee Mocca',articleNumber:209,price:5.00,options:[{name:'Extra Shot Espresso',price:1},{name:'Whipped Cream',price:1}]})"> <h3>Coffee Mocca</h3><p class="price">€5.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Hot Chocolate',articleNumber:210,price:4.00,options:[{name:'Whipped Cream',price:1}]})"> <h3>Hot Chocolate</h3><p class="price">€4.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Tea',articleNumber:301,price:3.50,options:[{name:'Extra Lemon',price:1},{name:'Extra Ginger',price:1},{name:'Orange Blossom',price:1},{name:'Louiza',price:1}]})"> <h3>Tea</h3><p class="price">€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Fresh Mint Tea',articleNumber:302,price:4.50,options:[{name:'Extra Lemon',price:0.50},{name:'Extra Ginger',price:0.50},{name:'Extra Blossom',price:0.50},{name:'Louiza',price:0.50}]})"> <h3>Fresh Mint Tea</h3><p class="price">€4.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Espresso',articleNumber:102,price:3.50,options:[{name:'Whipped Cream',price:1},{name:'Extra Oatmilk',price:1},{name:'Syrup',price:1}]})"><h3>Espresso</h3><p class="price">€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Doppio',articleNumber:202,price:4.00,options:[{name:'Extra Oatmilk',price:1},{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})"><h3>Doppio</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Black Coffee',articleNumber:203,price:3.50,options:[]})"><h3>Black Coffee</h3><p class="price">€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Americano',articleNumber:204,price:3.50,options:[]})"><h3>Americano</h3><p class="price">€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Cappuccino',articleNumber:205,price:4.00,options:[]})"><h3>Cappuccino</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Flavored Latte',articleNumber:206,price:5.00,options:[{name:'Hazelnuts',price:0},{name:'Caramel',price:0}]})"><h3>Flavored Latte</h3><p class="price">€5.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Café Latte',articleNumber:207,price:4.50,options:[]})"><h3>Café Latte</h3><p class="price">€4.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Latte Macchiato',articleNumber:208,price:4.50,options:[{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})"><h3>Latte Macchiato</h3><p class="price">€4.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Coffee Mocca',articleNumber:209,price:5.00,options:[{name:'Extra Shot Espresso',price:1},{name:'Whipped Cream',price:1}]})"><h3>Coffee Mocca</h3><p class="price">€5.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Hot Chocolate',articleNumber:210,price:4.00,options:[{name:'Whipped Cream',price:1}]})"><h3>Hot Chocolate</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Tea',articleNumber:301,price:3.50,options:[{name:'Extra Lemon',price:1},{name:'Extra Ginger',price:1},{name:'Orange Blossom',price:1},{name:'Louiza',price:1}]})"><h3>Tea</h3><p class="price">€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Fresh Mint Tea',articleNumber:302,price:4.50,options:[{name:'Extra Lemon',price:0.50},{name:'Extra Ginger',price:0.50},{name:'Extra Blossom',price:0.50},{name:'Louiza',price:0.50}]})"><h3>Fresh Mint Tea</h3><p class="price">€4.50</p><button>Add</button></div>
   </div>
 
   <!-- Cold Drinks -->
   <div class="menu-section" id="cold">
-    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola',articleNumber:401,price:4.00,options:[]})"> <h3>Coca-Cola</h3><p class="price">€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola Zero',articleNumber:402,price:4.00,options:[]})"> <h3>Coca-Cola Zero</h3><p class="price">€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Orange',articleNumber:403,price:4.00,options:[]})"> <h3>Fanta Orange</h3><p class="price">€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Cassis',articleNumber:404,price:4.00,options:[]})"> <h3>Fanta Cassis</h3><p class="price">€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Still Water',articleNumber:405,price:3.50,options:[]})"> <h3>Still Water</h3><p class="price">€3.50</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Sparkling Water',articleNumber:406,price:3.50,options:[]})"> <h3>Sparkling Water</h3><p class="price">€3.50</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Sprite',articleNumber:407,price:4.00,options:[]})"> <h3>Sprite</h3><p class="price">€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Chocomel',articleNumber:408,price:4.00,options:[]})"> <h3>Chocomel</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola',articleNumber:401,price:4.00,options:[]})"><h3>Coca-Cola</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola Zero',articleNumber:402,price:4.00,options:[]})"><h3>Coca-Cola Zero</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Orange',articleNumber:403,price:4.00,options:[]})"><h3>Fanta Orange</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Cassis',articleNumber:404,price:4.00,options:[]})"><h3>Fanta Cassis</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Still Water',articleNumber:405,price:3.50,options:[]})"><h3>Still Water</h3><p class="price">€3.50</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Sparkling Water',articleNumber:406,price:3.50,options:[]})"><h3>Sparkling Water</h3><p class="price">€3.50</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Sprite',articleNumber:407,price:4.00,options:[]})"><h3>Sprite</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Chocomel',articleNumber:408,price:4.00,options:[]})"><h3>Chocomel</h3><p class="price">€4.00</p><button>Add</button></div>
 
     <!-- Iced Tea changed to one-of variants -->
     <div class="item cold-drink" onclick="prepareOptions({
@@ -300,12 +317,12 @@
       <h3>Iced Tea (Peach/Mango)</h3><p class="price">€4.00</p><button>Add</button>
     </div>
 
-    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Lemon Sparkling',articleNumber:410,price:4.00,options:[]})"> <h3>Iced Tea Lemon Sparkling</h3><p class="price">€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Bitter Lemon',articleNumber:411,price:4.00,options:[]})"> <h3>Royal Bliss Bitter Lemon</h3><p class="price">€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Tonic',articleNumber:412,price:4.00,options:[]})"> <h3>Royal Bliss Tonic</h3><p class="price">€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Looza (Pear/Strawberry/Peach)',articleNumber:413,price:4.00,options:[{name:'Pear',price:0},{name:'Strawberry',price:0},{name:'Peach',price:0}]})"> <h3>Looza (Pear/Strawberry/Peach)</h3><p class="price">€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Minute Maid Orange/Apple',articleNumber:414,price:4.00,options:[{name:'Orange',price:0},{name:'Apple',price:0}]})"> <h3>Minute Maid Orange/Apple</h3><p class="price">€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'AA Energy Drink',articleNumber:415,price:4.00,options:[]})"> <h3>AA Energy Drink</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Lemon Sparkling',articleNumber:410,price:4.00,options:[]})"><h3>Iced Tea Lemon Sparkling</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Bitter Lemon',articleNumber:411,price:4.00,options:[]})"><h3>Royal Bliss Bitter Lemon</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Tonic',articleNumber:412,price:4.00,options:[]})"><h3>Royal Bliss Tonic</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Looza (Pear/Strawberry/Peach)',articleNumber:413,price:4.00,options:[{name:'Pear',price:0},{name:'Strawberry',price:0},{name:'Peach',price:0}]})"><h3>Looza (Pear/Strawberry/Peach)</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Minute Maid Orange/Apple',articleNumber:414,price:4.00,options:[{name:'Orange',price:0},{name:'Apple',price:0}]})"><h3>Minute Maid Orange/Apple</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'AA Energy Drink',articleNumber:415,price:4.00,options:[]})"><h3>AA Energy Drink</h3><p class="price">€4.00</p><button>Add</button></div>
 
     <!-- Red Bull changed to one-of variants (Regular vs Light/Sugarfree) -->
     <div class="item cold-drink" onclick="prepareOptions({
@@ -324,8 +341,8 @@
 
   <!-- Homemade Snacks -->
   <div class="menu-section" id="snacks">
-    <div class="item" onclick="prepareOptions({name:'Chocolate Chip Cookie',articleNumber:501,price:3.50,options:[]})"> <h3>Chocolate Chip Cookie</h3><p class="price">€3.50</p><button>Add</button></div>
-    <div class="item" onclick="prepareOptions({name:'Banana Cake',articleNumber:502,price:4.00,options:[]})"> <h3>Banana Cake</h3><p class="price">€4.00</p><button>Add</button></div>
+    <div class="item" onclick="prepareOptions({name:'Chocolate Chip Cookie',articleNumber:501,price:3.50,options:[]})"><h3>Chocolate Chip Cookie</h3><p class="price">€3.50</p><button>Add</button></div>
+    <div class="item" onclick="prepareOptions({name:'Banana Cake',articleNumber:502,price:4.00,options:[]})"><h3>Banana Cake</h3><p class="price">€4.00</p><button>Add</button></div>
   </div>
 
   <!-- Basket -->
@@ -341,13 +358,11 @@
     <div class="social-icons" style="display:flex; justify-content:center; gap:20px; padding:20px 0;">
       <img alt="Instagram" src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" style="height:40px;"/>
       <img
-  alt="TikTok"
-  src="https://upload.wikimedia.org/wikipedia/commons/a/a9/TikTok_logo.svg"
-  onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg';"
-  style="height:40px;"
-/>
-
-
+        alt="TikTok"
+        src="https://upload.wikimedia.org/wikipedia/commons/a/a9/TikTok_logo.svg"
+        onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg';"
+        style="height:40px;"
+      />
       <img alt="Facebook" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" style="height:40px;"/>
     </div>
   </div>
@@ -556,6 +571,7 @@
     /* Idle Slideshow Logic */
     const videos = ['smoke.mp4', 'Christmas.mp4', 'mascotte.mp4'];
     let vidIdx = 0, slideshowTO;
+
     const overlay = document.createElement("div");
     overlay.id = "slideshow-overlay";
     overlay.style.display = "none";
@@ -566,10 +582,10 @@
     overlay.style.height = "100vh";
     overlay.style.zIndex = "10001";
     overlay.style.backgroundColor = "rgba(0, 0, 0, 0.9)";
-    overlay.style.display = "none";
     overlay.style.flexDirection = "column";
     overlay.style.alignItems = "center";
     overlay.style.justifyContent = "center";
+    overlay.style.pointerEvents = "auto"; // allow click to close
 
     const videoLogo = document.createElement("img");
     videoLogo.src = "EASY TIMES LOGO BLACK-01.png";
@@ -579,7 +595,14 @@
 
     const msg = document.createElement("div");
     msg.innerText = "CLICK THE SCREEN TO ORDER DRINKS";
-    Object.assign(msg.style, { color: "#FFA500", fontSize: "2rem", fontWeight: "bold", textAlign: "center", textShadow: "1px 1px 4px black", marginBottom: "30px" });
+    Object.assign(msg.style, {
+      color: "#FFA500",
+      fontSize: "2rem",
+      fontWeight: "bold",
+      textAlign: "center",
+      textShadow: "1px 1px 4px black",
+      marginBottom: "30px"
+    });
 
     const vf = document.createElement("div");
     vf.className = "video-frame";
@@ -597,16 +620,34 @@
     vid.muted = true;
     vid.autoplay = true;
     vid.playsInline = true;
-    Object.assign(vid.style, { position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "100%", height: "100%", objectFit: "cover" });
+    Object.assign(vid.style, {
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: "100%",
+      height: "100%",
+      objectFit: "cover"
+    });
 
     vf.appendChild(vid);
     overlay.appendChild(videoLogo);
     overlay.appendChild(msg);
     overlay.appendChild(vf);
+
+    /* ✅ QR popup (always visible during slideshow overlay) */
+    const qrPopup = document.createElement("img");
+    qrPopup.className = "qr-popup";
+    qrPopup.src = "qrcodelinks.png"; // <-- put your attached image file next to this HTML
+    qrPopup.alt = "Scan QR";
+    overlay.appendChild(qrPopup);
+
     document.body.appendChild(overlay);
 
     function playNext() {
-      vid.src = videos[vidIdx]; vid.load(); vid.play().catch(() =>{});
+      vid.src = videos[vidIdx];
+      vid.load();
+      vid.play().catch(() => {});
       vidIdx = (vidIdx + 1) % videos.length;
     }
     vid.addEventListener("ended", playNext);
@@ -614,8 +655,12 @@
 
     function resetIdle() {
       clearTimeout(slideshowTO);
-      vid.pause(); overlay.style.display = "none";
-      slideshowTO = setTimeout(() => { overlay.style.display = "flex"; playNext(); }, 50000);
+      vid.pause();
+      overlay.style.display = "none";
+      slideshowTO = setTimeout(() => {
+        overlay.style.display = "flex";
+        playNext();
+      }, 50000);
     }
 
     ["click","mousemove","touchstart","keydown"].forEach(ev => document.addEventListener(ev, resetIdle));
@@ -649,10 +694,7 @@
     });
     window.addEventListener('resize', reflowForBanner);
   </script>
-  
-<script src="live-config.js" defer></script>
-  
+
+  <script src="live-config.js" defer></script>
 </body>
 </html>
-
-
