@@ -49,6 +49,7 @@
       padding:.6em 1.5em; border:2px solid #f26522; border-radius:999px;
       color:#fef5e6; background:transparent; cursor:pointer; font-weight:600;
       transition:.3s;
+      user-select:none;
     }
     .tab.active { background:#f26522; color:#000; }
 
@@ -81,35 +82,33 @@
     }
     #basket h2 { color:#f26522; margin-bottom:.5em; }
     #basket ul { list-style:none; margin:0; padding:0; }
-    #basket li { display:flex; justify-content:space-between; margin:.4em 0; }
+    #basket li { display:flex; justify-content:space-between; margin:.4em 0; gap:10px; }
+    #basket li button { cursor:pointer; }
     #confirmOrder {
       margin-top:1em; padding:.6em 1.5em;
       background:#f26522; color:#000; border:none; border-radius:12px;
       font-weight:600; cursor:pointer; width:100%;
     }
 
-    /* Slideshow overlay */
+    /* IDLE OVERLAY (actual overlay is built in JS) */
     #slideshow-overlay {
       position: fixed; top: 0; left: 0;
-      width: 100vw; height: 100vh; display: none;
+      width: 100vw; height: 100vh;
+      display: none;
       align-items: center; justify-content: center;
-      background: rgba(0,0,0,0.9); z-index: 9999;
-      pointer-events: none;
+      background: rgba(0,0,0,0.9);
+      z-index: 10001;
+      pointer-events: auto; /* IMPORTANT */
     }
     #slideshow-overlay .video-frame {
       width: calc(100vh * 9 / 16); max-width: 90vw; height: 90vh;
       border: 10px solid #f26522; border-radius: 20px;
       overflow: hidden; background: black; display: flex;
       align-items: center; justify-content: center;
-    }
-    #slideshow-overlay .overlay-msg {
-      position: absolute; z-index: 10001;
-      top:50%; left:50%; transform: translate(-50%,-50%);
-      font-size:2rem; font-weight:bold;
-      color:#FFA500; text-shadow:0 0 8px black;
+      position: relative;
     }
 
-    /* ✅ QR always visible during idle slideshow overlay */
+    /* QR always visible during idle overlay */
     #slideshow-overlay .qr-popup {
       position: absolute;
       right: 22px;
@@ -119,25 +118,9 @@
       border-radius: 14px;
       box-shadow: 0 10px 30px rgba(0,0,0,.55);
       border: 3px solid rgba(242,101,34,.9);
-      z-index: 10005;          /* above the video */
-      pointer-events: none;    /* don’t block clicks/taps */
+      z-index: 10005;
+      pointer-events: none;
       opacity: .98;
-    }
-
-    /* Idle Slideshow container */
-    #slideshow-container {
-      margin-top:2em; width:100%; max-width:1080px; height:360px;
-      background:#000; position:relative;
-      border:2px solid #f26522; border-radius:12px; overflow:hidden;
-    }
-    #slideshow-container video {
-      width:100%; height:100%; object-fit:cover;
-    }
-    #slideshow-container .overlay-msg {
-      position:absolute; top:50%; left:50%;
-      transform:translate(-50%, -50%);
-      color:#FFA500; font-size:2rem; font-weight:bold;
-      text-shadow:0 0 8px black;
     }
 
     /* Notification */
@@ -184,10 +167,6 @@
     #mini-cart { font-size: 1.2rem; }
     #mini-cart h3 { font-size: 1.4rem; }
     #mini-cart li, #mini-cart .total { font-size: 1.2rem; }
-
-    /* Bigger self-pickup banner text */
-    #soloModeBanner { font-size: 1.5rem; font-weight: 800; letter-spacing: .02em; }
-
     #mini-cart {
       position:fixed; bottom:20px; right:20px;
       background:rgba(20,20,20,.95); border:3px solid #f26522;
@@ -207,6 +186,7 @@
       text-align:center; padding:1em; display:none;
       z-index:10020;
       border-bottom:4px solid #f26522;
+      font-size: 1.5rem; font-weight: 800; letter-spacing: .02em;
     }
 
     /* Star Wars Crawl */
@@ -238,6 +218,7 @@
       background:#f26522; color:#000; font-weight:800; padding:4px 10px;
       border-radius:10px; font-size:.95rem;
     }
+
     :root { --banner-offset: 0px; }
     body { padding-top: var(--banner-offset); }
   </style>
@@ -303,7 +284,7 @@
     <div class="item cold-drink" onclick="prepareOptions({name:'Sprite',articleNumber:407,price:4.00,options:[]})"><h3>Sprite</h3><p class="price">€4.00</p><button>Add</button></div>
     <div class="item cold-drink" onclick="prepareOptions({name:'Chocomel',articleNumber:408,price:4.00,options:[]})"><h3>Chocomel</h3><p class="price">€4.00</p><button>Add</button></div>
 
-    <!-- Iced Tea changed to one-of variants -->
+    <!-- Iced Tea one-of variants -->
     <div class="item cold-drink" onclick="prepareOptions({
       name:'Iced Tea',
       articleNumber:409,
@@ -324,7 +305,7 @@
     <div class="item cold-drink" onclick="prepareOptions({name:'Minute Maid Orange/Apple',articleNumber:414,price:4.00,options:[{name:'Orange',price:0},{name:'Apple',price:0}]})"><h3>Minute Maid Orange/Apple</h3><p class="price">€4.00</p><button>Add</button></div>
     <div class="item cold-drink" onclick="prepareOptions({name:'AA Energy Drink',articleNumber:415,price:4.00,options:[]})"><h3>AA Energy Drink</h3><p class="price">€4.00</p><button>Add</button></div>
 
-    <!-- Red Bull changed to one-of variants (Regular vs Light/Sugarfree) -->
+    <!-- Red Bull one-of variants -->
     <div class="item cold-drink" onclick="prepareOptions({
       name:'Red Bull Energy Drink',
       articleNumber:416,
@@ -373,9 +354,8 @@
     <img alt="Google Review QR" src="qr-code.png" style="height:160px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.4);"/>
   </div>
 
-  <!-- Slideshow Container & Crawl -->
+  <!-- Crawl area (kept as you had it) -->
   <div id="slideshow-container" style="position:relative; width:100%; height:100%; border:none; background:none; overflow:hidden;">
-    <video id="slideshowVideo" muted playsinline></video>
     <div class="starwars-crawl-wrapper">
       <div class="starwars-crawl">
         <div class="crawl-text">
@@ -406,6 +386,7 @@
 
   <!-- Notification / Modal / Mini-cart / Solo banner -->
   <div id="notification"></div>
+
   <div class="option-modal" id="optionModal" style="display:none;">
     <div class="option-box">
       <h3 id="optionTitle"></h3>
@@ -414,11 +395,15 @@
       <button onclick="closeModal()" style="margin-top:.5em;">Close</button>
     </div>
   </div>
+
   <div id="mini-cart"></div>
   <div id="soloModeBanner" style="display:none;">Self Pickup Mode: Please collect your drinks downstairs after ordering.</div>
 
-  <!-- JS Logic -->
   <script>
+  /* =========================
+     CONFIG (REPLACE THESE)
+     ========================= */
+  // IMPORTANT: don’t keep bot tokens in frontend long-term.
   const botToken = "7627172769:AAH7I_2LRd0VqZuMOpVxRn_vZbt4QXPn9wU";
   const chatId   = "5462781265";
 
@@ -426,23 +411,19 @@
   let selectedArticle = null;
 
   // ---------- SOUND (autoplay-safe) ----------
-  // Works after first user gesture. We'll "unlock" audio on first tap/click.
   let audioUnlocked = false;
 
   const sfx = {
-    tap: new Audio("tap.mp3"),            // optional file (put next to html) - if missing, it won't break
-    success: new Audio("success.mp3"),    // optional
-    error: new Audio("error.mp3")         // optional
+    tap: new Audio("tap.mp3"),
+    success: new Audio("success.mp3"),
+    error: new Audio("error.mp3")
   };
 
-  // Make them quiet-ish by default (adjust)
   Object.values(sfx).forEach(a => { a.volume = 0.5; a.preload = "auto"; });
 
   function unlockAudioOnce() {
     if (audioUnlocked) return;
     audioUnlocked = true;
-
-    // Try to prime audio (some browsers need a play() call)
     Object.values(sfx).forEach(a => {
       try {
         a.currentTime = 0;
@@ -452,10 +433,6 @@
         }).catch(() => {});
       } catch(e) {}
     });
-
-    // OPTIONAL: if you want overlay videos to have sound after first interaction, we can unmute them
-    // BUT usually you want the idle overlay silent. Keep this off unless you really want sound.
-    // tryUnmuteIdleOverlayVideo();
   }
 
   function playSfx(which) {
@@ -468,7 +445,6 @@
     } catch(e) {}
   }
 
-  // Unlock audio on first interaction
   ["click","touchstart","keydown"].forEach(ev => {
     document.addEventListener(ev, unlockAudioOnce, { once: true, passive: true });
   });
@@ -518,10 +494,8 @@
     const optList = document.getElementById("optionList");
     optList.innerHTML = "";
 
-    // 1) Variants (radio)
     renderVariantsIfAny(article);
 
-    // 2) Regular add-ons (checkboxes)
     (article.options || []).forEach((o, i) => {
       const lbl = document.createElement("label");
       lbl.innerHTML = `<input type="checkbox" data-index="${i}"> ${o.name} (+€${o.price.toFixed(2)})`;
@@ -535,7 +509,6 @@
     let extra = 0;
     let chosen = [];
 
-    // Add-ons
     document.querySelectorAll("#optionList input[type='checkbox']").forEach(cb => {
       if (cb.checked) {
         const o = selectedArticle.options[cb.dataset.index];
@@ -544,7 +517,6 @@
       }
     });
 
-    // Variant (oneOf)
     let variantLabel = null, variantAN = selectedArticle.articleNumber, variantDelta = 0;
     const sel = document.querySelector("#optionList input[name='variantOneOf']:checked");
     if (sel && selectedArticle.variants && selectedArticle.variants.choices[+sel.value]) {
@@ -593,7 +565,7 @@
     updateMiniCart();
   }
 
-  // ---------- TELEGRAM SEND (robust + confirmation) ----------
+  // ---------- TELEGRAM SEND ----------
   let isSubmitting = false;
 
   async function submitOrder() {
@@ -614,7 +586,6 @@
       btn.style.opacity = "0.7";
       btn.innerHTML = "Sending…";
 
-      // Build message
       const isSolo = JSON.parse(localStorage.getItem("soloMode") || "false");
       const total = orderList.reduce((s, x) => s + x.totalPrice, 0).toFixed(2);
 
@@ -628,24 +599,16 @@
       txt += `\nTOTAL: €${total}\n`;
       if (isSolo) txt += `\nSELF PICKUP MODE ✅`;
 
-      // Use POST (cleaner + avoids URL length problems)
       const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
       const resp = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: txt
-        })
+        body: JSON.stringify({ chat_id: chatId, text: txt })
       });
 
       const data = await resp.json();
+      if (!data.ok) throw new Error(data.description || "Telegram error");
 
-      if (!data.ok) {
-        throw new Error(data.description || "Telegram error");
-      }
-
-      // SUCCESS
       const extraMsg = isSolo
         ? "<br><strong>Self-Pickup Mode:</strong> Please collect your drinks downstairs."
         : "";
@@ -653,12 +616,10 @@
       showNotification("✅ Order sent!" + extraMsg, 15000);
       playSfx("success");
 
-      // Reset cart
       orderList = [];
       updateOrderList();
       updateMiniCart();
 
-      // Redirect like before
       setTimeout(() => location.href = "index.html", 10000);
     } catch (err) {
       console.error(err);
@@ -724,18 +685,13 @@
     }
   });
 
-    // ---------- IDLE SLIDESHOW (with QR overlay) ----------
+  // ---------- IDLE SLIDESHOW OVERLAY (reliable kiosk idle) ----------
   const videos = ["smoke.mp4", "christmas2.mp4", "Christmas.mp4", "mascotte.mp4"];
   let vidIdx = 0;
 
-  // how long until idle overlay shows
   const IDLE_MS = 50000;
-
-  // track last real interaction time
   let lastActivity = Date.now();
-  let idleCheckInterval = null;
 
-  // Build overlay once
   const overlay = document.createElement("div");
   overlay.id = "slideshow-overlay";
   Object.assign(overlay.style, {
@@ -767,7 +723,8 @@
     fontWeight: "bold",
     textAlign: "center",
     textShadow: "1px 1px 4px black",
-    marginBottom: "30px"
+    marginBottom: "30px",
+    userSelect: "none"
   });
 
   const vf = document.createElement("div");
@@ -785,7 +742,7 @@
 
   const vid = document.createElement("video");
   vid.id = "slideshowVideoOverlay";
-  vid.muted = true;          // keep silent to be autoplay-safe
+  vid.muted = true;
   vid.autoplay = true;
   vid.playsInline = true;
   vid.loop = false;
@@ -805,7 +762,6 @@
   overlay.appendChild(idleMsg);
   overlay.appendChild(vf);
 
-  // QR popup (always visible)
   const qrPopup = document.createElement("img");
   qrPopup.className = "qr-popup";
   qrPopup.src = "qrcodelinks.png";
@@ -836,31 +792,27 @@
     try { vid.pause(); } catch(e) {}
   }
 
-  // Only count "real" interactions (NOT mousemove)
   function markActivity() {
     lastActivity = Date.now();
     hideIdleOverlay();
   }
 
-  // Key fix: remove mousemove (it prevents idle on kiosks)
+  // IMPORTANT: no mousemove here (kiosk/webview can fire it constantly)
   ["pointerdown", "touchstart", "keydown", "wheel"].forEach(ev => {
     document.addEventListener(ev, markActivity, { passive: true });
   });
 
-  // Tapping overlay closes it + counts as activity
   overlay.addEventListener("pointerdown", () => {
     playSfx("tap");
     markActivity();
   }, { passive: true });
 
-  // Idle watcher (reliable even if there are random events)
-  idleCheckInterval = setInterval(() => {
+  setInterval(() => {
     if (Date.now() - lastActivity >= IDLE_MS) showIdleOverlay();
   }, 500);
 
   // Start clean
   markActivity();
-
 
   // ---------- SURPRISE ME ----------
   function magicOrder() {
@@ -880,7 +832,7 @@
   }
   window.addEventListener("resize", reflowForBanner);
 
-  // OPTIONAL: if you want idle overlay video to have sound after first click (not recommended in shop)
+  // OPTIONAL: if you want idle overlay video to have sound after first click (not recommended)
   function tryUnmuteIdleOverlayVideo() {
     try {
       const v = document.getElementById("slideshowVideoOverlay");
@@ -890,9 +842,9 @@
       v.play().catch(() => {});
     } catch(e) {}
   }
-</script>
-
+  </script>
 
   <script src="live-config.js" defer></script>
 </body>
 </html>
+
