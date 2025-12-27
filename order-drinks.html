@@ -724,10 +724,18 @@
     }
   });
 
-  // ---------- IDLE SLIDESHOW (with QR overlay) ----------
+    // ---------- IDLE SLIDESHOW (with QR overlay) ----------
   const videos = ["smoke.mp4", "christmas2.mp4", "Christmas.mp4", "mascotte.mp4"];
-  let vidIdx = 0, slideshowTO;
+  let vidIdx = 0;
 
+  // how long until idle overlay shows
+  const IDLE_MS = 50000;
+
+  // track last real interaction time
+  let lastActivity = Date.now();
+  let idleCheckInterval = null;
+
+  // Build overlay once
   const overlay = document.createElement("div");
   overlay.id = "slideshow-overlay";
   Object.assign(overlay.style, {
@@ -742,7 +750,7 @@
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    pointerEvents: "auto" // allow click to close
+    pointerEvents: "auto"
   });
 
   const videoLogo = document.createElement("img");
@@ -777,10 +785,11 @@
 
   const vid = document.createElement("video");
   vid.id = "slideshowVideoOverlay";
-  vid.muted = true;      // keep silent idle overlay (autoplay-safe)
+  vid.muted = true;          // keep silent to be autoplay-safe
   vid.autoplay = true;
   vid.playsInline = true;
   vid.loop = false;
+  vid.preload = "auto";
   Object.assign(vid.style, {
     position: "absolute",
     top: "50%",
@@ -796,7 +805,7 @@
   overlay.appendChild(idleMsg);
   overlay.appendChild(vf);
 
-  // QR popup (always visible during slideshow overlay)
+  // QR popup (always visible)
   const qrPopup = document.createElement("img");
   qrPopup.className = "qr-popup";
   qrPopup.src = "qrcodelinks.png";
@@ -811,29 +820,47 @@
     vid.play().catch(() => {});
     vidIdx = (vidIdx + 1) % videos.length;
   }
+
   vid.addEventListener("ended", playNext);
   vid.addEventListener("error", playNext);
 
-  function resetIdle() {
-    clearTimeout(slideshowTO);
-    try { vid.pause(); } catch(e) {}
-    overlay.style.display = "none";
-
-    slideshowTO = setTimeout(() => {
-      overlay.style.display = "flex";
-      playNext();
-    }, 50000);
+  function showIdleOverlay() {
+    if (overlay.style.display === "flex") return;
+    overlay.style.display = "flex";
+    playNext();
   }
 
-  ["click","mousemove","touchstart","keydown"].forEach(ev =>
-    document.addEventListener(ev, resetIdle, { passive: true })
-  );
-  overlay.addEventListener("click", () => {
-    playSfx("tap");
-    resetIdle();
+  function hideIdleOverlay() {
+    if (overlay.style.display === "none") return;
+    overlay.style.display = "none";
+    try { vid.pause(); } catch(e) {}
+  }
+
+  // Only count "real" interactions (NOT mousemove)
+  function markActivity() {
+    lastActivity = Date.now();
+    hideIdleOverlay();
+  }
+
+  // Key fix: remove mousemove (it prevents idle on kiosks)
+  ["pointerdown", "touchstart", "keydown", "wheel"].forEach(ev => {
+    document.addEventListener(ev, markActivity, { passive: true });
   });
 
-  resetIdle();
+  // Tapping overlay closes it + counts as activity
+  overlay.addEventListener("pointerdown", () => {
+    playSfx("tap");
+    markActivity();
+  }, { passive: true });
+
+  // Idle watcher (reliable even if there are random events)
+  idleCheckInterval = setInterval(() => {
+    if (Date.now() - lastActivity >= IDLE_MS) showIdleOverlay();
+  }, 500);
+
+  // Start clean
+  markActivity();
+
 
   // ---------- SURPRISE ME ----------
   function magicOrder() {
