@@ -419,281 +419,452 @@
 
   <!-- JS Logic -->
   <script>
-    const botToken = "7627172769:AAH7I_2LRd0VqZuMOpVxRn_vZbt4QXPn9wU", chatId = "5462781265";
-    let orderList = [], selectedArticle = null;
+  const botToken = "7627172769:AAH7I_2LRd0VqZuMOpVxRn_vZbt4QXPn9wU";
+  const chatId   = "5462781265";
 
-    function showNotification(msg, ms = 8000) {
-      const n = document.getElementById("notification");
-      n.innerHTML = msg + '<div style="margin-top:.6em;font-size:1rem;opacity:.9">Tap to close</div>';
-      n.classList.add("show");
-      clearTimeout(n._hideTO);
-      n.onclick = () => { n.classList.remove("show"); clearTimeout(n._hideTO); n.onclick = null; };
-      n._hideTO = setTimeout(() => { n.classList.remove("show"); n.onclick = null; }, ms);
-    }
+  let orderList = [];
+  let selectedArticle = null;
 
-    /* ========== VARIANTS SUPPORT (one-of) ========== */
-    function renderVariantsIfAny(article) {
-      const box = document.getElementById("optionList");
-      if (!article.variants || article.variants.type !== 'oneOf') return;
-      const g = document.createElement('div');
-      g.style.margin = '0 0 0.8em 0';
-      const title = document.createElement('div');
-      title.style.margin = '0 0 0.4em 0';
-      title.style.fontWeight = '700';
-      title.textContent = article.variants.group || 'Variant';
-      g.appendChild(title);
-      article.variants.choices.forEach((c, idx) => {
-        const lbl = document.createElement("label");
-        lbl.style.display = "block";
-        lbl.innerHTML = `
-          <input type="radio" name="variantOneOf" value="${idx}" ${idx===0?'checked':''}>
-          ${c.label} ${c.priceDelta ? `(+€${c.priceDelta.toFixed(2)})` : ''}
-        `;
-        g.appendChild(lbl);
-      });
-      box.appendChild(g);
-    }
+  // ---------- SOUND (autoplay-safe) ----------
+  // Works after first user gesture. We'll "unlock" audio on first tap/click.
+  let audioUnlocked = false;
 
-    function prepareOptions(article) {
-      selectedArticle = article;
-      document.getElementById("optionTitle").innerText = `Options for ${article.name}`;
-      const optList = document.getElementById("optionList"); optList.innerHTML = "";
+  const sfx = {
+    tap: new Audio("tap.mp3"),            // optional file (put next to html) - if missing, it won't break
+    success: new Audio("success.mp3"),    // optional
+    error: new Audio("error.mp3")         // optional
+  };
 
-      // 1) Variants (radio)
-      renderVariantsIfAny(article);
+  // Make them quiet-ish by default (adjust)
+  Object.values(sfx).forEach(a => { a.volume = 0.5; a.preload = "auto"; });
 
-      // 2) Regular add-ons (checkboxes)
-      (article.options || []).forEach((o,i) => {
-        const lbl = document.createElement("label");
-        lbl.innerHTML = `<input type="checkbox" data-index="${i}"> ${o.name} (+€${o.price.toFixed(2)})`;
-        optList.appendChild(lbl);
-      });
+  function unlockAudioOnce() {
+    if (audioUnlocked) return;
+    audioUnlocked = true;
 
-      document.getElementById("optionModal").style.display = "flex";
-    }
+    // Try to prime audio (some browsers need a play() call)
+    Object.values(sfx).forEach(a => {
+      try {
+        a.currentTime = 0;
+        a.play().then(() => {
+          a.pause();
+          a.currentTime = 0;
+        }).catch(() => {});
+      } catch(e) {}
+    });
 
-    function confirmOptions() {
-      let extra = 0, chosen = [];
-      // Add-ons
-      document.querySelectorAll("#optionList input[type='checkbox']").forEach(cb => {
-        if (cb.checked) {
-          const o = selectedArticle.options[cb.dataset.index];
-          chosen.push(o);
-          extra += o.price;
-        }
-      });
-      // Variant
-      let variantLabel = null, variantAN = selectedArticle.articleNumber, variantDelta = 0;
-      const sel = document.querySelector("#optionList input[name='variantOneOf']:checked");
-      if (sel && selectedArticle.variants && selectedArticle.variants.choices[+sel.value]) {
-        const v = selectedArticle.variants.choices[+sel.value];
-        variantLabel = v.label;
-        variantAN = v.articleNumber || variantAN;
-        variantDelta = v.priceDelta || 0;
+    // OPTIONAL: if you want overlay videos to have sound after first interaction, we can unmute them
+    // BUT usually you want the idle overlay silent. Keep this off unless you really want sound.
+    // tryUnmuteIdleOverlayVideo();
+  }
+
+  function playSfx(which) {
+    if (!audioUnlocked) return;
+    const a = sfx[which];
+    if (!a) return;
+    try {
+      a.currentTime = 0;
+      a.play().catch(() => {});
+    } catch(e) {}
+  }
+
+  // Unlock audio on first interaction
+  ["click","touchstart","keydown"].forEach(ev => {
+    document.addEventListener(ev, unlockAudioOnce, { once: true, passive: true });
+  });
+
+  // ---------- NOTIFICATION ----------
+  function showNotification(msg, ms = 8000) {
+    const n = document.getElementById("notification");
+    n.innerHTML = msg + '<div style="margin-top:.6em;font-size:1rem;opacity:.9">Tap to close</div>';
+    n.classList.add("show");
+    clearTimeout(n._hideTO);
+    n.onclick = () => { n.classList.remove("show"); clearTimeout(n._hideTO); n.onclick = null; };
+    n._hideTO = setTimeout(() => { n.classList.remove("show"); n.onclick = null; }, ms);
+  }
+
+  // ---------- VARIANTS SUPPORT (one-of) ----------
+  function renderVariantsIfAny(article) {
+    const box = document.getElementById("optionList");
+    if (!article.variants || article.variants.type !== "oneOf") return;
+
+    const g = document.createElement("div");
+    g.style.margin = "0 0 0.8em 0";
+
+    const title = document.createElement("div");
+    title.style.margin = "0 0 0.4em 0";
+    title.style.fontWeight = "700";
+    title.textContent = article.variants.group || "Variant";
+    g.appendChild(title);
+
+    article.variants.choices.forEach((c, idx) => {
+      const lbl = document.createElement("label");
+      lbl.style.display = "block";
+      lbl.innerHTML = `
+        <input type="radio" name="variantOneOf" value="${idx}" ${idx === 0 ? "checked" : ""}>
+        ${c.label} ${c.priceDelta ? `(+€${c.priceDelta.toFixed(2)})` : ""}
+      `;
+      g.appendChild(lbl);
+    });
+
+    box.appendChild(g);
+  }
+
+  function prepareOptions(article) {
+    playSfx("tap");
+    selectedArticle = article;
+
+    document.getElementById("optionTitle").innerText = `Options for ${article.name}`;
+    const optList = document.getElementById("optionList");
+    optList.innerHTML = "";
+
+    // 1) Variants (radio)
+    renderVariantsIfAny(article);
+
+    // 2) Regular add-ons (checkboxes)
+    (article.options || []).forEach((o, i) => {
+      const lbl = document.createElement("label");
+      lbl.innerHTML = `<input type="checkbox" data-index="${i}"> ${o.name} (+€${o.price.toFixed(2)})`;
+      optList.appendChild(lbl);
+    });
+
+    document.getElementById("optionModal").style.display = "flex";
+  }
+
+  function confirmOptions() {
+    let extra = 0;
+    let chosen = [];
+
+    // Add-ons
+    document.querySelectorAll("#optionList input[type='checkbox']").forEach(cb => {
+      if (cb.checked) {
+        const o = selectedArticle.options[cb.dataset.index];
+        chosen.push(o);
+        extra += o.price;
       }
-      const finalName = variantLabel ? `${selectedArticle.name} – ${variantLabel}` : selectedArticle.name;
-      const total = (selectedArticle.price + variantDelta + extra);
-      orderList.push({
-        ...selectedArticle,
-        name: finalName,
-        articleNumber: variantAN,
-        selectedOptions: chosen,
-        totalPrice: total
-      });
-      updateOrderList(); updateMiniCart(); closeModal();
+    });
+
+    // Variant (oneOf)
+    let variantLabel = null, variantAN = selectedArticle.articleNumber, variantDelta = 0;
+    const sel = document.querySelector("#optionList input[name='variantOneOf']:checked");
+    if (sel && selectedArticle.variants && selectedArticle.variants.choices[+sel.value]) {
+      const v = selectedArticle.variants.choices[+sel.value];
+      variantLabel = v.label;
+      variantAN = v.articleNumber || variantAN;
+      variantDelta = v.priceDelta || 0;
     }
 
-    function closeModal() { document.getElementById("optionModal").style.display = "none"; }
+    const finalName = variantLabel ? `${selectedArticle.name} – ${variantLabel}` : selectedArticle.name;
+    const total = (selectedArticle.price + variantDelta + extra);
 
-    function updateOrderList() {
-      const ul = document.getElementById("basketList"); ul.innerHTML = "";
-      orderList.forEach((it,i) => {
-        ul.innerHTML += `<li>#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)}) <button onclick="removeFromOrder(${i})">×</button></li>`;
-      });
-      document.getElementById("totalPrice").innerText = orderList.reduce((s,x) => s + x.totalPrice, 0).toFixed(2);
+    orderList.push({
+      ...selectedArticle,
+      name: finalName,
+      articleNumber: variantAN,
+      selectedOptions: chosen,
+      totalPrice: total
+    });
+
+    updateOrderList();
+    updateMiniCart();
+    closeModal();
+
+    playSfx("tap");
+  }
+
+  function closeModal() {
+    document.getElementById("optionModal").style.display = "none";
+  }
+
+  function updateOrderList() {
+    const ul = document.getElementById("basketList");
+    ul.innerHTML = "";
+    orderList.forEach((it, i) => {
+      ul.innerHTML += `<li>#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)}) <button onclick="removeFromOrder(${i})">×</button></li>`;
+    });
+    document.getElementById("totalPrice").innerText =
+      orderList.reduce((s, x) => s + x.totalPrice, 0).toFixed(2);
+  }
+
+  function removeFromOrder(idx) {
+    playSfx("tap");
+    orderList.splice(idx, 1);
+    updateOrderList();
+    updateMiniCart();
+  }
+
+  // ---------- TELEGRAM SEND (robust + confirmation) ----------
+  let isSubmitting = false;
+
+  async function submitOrder() {
+    if (isSubmitting) return;
+
+    if (!orderList.length) {
+      showNotification("No items in order!");
+      playSfx("error");
+      return;
     }
-    function removeFromOrder(idx) { orderList.splice(idx,1); updateOrderList(); updateMiniCart(); }
 
-    function submitOrder() {
-      if (!orderList.length) { showNotification("No items in order!"); return; }
+    const btn = document.getElementById("confirmOrder");
+    const prev = btn.innerHTML;
+
+    try {
+      isSubmitting = true;
+      btn.disabled = true;
+      btn.style.opacity = "0.7";
+      btn.innerHTML = "Sending…";
+
+      // Build message
+      const isSolo = JSON.parse(localStorage.getItem("soloMode") || "false");
+      const total = orderList.reduce((s, x) => s + x.totalPrice, 0).toFixed(2);
+
       let txt = "🇦 New Order:\n";
       orderList.forEach(it => {
         txt += `#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)})\n`;
-        if (it.selectedOptions && it.selectedOptions.length)
-          txt += '  → ' + it.selectedOptions.map(o=>o.name).join(', ') + '\n';
+        if (it.selectedOptions && it.selectedOptions.length) {
+          txt += "  → " + it.selectedOptions.map(o => o.name).join(", ") + "\n";
+        }
       });
-      fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(txt)}`)
-        .then(r => r.json()).then(d => {
-          if (d.ok) {
-            const isSolo = JSON.parse(localStorage.getItem("soloMode") || "false");
-            const extraMsg = isSolo
-              ? "<br><strong>Self-Pickup Mode:</strong> Please collect your drinks downstairs."
-              : "";
-            showNotification("✅ Order sent!" + extraMsg, 15000);
-            orderList = []; updateOrderList(); updateMiniCart();
-            setTimeout(() => location.href = "index.html", 10000);
-          }
-        });
-    }
+      txt += `\nTOTAL: €${total}\n`;
+      if (isSolo) txt += `\nSELF PICKUP MODE ✅`;
 
-    function updateMiniCart() {
-      const m = document.getElementById("mini-cart"); let html = "<h3>Basket</h3><ul>", tot=0;
-      orderList.forEach(it => { html += `<li>${it.name} - €${it.totalPrice.toFixed(2)}</li>`; tot += it.totalPrice; });
-      html += `</ul><div class='total'>Total: €${tot.toFixed(2)}</div>`;
-      m.innerHTML = html; m.classList.add("show");
-      clearTimeout(window._miniTO); window._miniTO = setTimeout(() => m.classList.remove("show"), 10000);
-    }
+      // Use POST (cleaner + avoids URL length problems)
+      const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+      const resp = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: txt
+        })
+      });
 
-    function switchTab(id) {
-      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-      document.querySelectorAll(".menu-section").forEach(s => s.classList.remove("active"));
-      document.querySelector(`.tab[onclick="switchTab('${id}')"]`).classList.add("active");
-      document.getElementById(id).classList.add("active");
-    }
+      const data = await resp.json();
 
-    let pressTimer;
-    document.body.addEventListener("touchstart", e => {
-      if (e.touches[0].clientX < 100 && e.touches[0].clientY < 100)
-        pressTimer = setTimeout(toggleSoloMode, 1500);
+      if (!data.ok) {
+        throw new Error(data.description || "Telegram error");
+      }
+
+      // SUCCESS
+      const extraMsg = isSolo
+        ? "<br><strong>Self-Pickup Mode:</strong> Please collect your drinks downstairs."
+        : "";
+
+      showNotification("✅ Order sent!" + extraMsg, 15000);
+      playSfx("success");
+
+      // Reset cart
+      orderList = [];
+      updateOrderList();
+      updateMiniCart();
+
+      // Redirect like before
+      setTimeout(() => location.href = "index.html", 10000);
+    } catch (err) {
+      console.error(err);
+      showNotification("❌ Order failed. Please try again.");
+      playSfx("error");
+    } finally {
+      isSubmitting = false;
+      btn.disabled = false;
+      btn.style.opacity = "1";
+      btn.innerHTML = prev;
+    }
+  }
+
+  function updateMiniCart() {
+    const m = document.getElementById("mini-cart");
+    let html = "<h3>Basket</h3><ul>", tot = 0;
+    orderList.forEach(it => {
+      html += `<li>${it.name} - €${it.totalPrice.toFixed(2)}</li>`;
+      tot += it.totalPrice;
     });
-    document.body.addEventListener("touchend", () => clearTimeout(pressTimer));
+    html += `</ul><div class='total'>Total: €${tot.toFixed(2)}</div>`;
+    m.innerHTML = html;
+    m.classList.add("show");
+    clearTimeout(window._miniTO);
+    window._miniTO = setTimeout(() => m.classList.remove("show"), 10000);
+  }
 
-    function toggleSoloMode() {
-      const on = !JSON.parse(localStorage.getItem("soloMode") || "false");
-      localStorage.setItem("soloMode", on);
-      document.getElementById("soloModeBanner").style.display = on ? "block" : "none";
+  // ---------- TABS ----------
+  function switchTab(id) {
+    playSfx("tap");
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".menu-section").forEach(s => s.classList.remove("active"));
+    document.querySelector(`.tab[onclick="switchTab('${id}')"]`).classList.add("active");
+    document.getElementById(id).classList.add("active");
+  }
+
+  // ---------- SOLO MODE ----------
+  let pressTimer;
+  document.body.addEventListener("touchstart", e => {
+    if (e.touches[0].clientX < 100 && e.touches[0].clientY < 100) {
+      pressTimer = setTimeout(toggleSoloMode, 1500);
     }
-    document.addEventListener("DOMContentLoaded", () => {
-      if (JSON.parse(localStorage.getItem("soloMode") || "false"))
-        document.getElementById("soloModeBanner").style.display = "block";
-    });
+  }, { passive: true });
+  document.body.addEventListener("touchend", () => clearTimeout(pressTimer));
 
-    /* Idle Slideshow Logic */
-    const videos = ['smoke.mp4', 'christmas2.mp4', 'Christmas.mp4', 'mascotte.mp4'];
-    let vidIdx = 0, slideshowTO;
+  function toggleSoloMode() {
+    playSfx("tap");
+    const on = !JSON.parse(localStorage.getItem("soloMode") || "false");
+    localStorage.setItem("soloMode", on);
+    document.getElementById("soloModeBanner").style.display = on ? "block" : "none";
+    reflowForBanner();
+  }
 
-    const overlay = document.createElement("div");
-    overlay.id = "slideshow-overlay";
+  document.addEventListener("DOMContentLoaded", () => {
+    if (JSON.parse(localStorage.getItem("soloMode") || "false")) {
+      document.getElementById("soloModeBanner").style.display = "block";
+    }
+    reflowForBanner();
+    const b = document.getElementById("soloModeBanner");
+    if (b) {
+      new MutationObserver(reflowForBanner)
+        .observe(b, { attributes: true, attributeFilter: ["style", "class"] });
+    }
+  });
+
+  // ---------- IDLE SLIDESHOW (with QR overlay) ----------
+  const videos = ["smoke.mp4", "christmas2.mp4", "Christmas.mp4", "mascotte.mp4"];
+  let vidIdx = 0, slideshowTO;
+
+  const overlay = document.createElement("div");
+  overlay.id = "slideshow-overlay";
+  Object.assign(overlay.style, {
+    display: "none",
+    position: "fixed",
+    top: "0",
+    left: "0",
+    width: "100vw",
+    height: "100vh",
+    zIndex: "10001",
+    backgroundColor: "rgba(0, 0, 0, 0.9)",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    pointerEvents: "auto" // allow click to close
+  });
+
+  const videoLogo = document.createElement("img");
+  videoLogo.src = "EASY TIMES LOGO BLACK-01.png";
+  videoLogo.alt = "EasyTimes Logo";
+  videoLogo.style.width = "200px";
+  videoLogo.style.margin = "30px 0";
+
+  const idleMsg = document.createElement("div");
+  idleMsg.innerText = "CLICK THE SCREEN TO ORDER DRINKS";
+  Object.assign(idleMsg.style, {
+    color: "#FFA500",
+    fontSize: "2rem",
+    fontWeight: "bold",
+    textAlign: "center",
+    textShadow: "1px 1px 4px black",
+    marginBottom: "30px"
+  });
+
+  const vf = document.createElement("div");
+  vf.className = "video-frame";
+  Object.assign(vf.style, {
+    width: "calc(100vh * 9 / 16)",
+    maxWidth: "90vw",
+    height: "90vh",
+    border: "10px solid #f26522",
+    borderRadius: "20px",
+    overflow: "hidden",
+    background: "black",
+    position: "relative"
+  });
+
+  const vid = document.createElement("video");
+  vid.id = "slideshowVideoOverlay";
+  vid.muted = true;      // keep silent idle overlay (autoplay-safe)
+  vid.autoplay = true;
+  vid.playsInline = true;
+  vid.loop = false;
+  Object.assign(vid.style, {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "100%",
+    height: "100%",
+    objectFit: "cover"
+  });
+
+  vf.appendChild(vid);
+  overlay.appendChild(videoLogo);
+  overlay.appendChild(idleMsg);
+  overlay.appendChild(vf);
+
+  // QR popup (always visible during slideshow overlay)
+  const qrPopup = document.createElement("img");
+  qrPopup.className = "qr-popup";
+  qrPopup.src = "qrcodelinks.png";
+  qrPopup.alt = "Scan QR";
+  overlay.appendChild(qrPopup);
+
+  document.body.appendChild(overlay);
+
+  function playNext() {
+    vid.src = videos[vidIdx];
+    vid.load();
+    vid.play().catch(() => {});
+    vidIdx = (vidIdx + 1) % videos.length;
+  }
+  vid.addEventListener("ended", playNext);
+  vid.addEventListener("error", playNext);
+
+  function resetIdle() {
+    clearTimeout(slideshowTO);
+    try { vid.pause(); } catch(e) {}
     overlay.style.display = "none";
-    overlay.style.position = "fixed";
-    overlay.style.top = "0";
-    overlay.style.left = "0";
-    overlay.style.width = "100vw";
-    overlay.style.height = "100vh";
-    overlay.style.zIndex = "10001";
-    overlay.style.backgroundColor = "rgba(0, 0, 0, 0.9)";
-    overlay.style.flexDirection = "column";
-    overlay.style.alignItems = "center";
-    overlay.style.justifyContent = "center";
-    overlay.style.pointerEvents = "auto"; // allow click to close
 
-    const videoLogo = document.createElement("img");
-    videoLogo.src = "EASY TIMES LOGO BLACK-01.png";
-    videoLogo.alt = "EasyTimes Logo";
-    videoLogo.style.width = "200px";
-    videoLogo.style.margin = "30px 0";
+    slideshowTO = setTimeout(() => {
+      overlay.style.display = "flex";
+      playNext();
+    }, 50000);
+  }
 
-    const msg = document.createElement("div");
-    msg.innerText = "CLICK THE SCREEN TO ORDER DRINKS";
-    Object.assign(msg.style, {
-      color: "#FFA500",
-      fontSize: "2rem",
-      fontWeight: "bold",
-      textAlign: "center",
-      textShadow: "1px 1px 4px black",
-      marginBottom: "30px"
-    });
-
-    const vf = document.createElement("div");
-    vf.className = "video-frame";
-    vf.style.width = "calc(100vh * 9 / 16)";
-    vf.style.maxWidth = "90vw";
-    vf.style.height = "90vh";
-    vf.style.border = "10px solid #f26522";
-    vf.style.borderRadius = "20px";
-    vf.style.overflow = "hidden";
-    vf.style.background = "black";
-    vf.style.position = "relative";
-
-    const vid = document.createElement("video");
-    vid.id = "slideshowVideoOverlay";
-    vid.muted = true;
-    vid.autoplay = true;
-    vid.playsInline = true;
-    Object.assign(vid.style, {
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      width: "100%",
-      height: "100%",
-      objectFit: "cover"
-    });
-
-    vf.appendChild(vid);
-    overlay.appendChild(videoLogo);
-    overlay.appendChild(msg);
-    overlay.appendChild(vf);
-
-    /* ✅ QR popup (always visible during slideshow overlay) */
-    const qrPopup = document.createElement("img");
-    qrPopup.className = "qr-popup";
-    qrPopup.src = "qrcodelinks.png"; // <-- put your attached image file next to this HTML
-    qrPopup.alt = "Scan QR";
-    overlay.appendChild(qrPopup);
-
-    document.body.appendChild(overlay);
-
-    function playNext() {
-      vid.src = videos[vidIdx];
-      vid.load();
-      vid.play().catch(() => {});
-      vidIdx = (vidIdx + 1) % videos.length;
-    }
-    vid.addEventListener("ended", playNext);
-    vid.addEventListener("error", playNext);
-
-    function resetIdle() {
-      clearTimeout(slideshowTO);
-      vid.pause();
-      overlay.style.display = "none";
-      slideshowTO = setTimeout(() => {
-        overlay.style.display = "flex";
-        playNext();
-      }, 50000);
-    }
-
-    ["click","mousemove","touchstart","keydown"].forEach(ev => document.addEventListener(ev, resetIdle));
-    overlay.addEventListener("click", resetIdle);
+  ["click","mousemove","touchstart","keydown"].forEach(ev =>
+    document.addEventListener(ev, resetIdle, { passive: true })
+  );
+  overlay.addEventListener("click", () => {
+    playSfx("tap");
     resetIdle();
+  });
 
-    function magicOrder() {
-      const allItems = [...document.querySelectorAll('.item')];
-      allItems[Math.floor(Math.random() * allItems.length)].click();
-    }
+  resetIdle();
 
-    // Reserve space for the fixed banner so it doesn't cover the logo
-    function reflowForBanner() {
-      const b = document.getElementById('soloModeBanner');
-      if (!b) return;
-      const visible = getComputedStyle(b).display !== 'none';
-      const h = visible ? b.getBoundingClientRect().height : 0;
-      document.body.style.setProperty('--banner-offset', (h ? h + 8 : 0) + 'px');
-    }
+  // ---------- SURPRISE ME ----------
+  function magicOrder() {
+    playSfx("tap");
+    const allItems = [...document.querySelectorAll(".item:not(.sold-out)")];
+    if (!allItems.length) return;
+    allItems[Math.floor(Math.random() * allItems.length)].click();
+  }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      if (JSON.parse(localStorage.getItem("soloMode") || "false")) {
-        document.getElementById("soloModeBanner").style.display = "block";
-      }
-      reflowForBanner();
-      const b = document.getElementById('soloModeBanner');
-      if (b) {
-        new MutationObserver(reflowForBanner)
-          .observe(b, { attributes: true, attributeFilter: ['style', 'class'] });
-      }
-    });
-    window.addEventListener('resize', reflowForBanner);
-  </script>
+  // ---------- Banner spacing ----------
+  function reflowForBanner() {
+    const b = document.getElementById("soloModeBanner");
+    if (!b) return;
+    const visible = getComputedStyle(b).display !== "none";
+    const h = visible ? b.getBoundingClientRect().height : 0;
+    document.body.style.setProperty("--banner-offset", (h ? h + 8 : 0) + "px");
+  }
+  window.addEventListener("resize", reflowForBanner);
+
+  // OPTIONAL: if you want idle overlay video to have sound after first click (not recommended in shop)
+  function tryUnmuteIdleOverlayVideo() {
+    try {
+      const v = document.getElementById("slideshowVideoOverlay");
+      if (!v) return;
+      v.muted = false;
+      v.volume = 0.6;
+      v.play().catch(() => {});
+    } catch(e) {}
+  }
+</script>
+
 
   <script src="live-config.js" defer></script>
 </body>
