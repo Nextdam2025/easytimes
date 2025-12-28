@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
   <title>Easy Times Menu</title>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600&display=swap" rel="stylesheet"/>
+
   <style>
     /* Reset & Base */
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,7 +29,6 @@
       border:10px solid #f26522;
       box-sizing:border-box; pointer-events:none; z-index:10000;
     }
-
     @keyframes floatLogo { to { transform: translateY(-8px); } }
 
     /* Back Button */
@@ -48,7 +48,7 @@
     .tab {
       padding:.6em 1.5em; border:2px solid #f26522; border-radius:999px;
       color:#fef5e6; background:transparent; cursor:pointer; font-weight:600;
-      transition:.3s;
+      transition:.3s; user-select:none;
     }
     .tab.active { background:#f26522; color:#000; }
 
@@ -69,6 +69,7 @@
     .item button {
       padding:.5em 1.2em; background:#f26522; color:#000;
       border:none; border-radius:8px; font-weight:600;
+      pointer-events:none; /* the whole card is clickable */
     }
     .item.hot-drink  { background:linear-gradient(145deg,#CC5A00,#E67300); }
     .item.cold-drink { background:linear-gradient(145deg,#00BFA6,#00D7C3); }
@@ -77,71 +78,43 @@
     /* Basket */
     #basket {
       background:#1c1c1c; border-top:2px solid #f26522;
-      width:100%; max-width:1080px; margin-top:2em; padding:1em; text-align:left;
+      width:100%; max-width:1080px; margin-top:1.5em; padding:1em; text-align:left;
     }
     #basket h2 { color:#f26522; margin-bottom:.5em; }
     #basket ul { list-style:none; margin:0; padding:0; }
-    #basket li { display:flex; justify-content:space-between; margin:.4em 0; }
+    #basket li {
+      display:flex; justify-content:space-between; align-items:center;
+      margin:.4em 0; gap:12px;
+    }
+    #basket li button {
+      padding:.2em .6em; border-radius:10px; border:none;
+      background:rgba(255,255,255,0.12); color:#fff; cursor:pointer;
+    }
     #confirmOrder {
-      margin-top:1em; padding:.6em 1.5em;
+      margin-top:1em; padding:.75em 1.2em;
       background:#f26522; color:#000; border:none; border-radius:12px;
-      font-weight:600; cursor:pointer; width:100%;
+      font-weight:800; cursor:pointer; width:100%;
     }
-
-    /* Slideshow overlay */
-    #slideshow-overlay {
-      position: fixed; top: 0; left: 0;
-      width: 100vw; height: 100vh; display: none;
-      align-items: center; justify-content: center;
-      background: rgba(0,0,0,0.9); z-index: 9999;
-      pointer-events: none;
-    }
-    #slideshow-overlay .video-frame {
-      width: calc(100vh * 9 / 16); max-width: 90vw; height: 90vh;
-      border: 10px solid #f26522; border-radius: 20px;
-      overflow: hidden; background: black; display: flex;
-      align-items: center; justify-content: center;
-    }
-    #slideshow-overlay .overlay-msg {
-      position: absolute; z-index: 10001;
-      top:50%; left:50%; transform: translate(-50%,-50%);
-      font-size:2rem; font-weight:bold;
-      color:#FFA500; text-shadow:0 0 8px black;
-    }
-
-    /* Idle Slideshow container */
-    #slideshow-container {
-      margin-top:2em; width:100%; max-width:1080px; height:360px;
-      background:#000; position:relative;
-      border:2px solid #f26522; border-radius:12px; overflow:hidden;
-    }
-    #slideshow-container video {
-      width:100%; height:100%; object-fit:cover;
-    }
-    #slideshow-container .overlay-msg {
-      position:absolute; top:50%; left:50%;
-      transform:translate(-50%,-50%);
-      color:#FFA500; font-size:2rem; font-weight:bold;
-      text-shadow:0 0 8px black;
-    }
+    #confirmOrder:disabled { opacity:.65; cursor:not-allowed; }
 
     /* Notification */
     #notification {
       position: fixed;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      width: 80%; max-width: 400px;
+      width: 86%; max-width: 520px;
       background: #28a745;
       border: 8px solid #155724;
       color: #ffffff;
-      padding: 1.5em 2em;
+      padding: 1.2em 1.2em;
       border-radius: 12px;
-      font-size: 2.5rem;
-      font-weight: 700;
+      font-size: 1.8rem;
+      font-weight: 800;
       text-align: center;
       display: none; opacity: 0;
-      transition: opacity .3s ease;
-      z-index: 10000;
+      transition: opacity .2s ease;
+      z-index: 10050;
+      line-height: 1.25;
     }
     #notification.show { display: block; opacity: 1; }
 
@@ -150,45 +123,58 @@
       position:fixed; top:0; left:0; width:100%; height:100%;
       background:rgba(0,0,0,0.85);
       display:flex; align-items:center; justify-content:center;
-      z-index:9999; opacity:0; animation:fadeIn .3s forwards;
+      z-index:10040; opacity:0; animation:fadeIn .2s forwards;
     }
     @keyframes fadeIn { to { opacity:1; } }
     .option-box {
-      background:#222; padding:1.5em; border-radius:12px;
-      max-width:320px; width:90%; text-align:left; color:#fef5e6;
+      background:#222; padding:1.2em; border-radius:14px;
+      max-width:360px; width:92%; text-align:left; color:#fef5e6;
+      border:2px solid rgba(242,101,34,.55);
     }
-    .option-box h3 { color:#f26522; margin-bottom:.8em; }
-    .option-box label { display:block; margin:.6em 0; font-size:1rem; }
+    .option-box h3 { color:#f26522; margin-bottom:.8em; font-size:1.3rem; }
+    .option-box label { display:block; margin:.6em 0; font-size:1.05rem; }
     .option-box button {
-      margin-top:1em; width:100%; padding:.6em;
-      background:#f26522; color:#000; border:none; border-radius:8px;
-      cursor:pointer;
+      margin-top:.8em; width:100%; padding:.75em;
+      background:#f26522; color:#000; border:none; border-radius:10px;
+      cursor:pointer; font-weight:900;
     }
 
     /* Mini-cart */
     #mini-cart {
       position:fixed; bottom:20px; right:20px;
       background:rgba(20,20,20,.95); border:3px solid #f26522;
-      border-radius:16px; padding:1em; width:260px; opacity:0;
-      transition:.5s; z-index:1000;
+      border-radius:16px; padding:1em; width:280px; opacity:0;
+      transition:.25s; z-index:10010;
     }
     #mini-cart.show { opacity:1; }
-    #mini-cart h3 { color:#f26522; margin-bottom:.5em; }
+    #mini-cart h3 { color:#f26522; margin-bottom:.5em; font-size:1.4rem; }
     #mini-cart ul { list-style:none; max-height:180px; overflow:hidden; padding:0; }
-    #mini-cart li { display:flex; justify-content:space-between; margin:.4em 0; }
-    #mini-cart .total { text-align:right; margin-top:.8em; font-weight:600; }
+    #mini-cart li { display:flex; justify-content:space-between; margin:.35em 0; font-size:1.05rem; }
+    #mini-cart .total { text-align:right; margin-top:.8em; font-weight:900; font-size:1.1rem; }
 
     /* Solo Mode Banner */
-    #soloModeBanner {
+    :root { --banner-offset: 0px; }
+    body { padding-top: var(--banner-offset); }
+    #soloModeBanner{
       position:fixed; top:0; left:0; width:100%;
       background:rgba(0,0,0,0.95); color:#FFA500;
       text-align:center; padding:1em; display:none;
-      z-index:10000; border-bottom:4px solid #f26522;
+      z-index:10060;
+      border-bottom:4px solid #f26522;
+      font-size: 1.4rem; font-weight: 900; letter-spacing: .02em;
     }
+
+    /* Slideshow container (bottom) */
+    #slideshow-container {
+      margin-top:1.2em; width:100%; max-width:1080px; height:300px;
+      background:#000; position:relative;
+      border:2px solid #f26522; border-radius:12px; overflow:hidden;
+    }
+    #slideshow-container video { width:100%; height:100%; object-fit:cover; }
 
     /* Star Wars Crawl */
     .starwars-crawl-wrapper {
-      position: absolute; bottom: 0; width: 100%; height: 100%;
+      position: absolute; inset: 0;
       perspective: 800px; overflow: hidden; z-index: 10;
       pointer-events: none;
     }
@@ -199,18 +185,56 @@
     }
     .crawl-text {
       position: absolute; bottom: -20%; width: 90%; left: 5%;
-      text-align: center; font-size: 6.5rem; font-weight: bold;
-      line-height: 1.6; color: #FFA500;
+      text-align: center; font-size: 4.2rem; font-weight: 900;
+      line-height: 1.55; color: #FFA500;
       animation: crawlUp 90s linear infinite;
+      text-shadow: 0 4px 18px rgba(0,0,0,.6);
     }
     @keyframes crawlUp {
       0% { bottom: -100%; }
       100% { bottom: 230%; }
     }
+
+    /* IDLE OVERLAY (fixed: clickable + separate IDs) */
+    #slideshow-overlay {
+      position: fixed; inset: 0;
+      width: 100vw; height: 100vh;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.9);
+      z-index: 10070;
+      pointer-events: auto; /* IMPORTANT */
+      gap: 18px;
+    }
+    #slideshow-overlay .video-frame {
+      width: calc(100vh * 9 / 16); max-width: 90vw; height: 90vh;
+      border: 10px solid #f26522; border-radius: 20px;
+      overflow: hidden; background: black; position: relative;
+    }
+    #slideshow-overlay video {
+      position:absolute; inset:0;
+      width:100%; height:100%; object-fit:cover;
+    }
+    #slideshow-overlay .idle-logo {
+      width: 200px;
+      margin-top: 10px;
+    }
+    #slideshow-overlay .idle-msg {
+      color: #FFA500;
+      font-size: 2rem;
+      font-weight: 900;
+      text-align: center;
+      text-shadow: 1px 1px 4px black;
+      padding: 0 18px;
+    }
   </style>
 </head>
+
 <body>
   <canvas id="particles" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-2;pointer-events:none;"></canvas>
+
   <!-- Background & Frame -->
   <video autoplay class="bg-video" loop muted playsinline>
     <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4"/>
@@ -234,52 +258,55 @@
     <div class="tab" onclick="switchTab('cold')">Cold Drinks</div>
     <div class="tab" onclick="switchTab('snacks')">Homemade Snacks</div>
   </div>
+
   <div style="margin:1em auto; text-align:center;">
-    <button onclick="magicOrder()" style="padding:10px 25px; font-size:1.2rem; border-radius:12px; background:linear-gradient(145deg,#f26522,#ff7e29); color:#fff; border:none; cursor:pointer; box-shadow:0 5px 15px rgba(0,0,0,0.3); font-weight:bold;">
+    <button onclick="magicOrder()"
+      style="padding:10px 25px; font-size:1.2rem; border-radius:12px; background:linear-gradient(145deg,#f26522,#ff7e29);
+      color:#fff; border:none; cursor:pointer; box-shadow:0 5px 15px rgba(0,0,0,0.3); font-weight:900;">
       🎲 Surprise Me!
     </button>
   </div>
 
   <!-- Hot Drinks -->
   <div class="menu-section active" id="hot">
-    <div class="item hot-drink" onclick="prepareOptions({name:'Espresso',articleNumber:102,price:3.50,options:[{name:'Whipped Cream',price:1},{name:'Extra Oatmilk',price:1},{name:'Syrup',price:1}]})"> <h3>Espresso</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Doppio',articleNumber:202,price:4.00,options:[{name:'Extra Oatmilk',price:1},{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})"> <h3>Doppio</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Black Coffee',articleNumber:203,price:3.50,options:[]})"> <h3>Black Coffee</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Americano',articleNumber:204,price:3.50,options:[]})"> <h3>Americano</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Cappuccino',articleNumber:205,price:4.00,options:[]})"> <h3>Cappuccino</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Flavored Latte',articleNumber:206,price:5.00,options:[{name:'Hazelnuts',price:0},{name:'Caramel',price:0}]})"> <h3>Flavored Latte</h3><p>€5.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Café Latte',articleNumber:207,price:4.50,options:[]})"> <h3>Café Latte</h3><p>€4.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Latte Macchiato',articleNumber:208,price:4.50,options:[{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})"> <h3>Latte Macchiato</h3><p>€4.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Coffee Mocca',articleNumber:209,price:5.00,options:[{name:'Extra Shot Espresso',price:1},{name:'Whipped Cream',price:1}]})"> <h3>Coffee Mocca</h3><p>€5.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Hot Chocolate',articleNumber:210,price:4.00,options:[{name:'Whipped Cream',price:1}]})"> <h3>Hot Chocolate</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Tea',articleNumber:301,price:3.50,options:[{name:'Extra Lemon',price:1},{name:'Extra Ginger',price:1},{name:'Orange Blossom',price:1},{name:'Louiza',price:1}]})"> <h3>Tea</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Fresh Mint Tea',articleNumber:302,price:4.50,options:[{name:'Extra Lemon',price:0.50},{name:'Extra Ginger',price:0.50},{name:'Extra Blossom',price:0.50},{name:'Louiza',price:0.50}]})"> <h3>Fresh Mint Tea</h3><p>€4.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Espresso',articleNumber:102,price:3.50,options:[{name:'Whipped Cream',price:1},{name:'Extra Oatmilk',price:1},{name:'Syrup',price:1}]})"><h3>Espresso</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Doppio',articleNumber:202,price:4.00,options:[{name:'Extra Oatmilk',price:1},{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})"><h3>Doppio</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Black Coffee',articleNumber:203,price:3.50,options:[]})"><h3>Black Coffee</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Americano',articleNumber:204,price:3.50,options:[]})"><h3>Americano</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Cappuccino',articleNumber:205,price:4.00,options:[]})"><h3>Cappuccino</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Flavored Latte',articleNumber:206,price:5.00,options:[{name:'Hazelnuts',price:0},{name:'Caramel',price:0}]})"><h3>Flavored Latte</h3><p>€5.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Café Latte',articleNumber:207,price:4.50,options:[]})"><h3>Café Latte</h3><p>€4.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Latte Macchiato',articleNumber:208,price:4.50,options:[{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})"><h3>Latte Macchiato</h3><p>€4.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Coffee Mocca',articleNumber:209,price:5.00,options:[{name:'Extra Shot Espresso',price:1},{name:'Whipped Cream',price:1}]})"><h3>Coffee Mocca</h3><p>€5.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Hot Chocolate',articleNumber:210,price:4.00,options:[{name:'Whipped Cream',price:1}]})"><h3>Hot Chocolate</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Tea',articleNumber:301,price:3.50,options:[{name:'Extra Lemon',price:1},{name:'Extra Ginger',price:1},{name:'Orange Blossom',price:1},{name:'Louiza',price:1}]})"><h3>Tea</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Fresh Mint Tea',articleNumber:302,price:4.50,options:[{name:'Extra Lemon',price:0.50},{name:'Extra Ginger',price:0.50},{name:'Extra Blossom',price:0.50},{name:'Louiza',price:0.50}]})"><h3>Fresh Mint Tea</h3><p>€4.50</p><button>Add</button></div>
   </div>
 
   <!-- Cold Drinks -->
   <div class="menu-section" id="cold">
-    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola',articleNumber:401,price:4.00,options:[]})"> <h3>Coca-Cola</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola Zero',articleNumber:402,price:4.00,options:[]})"> <h3>Coca-Cola Zero</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Orange',articleNumber:403,price:4.00,options:[]})"> <h3>Fanta Orange</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Cassis',articleNumber:404,price:4.00,options:[]})"> <h3>Fanta Cassis</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Still Water',articleNumber:405,price:3.50,options:[]})"> <h3>Still Water</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Sparkling Water',articleNumber:406,price:3.50,options:[]})"> <h3>Sparkling Water</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Sprite',articleNumber:407,price:4.00,options:[]})"> <h3>Sprite</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Chocomel',articleNumber:408,price:4.00,options:[]})"> <h3>Chocomel</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Peach/Mango',articleNumber:409,price:4.00,options:[{name:'Peach',price:0},{name:'Mango',price:0}]})"> <h3>Iced Tea Peach/Mango</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Lemon Sparkling',articleNumber:410,price:4.00,options:[]})"> <h3>Iced Tea Lemon Sparkling</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Bitter Lemon',articleNumber:411,price:4.00,options:[]})"> <h3>Royal Bliss Bitter Lemon</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Ginger Ale',articleNumber:412,price:4.00,options:[]})"> <h3>Royal Bliss Ginger Ale</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Looza (Pear/Strawberry/Peach)',articleNumber:413,price:4.00,options:[{name:'Pear',price:0},{name:'Strawberry',price:0},{name:'Peach',price:0}]})"> <h3>Looza (Pear/Strawberry/Peach)</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Minute Maid Orange/Apple',articleNumber:414,price:4.00,options:[{name:'Orange',price:0},{name:'Apple',price:0}]})"> <h3>Minute Maid Orange/Apple</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'AA Energy Drink',articleNumber:415,price:4.00,options:[]})"> <h3>AA Energy Drink</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Red Bull',articleNumber:416,price:5.00,options:[]})"> <h3>Red Bull Energy Drink</h3><p>€5.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola',articleNumber:401,price:4.00,options:[]})"><h3>Coca-Cola</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola Zero',articleNumber:402,price:4.00,options:[]})"><h3>Coca-Cola Zero</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Orange',articleNumber:403,price:4.00,options:[]})"><h3>Fanta Orange</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Cassis',articleNumber:404,price:4.00,options:[]})"><h3>Fanta Cassis</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Still Water',articleNumber:405,price:3.50,options:[]})"><h3>Still Water</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Sparkling Water',articleNumber:406,price:3.50,options:[]})"><h3>Sparkling Water</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Sprite',articleNumber:407,price:4.00,options:[]})"><h3>Sprite</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Chocomel',articleNumber:408,price:4.00,options:[]})"><h3>Chocomel</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Peach/Mango',articleNumber:409,price:4.00,options:[{name:'Peach',price:0},{name:'Mango',price:0}]})"><h3>Iced Tea Peach/Mango</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Lemon Sparkling',articleNumber:410,price:4.00,options:[]})"><h3>Iced Tea Lemon Sparkling</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Bitter Lemon',articleNumber:411,price:4.00,options:[]})"><h3>Royal Bliss Bitter Lemon</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Ginger Ale',articleNumber:412,price:4.00,options:[]})"><h3>Royal Bliss Ginger Ale</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Looza (Pear/Strawberry/Peach)',articleNumber:413,price:4.00,options:[{name:'Pear',price:0},{name:'Strawberry',price:0},{name:'Peach',price:0}]})"><h3>Looza (Pear/Strawberry/Peach)</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Minute Maid Orange/Apple',articleNumber:414,price:4.00,options:[{name:'Orange',price:0},{name:'Apple',price:0}]})"><h3>Minute Maid Orange/Apple</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'AA Energy Drink',articleNumber:415,price:4.00,options:[]})"><h3>AA Energy Drink</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Red Bull',articleNumber:416,price:5.00,options:[]})"><h3>Red Bull Energy Drink</h3><p>€5.00</p><button>Add</button></div>
   </div>
 
   <!-- Homemade Snacks -->
   <div class="menu-section" id="snacks">
-    <div class="item" onclick="prepareOptions({name:'Chocolate Chip Cookie',articleNumber:501,price:3.50,options:[]})"> <h3>Chocolate Chip Cookie</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item" onclick="prepareOptions({name:'Banana Cake',articleNumber:502,price:4.00,options:[]})"> <h3>Banana Cake</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item" onclick="prepareOptions({name:'Chocolate Chip Cookie',articleNumber:501,price:3.50,options:[]})"><h3>Chocolate Chip Cookie</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item" onclick="prepareOptions({name:'Banana Cake',articleNumber:502,price:4.00,options:[]})"><h3>Banana Cake</h3><p>€4.00</p><button>Add</button></div>
   </div>
 
   <!-- Basket -->
@@ -290,23 +317,8 @@
     <button id="confirmOrder" onclick="submitOrder()">Send Order</button>
   </div>
 
-  <!-- Social Icons -->
-  <div style="width:100%; text-align:center; margin-top:30px;">
-    <div class="social-icons" style="display:flex; justify-content:center; gap:20px; padding:20px 0;">
-      <img alt="Instagram" src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" style="height:40px;"/>
-      <img alt="TikTok" src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/tiktok-square-color-icon.svg" style="height:40px;"/>
-      <img alt="Facebook" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" style="height:40px;"/>
-    </div>
-  </div>
-
-  <!-- Google Review QR -->
-  <div style="width:100%; text-align:center; margin-top:30px;">
-    <p style="color:#FFA500; font-weight:bold; font-size:1.1rem; margin-bottom:10px;">Please leave us a Google review!</p>
-    <img alt="Google Review QR" src="qr-code.png" style="height:160px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.4);"/>
-  </div>
-
   <!-- Slideshow Container & Crawl -->
-  <div id="slideshow-container" style="position:relative; width:100%; height:100%; border:none; background:none; overflow:hidden;">
+  <div id="slideshow-container">
     <video id="slideshowVideo" muted playsinline></video>
     <div class="starwars-crawl-wrapper">
       <div class="starwars-crawl">
@@ -338,190 +350,295 @@
 
   <!-- Notification / Modal / Mini-cart / Solo banner -->
   <div id="notification"></div>
+
   <div class="option-modal" id="optionModal" style="display:none;">
     <div class="option-box">
       <h3 id="optionTitle"></h3>
       <div id="optionList"></div>
       <button onclick="confirmOptions()">Add to Order</button>
-      <button onclick="closeModal()" style="margin-top:.5em;">Close</button>
+      <button onclick="closeModal()" style="margin-top:.5em;background:rgba(255,255,255,0.1);color:#fff;">Close</button>
     </div>
   </div>
+
   <div id="mini-cart"></div>
-  <div id="soloModeBanner" style="display:none;">Self Pickup Mode: Please collect your drinks downstairs after ordering.</div>
+  <div id="soloModeBanner">Self Pickup Mode: Please collect your drinks downstairs after ordering.</div>
 
-  <!-- JS Logic -->
+  <!-- Idle Overlay -->
+  <div id="slideshow-overlay">
+    <img class="idle-logo" src="EASY TIMES LOGO BLACK-01.png" alt="EasyTimes Logo">
+    <div class="idle-msg">CLICK THE SCREEN TO ORDER DRINKS</div>
+    <div class="video-frame">
+      <!-- IMPORTANT: different ID than #slideshowVideo -->
+      <video id="slideshowVideoOverlay" muted playsinline autoplay></video>
+    </div>
+  </div>
+
   <script>
-    const botToken = "8004629550:AAGbBMSe-QQhs_sZmzKdCpol4Mrn2831PPw", chatId = "36469430";
-    let orderList = [], selectedArticle = null;
+    /* =============================
+       TELEGRAM SETTINGS
+       ============================= */
+    const botToken = "8004629550:AAGbBMSe-QQhs_sZmzKdCpol4Mrn2831PPw";
+    const chatId   = "36469430";
 
-    function showNotification(msg) {
+    /* =============================
+       ORDER STATE
+       ============================= */
+    let orderList = [];
+    let selectedArticle = null;
+
+    function showNotification(msg, ms = 8000, isError = false) {
       const n = document.getElementById("notification");
-      n.innerHTML = msg; n.classList.add("show");
-      setTimeout(() => n.classList.remove("show"), 3000);
+      n.style.background = isError ? "#c0392b" : "#28a745";
+      n.style.borderColor = isError ? "#641e16" : "#155724";
+      n.innerHTML = msg + '<div style="margin-top:.6em;font-size:1rem;opacity:.92">Tap to close</div>';
+      n.classList.add("show");
+      clearTimeout(n._hideTO);
+      n.onclick = () => { n.classList.remove("show"); clearTimeout(n._hideTO); n.onclick = null; };
+      n._hideTO = setTimeout(() => { n.classList.remove("show"); n.onclick = null; }, ms);
     }
 
     function prepareOptions(article) {
       selectedArticle = article;
       document.getElementById("optionTitle").innerText = `Options for ${article.name}`;
-      const optList = document.getElementById("optionList"); optList.innerHTML = "";
-      article.options.forEach((o,i) => {
+      const optList = document.getElementById("optionList");
+      optList.innerHTML = "";
+
+      (article.options || []).forEach((o, i) => {
         const lbl = document.createElement("label");
-        lbl.innerHTML = `<input type="checkbox" data-index="${i}"> ${o.name} (+€${o.price.toFixed(2)})`;
+        lbl.innerHTML = `<input type="checkbox" data-index="${i}"> ${o.name} (+€${(+o.price).toFixed(2)})`;
         optList.appendChild(lbl);
       });
+
       document.getElementById("optionModal").style.display = "flex";
     }
 
     function confirmOptions() {
-      let extra = 0, chosen = [];
-      document.querySelectorAll("#optionList input").forEach(cb => {
-        if (cb.checked) { const o = selectedArticle.options[cb.dataset.index]; chosen.push(o); extra += o.price; }
+      let extra = 0;
+      let chosen = [];
+
+      document.querySelectorAll("#optionList input[type='checkbox']").forEach(cb => {
+        if (cb.checked) {
+          const o = selectedArticle.options[cb.dataset.index];
+          chosen.push(o);
+          extra += (+o.price || 0);
+        }
       });
-      orderList.push({ ...selectedArticle, selectedOptions: chosen, totalPrice: selectedArticle.price + extra });
-      updateOrderList(); updateMiniCart(); closeModal();
+
+      orderList.push({
+        ...selectedArticle,
+        selectedOptions: chosen,
+        totalPrice: (+selectedArticle.price || 0) + extra
+      });
+
+      updateOrderList();
+      updateMiniCart();
+      closeModal();
     }
 
-    function closeModal() { document.getElementById("optionModal").style.display = "none"; }
+    function closeModal() {
+      document.getElementById("optionModal").style.display = "none";
+    }
 
     function updateOrderList() {
-      const ul = document.getElementById("basketList"); ul.innerHTML = "";
-      orderList.forEach((it,i) => {
-        ul.innerHTML += `<li>#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)}) <button onclick="removeFromOrder(${i})">×</button></li>`;
+      const ul = document.getElementById("basketList");
+      ul.innerHTML = "";
+      orderList.forEach((it, i) => {
+        ul.innerHTML += `<li>
+          <span>#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)})</span>
+          <button onclick="removeFromOrder(${i})">×</button>
+        </li>`;
       });
-      document.getElementById("totalPrice").innerText = orderList.reduce((s,x) => s + x.totalPrice, 0).toFixed(2);
+      document.getElementById("totalPrice").innerText =
+        orderList.reduce((s, x) => s + (+x.totalPrice || 0), 0).toFixed(2);
     }
 
-    function removeFromOrder(idx) { orderList.splice(idx,1); updateOrderList(); updateMiniCart(); }
-
-    function submitOrder() {
-      if (!orderList.length) { showNotification("No items in order!"); return; }
-      let txt = "🇎 New Order:\n";
-      orderList.forEach(it => {
-        txt += `#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)})\n`;
-        if (it.selectedOptions.length) txt += '  → ' + it.selectedOptions.map(o=>o.name).join(', ') + '\n';
-      });
-      fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(txt)}`)
-        .then(r => r.json()).then(d => {
-          if (d.ok) {
-            const isSolo = JSON.parse(localStorage.getItem("soloMode") || "false");
-            const extraMsg = isSolo
-              ? "<br><strong>Self-Pickup Mode:</strong> Please collect your drinks downstairs."
-              : "";
-            showNotification("✅ Order sent!" + extraMsg);
-            orderList = []; updateOrderList(); updateMiniCart();
-            setTimeout(() => location.href = "index.html", 3000);
-          }
-        });
+    function removeFromOrder(idx) {
+      orderList.splice(idx, 1);
+      updateOrderList();
+      updateMiniCart();
     }
 
     function updateMiniCart() {
-      const m = document.getElementById("mini-cart"); let html = "<h3>Basket</h3><ul>", tot=0;
-      orderList.forEach(it => { html += `<li>${it.name} - €${it.totalPrice.toFixed(2)}</li>`; tot += it.totalPrice; });
-      html += `</ul><div class='total'>Total: €${tot.toFixed(2)}</div>`;
-      m.innerHTML = html; m.classList.add("show");
-      clearTimeout(window._miniTO); window._miniTO = setTimeout(() => m.classList.remove("show"), 10000);
+      const m = document.getElementById("mini-cart");
+      let html = "<h3>Basket</h3><ul>";
+      let tot = 0;
+      orderList.forEach(it => {
+        html += `<li><span>${it.name}</span><span>€${it.totalPrice.toFixed(2)}</span></li>`;
+        tot += (+it.totalPrice || 0);
+      });
+      html += `</ul><div class="total">Total: €${tot.toFixed(2)}</div>`;
+      m.innerHTML = html;
+
+      m.classList.add("show");
+      clearTimeout(window._miniTO);
+      window._miniTO = setTimeout(() => m.classList.remove("show"), 10000);
+    }
+
+    /* =============================
+       SUBMIT ORDER (FIXED: POST + error handling)
+       ============================= */
+    let isSubmitting = false;
+
+    async function submitOrder() {
+      if (isSubmitting) return;
+
+      if (!orderList.length) {
+        showNotification("No items in order!", 7000, true);
+        return;
+      }
+
+      const btn = document.getElementById("confirmOrder");
+      const prev = btn.innerHTML;
+
+      try {
+        isSubmitting = true;
+        btn.disabled = true;
+        btn.innerHTML = "Sending…";
+
+        let txt = "🟧 New Order:\n";
+        orderList.forEach(it => {
+          txt += `#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)})\n`;
+          if (it.selectedOptions && it.selectedOptions.length) {
+            txt += "  → " + it.selectedOptions.map(o => o.name).join(", ") + "\n";
+          }
+        });
+
+        const total = orderList.reduce((s, x) => s + (+x.totalPrice || 0), 0).toFixed(2);
+        txt += `\nTOTAL: €${total}\n`;
+
+        const isSolo = JSON.parse(localStorage.getItem("soloMode") || "false");
+        if (isSolo) txt += "\nSELF PICKUP MODE ✅";
+
+        const resp = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ chat_id: chatId, text: txt })
+        });
+
+        const data = await resp.json().catch(() => null);
+
+        if (!resp.ok || !data || !data.ok) {
+          const details = (data && data.description) ? data.description : `HTTP ${resp.status}`;
+          throw new Error(details);
+        }
+
+        const extraMsg = isSolo
+          ? "<br><strong>Self-Pickup Mode:</strong> Please collect your drinks downstairs."
+          : "";
+
+        showNotification("✅ Order sent!" + extraMsg, 15000, false);
+
+        orderList = [];
+        updateOrderList();
+        updateMiniCart();
+
+        setTimeout(() => location.href = "index.html", 3000);
+
+      } catch (err) {
+        console.error("Order failed:", err);
+        showNotification(
+          "❌ Order failed.<br><span style='font-size:1.05rem;opacity:.95'>" +
+          String(err.message).replaceAll("<","&lt;").replaceAll(">","&gt;") +
+          "</span>",
+          15000,
+          true
+        );
+      } finally {
+        isSubmitting = false;
+        btn.disabled = false;
+        btn.innerHTML = prev;
+      }
     }
 
     function switchTab(id) {
       document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
       document.querySelectorAll(".menu-section").forEach(s => s.classList.remove("active"));
-      document.querySelector(`.tab[onclick="switchTab('${id}')"]`).classList.add("active");
-      document.getElementById(id).classList.add("active");
+      const tab = document.querySelector(`.tab[onclick="switchTab('${id}')"]`);
+      if (tab) tab.classList.add("active");
+      const sec = document.getElementById(id);
+      if (sec) sec.classList.add("active");
     }
 
+    /* SOLO MODE: long press top-left */
     let pressTimer;
     document.body.addEventListener("touchstart", e => {
-      if (e.touches[0].clientX < 100 && e.touches[0].clientY < 100)
+      if (e.touches[0].clientX < 100 && e.touches[0].clientY < 100) {
         pressTimer = setTimeout(toggleSoloMode, 1500);
-    });
-    document.body.addEventListener("touchend", () => clearTimeout(pressTimer));
+      }
+    }, { passive: true });
+    document.body.addEventListener("touchend", () => clearTimeout(pressTimer), { passive: true });
 
     function toggleSoloMode() {
       const on = !JSON.parse(localStorage.getItem("soloMode") || "false");
       localStorage.setItem("soloMode", on);
       document.getElementById("soloModeBanner").style.display = on ? "block" : "none";
+      reflowForBanner();
     }
+
+    function reflowForBanner() {
+      const b = document.getElementById("soloModeBanner");
+      const visible = getComputedStyle(b).display !== "none";
+      const h = visible ? b.getBoundingClientRect().height : 0;
+      document.body.style.setProperty("--banner-offset", (h ? h + 8 : 0) + "px");
+    }
+    window.addEventListener("resize", reflowForBanner);
     document.addEventListener("DOMContentLoaded", () => {
-      if (JSON.parse(localStorage.getItem("soloMode") || "false"))
+      if (JSON.parse(localStorage.getItem("soloMode") || "false")) {
         document.getElementById("soloModeBanner").style.display = "block";
+      }
+      reflowForBanner();
     });
 
-    /* Idle Slideshow Logic */
-    const videos = ['smoke.mp4', 'christmas2.mp4', 'Christmas.mp4', 'mascotte.mp4'];
-    let vidIdx = 0, slideshowTO;
-    const overlay = document.createElement("div");
-    overlay.id = "slideshow-overlay";
-    overlay.style.display = "none";
-    overlay.style.position = "fixed";
-    overlay.style.top = "0";
-    overlay.style.left = "0";
-    overlay.style.width = "100vw";
-    overlay.style.height = "100vh";
-    overlay.style.zIndex = "10001";
-    overlay.style.backgroundColor = "rgba(0, 0, 0, 0.9)";
-    overlay.style.display = "none";
-    overlay.style.flexDirection = "column";
-    overlay.style.alignItems = "center";
-    overlay.style.justifyContent = "center";
+    /* IDLE OVERLAY (FIXED) */
+    const idleOverlay = document.getElementById("slideshow-overlay");
+    const idleVideo   = document.getElementById("slideshowVideoOverlay");
+    const idleVideos  = ["smoke.mp4", "christmas2.mp4", "Christmas.mp4", "mascotte.mp4"];
+    let idleIdx = 0;
+    let idleTO;
 
-    const videoLogo = document.createElement("img");
-    videoLogo.src = "EASY TIMES LOGO BLACK-01.png";
-    videoLogo.alt = "EasyTimes Logo";
-    videoLogo.style.width = "200px";
-    videoLogo.style.margin = "30px 0";
-
-    const msg = document.createElement("div");
-    msg.innerText = "CLICK THE SCREEN TO ORDER DRINKS";
-    Object.assign(msg.style, { color: "#FFA500", fontSize: "2rem", fontWeight: "bold", textAlign: "center", textShadow: "1px 1px 4px black", marginBottom: "30px" });
-
-    const vf = document.createElement("div");
-    vf.className = "video-frame";
-    vf.style.width = "calc(100vh * 9 / 16)";
-    vf.style.maxWidth = "90vw";
-    vf.style.height = "90vh";
-    vf.style.border = "10px solid #f26522";
-    vf.style.borderRadius = "20px";
-    vf.style.overflow = "hidden";
-    vf.style.background = "black";
-    vf.style.position = "relative";
-
-    const vid = document.createElement("video");
-    vid.id = "slideshowVideo";
-    vid.muted = true;
-    vid.autoplay = true;
-    vid.playsInline = true;
-    Object.assign(vid.style, { position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "100%", height: "100%", objectFit: "cover" });
-
-    vf.appendChild(vid);
-    overlay.appendChild(videoLogo);
-    overlay.appendChild(msg);
-    overlay.appendChild(vf);
-    document.body.appendChild(overlay);
-
-    function playNext() {
-      vid.src = videos[vidIdx]; vid.load(); vid.play().catch(() =>{});
-      vidIdx = (vidIdx + 1) % videos.length;
+    function playNextIdle() {
+      idleVideo.src = idleVideos[idleIdx];
+      idleVideo.load();
+      idleVideo.play().catch(() => {});
+      idleIdx = (idleIdx + 1) % idleVideos.length;
     }
-    vid.addEventListener("ended", playNext);
-    vid.addEventListener("error", playNext);
+    idleVideo.addEventListener("ended", playNextIdle);
+    idleVideo.addEventListener("error", playNextIdle);
+
+    function showIdle() {
+      idleOverlay.style.display = "flex";
+      playNextIdle();
+    }
+    function hideIdle() {
+      idleOverlay.style.display = "none";
+      try { idleVideo.pause(); } catch(e) {}
+    }
 
     function resetIdle() {
-      clearTimeout(slideshowTO);
-      vid.pause(); overlay.style.display = "none";
-      slideshowTO = setTimeout(() => { overlay.style.display = "flex"; playNext(); }, 50000);
+      clearTimeout(idleTO);
+      hideIdle();
+      idleTO = setTimeout(showIdle, 50000);
     }
 
-    ["click","mousemove","touchstart","keydown"].forEach(ev => document.addEventListener(ev, resetIdle));
-    overlay.addEventListener("click", resetIdle);
+    // Activity resets idle
+    ["pointerdown","touchstart","keydown","wheel"].forEach(ev => {
+      document.addEventListener(ev, resetIdle, { passive: true });
+    });
+
+    // Clicking overlay closes it
+    idleOverlay.addEventListener("pointerdown", resetIdle, { passive: true });
+
     resetIdle();
 
+    /* Surprise Me */
     function magicOrder() {
-      const allItems = [...document.querySelectorAll('.item')];
+      const allItems = [...document.querySelectorAll(".item")];
+      if (!allItems.length) return;
       allItems[Math.floor(Math.random() * allItems.length)].click();
     }
   </script>
+
+  <!-- Optional: live-config -->
+  <script src="live-config.js" defer></script>
 </body>
 </html>
-
-
-
