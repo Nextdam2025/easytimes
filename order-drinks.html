@@ -373,322 +373,338 @@
   </div>
 
   <script>
-    /* =============================
-       TELEGRAM SETTINGS
-       ============================= */
-    const botToken = "8004629550:AAGbBMSe-QQhs_sZmzKdCpol4Mrn2831PPw";
-    const chatId   = "-5170118091";
+  /* =============================
+     TELEGRAM SETTINGS
+     ============================= */
+  const botToken = "8004629550:AAGbBMSe-QQhs_sZmzKdCpol4Mrn2831PPw";
+  const chatId   = "-5170118091";
 
-    /* =============================
-       DING SOUND (NO AUDIO FILE)
-       ============================= */
-    let _dingCtx = null;
+  /* =============================
+     DING SOUND (NO AUDIO FILE)
+     ============================= */
+  let _dingCtx = null;
 
-    function _ctx() {
-      if (_dingCtx && _dingCtx.state !== "closed") return _dingCtx;
-      const AC = window.AudioContext || window.webkitAudioContext;
-      if (!AC) return null;
-      _dingCtx = new AC();
-      return _dingCtx;
+  function _ctx() {
+    if (_dingCtx && _dingCtx.state !== "closed") return _dingCtx;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    _dingCtx = new AC();
+    return _dingCtx;
+  }
+
+  function unlockAudioOnce() {
+    const c = _ctx();
+    if (!c) return;
+    if (c.state !== "running") c.resume().catch(() => {});
+  }
+
+  // unlock on first gesture
+  document.addEventListener("pointerdown", unlockAudioOnce, { once: true });
+  document.addEventListener("touchstart", unlockAudioOnce, { once: true, passive: true });
+
+  function ding(kind = "tap") {
+    const c = _ctx();
+    if (!c) return;
+
+    if (c.state !== "running") c.resume().catch(() => {});
+
+    const t = c.currentTime;
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+
+    const freq = kind === "ok" ? 1046.5 : kind === "err" ? 220 : 880; // C6 / A3 / A5
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(freq, t);
+
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(0.35, t + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
+
+    osc.connect(gain);
+    gain.connect(c.destination);
+
+    osc.start(t);
+    osc.stop(t + 0.16);
+  }
+
+  // IMPORTANT: called directly by the button click
+  function handleSendClick() {
+    unlockAudioOnce();
+    ding("tap");
+    submitOrder();
+  }
+
+  /* =============================
+     ORDER STATE
+     ============================= */
+  let orderList = [];
+  let selectedArticle = null;
+
+  function showNotification(msg, ms = 8000, isError = false) {
+    const n = document.getElementById("notification");
+    n.style.background = isError ? "#c0392b" : "#28a745";
+    n.style.borderColor = isError ? "#641e16" : "#155724";
+    n.innerHTML = msg + '<div style="margin-top:.6em;font-size:1rem;opacity:.92">Tap to close</div>';
+    n.classList.add("show");
+    clearTimeout(n._hideTO);
+    n.onclick = () => { n.classList.remove("show"); clearTimeout(n._hideTO); n.onclick = null; };
+    n._hideTO = setTimeout(() => { n.classList.remove("show"); n.onclick = null; }, ms);
+  }
+
+  function prepareOptions(article) {
+    selectedArticle = article;
+
+    // optional: tiny click sound on opening options
+    // unlockAudioOnce(); ding("tap");
+
+    document.getElementById("optionTitle").innerText = `Options for ${article.name}`;
+    const optList = document.getElementById("optionList");
+    optList.innerHTML = "";
+
+    (article.options || []).forEach((o, i) => {
+      const lbl = document.createElement("label");
+      lbl.innerHTML = `<input type="checkbox" data-index="${i}"> ${o.name} (+€${(+o.price).toFixed(2)})`;
+      optList.appendChild(lbl);
+    });
+
+    document.getElementById("optionModal").style.display = "flex";
+  }
+
+  function confirmOptions() {
+    let extra = 0;
+    let chosen = [];
+
+    document.querySelectorAll("#optionList input[type='checkbox']").forEach(cb => {
+      if (cb.checked) {
+        const o = selectedArticle.options[cb.dataset.index];
+        chosen.push(o);
+        extra += (+o.price || 0);
+      }
+    });
+
+    orderList.push({
+      ...selectedArticle,
+      selectedOptions: chosen,
+      totalPrice: (+selectedArticle.price || 0) + extra
+    });
+
+    updateOrderList();
+    updateMiniCart();
+    closeModal();
+  }
+
+  function closeModal() {
+    document.getElementById("optionModal").style.display = "none";
+  }
+
+  function updateOrderList() {
+    const ul = document.getElementById("basketList");
+    ul.innerHTML = "";
+    orderList.forEach((it, i) => {
+      ul.innerHTML += `<li>
+        <span>#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)})</span>
+        <button onclick="removeFromOrder(${i})">×</button>
+      </li>`;
+    });
+    document.getElementById("totalPrice").innerText =
+      orderList.reduce((s, x) => s + (+x.totalPrice || 0), 0).toFixed(2);
+  }
+
+  function removeFromOrder(idx) {
+    orderList.splice(idx, 1);
+    updateOrderList();
+    updateMiniCart();
+  }
+
+  function updateMiniCart() {
+    const m = document.getElementById("mini-cart");
+    let html = "<h3>Basket</h3><ul>";
+    let tot = 0;
+    orderList.forEach(it => {
+      html += `<li><span>${it.name}</span><span>€${it.totalPrice.toFixed(2)}</span></li>`;
+      tot += (+it.totalPrice || 0);
+    });
+    html += `</ul><div class="total">Total: €${tot.toFixed(2)}</div>`;
+    m.innerHTML = html;
+
+    m.classList.add("show");
+    clearTimeout(window._miniTO);
+    window._miniTO = setTimeout(() => m.classList.remove("show"), 10000);
+  }
+
+  /* =============================
+     SUBMIT ORDER
+     ============================= */
+  let isSubmitting = false;
+
+  async function submitOrder() {
+    if (isSubmitting) return;
+
+    if (!orderList.length) {
+      ding("err");
+      showNotification("No items in order!", 7000, true);
+      return;
     }
 
-    function unlockAudioOnce() {
-      const c = _ctx();
-      if (!c) return;
-      if (c.state === "suspended") c.resume().catch(() => {});
-    }
-    document.addEventListener("pointerdown", unlockAudioOnce, { once: true });
-    document.addEventListener("touchstart", unlockAudioOnce, { once: true, passive: true });
+    const btn = document.getElementById("confirmOrder");
+    const prev = btn.innerHTML;
 
-    function ding(kind = "tap") {
-      const c = _ctx();
-      if (!c) return;
+    try {
+      isSubmitting = true;
+      btn.disabled = true;
+      btn.innerHTML = "Sending…";
 
-      if (c.state === "suspended") c.resume().catch(() => {});
-
-      const t = c.currentTime;
-      const osc = c.createOscillator();
-      const gain = c.createGain();
-
-      const freq = kind === "ok" ? 1046.5 : kind === "err" ? 220 : 880; // C6 / A3 / A5
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(freq, t);
-
-      gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.exponentialRampToValueAtTime(0.35, t + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
-
-      osc.connect(gain);
-      gain.connect(c.destination);
-
-      osc.start(t);
-      osc.stop(t + 0.16);
-    }
-
-    /* =============================
-       ORDER STATE
-       ============================= */
-    let orderList = [];
-    let selectedArticle = null;
-
-    function showNotification(msg, ms = 8000, isError = false) {
-      const n = document.getElementById("notification");
-      n.style.background = isError ? "#c0392b" : "#28a745";
-      n.style.borderColor = isError ? "#641e16" : "#155724";
-      n.innerHTML = msg + '<div style="margin-top:.6em;font-size:1rem;opacity:.92">Tap to close</div>';
-      n.classList.add("show");
-      clearTimeout(n._hideTO);
-      n.onclick = () => { n.classList.remove("show"); clearTimeout(n._hideTO); n.onclick = null; };
-      n._hideTO = setTimeout(() => { n.classList.remove("show"); n.onclick = null; }, ms);
-    }
-
-    function prepareOptions(article) {
-      selectedArticle = article;
-      document.getElementById("optionTitle").innerText = `Options for ${article.name}`;
-      const optList = document.getElementById("optionList");
-      optList.innerHTML = "";
-
-      (article.options || []).forEach((o, i) => {
-        const lbl = document.createElement("label");
-        lbl.innerHTML = `<input type="checkbox" data-index="${i}"> ${o.name} (+€${(+o.price).toFixed(2)})`;
-        optList.appendChild(lbl);
-      });
-
-      document.getElementById("optionModal").style.display = "flex";
-    }
-
-    function confirmOptions() {
-      let extra = 0;
-      let chosen = [];
-
-      document.querySelectorAll("#optionList input[type='checkbox']").forEach(cb => {
-        if (cb.checked) {
-          const o = selectedArticle.options[cb.dataset.index];
-          chosen.push(o);
-          extra += (+o.price || 0);
-        }
-      });
-
-      orderList.push({
-        ...selectedArticle,
-        selectedOptions: chosen,
-        totalPrice: (+selectedArticle.price || 0) + extra
-      });
-
-      updateOrderList();
-      updateMiniCart();
-      closeModal();
-    }
-
-    function closeModal() {
-      document.getElementById("optionModal").style.display = "none";
-    }
-
-    function updateOrderList() {
-      const ul = document.getElementById("basketList");
-      ul.innerHTML = "";
-      orderList.forEach((it, i) => {
-        ul.innerHTML += `<li>
-          <span>#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)})</span>
-          <button onclick="removeFromOrder(${i})">×</button>
-        </li>`;
-      });
-      document.getElementById("totalPrice").innerText =
-        orderList.reduce((s, x) => s + (+x.totalPrice || 0), 0).toFixed(2);
-    }
-
-    function removeFromOrder(idx) {
-      orderList.splice(idx, 1);
-      updateOrderList();
-      updateMiniCart();
-    }
-
-    function updateMiniCart() {
-      const m = document.getElementById("mini-cart");
-      let html = "<h3>Basket</h3><ul>";
-      let tot = 0;
+      let txt = "🟧 New Order:\n";
       orderList.forEach(it => {
-        html += `<li><span>${it.name}</span><span>€${it.totalPrice.toFixed(2)}</span></li>`;
-        tot += (+it.totalPrice || 0);
-      });
-      html += `</ul><div class="total">Total: €${tot.toFixed(2)}</div>`;
-      m.innerHTML = html;
-
-      m.classList.add("show");
-      clearTimeout(window._miniTO);
-      window._miniTO = setTimeout(() => m.classList.remove("show"), 10000);
-    }
-
-    /* =============================
-       SUBMIT ORDER (POST + error handling + dings)
-       ============================= */
-    let isSubmitting = false;
-
-    async function submitOrder() {
-      if (isSubmitting) return;
-
-      if (!orderList.length) {
-        ding("err");
-        showNotification("No items in order!", 7000, true);
-        return;
-      }
-
-      const btn = document.getElementById("confirmOrder");
-      const prev = btn.innerHTML;
-function handleSendClick() {
-  // must be directly inside the user gesture handler
-  unlockAudioOnce();
-  ding("tap");
-  submitOrder();
-}
-
-      try {
-        isSubmitting = true;
-        btn.disabled = true;
-        btn.innerHTML = "Sending…";
-        
-
-        let txt = "🟧 New Order:\n";
-        orderList.forEach(it => {
-          txt += `#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)})\n`;
-          if (it.selectedOptions && it.selectedOptions.length) {
-            txt += "  → " + it.selectedOptions.map(o => o.name).join(", ") + "\n";
-          }
-        });
-
-        const total = orderList.reduce((s, x) => s + (+x.totalPrice || 0), 0).toFixed(2);
-        txt += `\nTOTAL: €${total}\n`;
-
-        const isSolo = JSON.parse(localStorage.getItem("soloMode") || "false");
-        if (isSolo) txt += "\nSELF PICKUP MODE ✅";
-
-        const resp = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ chat_id: chatId, text: txt })
-        });
-
-        const data = await resp.json().catch(() => null);
-
-        if (!resp.ok || !data || !data.ok) {
-          const details = (data && data.description) ? data.description : `HTTP ${resp.status}`;
-          throw new Error(details);
+        txt += `#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)})\n`;
+        if (it.selectedOptions && it.selectedOptions.length) {
+          txt += "  → " + it.selectedOptions.map(o => o.name).join(", ") + "\n";
         }
+      });
 
-        const extraMsg = isSolo
-          ? "<br><strong>Self-Pickup Mode:</strong> Please collect your drinks downstairs."
-          : "";
+      const total = orderList.reduce((s, x) => s + (+x.totalPrice || 0), 0).toFixed(2);
+      txt += `\nTOTAL: €${total}\n`;
 
-        ding("ok");
-        showNotification("✅ Order sent!" + extraMsg, 15000, false);
+      const isSolo = JSON.parse(localStorage.getItem("soloMode") || "false");
+      if (isSolo) txt += "\nSELF PICKUP MODE ✅";
 
-        orderList = [];
-        updateOrderList();
-        updateMiniCart();
+      const resp = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: chatId, text: txt })
+      });
 
-        setTimeout(() => location.href = "index.html", 3000);
+      const data = await resp.json().catch(() => null);
 
-      } catch (err) {
-        console.error("Order failed:", err);
-        ding("err");
-        showNotification(
-          "❌ Order failed.<br><span style='font-size:1.05rem;opacity:.95'>" +
-          String(err.message).replaceAll("<","&lt;").replaceAll(">","&gt;") +
-          "</span>",
-          15000,
-          true
-        );
-      } finally {
-        isSubmitting = false;
-        btn.disabled = false;
-        btn.innerHTML = prev;
+      if (!resp.ok || !data || !data.ok) {
+        const details = (data && data.description) ? data.description : `HTTP ${resp.status}`;
+        throw new Error(details);
       }
+
+      const extraMsg = isSolo
+        ? "<br><strong>Self-Pickup Mode:</strong> Please collect your drinks downstairs."
+        : "";
+
+      ding("ok");
+      showNotification("✅ Order sent!" + extraMsg, 15000, false);
+
+      orderList = [];
+      updateOrderList();
+      updateMiniCart();
+
+      setTimeout(() => location.href = "index.html", 3000);
+
+    } catch (err) {
+      console.error("Order failed:", err);
+      ding("err");
+      showNotification(
+        "❌ Order failed.<br><span style='font-size:1.05rem;opacity:.95'>" +
+        String(err.message).replaceAll("<","&lt;").replaceAll(">","&gt;") +
+        "</span>",
+        15000,
+        true
+      );
+    } finally {
+      isSubmitting = false;
+      btn.disabled = false;
+      btn.innerHTML = prev;
     }
+  }
 
-    function switchTab(id) {
-      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-      document.querySelectorAll(".menu-section").forEach(s => s.classList.remove("active"));
-      const tab = document.querySelector(`.tab[onclick="switchTab('${id}')"]`);
-      if (tab) tab.classList.add("active");
-      const sec = document.getElementById(id);
-      if (sec) sec.classList.add("active");
+  function switchTab(id) {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".menu-section").forEach(s => s.classList.remove("active"));
+    const tab = document.querySelector(`.tab[onclick="switchTab('${id}')"]`);
+    if (tab) tab.classList.add("active");
+    const sec = document.getElementById(id);
+    if (sec) sec.classList.add("active");
+  }
+
+  /* SOLO MODE: long press top-left */
+  let pressTimer;
+  document.body.addEventListener("touchstart", e => {
+    if (e.touches[0].clientX < 100 && e.touches[0].clientY < 100) {
+      pressTimer = setTimeout(toggleSoloMode, 1500);
     }
+  }, { passive: true });
+  document.body.addEventListener("touchend", () => clearTimeout(pressTimer), { passive: true });
 
-    /* SOLO MODE: long press top-left */
-    let pressTimer;
-    document.body.addEventListener("touchstart", e => {
-      if (e.touches[0].clientX < 100 && e.touches[0].clientY < 100) {
-        pressTimer = setTimeout(toggleSoloMode, 1500);
-      }
-    }, { passive: true });
-    document.body.addEventListener("touchend", () => clearTimeout(pressTimer), { passive: true });
+  function toggleSoloMode() {
+    const on = !JSON.parse(localStorage.getItem("soloMode") || "false");
+    localStorage.setItem("soloMode", on);
+    document.getElementById("soloModeBanner").style.display = on ? "block" : "none";
+    reflowForBanner();
+  }
 
-    function toggleSoloMode() {
-      const on = !JSON.parse(localStorage.getItem("soloMode") || "false");
-      localStorage.setItem("soloMode", on);
-      document.getElementById("soloModeBanner").style.display = on ? "block" : "none";
-      reflowForBanner();
+  function reflowForBanner() {
+    const b = document.getElementById("soloModeBanner");
+    const visible = getComputedStyle(b).display !== "none";
+    const h = visible ? b.getBoundingClientRect().height : 0;
+    document.body.style.setProperty("--banner-offset", (h ? h + 8 : 0) + "px");
+  }
+  window.addEventListener("resize", reflowForBanner);
+  document.addEventListener("DOMContentLoaded", () => {
+    if (JSON.parse(localStorage.getItem("soloMode") || "false")) {
+      document.getElementById("soloModeBanner").style.display = "block";
     }
+    reflowForBanner();
+  });
 
-    function reflowForBanner() {
-      const b = document.getElementById("soloModeBanner");
-      const visible = getComputedStyle(b).display !== "none";
-      const h = visible ? b.getBoundingClientRect().height : 0;
-      document.body.style.setProperty("--banner-offset", (h ? h + 8 : 0) + "px");
-    }
-    window.addEventListener("resize", reflowForBanner);
-    document.addEventListener("DOMContentLoaded", () => {
-      if (JSON.parse(localStorage.getItem("soloMode") || "false")) {
-        document.getElementById("soloModeBanner").style.display = "block";
-      }
-      reflowForBanner();
-    });
+  /* IDLE OVERLAY */
+  const idleOverlay = document.getElementById("slideshow-overlay");
+  const idleVideo   = document.getElementById("slideshowVideoOverlay");
+  const idleVideos  = ["smoke.mp4", "christmas2.mp4", "Christmas.mp4", "mascotte.mp4"];
+  let idleIdx = 0;
+  let idleTO;
 
-    /* IDLE OVERLAY */
-    const idleOverlay = document.getElementById("slideshow-overlay");
-    const idleVideo   = document.getElementById("slideshowVideoOverlay");
-    const idleVideos  = ["smoke.mp4", "christmas2.mp4", "Christmas.mp4", "mascotte.mp4"];
-    let idleIdx = 0;
-    let idleTO;
+  function playNextIdle() {
+    idleVideo.src = idleVideos[idleIdx];
+    idleVideo.load();
+    idleVideo.play().catch(() => {});
+    idleIdx = (idleIdx + 1) % idleVideos.length;
+  }
+  idleVideo.addEventListener("ended", playNextIdle);
+  idleVideo.addEventListener("error", playNextIdle);
 
-    function playNextIdle() {
-      idleVideo.src = idleVideos[idleIdx];
-      idleVideo.load();
-      idleVideo.play().catch(() => {});
-      idleIdx = (idleIdx + 1) % idleVideos.length;
-    }
-    idleVideo.addEventListener("ended", playNextIdle);
-    idleVideo.addEventListener("error", playNextIdle);
+  function showIdle() {
+    idleOverlay.style.display = "flex";
+    playNextIdle();
+  }
+  function hideIdle() {
+    idleOverlay.style.display = "none";
+    try { idleVideo.pause(); } catch(e) {}
+  }
 
-    function showIdle() {
-      idleOverlay.style.display = "flex";
-      playNextIdle();
-    }
-    function hideIdle() {
-      idleOverlay.style.display = "none";
-      try { idleVideo.pause(); } catch(e) {}
-    }
+  function resetIdle() {
+    clearTimeout(idleTO);
+    hideIdle();
+    idleTO = setTimeout(showIdle, 50000);
+  }
 
-    function resetIdle() {
-      clearTimeout(idleTO);
-      hideIdle();
-      idleTO = setTimeout(showIdle, 50000);
-    }
+  ["pointerdown","touchstart","keydown","wheel"].forEach(ev => {
+    document.addEventListener(ev, resetIdle, { passive: true });
+  });
+  idleOverlay.addEventListener("pointerdown", resetIdle, { passive: true });
 
-    ["pointerdown","touchstart","keydown","wheel"].forEach(ev => {
-      document.addEventListener(ev, resetIdle, { passive: true });
-    });
-    idleOverlay.addEventListener("pointerdown", resetIdle, { passive: true });
+  resetIdle();
 
-    resetIdle();
+  /* Surprise Me */
+  function magicOrder() {
+    const allItems = [...document.querySelectorAll(".item")];
+    if (!allItems.length) return;
+    allItems[Math.floor(Math.random() * allItems.length)].click();
+  }
 
-    /* Surprise Me */
-    function magicOrder() {
-      const allItems = [...document.querySelectorAll(".item")];
-      if (!allItems.length) return;
-      allItems[Math.floor(Math.random() * allItems.length)].click();
-    }
-  </script>
+  /* OPTIONAL: quick sound test (remove later)
+  window.addEventListener("load", () => {
+    const b = document.createElement("button");
+    b.textContent = "TEST SOUND";
+    b.style.cssText = "position:fixed;left:20px;bottom:20px;z-index:99999;padding:10px 14px;border-radius:12px;border:none;background:#f26522;color:#000;font-weight:900;";
+    b.onclick = () => { unlockAudioOnce(); ding("ok"); };
+    document.body.appendChild(b);
+  });
+  */
+</script>
 
   <!-- Optional: live-config -->
   <script src="live-config.js" defer></script>
