@@ -368,7 +368,6 @@
     <img class="idle-logo" src="EASY TIMES LOGO BLACK-01.png" alt="EasyTimes Logo">
     <div class="idle-msg">CLICK THE SCREEN TO ORDER DRINKS</div>
     <div class="video-frame">
-      <!-- IMPORTANT: different ID than #slideshowVideo -->
       <video id="slideshowVideoOverlay" muted playsinline autoplay></video>
     </div>
   </div>
@@ -379,6 +378,52 @@
        ============================= */
     const botToken = "8004629550:AAGbBMSe-QQhs_sZmzKdCpol4Mrn2831PPw";
     const chatId   = "-5170118091";
+
+    /* =============================
+       DING SOUND (NO AUDIO FILE)
+       ============================= */
+    let _dingCtx = null;
+
+    function _ctx() {
+      if (_dingCtx && _dingCtx.state !== "closed") return _dingCtx;
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      _dingCtx = new AC();
+      return _dingCtx;
+    }
+
+    function unlockAudioOnce() {
+      const c = _ctx();
+      if (!c) return;
+      if (c.state === "suspended") c.resume().catch(() => {});
+    }
+    document.addEventListener("pointerdown", unlockAudioOnce, { once: true });
+    document.addEventListener("touchstart", unlockAudioOnce, { once: true, passive: true });
+
+    function ding(kind = "tap") {
+      const c = _ctx();
+      if (!c) return;
+
+      if (c.state === "suspended") c.resume().catch(() => {});
+
+      const t = c.currentTime;
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+
+      const freq = kind === "ok" ? 1046.5 : kind === "err" ? 220 : 880; // C6 / A3 / A5
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, t);
+
+      gain.gain.setValueAtTime(0.0001, t);
+      gain.gain.exponentialRampToValueAtTime(0.35, t + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
+
+      osc.connect(gain);
+      gain.connect(c.destination);
+
+      osc.start(t);
+      osc.stop(t + 0.16);
+    }
 
     /* =============================
        ORDER STATE
@@ -475,7 +520,7 @@
     }
 
     /* =============================
-       SUBMIT ORDER (FIXED: POST + error handling)
+       SUBMIT ORDER (POST + error handling + dings)
        ============================= */
     let isSubmitting = false;
 
@@ -483,6 +528,7 @@
       if (isSubmitting) return;
 
       if (!orderList.length) {
+        ding("err");
         showNotification("No items in order!", 7000, true);
         return;
       }
@@ -494,7 +540,7 @@
         isSubmitting = true;
         btn.disabled = true;
         btn.innerHTML = "Sending…";
-ding("tap");
+        ding("tap");
 
         let txt = "🟧 New Order:\n";
         orderList.forEach(it => {
@@ -527,6 +573,7 @@ ding("tap");
           ? "<br><strong>Self-Pickup Mode:</strong> Please collect your drinks downstairs."
           : "";
 
+        ding("ok");
         showNotification("✅ Order sent!" + extraMsg, 15000, false);
 
         orderList = [];
@@ -537,6 +584,7 @@ ding("tap");
 
       } catch (err) {
         console.error("Order failed:", err);
+        ding("err");
         showNotification(
           "❌ Order failed.<br><span style='font-size:1.05rem;opacity:.95'>" +
           String(err.message).replaceAll("<","&lt;").replaceAll(">","&gt;") +
@@ -590,7 +638,7 @@ ding("tap");
       reflowForBanner();
     });
 
-    /* IDLE OVERLAY (FIXED) */
+    /* IDLE OVERLAY */
     const idleOverlay = document.getElementById("slideshow-overlay");
     const idleVideo   = document.getElementById("slideshowVideoOverlay");
     const idleVideos  = ["smoke.mp4", "christmas2.mp4", "Christmas.mp4", "mascotte.mp4"];
@@ -621,12 +669,9 @@ ding("tap");
       idleTO = setTimeout(showIdle, 50000);
     }
 
-    // Activity resets idle
     ["pointerdown","touchstart","keydown","wheel"].forEach(ev => {
       document.addEventListener(ev, resetIdle, { passive: true });
     });
-
-    // Clicking overlay closes it
     idleOverlay.addEventListener("pointerdown", resetIdle, { passive: true });
 
     resetIdle();
@@ -637,56 +682,6 @@ ding("tap");
       if (!allItems.length) return;
       allItems[Math.floor(Math.random() * allItems.length)].click();
     }
-    /* =============================
-   DING SOUND (NO AUDIO FILE)
-   ============================= */
-let _dingCtx = null;
-
-function _ctx() {
-  if (_dingCtx && _dingCtx.state !== "closed") return _dingCtx;
-  const AC = window.AudioContext || window.webkitAudioContext;
-  if (!AC) return null;
-  _dingCtx = new AC();
-  return _dingCtx;
-}
-
-// IMPORTANT: unlock audio on first user gesture (iOS/Android)
-function unlockAudioOnce() {
-  const c = _ctx();
-  if (!c) return;
-  if (c.state === "suspended") c.resume().catch(() => {});
-}
-document.addEventListener("pointerdown", unlockAudioOnce, { once: true });
-document.addEventListener("touchstart", unlockAudioOnce, { once: true, passive: true });
-
-function ding(kind = "tap") {
-  const c = _ctx();
-  if (!c) return;
-
-  if (c.state === "suspended") c.resume().catch(() => {});
-
-  const t = c.currentTime;
-
-  const osc = c.createOscillator();
-  const gain = c.createGain();
-
-  // "tap" = quick ding, "ok" = brighter, "err" = lower
-  const freq = kind === "ok" ? 1046.5 : kind === "err" ? 220 : 880; // C6 / A3 / A5
-  osc.type = "sine";
-  osc.frequency.setValueAtTime(freq, t);
-
-  // fast attack, fast decay
-  gain.gain.setValueAtTime(0.0001, t);
-  gain.gain.exponentialRampToValueAtTime(0.35, t + 0.01);
-  gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
-
-  osc.connect(gain);
-  gain.connect(c.destination);
-
-  osc.start(t);
-  osc.stop(t + 0.16);
-}
-
   </script>
 
   <!-- Optional: live-config -->
