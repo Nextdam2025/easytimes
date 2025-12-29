@@ -314,7 +314,7 @@
     <h2>Your Order</h2>
     <ul id="basketList"></ul>
     <strong>Total: €<span id="totalPrice">0.00</span></strong>
-    <button id="confirmOrder" onclick="submitOrder()">Send Order</button>
+    <button id="confirmOrder" onclick="handleSendClick()">Send Order</button>
   </div>
 
   <!-- Slideshow Container & Crawl -->
@@ -535,12 +535,18 @@
 
       const btn = document.getElementById("confirmOrder");
       const prev = btn.innerHTML;
+function handleSendClick() {
+  // must be directly inside the user gesture handler
+  unlockAudioOnce();
+  ding("tap");
+  submitOrder();
+}
 
       try {
         isSubmitting = true;
         btn.disabled = true;
         btn.innerHTML = "Sending…";
-        ding("tap");
+        
 
         let txt = "🟧 New Order:\n";
         orderList.forEach(it => {
