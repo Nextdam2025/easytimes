@@ -203,15 +203,13 @@
   const repo  = els.repo.value.trim();
 
   const pathRaw = els.path.value.trim().replace(/^\//,'');
-  const safePath = pathRaw
-    .split('/')
-    .map(seg => encodeURIComponent(seg))
-    .join('/');
+  const safePath = pathRaw.split('/').map(encodeURIComponent).join('/');
 
   const base = `https://api.github.com/repos/${owner}/${repo}/contents/${safePath}`;
   const branch = els.branch.value.trim() || 'main';
   return withRef ? `${base}?ref=${encodeURIComponent(branch)}` : base;
 }
+
 
     function repoUiUrl(){
       const owner=els.owner.value.trim(), repo=els.repo.value.trim(),
@@ -504,5 +502,6 @@
   </script>
 </body>
 </html>
+
 
 
