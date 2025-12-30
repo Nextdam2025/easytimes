@@ -417,10 +417,11 @@
     }
 
     // ------- Events -------
-    els.reloadBtn.addEventListener('click', ()=> loadConfig().catch(err=>{
-      console.error(err);
-      alert('Could not load config. Check repo/branch/path and token (if private).');
-    }));
+    loadConfig().catch(err=>{
+  console.error(err);
+  alert('Could not load config:\n\n' + (err?.message || err));
+});
+
     els.saveBtn.addEventListener('click', async () => {
       try { await saveConfig(); }
       catch (err) { console.error(err); alert('Save failed: ' + (err?.message || err)); }
@@ -502,6 +503,7 @@
   </script>
 </body>
 </html>
+
 
 
 
