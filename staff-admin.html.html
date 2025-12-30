@@ -199,11 +199,20 @@
     function getAuth(){ return els.token.value.trim(); }
 
     function apiUrl(withRef=false){
-      const owner=els.owner.value.trim(), repo=els.repo.value.trim(),
-            path=encodeURIComponent(els.path.value.trim().replace(/^\//,''));
-      const base=`https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-      return withRef ? `${base}?ref=${encodeURIComponent(els.branch.value.trim()||'main')}` : base;
-    }
+  const owner = els.owner.value.trim();
+  const repo  = els.repo.value.trim();
+
+  const pathRaw = els.path.value.trim().replace(/^\//,'');
+  const safePath = pathRaw
+    .split('/')
+    .map(seg => encodeURIComponent(seg))
+    .join('/');
+
+  const base = `https://api.github.com/repos/${owner}/${repo}/contents/${safePath}`;
+  const branch = els.branch.value.trim() || 'main';
+  return withRef ? `${base}?ref=${encodeURIComponent(branch)}` : base;
+}
+
     function repoUiUrl(){
       const owner=els.owner.value.trim(), repo=els.repo.value.trim(),
             path=els.path.value.trim().replace(/^\//,''),
@@ -495,4 +504,5 @@
   </script>
 </body>
 </html>
+
 
