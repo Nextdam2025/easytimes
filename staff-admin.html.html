@@ -21,9 +21,9 @@
     .slider:before{ content:""; position:absolute; height:22px; width:22px; left:4px; top:3px; background:#fff; border-radius:50%; transition:.2s; }
     input:checked + .slider { background:#f26522; }
     input:checked + .slider:before { transform: translateX(22px); }
-    .kbd{ background:#222; border:1px solid #444; border-radius:.5rem; padding:.1rem .4rem; font-size:.8rem; }
   </style>
 </head>
+
 <body class="min-h-screen flex flex-col">
   <!-- Top Bar -->
   <header class="sticky top-0 z-30 border-b border-orange-500/40 bg-black/70 backdrop-blur">
@@ -47,7 +47,7 @@
             <div class="text-sm text-orange-300/80">Service mode</div>
             <div class="mt-1 inline-flex items-center gap-2">
               <button id="modeCounter" class="pill text-sm" aria-pressed="true">Counter</button>
-              <button id="modePickup"  class="pill text-sm">Self-Pickup</button>
+              <button id="modePickup"  class="pill text-sm" aria-pressed="false">Self-Pickup</button>
             </div>
           </div>
           <div class="hidden md:block w-px h-10 bg-orange-500/30"></div>
@@ -80,7 +80,7 @@
         </div>
         <div class="grid md:grid-cols-3 gap-3 mt-3">
           <label class="text-sm md:col-span-2">GitHub token (fine-grained; this repo only; contents: read/write)
-            <input id="token" type="password" class="w-full mt-1 px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30" placeholder="ghp_...">
+            <input id="token" type="password" class="w-full mt-1 px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30" placeholder="github_pat_...">
           </label>
           <label class="text-sm flex items-center gap-2 mt-1">
             <input id="remember" type="checkbox" class="scale-125"> Remember on this device
@@ -96,7 +96,7 @@
     <!-- Filter / Quick tools -->
     <section class="card p-4">
       <div class="flex flex-col md:flex-row items-start md:items-center gap-3 justify-between">
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 flex-wrap">
           <input id="search" class="px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30 w-64" placeholder="Search name or #">
           <div class="text-sm text-orange-300/80">Quick raise (visible)</div>
           <button data-bulk="-0.5" class="pill text-sm">−0.5</button>
@@ -127,7 +127,6 @@
         <tbody id="rows"></tbody>
       </table>
     </section>
-
   </main>
 
   <!-- Toast -->
@@ -175,24 +174,30 @@
       'toast','openGitHub'
     ]);
 
-    let fileSHA = null;       // GitHub blob SHA
+    let fileSHA = null;
     let serviceMode = 'counter';
+    // items: { [id:number]: { price:number, available:boolean } }
     let items = {};
     let dirty = false;
 
     // ------- Helpers -------
     function setDirty(v=true){ dirty=v; els.saveBtn.disabled = !dirty; }
-    function euro(num){ return Number(num||0).toFixed(2); }
-    function toast(msg='Saved!'){ const t=els.toast; t.textContent=msg; t.classList.remove('hidden'); setTimeout(()=>t.classList.add('hidden'),1600); }
+    function clampPrice(n){
+      const x = Number(n);
+      if(!Number.isFinite(x)) return 0;
+      return Math.max(0, Math.round(x * 100) / 100);
+    }
+    function fmt2(n){ return clampPrice(n).toFixed(2); }
+    function toast(msg='Saved!'){
+      const t=els.toast;
+      t.textContent=msg;
+      t.classList.remove('hidden');
+      setTimeout(()=>t.classList.add('hidden'),1600);
+    }
     function nowIso(){ return new Date().toISOString(); }
 
     function getAuth(){ return els.token.value.trim(); }
-    function rawUrl(){
-      const owner=els.owner.value.trim(), repo=els.repo.value.trim(),
-            path=els.path.value.trim().replace(/^\//,''),
-            branch=els.branch.value.trim()||'main';
-      return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`;
-    }
+
     function apiUrl(withRef=false){
       const owner=els.owner.value.trim(), repo=els.repo.value.trim(),
             path=encodeURIComponent(els.path.value.trim().replace(/^\//,''));
@@ -226,53 +231,26 @@
       }catch{}
     }
 
-    // ------- Render -------
-    function renderRows(){
-      const q = els.search.value.toLowerCase().trim();
-      const onlyAvail = els.showOnlyAvailable.checked;
-      const rows = CATALOG.filter(it=>{
-        const match = `${it.id} ${it.name}`.toLowerCase().includes(q);
-        const av = items[it.id]?.available !== false;
-        return match && (!onlyAvail || av);
-      }).map(it=>{
-        const conf = items[it.id] || { price:0, available:true };
-        const checked = conf.available !== false ? 'checked' : '';
-        return `
-          <tr class="row border-t border-orange-500/20" data-id="${it.id}">
-            <td class="px-4 py-3 font-bold text-orange-300/90">${it.id}</td>
-            <td class="px-4 py-3">${it.name}</td>
-            <td class="px-4 py-3 text-sm text-orange-300/80">${it.cat}</td>
-            <td class="px-4 py-3">
-              <div class="flex items-center gap-2">
-                <button class="pill text-sm px-2 py-1" data-step="-0.5">−0.5</button>
-                <input type="number" step="0.1" min="0" value="${euro(conf.price)}"
-                       class="price w-28 px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30">
-                <button class="pill text-sm px-2 py-1" data-step="0.5">+0.5</button>
-              </div>
-            </td>
-            <td class="px-4 py-3">
-              <label class="switch">
-                <input type="checkbox" class="avail" ${checked}>
-                <span class="slider"></span>
-              </label>
-            </td>
-            <td class="px-4 py-3">
-              <div class="flex items-center gap-2">
-                <button class="pill text-sm px-2 py-1" data-step="-0.1">−0.1</button>
-                <button class="pill text-sm px-2 py-1" data-step="+0.1">+0.1</button>
-                <button class="pill text-sm px-2 py-1" data-step="+1">+1</button>
-              </div>
-            </td>
-          </tr>`;
-      }).join('');
-      els.rows.innerHTML = rows || `<tr><td class="px-4 py-6 text-orange-300/70" colspan="6">No items match your filter.</td></tr>`;
-    }
-
     // ------- Defaults -------
     function defaultPrice(id){
-      const d = {102:3.5,202:4,203:3.5,204:3.5,205:4,206:5,207:4.5,208:4.5,209:5,210:4,301:3.5,302:4.5,
-                 401:4,402:4,403:4,404:4,405:3.5,406:3.5,407:4,408:4,409:4,410:4,411:4,412:4,413:4,414:4,415:4,416:5,501:3.5,502:4};
+      const d = {
+        102:3.5,202:4,203:3.5,204:3.5,205:4,206:5,207:4.5,208:4.5,209:5,210:4,
+        301:3.5,302:4.5,401:4,402:4,403:4,404:4,405:3.5,406:3.5,407:4,408:4,
+        409:4,410:4,411:4,412:4,413:4,414:4,415:4,416:5,501:3.5,502:4
+      };
       return d[id] ?? 0;
+    }
+
+    function ensureItems(){
+      // Guarantee every catalog item exists in state
+      for(const it of CATALOG){
+        if(!items[it.id]){
+          items[it.id] = { price: defaultPrice(it.id), available:true };
+        }else{
+          items[it.id].price = clampPrice(items[it.id].price ?? defaultPrice(it.id));
+          items[it.id].available = items[it.id].available !== false;
+        }
+      }
     }
 
     function updateModeUI(){
@@ -285,44 +263,95 @@
       });
     }
 
-    // ------- Load config (via Contents API to get SHA) -------
+    // ------- Render -------
+    function renderRows(){
+      ensureItems();
+      const q = els.search.value.toLowerCase().trim();
+      const onlyAvail = els.showOnlyAvailable.checked;
+
+      const html = CATALOG.filter(it=>{
+        const match = `${it.id} ${it.name}`.toLowerCase().includes(q);
+        const av = items[it.id]?.available !== false;
+        return match && (!onlyAvail || av);
+      }).map(it=>{
+        const conf = items[it.id];
+        const checked = conf.available !== false ? 'checked' : '';
+        return `
+          <tr class="row border-t border-orange-500/20" data-id="${it.id}">
+            <td class="px-4 py-3 font-bold text-orange-300/90">${it.id}</td>
+            <td class="px-4 py-3">${it.name}</td>
+            <td class="px-4 py-3 text-sm text-orange-300/80">${it.cat}</td>
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-2">
+                <button class="pill text-sm px-2 py-1" data-step="-0.5">−0.5</button>
+                <input
+                  type="number" step="0.1" min="0" inputmode="decimal"
+                  value="${fmt2(conf.price)}"
+                  class="price w-28 px-3 py-2 rounded-xl bg-black/60 border border-orange-500/30"
+                >
+                <button class="pill text-sm px-2 py-1" data-step="0.5">+0.5</button>
+              </div>
+            </td>
+            <td class="px-4 py-3">
+              <label class="switch">
+                <input type="checkbox" class="avail" ${checked}>
+                <span class="slider"></span>
+              </label>
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-2">
+                <button class="pill text-sm px-2 py-1" data-step="-0.1">−0.1</button>
+                <button class="pill text-sm px-2 py-1" data-step="0.1">+0.1</button>
+                <button class="pill text-sm px-2 py-1" data-step="1">+1</button>
+              </div>
+            </td>
+          </tr>`;
+      }).join('');
+
+      els.rows.innerHTML = html || `
+        <tr><td class="px-4 py-6 text-orange-300/70" colspan="6">No items match your filter.</td></tr>
+      `;
+    }
+
+    // ------- Load config (Contents API to get SHA) -------
     async function loadConfig(){
       fileSHA = null;
       const headers = { 'Accept':'application/vnd.github+json' };
       if(getAuth()) headers['Authorization'] = `Bearer ${getAuth()}`;
 
       const res = await fetch(apiUrl(true), { headers });
+
       if(res.status === 404){
-        // Bootstrap new file
         items = Object.fromEntries(CATALOG.map(it=>[it.id,{ price: defaultPrice(it.id), available:true }]));
         serviceMode = 'counter';
         els.lastLoaded.textContent = 'New file (to be created)';
-        setDirty(true);
         updateModeUI();
         renderRows();
+        setDirty(true);
         return;
       }
       if(!res.ok){
         const txt = await res.text();
         throw new Error(`Load failed: ${res.status} ${txt}`);
       }
+
       const meta = await res.json();
       fileSHA = meta.sha || null;
 
       let cfg = { serviceMode:'counter', items:{} };
       try{
         if(meta.content){
-          const decoded = atob(meta.content.replace(/\n/g,''));
+          const decoded = atob(String(meta.content).replace(/\n/g,''));
           cfg = JSON.parse(decoded);
         }
       }catch(e){
         console.error('Parse error:', e);
       }
 
-      // Merge onto catalog
+      // Merge onto catalog (accept both string/number keys)
       items = Object.fromEntries(CATALOG.map(it=>{
-        const ex = cfg.items?.[it.id] ?? cfg.items?.[String(it.id)] ?? {};
-        return [it.id, { price: Number(ex.price ?? defaultPrice(it.id)), available: ex.available !== false }];
+        const ex = cfg.items?.[String(it.id)] ?? cfg.items?.[it.id] ?? {};
+        return [it.id, { price: clampPrice(ex.price ?? defaultPrice(it.id)), available: ex.available !== false }];
       }));
       serviceMode = (cfg.serviceMode === 'self_pickup') ? 'self_pickup' : 'counter';
 
@@ -337,22 +366,27 @@
       const token = getAuth();
       if(!token){ alert('Paste a GitHub token (fine-grained, contents read/write)'); return; }
 
+      ensureItems();
+
+      // Build cfg from STATE (not DOM) so filtered rows still save correctly
       const cfg = {
         updatedAt: nowIso(),
         serviceMode,
         items: Object.fromEntries(CATALOG.map(it=>{
-          const row = document.querySelector(`tr[data-id="${it.id}"]`);
-          const price = Number(row.querySelector('input.price').value);
-          const available = row.querySelector('input.avail').checked;
-          return [it.id, { price, available }];
+          const v = items[it.id] || { price: defaultPrice(it.id), available:true };
+          // store keys as strings (safer JSON interop)
+          return [String(it.id), { price: clampPrice(v.price), available: v.available !== false }];
         }))
       };
 
-      const content = btoa(unescape(encodeURIComponent(JSON.stringify(cfg, null, 2))));
+      // GitHub Contents API requires base64 of bytes; handle unicode safely
+      const json = JSON.stringify(cfg, null, 2);
+      const content = btoa(unescape(encodeURIComponent(json)));
+
       const body = {
         message: `chore: update menu config ${nowIso()}`,
         content,
-        branch: els.branch.value.trim()
+        branch: els.branch.value.trim() || 'main'
       };
       if(fileSHA) body.sha = fileSHA;
 
@@ -369,6 +403,7 @@
       }
       const out = await res.json();
       fileSHA = out.content?.sha || null;
+
       setDirty(false);
       toast('Saved to GitHub');
       els.lastLoaded.textContent = new Date().toLocaleString();
@@ -388,32 +423,59 @@
     els.search.addEventListener('input', renderRows);
     els.showOnlyAvailable.addEventListener('change', renderRows);
 
+    // Bulk raise for currently visible rows (DOM), but also sync state
     document.querySelectorAll('[data-bulk]').forEach(b=>{
       b.addEventListener('click', ()=>{
         const delta = Number(b.getAttribute('data-bulk'));
-        document.querySelectorAll('#rows tr').forEach(tr=>{
+        document.querySelectorAll('#rows tr[data-id]').forEach(tr=>{
+          const id = Number(tr.getAttribute('data-id'));
+          const next = clampPrice((items[id]?.price ?? defaultPrice(id)) + delta);
+          items[id] = { ...(items[id] || {}), price: next };
           const inp = tr.querySelector('input.price');
-          inp.value = (Number(inp.value) + delta).toFixed(2);
+          if(inp) inp.value = fmt2(next);
         });
         setDirty(true);
       });
     });
 
+    // Row button steps (DOM + state)
     els.rows.addEventListener('click', e=>{
       const stepBtn = e.target.closest('[data-step]');
-      if(stepBtn){
-        const tr = e.target.closest('tr');
-        const inp = tr.querySelector('input.price');
-        const delta = Number(stepBtn.getAttribute('data-step'));
-        inp.value = (Number(inp.value) + delta).toFixed(2);
-        setDirty(true);
-      }
+      if(!stepBtn) return;
+      const tr = e.target.closest('tr[data-id]');
+      if(!tr) return;
+
+      const id = Number(tr.getAttribute('data-id'));
+      const delta = Number(stepBtn.getAttribute('data-step'));
+      const next = clampPrice((items[id]?.price ?? defaultPrice(id)) + delta);
+      items[id] = { ...(items[id] || {}), price: next };
+
+      const inp = tr.querySelector('input.price');
+      if(inp) inp.value = fmt2(next);
+      setDirty(true);
     });
+
+    // Direct price typing -> state
     els.rows.addEventListener('input', e=>{
-      if(e.target.matches('input.price')) setDirty(true);
+      if(!e.target.matches('input.price')) return;
+      const tr = e.target.closest('tr[data-id]');
+      if(!tr) return;
+
+      const id = Number(tr.getAttribute('data-id'));
+      const next = clampPrice(e.target.value);
+      items[id] = { ...(items[id] || {}), price: next };
+      setDirty(true);
     });
+
+    // Availability toggle -> state
     els.rows.addEventListener('change', e=>{
-      if(e.target.matches('input.avail')) setDirty(true);
+      if(!e.target.matches('input.avail')) return;
+      const tr = e.target.closest('tr[data-id]');
+      if(!tr) return;
+
+      const id = Number(tr.getAttribute('data-id'));
+      items[id] = { ...(items[id] || {}), available: !!e.target.checked };
+      setDirty(true);
     });
 
     els.modeCounter.addEventListener('click', ()=>{ serviceMode='counter'; updateModeUI(); setDirty(true); });
