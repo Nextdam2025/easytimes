@@ -378,6 +378,13 @@
      ============================= */
   const botToken = "8004629550:AAGbBMSe-QQhs_sZmzKdCpol4Mrn2831PPw";
   const chatId   = "-5170118091";
+// OPTIONAL: if your group is set to "Mentions only", add staff usernames here
+// Example: const notifyMentions = ["@ezmalik85"];
+const notifyMentions = [];
+
+// OPTIONAL: if your Telegram group is a "forum" (topics), set the topic id here
+// Example: const messageThreadId = 12345;
+const messageThreadId = null;
 
   /* =============================
      DING SOUND (NO AUDIO FILE)
@@ -568,11 +575,23 @@
       const isSolo = JSON.parse(localStorage.getItem("soloMode") || "false");
       if (isSolo) txt += "\nSELF PICKUP MODE ✅";
 
-      const resp = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chat_id: chatId, text: txt })
-      });
+      const mentionLine = notifyMentions.length ? `🔔 ${notifyMentions.join(" ")}\n` : "";
+const finalText = mentionLine + txt;
+
+const payload = {
+  chat_id: chatId,
+  text: finalText,
+  disable_notification: false // FORCE Telegram notification sound (not silent)
+};
+
+if (messageThreadId) payload.message_thread_id = messageThreadId;
+
+const resp = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(payload)
+});
+
 
       const data = await resp.json().catch(() => null);
 
