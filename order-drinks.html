@@ -720,6 +720,7 @@ const resp = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, 
     b.textContent = "TEST SOUND";
     b.style.cssText = "position:fixed;left:20px;bottom:20px;z-index:99999;padding:10px 14px;border-radius:12px;border:none;background:#f26522;color:#000;font-weight:900;";
     b.onclick = () => { unlockAudioOnce(); ding("ok"); };
+    fetch("http://localhost:9899/busylight?token=m8pJqoyMaUGIxEfeOo9XOg==&color=red&blink=fast").catch(()=>{});
     document.body.appendChild(b);
   });
   */
