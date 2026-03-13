@@ -406,8 +406,12 @@ const messageThreadId = null;
   }
 
   // unlock on first gesture
-  document.addEventListener("pointerdown", clearBusylight);
-  document.addEventListener("touchstart", unlockAudioOnce, { once: true, passive: true });
+  // unlock audio on first gesture
+document.addEventListener("pointerdown", unlockAudioOnce, { once: true });
+document.addEventListener("touchstart", unlockAudioOnce, { once: true, passive: true });
+
+// clear Busylight when staff touches the screen again
+document.addEventListener("pointerdown", clearBusylight);
 
   function ding(kind = "tap") {
     const c = _ctx();
