@@ -636,8 +636,8 @@ async function submitOrder() {
       : "";
 
     ding("ok");
-    flashBusylight();
-    showNotification("✅ Order sent!" + extraMsg, 15000, false);
+flashBusylight();
+showNotification("✅ Order sent!" + extraMsg, 15000, false);
 
     orderList = [];
     updateOrderList();
