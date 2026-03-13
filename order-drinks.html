@@ -406,7 +406,7 @@ const messageThreadId = null;
   }
 
   // unlock on first gesture
-  document.addEventListener("pointerdown", unlockAudioOnce, { once: true });
+  document.addEventListener("pointerdown", clearBusylight);
   document.addEventListener("touchstart", unlockAudioOnce, { once: true, passive: true });
 
   function ding(kind = "tap") {
