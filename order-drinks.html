@@ -723,6 +723,9 @@ const resp = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, 
     fetch("http://localhost:9899/busylight?token=m8pJqoyMaUGIxEfeOo9XOg==&color=red&blink=fast").catch(()=>{});
     document.body.appendChild(b);
   });
+  function clearBusylight(){
+  fetch("http://localhost:9899/busylight?token=m8pJqoyMaUGIxEfeOo9XOg==&color=off").catch(()=>{});
+}
   */
 </script>
 
