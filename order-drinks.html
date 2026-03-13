@@ -387,16 +387,15 @@ const messageThreadId = null;
 /* =============================
    BUSYLIGHT SETTINGS
    ============================= */
-const BUSYLIGHT_URL = "http://localhost:9899/";
-const BUSYLIGHT_TOKEN = "m8pJqoyMaUGIxEfeOo9XOg==";
+const BUSYLIGHT_URL = "http://localhost:8989/";
 
 function flashBusylight() {
-  fetch(`${BUSYLIGHT_URL}busylight?token=${encodeURIComponent(BUSYLIGHT_TOKEN)}&color=red&blink=fast`)
+  fetch(`${BUSYLIGHT_URL}?action=blink&red=100&green=0&blue=0&ontime=5&offtime=5&deviceindex=0`)
     .catch(() => {});
 }
 
 function clearBusylight() {
-  fetch(`${BUSYLIGHT_URL}busylight?token=${encodeURIComponent(BUSYLIGHT_TOKEN)}&color=off`)
+  fetch(`${BUSYLIGHT_URL}?action=off&deviceindex=0`)
     .catch(() => {});
 }
 
