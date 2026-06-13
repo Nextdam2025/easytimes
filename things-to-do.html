@@ -3,117 +3,333 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-  <title>Easy Times • Things to Do</title>
-  <!-- Fonts -->
+  <title>Easy Times • Things to Do</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600&display=swap" rel="stylesheet"/>
-  <!-- Styles → lifted from order‑drinks page for visual consistency -->
+
   <style>
-    /* RESET & BASE */
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100vh;width:100vw;overflow:hidden;background:#000;color:#fef5e6;font-family:'Barlow Condensed',sans-serif;display:flex;flex-direction:column;align-items:center;text-align:center}
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
 
-    /* BACKGROUND VIDEO */
-    video.bg-video{position:fixed;top:50%;left:50%;min-width:100%;height:100%;transform:translate(-50%,-50%);object-fit:cover;opacity:.25;z-index:-1}
+    html,body{
+      height:100vh;
+      width:100vw;
+      overflow:hidden;
+      background:#000;
+      color:#fef5e6;
+      font-family:'Barlow Condensed',sans-serif;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+    }
 
-    /* ORANGE FRAME */
-    .orange-frame{position:fixed;inset:0;width:100vw;height:100vh;border:10px solid #f26522;pointer-events:none;z-index:10000;box-sizing:border-box}
+    /* Background Video */
+    video.bg-video{
+      position:fixed;
+      top:50%;
+      left:50%;
+      min-width:100%;
+      height:100%;
+      transform:translate(-50%,-50%);
+      object-fit:cover;
+      opacity:.25;
+      z-index:-1;
+    }
 
-    /* FLOATING LOGO */
-    @keyframes floatLogo{to{transform:translateY(-8px)}}
-    .logo{animation:floatLogo 2s ease-in-out infinite alternate;margin:1rem 0}
-    .logo h1{font-size:3rem;letter-spacing:.1em}
-    .logo h2.sub{font-size:1.25rem;color:#f26522;margin-top:.2em}
+    /* Orange Frame */
+    .orange-frame{
+      position:fixed;
+      inset:0;
+      width:100vw;
+      height:100vh;
+      border:10px solid #f26522;
+      pointer-events:none;
+      z-index:10000;
+    }
 
-    /* GRID LAYOUT */
-    .partners-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;width:100%;max-width:1080px;padding:0 1rem;margin-top:1rem;overflow-y:auto;flex:1}
-    .partner-card{background:#111;border:2px solid #f26522;border-radius:16px;padding:1em;cursor:pointer;display:flex;flex-direction:column;align-items:center;transition:transform .3s}
-    .partner-card:hover{transform:scale(1.05)}
-    .partner-card img{width:120px;height:120px;object-fit:contain;border-radius:12px;background:rgba(255,255,255,.05);padding:10px;margin-bottom:.75em}
-    .partner-card h3{font-size:1.5rem;margin-bottom:.4em}
-    .partner-card p{font-size:1rem;line-height:1.3}
+    /* Floating Logo */
+    @keyframes floatLogo{
+      to{
+        transform:translateY(-8px);
+      }
+    }
 
-    /* SCROLLBAR STYLING */
-    .partners-grid::-webkit-scrollbar{width:8px}
-    .partners-grid::-webkit-scrollbar-thumb{background:#f26522;border-radius:10px}
-    .partners-grid{-ms-overflow-style:none;scrollbar-width:thin}
+    .logo{
+      animation:floatLogo 2s ease-in-out infinite alternate;
+      margin:1rem 0;
+    }
 
-    /* BACK BUTTON */
-    .back-btn{margin:1rem 0}
-    .back-btn button{padding:10px 20px;font-size:1rem;border-radius:10px;background:rgba(255,255,255,.1);border:none;color:#fff;cursor:pointer}
+    .logo h1{
+      font-size:3rem;
+      letter-spacing:.1em;
+    }
+
+    .logo h2{
+      font-size:1.25rem;
+      color:#f26522;
+      margin-top:.2em;
+    }
+
+    /* Back Button */
+    .back-btn{
+      margin:1rem 0;
+    }
+
+    .back-btn button{
+      padding:10px 20px;
+      font-size:1rem;
+      border-radius:10px;
+      background:rgba(255,255,255,.1);
+      border:none;
+      color:#fff;
+      cursor:pointer;
+    }
+
+    /* Grid */
+    .partners-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:1rem;
+      width:100%;
+      max-width:1200px;
+      padding:0 1rem 2rem;
+      overflow-y:auto;
+      flex:1;
+    }
+
+    .partner-card{
+      background:#111;
+      border:2px solid #f26522;
+      border-radius:16px;
+      padding:1rem;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      transition:.3s;
+    }
+
+    .partner-card:hover{
+      transform:scale(1.03);
+      border-color:#ffb347;
+    }
+
+    .partner-card img{
+      width:120px;
+      height:120px;
+      object-fit:contain;
+      background:rgba(255,255,255,.05);
+      border-radius:12px;
+      padding:10px;
+      margin-bottom:.75rem;
+    }
+
+    .partner-card h3{
+      font-size:1.5rem;
+      margin-bottom:.5rem;
+      color:#fff;
+    }
+
+    .partner-card p{
+      font-size:1rem;
+      line-height:1.4;
+      color:#ddd;
+      margin-bottom:1rem;
+    }
+
+    .partner-action{
+      margin-top:auto;
+      width:100%;
+      padding:.75rem;
+      border:none;
+      border-radius:10px;
+      background:#f26522;
+      color:#000;
+      font-weight:bold;
+      font-size:1rem;
+      cursor:pointer;
+    }
+
+    .partner-action:hover{
+      background:#ff8c3a;
+    }
+
+    /* Scrollbar */
+    .partners-grid::-webkit-scrollbar{
+      width:8px;
+    }
+
+    .partners-grid::-webkit-scrollbar-thumb{
+      background:#f26522;
+      border-radius:10px;
+    }
+
+    /* Popup */
+    .popup{
+      position:fixed;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      background:#111;
+      border:3px solid #f26522;
+      border-radius:15px;
+      padding:25px;
+      width:90%;
+      max-width:500px;
+      z-index:20000;
+      display:none;
+    }
+
+    .popup h3{
+      color:#f26522;
+      margin-bottom:10px;
+    }
+
+    .popup p{
+      line-height:1.5;
+      margin-bottom:15px;
+    }
+
+    .popup button{
+      padding:10px 20px;
+      background:#f26522;
+      border:none;
+      border-radius:10px;
+      font-weight:bold;
+      cursor:pointer;
+    }
   </style>
 </head>
+
 <body>
-  <!-- Background video reused from assets folder; falls back gracefully if not loaded -->
+
   <video class="bg-video" autoplay muted loop playsinline>
     <source src="smoke.mp4" type="video/mp4"/>
   </video>
 
   <div class="orange-frame"></div>
 
-  <!-- Back to menu button -->
-  <div class="back-btn"><button onclick="history.back()">← Back</button></div>
-
-  <!-- Floating logo -->
-  <div class="logo">
-    <h1>Easy Times</h1>
-    <h2 class="sub">Things to Do</h2>
+  <div class="back-btn">
+    <button onclick="history.back()">⬅ Back</button>
   </div>
 
-  <!-- Partners grid -->
+  <div class="logo">
+    <h1>EASY TIMES</h1>
+    <h2>Things To Do In Amsterdam</h2>
+  </div>
+
   <div class="partners-grid" id="partnersGrid"></div>
 
-  <script>
-    /* -----------------
-       AFFILIATE TRACKING
-       -----------------
-       – We create or reuse a stored customer‑id (cid) to append to all outbound partner links.
-       – Clicks are also sent (fire‑and‑forget) to our /api/affiliate endpoint so the back‑end can log them.
-    */
-    const STORAGE_KEY = 'easy_cid';
-    const getCid = () => {
-      const urlCid = new URLSearchParams(location.search).get('cid');
-      if(urlCid){ localStorage.setItem(STORAGE_KEY,urlCid); return urlCid; }
-      let existing = localStorage.getItem(STORAGE_KEY);
-      if(existing) return existing;
-      existing = Math.random().toString(36).substring(2,10);
-      localStorage.setItem(STORAGE_KEY, existing);
-      return existing;
-    };
-    const CID = getCid();
+  <div class="popup" id="popup">
+    <h3>Easy Times Recommendation</h3>
+    <p id="popupText"></p>
+    <button onclick="closePopup()">Close</button>
+  </div>
 
-    /* Partner catalog – extend easily: */
-    const partners = [
-      {
-        id: 'abike',
-        name: 'A‑Bike Rentals',
-        logo: 'images/abike-logo.png',
-        text: 'See Amsterdam the local way with our favourite bike‑rental crew. 10% off with code EASYTIMES!',
-        url: 'https://a-bike.nl/'
-      },
-      {
-        id: 'hashmuseum',
-        name: 'Hash & Marijuana Museum',
-        logo: 'images/hashmuseum-logo.png',
-        text: 'Dive into the history of cannabis culture – yes, there’s more than you think!',
-        url: 'https://hashmuseum.com/'
-      },
-           // add more partners here ↓
-    ];
+<script>
+/* Optional tracking only */
+const STORAGE_KEY = "easy_cid";
 
-    const grid = document.getElementById('partnersGrid');
-    partners.forEach(p => {
-      const card = document.createElement('a');
-      card.className = 'partner-card';
-      card.innerHTML = `<img src="${p.logo}" alt="${p.name} logo"><h3>${p.name}</h3><p>${p.text}</p>`;
-      card.href = `${p.url}?ref=easy_times&cid=${CID}`;
-      card.target = '_blank';
-      card.rel = 'noopener noreferrer';
-      card.onclick = () => {
-        // Fire tracking beacon
-        navigator.sendBeacon?.('/api/affiliate_click', JSON.stringify({partner: p.id, cid: CID, ts: Date.now()}));
-      };
-      grid.appendChild(card);
-    });
-  </script>
+function getCid() {
+  let cid = localStorage.getItem(STORAGE_KEY);
+
+  if (!cid) {
+    cid = Math.random().toString(36).substring(2,10);
+    localStorage.setItem(STORAGE_KEY,cid);
+  }
+
+  return cid;
+}
+
+const CID = getCid();
+
+/* Partners */
+const partners = [
+  {
+    id:"abike",
+    name:"A-Bike Rentals",
+    logo:"images/abike-logo.png",
+    text:"Discover Amsterdam by bike. One of the most popular ways to explore the city.",
+    popup:"Ask our staff downstairs for special bike rental recommendations."
+  },
+  {
+    id:"hashmuseum",
+    name:"Hash & Marijuana Museum",
+    logo:"images/hashmuseum-logo.png",
+    text:"Learn about the fascinating history of cannabis culture.",
+    popup:"Located in the city centre. Ask staff for directions."
+  },
+  {
+    id:"canal",
+    name:"Canal Cruise",
+    logo:"images/canal-cruise.png",
+    text:"Experience Amsterdam from the water with a classic canal cruise.",
+    popup:"Canal cruises depart throughout the day."
+  },
+  {
+    id:"heineken",
+    name:"Heineken Experience",
+    logo:"images/heineken.png",
+    text:"Visit one of Amsterdam's most famous attractions.",
+    popup:"Tickets available online and nearby."
+  },
+  {
+    id:"rijksmuseum",
+    name:"Rijksmuseum",
+    logo:"images/rijksmuseum.png",
+    text:"See masterpieces from Dutch history and art.",
+    popup:"One of the top museums in the Netherlands."
+  },
+  {
+    id:"annefrank",
+    name:"Anne Frank House",
+    logo:"images/annefrank.png",
+    text:"A powerful historical experience.",
+    popup:"Advance booking is strongly recommended."
+  }
+];
+
+const grid = document.getElementById("partnersGrid");
+
+partners.forEach(partner => {
+
+  const card = document.createElement("div");
+  card.className = "partner-card";
+
+  card.innerHTML = `
+    <img src="${partner.logo}" alt="${partner.name}">
+    <h3>${partner.name}</h3>
+    <p>${partner.text}</p>
+    <button class="partner-action">More Info</button>
+  `;
+
+  card.onclick = () => {
+
+    /* Optional click tracking */
+    navigator.sendBeacon?.(
+      "/api/affiliate_click",
+      JSON.stringify({
+        partner: partner.id,
+        cid: CID,
+        timestamp: Date.now()
+      })
+    );
+
+    document.getElementById("popupText").innerText = partner.popup;
+    document.getElementById("popup").style.display = "block";
+  };
+
+  grid.appendChild(card);
+});
+
+function closePopup(){
+  document.getElementById("popup").style.display = "none";
+}
+</script>
+
 </body>
 </html>
