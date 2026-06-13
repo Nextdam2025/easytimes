@@ -1,895 +1,419 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-  <title>Easy Times Menu</title>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600&display=swap" rel="stylesheet"/>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<title>Easy Times Menu</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600;800&display=swap" rel="stylesheet"/>
 
-  <style>
-    /* Reset & Base */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body {
-      height: 100vh; width: 100vw; overflow: hidden;
-      background: #000; color: #fef5e6;
-      font-family: 'Barlow Condensed', sans-serif;
-      display: flex; flex-direction: column; align-items: center; text-align: center;
-    }
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100vh;width:100vw;overflow:hidden;background:#000;color:#fef5e6;font-family:'Barlow Condensed',sans-serif;text-align:center}
+body{display:flex;flex-direction:column;align-items:center}
 
-    /* Background & Orange Frame */
-    video.bg-video {
-      position: fixed; top:50%; left:50%;
-      min-width:100%; height:100%;
-      transform:translate(-50%,-50%);
-      object-fit:cover; opacity:0.3; z-index:-1;
-    }
-    .orange-frame {
-      position:fixed; top:0; left:0;
-      width:100vw; height:100vh;
-      border:10px solid #f26522;
-      box-sizing:border-box; pointer-events:none; z-index:10000;
-    }
-    @keyframes floatLogo { to { transform: translateY(-8px); } }
+video.bg-video{position:fixed;top:50%;left:50%;min-width:100%;height:100%;transform:translate(-50%,-50%);object-fit:cover;opacity:.3;z-index:-1}
+.orange-frame{position:fixed;inset:0;border:10px solid #f26522;pointer-events:none;z-index:10000}
 
-    /* Back Button */
-    .back-btn { margin:20px 0; }
-    .back-btn button {
-      padding:10px 20px; font-size:1rem; border-radius:10px;
-      background:rgba(255,255,255,0.1); border:none; color:#fff; cursor:pointer;
-    }
+#soloModeBanner{position:fixed;top:0;left:0;width:100%;background:#000;color:#ffa500;padding:1em;display:none;z-index:10060;border-bottom:3px solid #f26522;font-weight:900}
 
-    /* Logo */
-    .logo { animation:floatLogo 2s ease-in-out infinite alternate; }
-    .logo h1 { font-size:3rem; letter-spacing:.1em; }
-    .logo h2.sub { font-size:1.2rem; color:#f26522; margin-top:.2em; }
+.back-btn{margin:18px 0 5px}
+.back-btn button,.tab,#confirmOrder,.partner-open{cursor:pointer}
 
-    /* Tabs */
-    .tabs { display:flex; gap:1em; margin-bottom:2em; flex-wrap:wrap; }
-    .tab {
-      padding:.6em 1.5em; border:2px solid #f26522; border-radius:999px;
-      color:#fef5e6; background:transparent; cursor:pointer; font-weight:600;
-      transition:.3s; user-select:none;
-    }
-    .tab.active { background:#f26522; color:#000; }
+.back-btn button{padding:10px 20px;border-radius:10px;background:rgba(255,255,255,.1);border:none;color:#fff}
 
-    /* Menu grid */
-    .menu-section {
-      display:none; width:100%; max-width:1080px;
-      margin:0 auto;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:1em; padding:0 1em;
-    }
-    .menu-section.active { display:grid; }
-    .item {
-      background:#111; border:2px solid #f26522; border-radius:16px;
-      padding:1em; color:#fef5e6; cursor:pointer;
-    }
-    .item h3 { font-size:1.4rem; margin-bottom:.5em; }
-    .item p  { font-size:1.1rem; margin-bottom:.8em; }
-    .item button {
-      padding:.5em 1.2em; background:#f26522; color:#000;
-      border:none; border-radius:8px; font-weight:600;
-      pointer-events:none; /* the whole card is clickable */
-    }
-    .item.hot-drink  { background:linear-gradient(145deg,#CC5A00,#E67300); }
-    .item.cold-drink { background:linear-gradient(145deg,#00BFA6,#00D7C3); }
-    .item:hover     { filter:brightness(1.1); }
+.logo h1{font-size:3.4rem;letter-spacing:.18em;text-shadow:0 0 16px #f26522}
+.logo h2{font-size:1.3rem;color:#f0c040;letter-spacing:.35em}
 
-    /* Basket */
-    #basket {
-      background:#1c1c1c; border-top:2px solid #f26522;
-      width:100%; max-width:1080px; margin-top:1.5em; padding:1em; text-align:left;
-    }
-    #basket h2 { color:#f26522; margin-bottom:.5em; }
-    #basket ul { list-style:none; margin:0; padding:0; }
-    #basket li {
-      display:flex; justify-content:space-between; align-items:center;
-      margin:.4em 0; gap:12px;
-    }
-    #basket li button {
-      padding:.2em .6em; border-radius:10px; border:none;
-      background:rgba(255,255,255,0.12); color:#fff; cursor:pointer;
-    }
-    #confirmOrder {
-      margin-top:1em; padding:.75em 1.2em;
-      background:#f26522; color:#000; border:none; border-radius:12px;
-      font-weight:800; cursor:pointer; width:100%;
-    }
-    #confirmOrder:disabled { opacity:.65; cursor:not-allowed; }
+.tabs{display:flex;gap:.8em;margin:1em 0;flex-wrap:wrap;justify-content:center}
+.tab{padding:.7em 1.5em;border:2px solid #f26522;border-radius:999px;color:#fff;background:#050505;font-weight:800}
+.tab.active{background:linear-gradient(145deg,#f26522,#ffb347);color:#000}
 
-    /* Notification */
-    #notification {
-      position: fixed;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 86%; max-width: 520px;
-      background: #28a745;
-      border: 8px solid #155724;
-      color: #ffffff;
-      padding: 1.2em 1.2em;
-      border-radius: 12px;
-      font-size: 1.8rem;
-      font-weight: 800;
-      text-align: center;
-      display: none; opacity: 0;
-      transition: opacity .2s ease;
-      z-index: 10050;
-      line-height: 1.25;
-    }
-    #notification.show { display: block; opacity: 1; }
+.surprise{margin:.3em auto 1em;padding:12px 36px;border:none;border-radius:999px;background:linear-gradient(145deg,#f26522,#ffb347);font-weight:900;font-size:1.1rem}
 
-    /* Option Modal */
-    .option-modal {
-      position:fixed; top:0; left:0; width:100%; height:100%;
-      background:rgba(0,0,0,0.85);
-      display:flex; align-items:center; justify-content:center;
-      z-index:10040; opacity:0; animation:fadeIn .2s forwards;
-    }
-    @keyframes fadeIn { to { opacity:1; } }
-    .option-box {
-      background:#222; padding:1.2em; border-radius:14px;
-      max-width:360px; width:92%; text-align:left; color:#fef5e6;
-      border:2px solid rgba(242,101,34,.55);
-    }
-    .option-box h3 { color:#f26522; margin-bottom:.8em; font-size:1.3rem; }
-    .option-box label { display:block; margin:.6em 0; font-size:1.05rem; }
-    .option-box button {
-      margin-top:.8em; width:100%; padding:.75em;
-      background:#f26522; color:#000; border:none; border-radius:10px;
-      cursor:pointer; font-weight:900;
-    }
+.menu-section{display:none;width:100%;max-width:1080px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1em;padding:0 1em;overflow-y:auto}
+.menu-section.active{display:grid}
 
-    /* Mini-cart */
-    #mini-cart {
-      position:fixed; bottom:20px; right:20px;
-      background:rgba(20,20,20,.95); border:3px solid #f26522;
-      border-radius:16px; padding:1em; width:280px; opacity:0;
-      transition:.25s; z-index:10010;
-    }
-    #mini-cart.show { opacity:1; }
-    #mini-cart h3 { color:#f26522; margin-bottom:.5em; font-size:1.4rem; }
-    #mini-cart ul { list-style:none; max-height:180px; overflow:hidden; padding:0; }
-    #mini-cart li { display:flex; justify-content:space-between; margin:.35em 0; font-size:1.05rem; }
-    #mini-cart .total { text-align:right; margin-top:.8em; font-weight:900; font-size:1.1rem; }
+.item,.partner-card{background:rgba(20,20,20,.88);border:2px solid #f26522;border-radius:16px;padding:1em;color:#fef5e6;cursor:pointer;min-height:145px}
+.item:hover,.partner-card:hover{transform:scale(1.03);border-color:#f0c040}
+.item h3,.partner-card h3{font-size:1.45rem;color:#f0c040}
+.item p,.partner-card p{font-size:1rem;margin:.5em 0}
+.item button,.partner-open{padding:.55em 1.2em;background:#f26522;color:#000;border:none;border-radius:10px;font-weight:900}
 
-    /* Solo Mode Banner */
-    :root { --banner-offset: 0px; }
-    body { padding-top: var(--banner-offset); }
-    #soloModeBanner{
-      position:fixed; top:0; left:0; width:100%;
-      background:rgba(0,0,0,0.95); color:#FFA500;
-      text-align:center; padding:1em; display:none;
-      z-index:10060;
-      border-bottom:4px solid #f26522;
-      font-size: 1.4rem; font-weight: 900; letter-spacing: .02em;
-    }
+.hot-drink{background:linear-gradient(145deg,rgba(204,90,0,.8),rgba(40,15,0,.88))}
+.cold-drink{background:linear-gradient(145deg,rgba(0,140,150,.75),rgba(0,25,30,.9))}
 
-    /* Slideshow container (bottom) */
-    #slideshow-container {
-      margin-top:1.2em; width:100%; max-width:1080px; height:300px;
-      background:#000; position:relative;
-      border:2px solid #f26522; border-radius:12px; overflow:hidden;
-    }
-    #slideshow-container video { width:100%; height:100%; object-fit:cover; }
+.things-header{grid-column:1/-1;background:linear-gradient(145deg,#c96b2a,#d7a94b);color:#111;border-radius:16px;padding:1em;text-align:left}
+.things-header h2{font-size:2rem}
+.partner-card{text-align:left}
+.partner-card img{width:125px;height:70px;object-fit:contain;background:rgba(255,255,255,.12);border-radius:10px;padding:8px;margin-bottom:.8em}
 
-    /* Star Wars Crawl */
-    .starwars-crawl-wrapper {
-      position: absolute; inset: 0;
-      perspective: 800px; overflow: hidden; z-index: 10;
-      pointer-events: none;
-    }
-    .starwars-crawl {
-      position: relative; height: 100%;
-      transform: rotateX(25deg); transform-origin: bottom center;
-      overflow: hidden;
-    }
-    .crawl-text {
-      position: absolute; bottom: -20%; width: 90%; left: 5%;
-      text-align: center; font-size: 4.2rem; font-weight: 900;
-      line-height: 1.55; color: #FFA500;
-      animation: crawlUp 90s linear infinite;
-      text-shadow: 0 4px 18px rgba(0,0,0,.6);
-    }
-    @keyframes crawlUp {
-      0% { bottom: -100%; }
-      100% { bottom: 230%; }
-    }
+#basket{width:100%;max-width:1080px;margin-top:1em;padding:1em;background:rgba(10,10,10,.9);border:2px solid #b98024;border-radius:16px;text-align:left}
+#basket h2{color:#f0c040}
+#basket ul{list-style:none}
+#basket li{display:flex;justify-content:space-between;gap:10px;margin:.35em 0}
+#basket li button{border:none;border-radius:8px;padding:.2em .6em;background:#f26522;color:#000}
+#confirmOrder{margin-top:1em;width:100%;padding:.8em;border:none;border-radius:999px;background:linear-gradient(145deg,#f26522,#ffca65);font-weight:900}
 
-    /* IDLE OVERLAY (fixed: clickable + separate IDs) */
-    #slideshow-overlay {
-      position: fixed; inset: 0;
-      width: 100vw; height: 100vh;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.9);
-      z-index: 10070;
-      pointer-events: auto; /* IMPORTANT */
-      gap: 18px;
-    }
-    #slideshow-overlay .video-frame {
-      width: calc(100vh * 9 / 16); max-width: 90vw; height: 90vh;
-      border: 10px solid #f26522; border-radius: 20px;
-      overflow: hidden; background: black; position: relative;
-    }
-    #slideshow-overlay video {
-      position:absolute; inset:0;
-      width:100%; height:100%; object-fit:cover;
-    }
-    #slideshow-overlay .idle-logo {
-      width: 200px;
-      margin-top: 10px;
-    }
-    #slideshow-overlay .idle-msg {
-      color: #FFA500;
-      font-size: 2rem;
-      font-weight: 900;
-      text-align: center;
-      text-shadow: 1px 1px 4px black;
-      padding: 0 18px;
-    }
-  
+#notification{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:86%;max-width:520px;background:#28a745;border:8px solid #155724;color:#fff;padding:1.2em;border-radius:14px;font-size:1.8rem;font-weight:900;display:none;z-index:10050}
+#notification.show{display:block}
 
-/* ===== EASY TIMES AMAZE REDESIGN 2026 ===== */
-:root{
-  --et-orange:#f26522;
-  --et-gold:#f6c667;
-  --et-cream:#fff3dc;
-  --et-glass:rgba(20,16,12,.72);
-  --et-border:rgba(246,198,103,.42);
-  --et-shadow:0 22px 70px rgba(0,0,0,.55);
-}
-html,body{background:radial-gradient(circle at 20% 0%,rgba(242,101,34,.22),transparent 36%),radial-gradient(circle at 80% 15%,rgba(246,198,103,.16),transparent 32%),#050403;color:var(--et-cream);}
-body{padding:18px 24px 20px;justify-content:flex-start;gap:12px;overflow:hidden;}
-body:before{content:"";position:fixed;inset:10px;border:1px solid rgba(246,198,103,.28);border-radius:28px;z-index:1;pointer-events:none;box-shadow:inset 0 0 60px rgba(242,101,34,.12);}
-.orange-frame{border:8px solid var(--et-orange);border-radius:28px;box-shadow:inset 0 0 34px rgba(242,101,34,.3);}
-video.bg-video{opacity:.24;filter:saturate(1.2) contrast(1.1);}
-.back-btn{position:fixed;top:24px;left:28px;z-index:10020;margin:0;}
-.back-btn button,.top-action{backdrop-filter:blur(14px);background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.18);box-shadow:0 10px 28px rgba(0,0,0,.35);}
-.logo{margin-top:4px;padding:8px 24px 2px;border-radius:24px;background:linear-gradient(180deg,rgba(0,0,0,.42),rgba(0,0,0,0));z-index:2;}
-.logo h1{font-size:clamp(2.5rem,5.5vw,5.7rem);line-height:.85;letter-spacing:.13em;text-shadow:0 0 22px rgba(242,101,34,.35),0 8px 22px rgba(0,0,0,.7);}
-.logo h2.sub{font-size:clamp(1rem,1.7vw,1.7rem);color:var(--et-gold);letter-spacing:.36em;text-transform:uppercase;}
-.tabs{gap:.7em;margin:.2em 0 .8em;z-index:2;align-items:center;justify-content:center;}
-.tab{position:relative;overflow:hidden;padding:.72em 1.45em;border:1px solid var(--et-border);background:rgba(0,0,0,.38);box-shadow:0 12px 30px rgba(0,0,0,.26);backdrop-filter:blur(10px);font-size:1.05rem;}
-.tab:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent);transform:translateX(-110%);transition:.45s;}
-.tab:hover:before{transform:translateX(110%);}
-.tab.active{background:linear-gradient(135deg,var(--et-orange),#ff8d35 55%,var(--et-gold));color:#150904;border-color:rgba(255,255,255,.35);transform:translateY(-2px);}
-#surpriseWrap{margin:.1em auto .8em!important;z-index:2;}
-#surpriseWrap button{padding:12px 28px!important;border-radius:999px!important;background:linear-gradient(135deg,#f26522,#f6c667)!important;color:#160a04!important;}
-.menu-section{max-width:1280px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;padding:0 8px;max-height:45vh;overflow:auto;scrollbar-width:thin;z-index:2;}
-.item,.partner-card{position:relative;min-height:126px;background:linear-gradient(155deg,rgba(255,255,255,.12),rgba(255,255,255,.035));border:1px solid var(--et-border);border-radius:22px;padding:1.05em;box-shadow:var(--et-shadow);backdrop-filter:blur(12px);transition:transform .2s ease, filter .2s ease, border-color .2s ease;overflow:hidden;}
-.item:after,.partner-card:after{content:"";position:absolute;right:-36px;bottom:-44px;width:110px;height:110px;border-radius:50%;background:radial-gradient(circle,rgba(246,198,103,.24),transparent 65%);}
-.item:hover,.partner-card:hover{transform:translateY(-4px) scale(1.015);filter:brightness(1.13);border-color:rgba(246,198,103,.75);}
-.item h3{font-size:1.55rem;line-height:1.02;position:relative;z-index:1;}
-.item p{font-size:1.3rem;font-weight:900;color:var(--et-gold);position:relative;z-index:1;}
-.item button{border-radius:999px;background:rgba(0,0,0,.46);color:#fff3dc;border:1px solid rgba(255,255,255,.2);position:relative;z-index:1;}
-.item.hot-drink{background:linear-gradient(145deg,rgba(180,74,18,.88),rgba(48,20,10,.74));}
-.item.cold-drink{background:linear-gradient(145deg,rgba(0,150,136,.72),rgba(8,38,38,.78));}
-.item.snack-card{background:linear-gradient(145deg,rgba(122,71,25,.82),rgba(36,20,10,.82));}
-#basket{max-width:1280px;margin-top:10px;border:1px solid var(--et-border);border-radius:24px;background:linear-gradient(135deg,rgba(10,10,10,.76),rgba(45,26,12,.62));box-shadow:var(--et-shadow);backdrop-filter:blur(12px);z-index:2;}
-#basket h2{color:var(--et-gold);}
-#confirmOrder{background:linear-gradient(135deg,var(--et-orange),var(--et-gold));border-radius:999px;}
-#slideshow-container{height:180px;max-width:1280px;margin-top:10px;border:1px solid var(--et-border);border-radius:24px;box-shadow:var(--et-shadow);opacity:.95;z-index:2;}
-.crawl-text{font-size:2.4rem;color:var(--et-gold);}
-#things{max-height:48vh;}
-.things-hero{grid-column:1/-1;border-radius:26px;padding:18px 22px;background:linear-gradient(135deg,rgba(242,101,34,.86),rgba(246,198,103,.72));color:#150904;text-align:left;display:flex;justify-content:space-between;gap:18px;align-items:center;box-shadow:var(--et-shadow);}
-.things-hero h2{font-size:2.4rem;line-height:.95;margin-bottom:4px;}
-.things-hero p{font-size:1.18rem;max-width:760px;}
-.partner-card{display:flex;flex-direction:column;text-decoration:none;color:var(--et-cream);align-items:flex-start;min-height:255px;text-align:left;}
-.partner-card .logo-wrap{height:96px;width:100%;display:flex;align-items:center;justify-content:center;margin-bottom:12px;background:rgba(255,255,255,.08);border-radius:18px;position:relative;z-index:1;}
-.partner-card img.partner-logo{max-width:78%;max-height:76px;object-fit:contain;filter:drop-shadow(0 8px 16px rgba(0,0,0,.35));}
-.partner-card h3{font-size:1.75rem;line-height:1;color:var(--et-gold);margin-bottom:8px;position:relative;z-index:1;}
-.partner-card p{font-size:1.05rem;line-height:1.25;color:#fff5df;position:relative;z-index:1;}
-.partner-card .cta{margin-top:auto;padding:9px 14px;border-radius:999px;background:linear-gradient(135deg,var(--et-orange),var(--et-gold));color:#150904;font-weight:900;position:relative;z-index:1;}
-.partner-card .qr{position:absolute;right:14px;top:14px;width:62px;height:62px;border-radius:12px;background:#fff;padding:5px;z-index:2;}
-@media (min-width:1400px){.menu-section{max-height:52vh;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));}#slideshow-container{height:210px}.item{min-height:140px}}
-@media (max-width:760px){body{padding:14px 12px}.back-btn{position:static;align-self:flex-start}.logo h1{font-size:2.6rem}.menu-section{max-height:50vh;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));}.tabs{gap:.45em}.tab{font-size:.95rem;padding:.65em 1em}.things-hero{flex-direction:column;align-items:flex-start}.partner-card{min-height:235px}#basket{font-size:.95rem}}
+.option-modal{position:fixed;inset:0;background:rgba(0,0,0,.86);display:none;align-items:center;justify-content:center;z-index:10040}
+.option-box{background:#222;border:2px solid #f26522;border-radius:16px;padding:1.3em;width:92%;max-width:380px;text-align:left}
+.option-box h3{color:#f26522;margin-bottom:.8em}
+.option-box label{display:block;margin:.6em 0}
+.option-box button{width:100%;padding:.8em;margin-top:.7em;border:none;border-radius:10px;background:#f26522;font-weight:900}
 
-  </style>
+#mini-cart{position:fixed;bottom:20px;right:20px;width:280px;background:rgba(20,20,20,.95);border:3px solid #f26522;border-radius:16px;padding:1em;opacity:0;z-index:10010}
+#mini-cart.show{opacity:1}
+
+.quote-box{width:100%;max-width:1080px;margin:1em auto;padding:1.4em;border:1px solid #b98024;border-radius:16px;color:#f0c040;font-size:1.7rem;font-weight:900}
+
+/* PARTNER IFRAME POPUP */
+.partner-popup{position:fixed;inset:0;background:rgba(0,0,0,.95);display:none;align-items:center;justify-content:center;z-index:999999;padding:25px}
+.partner-popup-box{width:95vw;height:90vh;background:#000;border:8px solid #f26522;border-radius:24px;overflow:hidden;display:flex;flex-direction:column}
+.partner-popup-header{height:70px;background:#111;border-bottom:3px solid #f26522;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+.partner-popup-header h3{color:#f26522;font-size:1.6rem}
+.partner-popup-header button{background:#f26522;color:#000;border:none;border-radius:12px;padding:12px 22px;font-weight:900;cursor:pointer}
+#partnerFrame{width:100%;height:100%;border:none;background:white}
+</style>
 </head>
 
 <body>
-  <canvas id="particles" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-2;pointer-events:none;"></canvas>
+<video autoplay class="bg-video" loop muted playsinline>
+  <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4"/>
+</video>
 
-  <!-- Background & Frame -->
-  <video autoplay class="bg-video" loop muted playsinline>
-    <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4"/>
-  </video>
-  <div class="orange-frame"></div>
+<div class="orange-frame"></div>
+<div id="soloModeBanner">Self Pickup Mode: Please collect your drinks downstairs after ordering.</div>
 
-  <!-- Back to Home -->
-  <div class="back-btn">
-    <button onclick="location.href='index.html'">⬅ Back to Home</button>
+<div class="back-btn"><button onclick="location.href='index.html'">⬅ Back to Home</button></div>
+
+<div class="logo">
+  <h1>EASY TIMES</h1>
+  <h2>1985 - AMSTERDAM</h2>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('hot')">Hot Drinks</div>
+  <div class="tab" onclick="switchTab('cold')">Cold Drinks</div>
+  <div class="tab" onclick="switchTab('snacks')">Homemade Snacks</div>
+  <div class="tab" onclick="switchTab('things')">Things to Do</div>
+</div>
+
+<button class="surprise" onclick="magicOrder()">🎲 Surprise Me!</button>
+
+<div class="menu-section active" id="hot"></div>
+<div class="menu-section" id="cold"></div>
+<div class="menu-section" id="snacks"></div>
+
+<div class="menu-section" id="things">
+  <div class="things-header">
+    <h2>Things to Do in Amsterdam</h2>
+    <p>Keep the Easy Times vibe going: bikes, culture, food and local favourites. Partner websites open only inside this framed popup.</p>
   </div>
+</div>
 
-  <!-- Logo -->
-  <div class="logo">
-    <h1>EASY TIMES</h1>
-    <h2 class="sub">1985 – Amsterdam</h2>
+<div id="basket">
+  <h2>Your Order</h2>
+  <ul id="basketList"></ul>
+  <strong>Total: €<span id="totalPrice">0.00</span></strong>
+  <button id="confirmOrder" onclick="handleSendClick()">Send Order</button>
+</div>
+
+<div class="quote-box">
+  It’s Not Just a Coffeeshop. It’s Malik’s House of Chill.<br>
+  EasyTimes Amsterdam — Born to Relax. Built to Remember.<br>
+  EasyTimes. The Legend Lives on Reguliers.
+</div>
+
+<div id="notification"></div>
+
+<div class="option-modal" id="optionModal">
+  <div class="option-box">
+    <h3 id="optionTitle"></h3>
+    <div id="optionList"></div>
+    <button onclick="confirmOptions()">Add to Order</button>
+    <button onclick="closeModal()" style="background:rgba(255,255,255,.1);color:white">Close</button>
   </div>
+</div>
 
-  <!-- Tabs -->
-  <div class="tabs">
-    <div class="tab active" onclick="switchTab('hot')">Hot Drinks</div>
-    <div class="tab" onclick="switchTab('cold')">Cold Drinks</div>
-    <div class="tab" onclick="switchTab('snacks')">Homemade Snacks</div>
-    <div class="tab" onclick="switchTab('things')">Things to Do</div>
-  </div>
+<div id="mini-cart"></div>
 
-  <div id="surpriseWrap" style="margin:1em auto; text-align:center;">
-    <button onclick="magicOrder()"
-      style="padding:10px 25px; font-size:1.2rem; border-radius:12px; background:linear-gradient(145deg,#f26522,#ff7e29);
-      color:#fff; border:none; cursor:pointer; box-shadow:0 5px 15px rgba(0,0,0,0.3); font-weight:900;">
-      🎲 Surprise Me!
-    </button>
-  </div>
-
-  <!-- Hot Drinks -->
-  <div class="menu-section active" id="hot">
-    <div class="item hot-drink" onclick="prepareOptions({name:'Espresso',articleNumber:102,price:3.50,options:[{name:'Whipped Cream',price:1},{name:'Extra Oatmilk',price:1},{name:'Syrup',price:1}]})"><h3>Espresso</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Doppio',articleNumber:202,price:4.00,options:[{name:'Extra Oatmilk',price:1},{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})"><h3>Doppio</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Black Coffee',articleNumber:203,price:3.50,options:[]})"><h3>Black Coffee</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Americano',articleNumber:204,price:3.50,options:[]})"><h3>Americano</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Cappuccino',articleNumber:205,price:4.00,options:[]})"><h3>Cappuccino</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Flavored Latte',articleNumber:206,price:5.00,options:[{name:'Hazelnuts',price:0},{name:'Caramel',price:0}]})"><h3>Flavored Latte</h3><p>€5.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Café Latte',articleNumber:207,price:4.50,options:[]})"><h3>Café Latte</h3><p>€4.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Latte Macchiato',articleNumber:208,price:4.50,options:[{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})"><h3>Latte Macchiato</h3><p>€4.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Coffee Mocca',articleNumber:209,price:5.00,options:[{name:'Extra Shot Espresso',price:1},{name:'Whipped Cream',price:1}]})"><h3>Coffee Mocca</h3><p>€5.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Hot Chocolate',articleNumber:210,price:4.00,options:[{name:'Whipped Cream',price:1}]})"><h3>Hot Chocolate</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Tea',articleNumber:301,price:3.50,options:[{name:'Extra Lemon',price:1},{name:'Extra Ginger',price:1},{name:'Orange Blossom',price:1},{name:'Louiza',price:1}]})"><h3>Tea</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" onclick="prepareOptions({name:'Fresh Mint Tea',articleNumber:302,price:4.50,options:[{name:'Extra Lemon',price:0.50},{name:'Extra Ginger',price:0.50},{name:'Extra Blossom',price:0.50},{name:'Louiza',price:0.50}]})"><h3>Fresh Mint Tea</h3><p>€4.50</p><button>Add</button></div>
-  </div>
-
-  <!-- Cold Drinks -->
-  <div class="menu-section" id="cold">
-    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola',articleNumber:401,price:4.00,options:[]})"><h3>Coca-Cola</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola Zero',articleNumber:402,price:4.00,options:[]})"><h3>Coca-Cola Zero</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Orange',articleNumber:403,price:4.00,options:[]})"><h3>Fanta Orange</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Cassis',articleNumber:404,price:4.00,options:[]})"><h3>Fanta Cassis</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Still Water',articleNumber:405,price:3.50,options:[]})"><h3>Still Water</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Sparkling Water',articleNumber:406,price:3.50,options:[]})"><h3>Sparkling Water</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Sprite',articleNumber:407,price:4.00,options:[]})"><h3>Sprite</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Chocomel',articleNumber:408,price:4.00,options:[]})"><h3>Chocomel</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Peach/Mango',articleNumber:409,price:4.00,options:[{name:'Peach',price:0},{name:'Mango',price:0}]})"><h3>Iced Tea Peach/Mango</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Lemon Sparkling',articleNumber:410,price:4.00,options:[]})"><h3>Iced Tea Lemon Sparkling</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Bitter Lemon',articleNumber:411,price:4.00,options:[]})"><h3>Royal Bliss Bitter Lemon</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Ginger Ale',articleNumber:412,price:4.00,options:[]})"><h3>Royal Bliss Ginger Ale</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Looza (Pear/Strawberry/Peach)',articleNumber:413,price:4.00,options:[{name:'Pear',price:0},{name:'Strawberry',price:0},{name:'Peach',price:0}]})"><h3>Looza (Pear/Strawberry/Peach)</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Minute Maid Orange/Apple',articleNumber:414,price:4.00,options:[{name:'Orange',price:0},{name:'Apple',price:0}]})"><h3>Minute Maid Orange/Apple</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'AA Energy Drink',articleNumber:415,price:4.00,options:[]})"><h3>AA Energy Drink</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" onclick="prepareOptions({name:'Red Bull',articleNumber:416,price:5.00,options:[]})"><h3>Red Bull Energy Drink</h3><p>€5.00</p><button>Add</button></div>
-  </div>
-
-  <!-- Homemade Snacks -->
-  <div class="menu-section" id="snacks">
-    <div class="item snack-card" onclick="prepareOptions({name:'Chocolate Chip Cookie',articleNumber:501,price:3.50,options:[]})"><h3>Chocolate Chip Cookie</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item snack-card" onclick="prepareOptions({name:'Banana Cake',articleNumber:502,price:4.00,options:[]})"><h3>Banana Cake</h3><p>€4.00</p><button>Add</button></div>
-  </div>
-
-
-  <!-- Things to Do / Affiliate Partners -->
-  <div class="menu-section" id="things">
-    <div class="things-hero">
-      <div>
-        <h2>Things to Do in Amsterdam</h2>
-        <p>Keep the Easy Times vibe going: bikes, culture, food and local favourites. Every click can be tracked with the Easy Times affiliate CID logic.</p>
-      </div>
-      <strong>Tap a card → open partner</strong>
+<div id="partnerPopup" class="partner-popup">
+  <div class="partner-popup-box">
+    <div class="partner-popup-header">
+      <h3 id="partnerTitle">Partner</h3>
+      <button onclick="closePartnerPopup()">Close</button>
     </div>
-    <a class="partner-card" href="https://a-bike.nl/?ref=easy_times" target="_blank" rel="noopener noreferrer" data-partner="abike">
-      <img class="qr" src="images/qr_abike.png" alt="A-Bike QR">
-      <div class="logo-wrap"><img class="partner-logo" src="images/abike-logo.png" alt="A-Bike Rentals logo"></div>
-      <h3>A‑Bike Rentals</h3>
-      <p>See Amsterdam like a local. Great for tourists who want to explore after chilling upstairs.</p>
-      <span class="cta">Open partner</span>
-    </a>
-    <a class="partner-card" href="https://hashmuseum.com/?ref=easy_times" target="_blank" rel="noopener noreferrer" data-partner="hashmuseum">
-      <div class="logo-wrap"><img class="partner-logo" src="images/hashmuseum-logo.png" alt="Hash & Marijuana Museum logo"></div>
-      <h3>Hash & Marijuana Museum</h3>
-      <p>A perfect culture stop: history, cannabis heritage and a very Amsterdam story.</p>
-      <span class="cta">Open partner</span>
-    </a>
-    
+    <iframe id="partnerFrame" src="" loading="lazy"></iframe>
   </div>
+</div>
 
-  <!-- Basket -->
-  <div id="basket">
-    <h2>Your Order</h2>
-    <ul id="basketList"></ul>
-    <strong>Total: €<span id="totalPrice">0.00</span></strong>
-    <button id="confirmOrder" onclick="handleSendClick()">Send Order</button>
-  </div>
-
-  <!-- Slideshow Container & Crawl -->
-  <div id="slideshow-container">
-    <video id="slideshowVideo" muted playsinline></video>
-    <div class="starwars-crawl-wrapper">
-      <div class="starwars-crawl">
-        <div class="crawl-text">
-          <p>EasyTimes Amsterdam — Where the World Comes to Chill.</p>
-          <p>One Love. One Coffeeshop. A Thousand Stories.</p>
-          <p>Relax Like a Local, Float Like a Tourist.</p>
-          <p>Welcome to the Heartbeat of Chill in Amsterdam.</p>
-          <p>Your Couch Away from Home — Only at EasyTimes.</p>
-          <p>From Tokyo to Toronto — Everyone Finds Peace at EasyTimes.</p>
-          <p>Across Borders, One Destination: EasyTimes Amsterdam.</p>
-          <p>Jetlagged? High Spirits Only Here.</p>
-          <p>EasyTimes: The Pilgrimage for Chill Seekers.</p>
-          <p>Travel Light, Relax Heavy.</p>
-          <p>Where Time Slows Down and Smiles Light Up.</p>
-          <p>No Rush. No Worries. Just EasyTimes.</p>
-          <p>The Art of Relaxation — Served Daily.</p>
-          <p>Escape the Noise, Embrace the Vibe.</p>
-          <p>Let Go. Light Up. Live Easy.</p>
-          <p>Malik’s Arms Are Open. So Are Our Doors.</p>
-          <p>Come as a Stranger, Leave as Family.</p>
-          <p>It’s Not Just a Coffeeshop. It’s Malik’s House of Chill.</p>
-          <p>EasyTimes Amsterdam — Born to Relax. Built to Remember.</p>
-          <p>EasyTimes. The Legend Lives on Reguliers.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Notification / Modal / Mini-cart / Solo banner -->
-  <div id="notification"></div>
-
-  <div class="option-modal" id="optionModal" style="display:none;">
-    <div class="option-box">
-      <h3 id="optionTitle"></h3>
-      <div id="optionList"></div>
-      <button onclick="confirmOptions()">Add to Order</button>
-      <button onclick="closeModal()" style="margin-top:.5em;background:rgba(255,255,255,0.1);color:#fff;">Close</button>
-    </div>
-  </div>
-
-  <div id="mini-cart"></div>
-  <div id="soloModeBanner">Self Pickup Mode: Please collect your drinks downstairs after ordering.</div>
-
-  <!-- Idle Overlay -->
-  <div id="slideshow-overlay">
-    <img class="idle-logo" src="EASY TIMES LOGO BLACK-01.png" alt="EasyTimes Logo">
-    <div class="idle-msg">CLICK THE SCREEN TO ORDER DRINKS</div>
-    <div class="video-frame">
-      <video id="slideshowVideoOverlay" muted playsinline autoplay></video>
-    </div>
-  </div>
 <script>
-
-/* =============================
-   THINGS TO DO AFFILIATE TRACKING
-   ============================= */
-(function(){
-  const STORAGE_KEY = "easy_cid";
-  function getCid(){
-    const urlCid = new URLSearchParams(location.search).get("cid");
-    if(urlCid){ localStorage.setItem(STORAGE_KEY,urlCid); return urlCid; }
-    let existing = localStorage.getItem(STORAGE_KEY);
-    if(existing) return existing;
-    existing = Math.random().toString(36).slice(2,10);
-    localStorage.setItem(STORAGE_KEY, existing);
-    return existing;
-  }
-  const cid = getCid();
-  document.addEventListener("click", function(e){
-    const card = e.target.closest(".partner-card[data-partner]");
-    if(!card) return;
-    const url = new URL(card.href);
-    url.searchParams.set("ref", "easy_times");
-    url.searchParams.set("cid", cid);
-    card.href = url.toString();
-    try{
-      navigator.sendBeacon && navigator.sendBeacon("/api/affiliate_click", JSON.stringify({partner:card.dataset.partner,cid:cid,ts:Date.now()}));
-    }catch(err){}
-  }, true);
-})();
-
-/* =============================
-   TELEGRAM SETTINGS
-   ============================= */
 const botToken = "8004629550:AAGbBMSe-QQhs_sZmzKdCpol4Mrn2831PPw";
-const chatId   = "-5170118091";
-
-// OPTIONAL: if your group is set to "Mentions only", add staff usernames here
+const chatId = "-5170118091";
+const messageThreadId = null;
 const notifyMentions = [];
 
-// OPTIONAL: if your Telegram group is a forum/topic group, set topic id here
-const messageThreadId = null;
+const hotItems = [
+{name:"Espresso",articleNumber:102,price:3.50,options:[{name:"Whipped Cream",price:1},{name:"Extra Oatmilk",price:1},{name:"Syrup",price:1}]},
+{name:"Doppio",articleNumber:202,price:4.00,options:[{name:"Extra Oatmilk",price:1},{name:"Whipped Cream",price:1},{name:"Syrup",price:1}]},
+{name:"Black Coffee",articleNumber:203,price:3.50,options:[]},
+{name:"Americano",articleNumber:204,price:3.50,options:[]},
+{name:"Cappuccino",articleNumber:205,price:4.00,options:[]},
+{name:"Flavored Latte",articleNumber:206,price:5.00,options:[{name:"Hazelnuts",price:0},{name:"Caramel",price:0}]},
+{name:"Café Latte",articleNumber:207,price:4.50,options:[]},
+{name:"Latte Macchiato",articleNumber:208,price:4.50,options:[{name:"Whipped Cream",price:1},{name:"Syrup",price:1}]},
+{name:"Coffee Mocca",articleNumber:209,price:5.00,options:[{name:"Extra Shot Espresso",price:1},{name:"Whipped Cream",price:1}]},
+{name:"Hot Chocolate",articleNumber:210,price:4.00,options:[{name:"Whipped Cream",price:1}]},
+{name:"Tea",articleNumber:301,price:3.50,options:[{name:"Extra Lemon",price:1},{name:"Extra Ginger",price:1},{name:"Orange Blossom",price:1},{name:"Louiza",price:1}]},
+{name:"Fresh Mint Tea",articleNumber:302,price:4.50,options:[{name:"Extra Lemon",price:.5},{name:"Extra Ginger",price:.5},{name:"Extra Blossom",price:.5},{name:"Louiza",price:.5}]}
+];
 
-/* =============================
-   BUSYLIGHT SETTINGS
-   ============================= */
-const BUSYLIGHT_URL = "http://localhost:8989/";
+const coldItems = [
+{name:"Coca-Cola",articleNumber:401,price:4.00,options:[]},
+{name:"Coca-Cola Zero",articleNumber:402,price:4.00,options:[]},
+{name:"Fanta Orange",articleNumber:403,price:4.00,options:[]},
+{name:"Fanta Cassis",articleNumber:404,price:4.00,options:[]},
+{name:"Still Water",articleNumber:405,price:3.50,options:[]},
+{name:"Sparkling Water",articleNumber:406,price:3.50,options:[]},
+{name:"Sprite",articleNumber:407,price:4.00,options:[]},
+{name:"Chocomel",articleNumber:408,price:4.00,options:[]},
+{name:"Iced Tea Peach/Mango",articleNumber:409,price:4.00,options:[{name:"Peach",price:0},{name:"Mango",price:0}]},
+{name:"Iced Tea Lemon Sparkling",articleNumber:410,price:4.00,options:[]},
+{name:"Royal Bliss Bitter Lemon",articleNumber:411,price:4.00,options:[]},
+{name:"Royal Bliss Ginger Ale",articleNumber:412,price:4.00,options:[]},
+{name:"Looza",articleNumber:413,price:4.00,options:[{name:"Pear",price:0},{name:"Strawberry",price:0},{name:"Peach",price:0}]},
+{name:"Minute Maid",articleNumber:414,price:4.00,options:[{name:"Orange",price:0},{name:"Apple",price:0}]},
+{name:"AA Energy Drink",articleNumber:415,price:4.00,options:[]},
+{name:"Red Bull Energy Drink",articleNumber:416,price:5.00,options:[]}
+];
 
-function flashBusylight() {
-  fetch(`${BUSYLIGHT_URL}?action=blink&red=100&green=0&blue=0&ontime=5&offtime=5&deviceindex=0`)
-    .catch(() => {});
-}
+const snackItems = [
+{name:"Chocolate Chip Cookie",articleNumber:501,price:3.50,options:[]},
+{name:"Banana Cake",articleNumber:502,price:4.00,options:[]}
+];
 
-function clearBusylight() {
-  fetch(`${BUSYLIGHT_URL}?action=off&deviceindex=0`)
-    .catch(() => {});
-}
+const partners = [
+{id:"abike",name:"A-Bike Rentals",logo:"images/abike-logo.png",text:"See Amsterdam like a local. Great for tourists who want to explore after chilling upstairs.",url:"https://a-bike.nl/"},
+{id:"hashmuseum",name:"Hash & Marijuana Museum",logo:"images/hashmuseum-logo.png",text:"A perfect culture stop: history, cannabis heritage and a very Amsterdam story.",url:"https://hashmuseum.com/"}
+];
 
-/* =============================
-   DING SOUND (NO AUDIO FILE)
-   ============================= */
-let _dingCtx = null;
-
-function _ctx() {
-  if (_dingCtx && _dingCtx.state !== "closed") return _dingCtx;
-  const AC = window.AudioContext || window.webkitAudioContext;
-  if (!AC) return null;
-  _dingCtx = new AC();
-  return _dingCtx;
-}
-
-function unlockAudioOnce() {
-  const c = _ctx();
-  if (!c) return;
-  if (c.state !== "running") c.resume().catch(() => {});
-}
-
-function ding(kind = "tap") {
-  const c = _ctx();
-  if (!c) return;
-
-  if (c.state !== "running") c.resume().catch(() => {});
-
-  const t = c.currentTime;
-  const osc = c.createOscillator();
-  const gain = c.createGain();
-
-  const freq = kind === "ok" ? 1046.5 : kind === "err" ? 220 : 880;
-  osc.type = "sine";
-  osc.frequency.setValueAtTime(freq, t);
-
-  gain.gain.setValueAtTime(0.0001, t);
-  gain.gain.exponentialRampToValueAtTime(0.35, t + 0.01);
-  gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
-
-  osc.connect(gain);
-  gain.connect(c.destination);
-
-  osc.start(t);
-  osc.stop(t + 0.16);
-}
-
-// unlock audio on first gesture only
-document.addEventListener("pointerdown", unlockAudioOnce, { once: true });
-document.addEventListener("touchstart", unlockAudioOnce, { once: true, passive: true });
-
-// IMPORTANT:
-// use click instead of pointerdown so it does not interfere with item/button presses
-document.addEventListener("click", (e) => {
-  const clickedSendButton = e.target.closest("#confirmOrder");
-  if (!clickedSendButton) {
-    clearBusylight();
-  }
-});
-
-/* =============================
-   ORDER STATE
-   ============================= */
 let orderList = [];
 let selectedArticle = null;
 let isSubmitting = false;
 
-function showNotification(msg, ms = 8000, isError = false) {
-  const n = document.getElementById("notification");
-  n.style.background = isError ? "#c0392b" : "#28a745";
-  n.style.borderColor = isError ? "#641e16" : "#155724";
-  n.innerHTML = msg + '<div style="margin-top:.6em;font-size:1rem;opacity:.92">Tap to close</div>';
-  n.classList.add("show");
-  clearTimeout(n._hideTO);
-  n.onclick = () => {
-    n.classList.remove("show");
-    clearTimeout(n._hideTO);
-    n.onclick = null;
-  };
-  n._hideTO = setTimeout(() => {
-    n.classList.remove("show");
-    n.onclick = null;
-  }, ms);
+function renderItems(id,items,type){
+  const box = document.getElementById(id);
+  items.forEach(item=>{
+    const div = document.createElement("div");
+    div.className = "item " + type;
+    div.innerHTML = `<h3>${item.name}</h3><p>€${item.price.toFixed(2)}</p><button>Add</button>`;
+    div.onclick = () => prepareOptions(item);
+    box.appendChild(div);
+  });
 }
 
-function prepareOptions(article) {
+function renderPartners(){
+  const box = document.getElementById("things");
+  partners.forEach(partner=>{
+    const div = document.createElement("div");
+    div.className = "partner-card";
+    div.innerHTML = `
+      <img src="${partner.logo}" alt="${partner.name}">
+      <h3>${partner.name}</h3>
+      <p>${partner.text}</p>
+      <button class="partner-open" type="button">Open partner</button>
+    `;
+    div.onclick = () => openPartnerPopup(partner.name, partner.url);
+    box.appendChild(div);
+  });
+}
+
+renderItems("hot",hotItems,"hot-drink");
+renderItems("cold",coldItems,"cold-drink");
+renderItems("snacks",snackItems,"");
+renderPartners();
+
+function switchTab(id){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".menu-section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+
+  const tabs = [...document.querySelectorAll(".tab")];
+  const names = {hot:0,cold:1,snacks:2,things:3};
+  tabs[names[id]].classList.add("active");
+}
+
+if(location.hash === "#things") switchTab("things");
+
+function openPartnerPopup(name,url){
+  document.getElementById("partnerTitle").innerText = name;
+  document.getElementById("partnerFrame").src = url;
+  document.getElementById("partnerPopup").style.display = "flex";
+}
+
+function closePartnerPopup(){
+  document.getElementById("partnerFrame").src = "";
+  document.getElementById("partnerPopup").style.display = "none";
+}
+
+function prepareOptions(article){
   selectedArticle = article;
+  document.getElementById("optionTitle").innerText = "Options for " + article.name;
+  const list = document.getElementById("optionList");
+  list.innerHTML = "";
 
-  document.getElementById("optionTitle").innerText = `Options for ${article.name}`;
-  const optList = document.getElementById("optionList");
-  optList.innerHTML = "";
+  if(!article.options.length){
+    orderList.push({...article,selectedOptions:[],totalPrice:article.price});
+    updateOrderList();
+    updateMiniCart();
+    return;
+  }
 
-  (article.options || []).forEach((o, i) => {
-    const lbl = document.createElement("label");
-    lbl.innerHTML = `<input type="checkbox" data-index="${i}"> ${o.name} (+€${(+o.price).toFixed(2)})`;
-    optList.appendChild(lbl);
+  article.options.forEach((o,i)=>{
+    const label = document.createElement("label");
+    label.innerHTML = `<input type="checkbox" data-index="${i}"> ${o.name} (+€${o.price.toFixed(2)})`;
+    list.appendChild(label);
   });
 
   document.getElementById("optionModal").style.display = "flex";
 }
 
-function confirmOptions() {
+function confirmOptions(){
   let extra = 0;
   let chosen = [];
 
-  document.querySelectorAll("#optionList input[type='checkbox']").forEach(cb => {
-    if (cb.checked) {
-      const o = selectedArticle.options[cb.dataset.index];
-      chosen.push(o);
-      extra += (+o.price || 0);
+  document.querySelectorAll("#optionList input").forEach(cb=>{
+    if(cb.checked){
+      const option = selectedArticle.options[cb.dataset.index];
+      chosen.push(option);
+      extra += option.price;
     }
   });
 
-  orderList.push({
-    ...selectedArticle,
-    selectedOptions: chosen,
-    totalPrice: (+selectedArticle.price || 0) + extra
-  });
-
+  orderList.push({...selectedArticle,selectedOptions:chosen,totalPrice:selectedArticle.price+extra});
   updateOrderList();
   updateMiniCart();
   closeModal();
 }
 
-function closeModal() {
+function closeModal(){
   document.getElementById("optionModal").style.display = "none";
 }
 
-function updateOrderList() {
+function updateOrderList(){
   const ul = document.getElementById("basketList");
   ul.innerHTML = "";
-
-  orderList.forEach((it, i) => {
-    ul.innerHTML += `
-      <li>
-        <span>#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)})</span>
-        <button onclick="removeFromOrder(${i})">×</button>
-      </li>
-    `;
+  orderList.forEach((item,i)=>{
+    ul.innerHTML += `<li><span>#${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})</span><button onclick="removeFromOrder(${i})">×</button></li>`;
   });
-
-  document.getElementById("totalPrice").innerText =
-    orderList.reduce((s, x) => s + (+x.totalPrice || 0), 0).toFixed(2);
+  document.getElementById("totalPrice").innerText = orderList.reduce((s,x)=>s+x.totalPrice,0).toFixed(2);
 }
 
-function removeFromOrder(idx) {
-  orderList.splice(idx, 1);
+function removeFromOrder(i){
+  orderList.splice(i,1);
   updateOrderList();
   updateMiniCart();
 }
 
-function updateMiniCart() {
+function updateMiniCart(){
   const m = document.getElementById("mini-cart");
-  let html = "<h3>Basket</h3><ul>";
-  let tot = 0;
-
-  orderList.forEach(it => {
-    html += `<li><span>${it.name}</span><span>€${it.totalPrice.toFixed(2)}</span></li>`;
-    tot += (+it.totalPrice || 0);
-  });
-
-  html += `</ul><div class="total">Total: €${tot.toFixed(2)}</div>`;
+  let total = 0;
+  let html = "<h3>Basket</h3>";
+  orderList.forEach(i=>{total+=i.totalPrice; html+=`<div>${i.name} €${i.totalPrice.toFixed(2)}</div>`});
+  html += `<strong>Total: €${total.toFixed(2)}</strong>`;
   m.innerHTML = html;
-
   m.classList.add("show");
   clearTimeout(window._miniTO);
-  window._miniTO = setTimeout(() => m.classList.remove("show"), 10000);
+  window._miniTO = setTimeout(()=>m.classList.remove("show"),8000);
 }
 
-// IMPORTANT: called directly by the send button
-function handleSendClick() {
-  unlockAudioOnce();
-  ding("tap");
+function showNotification(msg,isError=false){
+  const n = document.getElementById("notification");
+  n.innerHTML = msg;
+  n.style.background = isError ? "#c0392b" : "#28a745";
+  n.classList.add("show");
+  setTimeout(()=>n.classList.remove("show"),8000);
+}
+
+function handleSendClick(){
   submitOrder();
 }
 
-/* =============================
-   SUBMIT ORDER
-   ============================= */
-async function submitOrder() {
-  if (isSubmitting) return;
-
-  if (!orderList.length) {
-    ding("err");
-    showNotification("No items in order!", 7000, true);
-    return;
-  }
+async function submitOrder(){
+  if(isSubmitting) return;
+  if(!orderList.length){showNotification("No items in order!",true);return;}
 
   const btn = document.getElementById("confirmOrder");
-  const prev = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerText = "Sending...";
+  isSubmitting = true;
 
-  try {
-    isSubmitting = true;
-    btn.disabled = true;
-    btn.innerHTML = "Sending…";
-
+  try{
     let txt = "🟧 New Order:\n";
-
-    orderList.forEach(it => {
-      txt += `#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)})\n`;
-      if (it.selectedOptions && it.selectedOptions.length) {
-        txt += "  → " + it.selectedOptions.map(o => o.name).join(", ") + "\n";
-      }
+    orderList.forEach(item=>{
+      txt += `#${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})\n`;
+      if(item.selectedOptions.length) txt += " → " + item.selectedOptions.map(o=>o.name).join(", ") + "\n";
     });
 
-    const total = orderList.reduce((s, x) => s + (+x.totalPrice || 0), 0).toFixed(2);
-    txt += `\nTOTAL: €${total}\n`;
+    txt += `\nTOTAL: €${orderList.reduce((s,x)=>s+x.totalPrice,0).toFixed(2)}\n`;
 
-    const isSolo = JSON.parse(localStorage.getItem("soloMode") || "false");
-    if (isSolo) txt += "\nSELF PICKUP MODE ✅";
-
-    const mentionLine = notifyMentions.length ? `🔔 ${notifyMentions.join(" ")}\n` : "";
-    const finalText = mentionLine + txt;
-
-    const payload = {
-      chat_id: chatId,
-      text: finalText,
-      disable_notification: false
-    };
-
-    if (messageThreadId) payload.message_thread_id = messageThreadId;
-
-    const resp = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-
-    const data = await resp.json().catch(() => null);
-
-    if (!resp.ok || !data || !data.ok) {
-      const details = (data && data.description) ? data.description : `HTTP ${resp.status}`;
-      throw new Error(details);
+    if(JSON.parse(localStorage.getItem("soloMode") || "false")){
+      txt += "\nSELF PICKUP MODE ✅";
     }
 
-    const extraMsg = isSolo
-      ? "<br><strong>Self-Pickup Mode:</strong> Please collect your drinks downstairs."
-      : "";
+    const payload = {chat_id:chatId,text:txt,disable_notification:false};
+    if(messageThreadId) payload.message_thread_id = messageThreadId;
 
-    ding("ok");
-flashBusylight();
-showNotification("✅ Order sent!" + extraMsg, 15000, false);
+    const resp = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload)
+    });
 
+    const data = await resp.json();
+    if(!resp.ok || !data.ok) throw new Error(data.description || "Telegram failed");
+
+    showNotification("✅ Order sent!");
     orderList = [];
     updateOrderList();
     updateMiniCart();
 
-    setTimeout(() => {
-      location.href = "index.html";
-    }, 3000);
+    setTimeout(()=>location.href="index.html",3000);
 
-  } catch (err) {
-    console.error("Order failed:", err);
-    ding("err");
-    showNotification(
-      "❌ Order failed.<br><span style='font-size:1.05rem;opacity:.95'>" +
-      String(err.message).replaceAll("<", "&lt;").replaceAll(">", "&gt;") +
-      "</span>",
-      15000,
-      true
-    );
-  } finally {
-    isSubmitting = false;
+  }catch(e){
+    showNotification("❌ Order failed: " + e.message,true);
+  }finally{
     btn.disabled = false;
-    btn.innerHTML = prev;
+    btn.innerText = "Send Order";
+    isSubmitting = false;
   }
 }
 
-function switchTab(id) {
-  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-  document.querySelectorAll(".menu-section").forEach(s => s.classList.remove("active"));
-
-  const tab = document.querySelector(`.tab[onclick="switchTab('${id}')"]`);
-  if (tab) tab.classList.add("active");
-
-  const sec = document.getElementById(id);
-  if (sec) sec.classList.add("active");
+function magicOrder(){
+  const activeItems = [...document.querySelectorAll(".menu-section.active .item")];
+  if(activeItems.length) activeItems[Math.floor(Math.random()*activeItems.length)].click();
 }
 
-/* =============================
-   SOLO MODE: long press top-left
-   ============================= */
 let pressTimer;
-
-document.body.addEventListener("touchstart", e => {
-  if (e.touches[0].clientX < 100 && e.touches[0].clientY < 100) {
-    pressTimer = setTimeout(toggleSoloMode, 1500);
+document.body.addEventListener("touchstart",e=>{
+  if(e.touches[0].clientX < 100 && e.touches[0].clientY < 100){
+    pressTimer = setTimeout(toggleSoloMode,1500);
   }
-}, { passive: true });
+},{passive:true});
 
-document.body.addEventListener("touchend", () => clearTimeout(pressTimer), { passive: true });
+document.body.addEventListener("touchend",()=>clearTimeout(pressTimer),{passive:true});
 
-function toggleSoloMode() {
+function toggleSoloMode(){
   const on = !JSON.parse(localStorage.getItem("soloMode") || "false");
-  localStorage.setItem("soloMode", on);
+  localStorage.setItem("soloMode",on);
   document.getElementById("soloModeBanner").style.display = on ? "block" : "none";
-  reflowForBanner();
 }
 
-function reflowForBanner() {
-  const b = document.getElementById("soloModeBanner");
-  const visible = getComputedStyle(b).display !== "none";
-  const h = visible ? b.getBoundingClientRect().height : 0;
-  document.body.style.setProperty("--banner-offset", (h ? h + 8 : 0) + "px");
+if(JSON.parse(localStorage.getItem("soloMode") || "false")){
+  document.getElementById("soloModeBanner").style.display = "block";
 }
-
-window.addEventListener("resize", reflowForBanner);
-
-document.addEventListener("DOMContentLoaded", () => {
-  if (location.hash === "#things") switchTab("things");
-  if (JSON.parse(localStorage.getItem("soloMode") || "false")) {
-    document.getElementById("soloModeBanner").style.display = "block";
-  }
-  reflowForBanner();
-});
-
-/* =============================
-   IDLE OVERLAY
-   ============================= */
-const idleOverlay = document.getElementById("slideshow-overlay");
-const idleVideo   = document.getElementById("slideshowVideoOverlay");
-const idleVideos  = ["smoke.mp4", "mascotte.mp4"];
-let idleIdx = 0;
-let idleTO;
-
-function playNextIdle() {
-  idleVideo.src = idleVideos[idleIdx];
-  idleVideo.load();
-  idleVideo.play().catch(() => {});
-  idleIdx = (idleIdx + 1) % idleVideos.length;
-}
-
-idleVideo.addEventListener("ended", playNextIdle);
-idleVideo.addEventListener("error", playNextIdle);
-
-function showIdle() {
-  idleOverlay.style.display = "flex";
-  playNextIdle();
-}
-
-function hideIdle() {
-  idleOverlay.style.display = "none";
-  try { idleVideo.pause(); } catch (e) {}
-}
-
-function resetIdle() {
-  clearTimeout(idleTO);
-  hideIdle();
-  idleTO = setTimeout(showIdle, 50000);
-}
-
-["pointerdown", "touchstart", "keydown", "wheel"].forEach(ev => {
-  document.addEventListener(ev, resetIdle, { passive: true });
-});
-
-idleOverlay.addEventListener("pointerdown", resetIdle, { passive: true });
-
-resetIdle();
-
-/* =============================
-   SURPRISE ME
-   ============================= */
-function magicOrder() {
-  const allItems = [...document.querySelectorAll(".item")];
-  if (!allItems.length) return;
-  allItems[Math.floor(Math.random() * allItems.length)].click();
-}
-
-/* OPTIONAL: quick sound/light test
-window.addEventListener("load", () => {
-  const b = document.createElement("button");
-  b.textContent = "TEST SOUND";
-  b.style.cssText = "position:fixed;left:20px;bottom:20px;z-index:99999;padding:10px 14px;border-radius:12px;border:none;background:#f26522;color:#000;font-weight:900;";
-  b.onclick = () => {
-    unlockAudioOnce();
-    ding("ok");
-    flashBusylight();
-  };
-  document.body.appendChild(b);
-});
-*/
 </script>
 </body>
 </html>
