@@ -4,37 +4,10 @@
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>EasyTimes Touchscreen Menu</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700&family=Oleo+Script&display=swap" rel="stylesheet">
+
   <style>
-    /* Inside overlay logo and message */
-
-/* Video goes behind */
-
-
-.video-frame {
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 90vw;
-  max-width: 1280px;
-  aspect-ratio: 9/16;
-  border: 10px solid #f26522;
-  border-radius: 20px;
-  overflow: hidden;
-  background: black;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 20px;
-}
-
-@media (orientation: landscape) {
-  .video-frame {
-    aspect-ratio: 16 / 9;
-  }
-}
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
@@ -53,12 +26,10 @@
 
     .orange-frame {
       position: fixed;
-      top: 0;
-      left: 0;
+      inset: 0;
       width: 100vw;
       height: 100vh;
       border: 10px solid #f26522;
-      box-sizing: border-box;
       pointer-events: none;
       z-index: 10001;
     }
@@ -73,18 +44,25 @@
     }
 
     header img {
-  width: clamp(280px, 40vw, 480px); /* Increased min/max limits */
-  max-width: 90vw;                  /* Prevents overflow */
-  height: auto;
-  animation: pulseLogo 3s infinite ease-in-out;
-}
+      width: clamp(280px, 40vw, 480px);
+      max-width: 90vw;
+      height: auto;
+      animation: pulseLogo 3s infinite ease-in-out;
+    }
 
     header h1 {
       font-family: 'Oleo Script', cursive;
       font-size: clamp(2.5rem, 5vw, 4rem);
       color: #f26522;
-      text-shadow: 0 3px 15px rgba(0, 0, 0, 0.6);
+      text-shadow: 0 3px 15px rgba(0,0,0,.6);
       margin-top: -10px;
+    }
+
+    .main-button {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .main-button button {
@@ -95,15 +73,20 @@
       background: linear-gradient(145deg, #f26522, #ff7e29);
       color: #fff;
       font-weight: bold;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(0,0,0,.4);
+      transition: all .3s ease;
+      cursor: pointer;
     }
 
     .main-button button:hover {
       background: #f0c040;
       transform: scale(1.08);
-      cursor: pointer;
       color: #121212;
+    }
+
+    .things-btn {
+      background: linear-gradient(145deg,#f0c040,#f26522) !important;
+      color: #121212 !important;
     }
 
     footer {
@@ -111,34 +94,75 @@
       bottom: 10px;
       width: 100%;
       text-align: center;
-      font-size: 0.85rem;
+      font-size: .85rem;
       color: #aaa;
     }
 
     @keyframes pulseLogo {
       0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.04); opacity: 0.95; }
+      50% { transform: scale(1.04); opacity: .95; }
     }
 
-    /* Slideshow Overlay remains unchanged */
+    /* Popup iframe */
+    .iframe-popup {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.94);
+      z-index: 30000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+    }
 
+    .iframe-box {
+      width: 95vw;
+      height: 90vh;
+      max-width: 1300px;
+      background: #000;
+      border: 8px solid #f26522;
+      border-radius: 24px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 70px rgba(0,0,0,.85);
+    }
 
-  
-@media (orientation: landscape) {
-  .video-frame {
-    aspect-ratio: 16 / 9; /* Landscape override */
-  }
-}
+    .iframe-header {
+      height: 68px;
+      background: #111;
+      border-bottom: 3px solid #f26522;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+    }
 
-.video-frame video,
-.video-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* or use 'cover' if you want the entire frame filled but may crop slightly */
-}
+    .iframe-header h3 {
+      color: #f26522;
+      font-size: 1.6rem;
+    }
 
+    .iframe-header button {
+      padding: 12px 22px;
+      background: #f26522;
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .iframe-box iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #000;
+    }
   </style>
 </head>
+
 <body>
   <div class="orange-frame"></div>
 
@@ -147,9 +171,10 @@
       <img src="EASY TIMES LOGO BLACK-01.png" alt="EasyTimes Logo">
       <h1>Easy Times Touchscreen Order Menu</h1>
     </header>
+
     <div class="main-button">
       <button onclick="location.href='order-drinks.html'">🛒 Order Drinks Here</button>
-      <button onclick="location.href='order-drinks.html#things'" style="margin-left:14px;background:linear-gradient(145deg,#f0c040,#f26522);color:#121212;">✨ Things to Do</button>
+      <button class="things-btn" onclick="openThingsPopup()">✨ Things to Do</button>
     </div>
   </div>
 
@@ -157,124 +182,138 @@
     <p>&copy; 2025 Easy Times Amsterdam. All rights reserved.</p>
   </footer>
 
-  <script>
-  const videos = ['smoke.mp4', 'mascotte.mp4'];
-  let currentVideoIndex = 0;
-  let slideshowIdleTimeout;
+  <div class="iframe-popup" id="thingsPopup">
+    <div class="iframe-box">
+      <div class="iframe-header">
+        <h3>Things To Do In Amsterdam</h3>
+        <button onclick="closeThingsPopup()">Close</button>
+      </div>
+      <iframe id="thingsFrame" src=""></iframe>
+    </div>
+  </div>
 
-  // Create the overlay container
-  const videoOverlay = document.createElement('div');
-  Object.assign(videoOverlay.style, {
-    position: 'fixed',
-    top: '10px',
-    left: '10px',
-    right: '10px',
-    bottom: '10px',
-    backgroundColor: '#000',
-    zIndex: '4',
-    display: 'none',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    transition: 'opacity 1s ease, transform 1s ease',
-    opacity: '0',
-    transform: 'scale(0.9)',
-    borderRadius: '20px'
-  });
+<script>
+const videos = ['smoke.mp4', 'mascotte.mp4'];
+let currentVideoIndex = 0;
+let slideshowIdleTimeout;
 
-  // Logo
-  const videoLogo = document.createElement('img');
-  videoLogo.src = 'EASY TIMES LOGO BLACK-01.png';
-  videoLogo.alt = 'Easytimes Logo';
-  videoLogo.style.width = '200px';
-  videoLogo.style.margin = '40px 0 20px';
+function openThingsPopup() {
+  document.getElementById("thingsFrame").src = "things-to-do.html";
+  document.getElementById("thingsPopup").style.display = "flex";
+}
 
-  // Message
-  const videoMessage = document.createElement('div');
-  videoMessage.innerText = 'CLICK THE SCREEN TO ORDER DRINKS';
-  Object.assign(videoMessage.style, {
-    color: '#FFA500',
-    fontSize: '2rem',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    textShadow: '1px 1px 4px black',
-    marginBottom: '30px'
-  });
+function closeThingsPopup() {
+  document.getElementById("thingsFrame").src = "";
+  document.getElementById("thingsPopup").style.display = "none";
+}
 
-  // Framed container
-  const videoFrame = document.createElement('div');
-  Object.assign(videoFrame.style, {
-    position: 'relative',
-    width: '90vw',
-    maxWidth: '1280px',
-    border: '10px solid #f26522',
-    borderRadius: '20px',
-    overflow: 'hidden',
-    boxSizing: 'border-box',
-    background: 'black',
-    aspectRatio: '9 / 16'
-  });
+// Idle slideshow overlay
+const videoOverlay = document.createElement('div');
+Object.assign(videoOverlay.style, {
+  position: 'fixed',
+  top: '10px',
+  left: '10px',
+  right: '10px',
+  bottom: '10px',
+  backgroundColor: '#000',
+  zIndex: '4',
+  display: 'none',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: 'opacity 1s ease, transform 1s ease',
+  opacity: '0',
+  transform: 'scale(0.9)',
+  borderRadius: '20px'
+});
 
-  const video = document.createElement('video');
-  video.id = 'slideshowVideo';
-  video.muted = true;
-  video.controls = false;
-  video.autoplay = true;
-  video.playsInline = true;
-  Object.assign(video.style, {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover'
-  });
+const videoLogo = document.createElement('img');
+videoLogo.src = 'EASY TIMES LOGO BLACK-01.png';
+videoLogo.alt = 'Easytimes Logo';
+videoLogo.style.width = '200px';
+videoLogo.style.margin = '40px 0 20px';
 
-  videoFrame.appendChild(video);
-  videoOverlay.append(videoLogo, videoMessage, videoFrame);
-  document.body.appendChild(videoOverlay);
+const videoMessage = document.createElement('div');
+videoMessage.innerText = 'CLICK THE SCREEN TO ORDER DRINKS';
+Object.assign(videoMessage.style, {
+  color: '#FFA500',
+  fontSize: '2rem',
+  fontWeight: 'bold',
+  textAlign: 'center',
+  textShadow: '1px 1px 4px black',
+  marginBottom: '30px'
+});
 
-  // Playback
-  function playNextVideo() {
-    video.src = videos[currentVideoIndex];
-    video.load();
-    video.play().catch(() => {});
-    currentVideoIndex = (currentVideoIndex + 1) % videos.length;
-  }
+const videoFrame = document.createElement('div');
+Object.assign(videoFrame.style, {
+  position: 'relative',
+  width: '90vw',
+  maxWidth: '1280px',
+  border: '10px solid #f26522',
+  borderRadius: '20px',
+  overflow: 'hidden',
+  background: 'black',
+  aspectRatio: '9 / 16'
+});
 
-  video.addEventListener('ended', playNextVideo);
-  video.addEventListener('error', playNextVideo);
+const video = document.createElement('video');
+video.muted = true;
+video.controls = false;
+video.autoplay = true;
+video.playsInline = true;
+Object.assign(video.style, {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover'
+});
 
-  // Idle trigger
-  function resetSlideshowIdle() {
-    clearTimeout(slideshowIdleTimeout);
-    video.pause();
-    videoOverlay.style.opacity = '0';
-    videoOverlay.style.transform = 'scale(0.9)';
-    setTimeout(() => videoOverlay.style.display = 'none', 800);
+videoFrame.appendChild(video);
+videoOverlay.append(videoLogo, videoMessage, videoFrame);
+document.body.appendChild(videoOverlay);
 
-    slideshowIdleTimeout = setTimeout(() => {
-      videoOverlay.style.display = 'flex';
-      requestAnimationFrame(() => {
-        videoOverlay.style.opacity = '1';
-        videoOverlay.style.transform = 'scale(1)';
-      });
-      currentVideoIndex = 0;
-      playNextVideo();
-    }, 25000); // 25s
-  }
+function playNextVideo() {
+  video.src = videos[currentVideoIndex];
+  video.load();
+  video.play().catch(() => {});
+  currentVideoIndex = (currentVideoIndex + 1) % videos.length;
+}
 
-  ['click','mousemove','keydown','touchstart'].forEach(evt =>
-    document.addEventListener(evt, resetSlideshowIdle)
-  );
-  videoOverlay.addEventListener('click', resetSlideshowIdle);
-  resetSlideshowIdle();
+video.addEventListener('ended', playNextVideo);
+video.addEventListener('error', playNextVideo);
+
+function resetSlideshowIdle() {
+  clearTimeout(slideshowIdleTimeout);
+  video.pause();
+
+  videoOverlay.style.opacity = '0';
+  videoOverlay.style.transform = 'scale(0.9)';
+  setTimeout(() => videoOverlay.style.display = 'none', 800);
+
+  slideshowIdleTimeout = setTimeout(() => {
+    if (document.getElementById("thingsPopup").style.display === "flex") return;
+
+    videoOverlay.style.display = 'flex';
+    requestAnimationFrame(() => {
+      videoOverlay.style.opacity = '1';
+      videoOverlay.style.transform = 'scale(1)';
+    });
+
+    currentVideoIndex = 0;
+    playNextVideo();
+  }, 25000);
+}
+
+['click','mousemove','keydown','touchstart'].forEach(evt =>
+  document.addEventListener(evt, resetSlideshowIdle)
+);
+
+videoOverlay.addEventListener('click', resetSlideshowIdle);
+resetSlideshowIdle();
 </script>
 
-
-  
-  </script>
 </body>
 </html>
-
