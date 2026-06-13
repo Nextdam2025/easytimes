@@ -229,6 +229,63 @@
       text-shadow: 1px 1px 4px black;
       padding: 0 18px;
     }
+  
+
+/* ===== EASY TIMES AMAZE REDESIGN 2026 ===== */
+:root{
+  --et-orange:#f26522;
+  --et-gold:#f6c667;
+  --et-cream:#fff3dc;
+  --et-glass:rgba(20,16,12,.72);
+  --et-border:rgba(246,198,103,.42);
+  --et-shadow:0 22px 70px rgba(0,0,0,.55);
+}
+html,body{background:radial-gradient(circle at 20% 0%,rgba(242,101,34,.22),transparent 36%),radial-gradient(circle at 80% 15%,rgba(246,198,103,.16),transparent 32%),#050403;color:var(--et-cream);}
+body{padding:18px 24px 20px;justify-content:flex-start;gap:12px;overflow:hidden;}
+body:before{content:"";position:fixed;inset:10px;border:1px solid rgba(246,198,103,.28);border-radius:28px;z-index:1;pointer-events:none;box-shadow:inset 0 0 60px rgba(242,101,34,.12);}
+.orange-frame{border:8px solid var(--et-orange);border-radius:28px;box-shadow:inset 0 0 34px rgba(242,101,34,.3);}
+video.bg-video{opacity:.24;filter:saturate(1.2) contrast(1.1);}
+.back-btn{position:fixed;top:24px;left:28px;z-index:10020;margin:0;}
+.back-btn button,.top-action{backdrop-filter:blur(14px);background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.18);box-shadow:0 10px 28px rgba(0,0,0,.35);}
+.logo{margin-top:4px;padding:8px 24px 2px;border-radius:24px;background:linear-gradient(180deg,rgba(0,0,0,.42),rgba(0,0,0,0));z-index:2;}
+.logo h1{font-size:clamp(2.5rem,5.5vw,5.7rem);line-height:.85;letter-spacing:.13em;text-shadow:0 0 22px rgba(242,101,34,.35),0 8px 22px rgba(0,0,0,.7);}
+.logo h2.sub{font-size:clamp(1rem,1.7vw,1.7rem);color:var(--et-gold);letter-spacing:.36em;text-transform:uppercase;}
+.tabs{gap:.7em;margin:.2em 0 .8em;z-index:2;align-items:center;justify-content:center;}
+.tab{position:relative;overflow:hidden;padding:.72em 1.45em;border:1px solid var(--et-border);background:rgba(0,0,0,.38);box-shadow:0 12px 30px rgba(0,0,0,.26);backdrop-filter:blur(10px);font-size:1.05rem;}
+.tab:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent);transform:translateX(-110%);transition:.45s;}
+.tab:hover:before{transform:translateX(110%);}
+.tab.active{background:linear-gradient(135deg,var(--et-orange),#ff8d35 55%,var(--et-gold));color:#150904;border-color:rgba(255,255,255,.35);transform:translateY(-2px);}
+#surpriseWrap{margin:.1em auto .8em!important;z-index:2;}
+#surpriseWrap button{padding:12px 28px!important;border-radius:999px!important;background:linear-gradient(135deg,#f26522,#f6c667)!important;color:#160a04!important;}
+.menu-section{max-width:1280px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;padding:0 8px;max-height:45vh;overflow:auto;scrollbar-width:thin;z-index:2;}
+.item,.partner-card{position:relative;min-height:126px;background:linear-gradient(155deg,rgba(255,255,255,.12),rgba(255,255,255,.035));border:1px solid var(--et-border);border-radius:22px;padding:1.05em;box-shadow:var(--et-shadow);backdrop-filter:blur(12px);transition:transform .2s ease, filter .2s ease, border-color .2s ease;overflow:hidden;}
+.item:after,.partner-card:after{content:"";position:absolute;right:-36px;bottom:-44px;width:110px;height:110px;border-radius:50%;background:radial-gradient(circle,rgba(246,198,103,.24),transparent 65%);}
+.item:hover,.partner-card:hover{transform:translateY(-4px) scale(1.015);filter:brightness(1.13);border-color:rgba(246,198,103,.75);}
+.item h3{font-size:1.55rem;line-height:1.02;position:relative;z-index:1;}
+.item p{font-size:1.3rem;font-weight:900;color:var(--et-gold);position:relative;z-index:1;}
+.item button{border-radius:999px;background:rgba(0,0,0,.46);color:#fff3dc;border:1px solid rgba(255,255,255,.2);position:relative;z-index:1;}
+.item.hot-drink{background:linear-gradient(145deg,rgba(180,74,18,.88),rgba(48,20,10,.74));}
+.item.cold-drink{background:linear-gradient(145deg,rgba(0,150,136,.72),rgba(8,38,38,.78));}
+.item.snack-card{background:linear-gradient(145deg,rgba(122,71,25,.82),rgba(36,20,10,.82));}
+#basket{max-width:1280px;margin-top:10px;border:1px solid var(--et-border);border-radius:24px;background:linear-gradient(135deg,rgba(10,10,10,.76),rgba(45,26,12,.62));box-shadow:var(--et-shadow);backdrop-filter:blur(12px);z-index:2;}
+#basket h2{color:var(--et-gold);}
+#confirmOrder{background:linear-gradient(135deg,var(--et-orange),var(--et-gold));border-radius:999px;}
+#slideshow-container{height:180px;max-width:1280px;margin-top:10px;border:1px solid var(--et-border);border-radius:24px;box-shadow:var(--et-shadow);opacity:.95;z-index:2;}
+.crawl-text{font-size:2.4rem;color:var(--et-gold);}
+#things{max-height:48vh;}
+.things-hero{grid-column:1/-1;border-radius:26px;padding:18px 22px;background:linear-gradient(135deg,rgba(242,101,34,.86),rgba(246,198,103,.72));color:#150904;text-align:left;display:flex;justify-content:space-between;gap:18px;align-items:center;box-shadow:var(--et-shadow);}
+.things-hero h2{font-size:2.4rem;line-height:.95;margin-bottom:4px;}
+.things-hero p{font-size:1.18rem;max-width:760px;}
+.partner-card{display:flex;flex-direction:column;text-decoration:none;color:var(--et-cream);align-items:flex-start;min-height:255px;text-align:left;}
+.partner-card .logo-wrap{height:96px;width:100%;display:flex;align-items:center;justify-content:center;margin-bottom:12px;background:rgba(255,255,255,.08);border-radius:18px;position:relative;z-index:1;}
+.partner-card img.partner-logo{max-width:78%;max-height:76px;object-fit:contain;filter:drop-shadow(0 8px 16px rgba(0,0,0,.35));}
+.partner-card h3{font-size:1.75rem;line-height:1;color:var(--et-gold);margin-bottom:8px;position:relative;z-index:1;}
+.partner-card p{font-size:1.05rem;line-height:1.25;color:#fff5df;position:relative;z-index:1;}
+.partner-card .cta{margin-top:auto;padding:9px 14px;border-radius:999px;background:linear-gradient(135deg,var(--et-orange),var(--et-gold));color:#150904;font-weight:900;position:relative;z-index:1;}
+.partner-card .qr{position:absolute;right:14px;top:14px;width:62px;height:62px;border-radius:12px;background:#fff;padding:5px;z-index:2;}
+@media (min-width:1400px){.menu-section{max-height:52vh;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));}#slideshow-container{height:210px}.item{min-height:140px}}
+@media (max-width:760px){body{padding:14px 12px}.back-btn{position:static;align-self:flex-start}.logo h1{font-size:2.6rem}.menu-section{max-height:50vh;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));}.tabs{gap:.45em}.tab{font-size:.95rem;padding:.65em 1em}.things-hero{flex-direction:column;align-items:flex-start}.partner-card{min-height:235px}#basket{font-size:.95rem}}
+
   </style>
 </head>
 
@@ -257,9 +314,10 @@
     <div class="tab active" onclick="switchTab('hot')">Hot Drinks</div>
     <div class="tab" onclick="switchTab('cold')">Cold Drinks</div>
     <div class="tab" onclick="switchTab('snacks')">Homemade Snacks</div>
+    <div class="tab" onclick="switchTab('things')">Things to Do</div>
   </div>
 
-  <div style="margin:1em auto; text-align:center;">
+  <div id="surpriseWrap" style="margin:1em auto; text-align:center;">
     <button onclick="magicOrder()"
       style="padding:10px 25px; font-size:1.2rem; border-radius:12px; background:linear-gradient(145deg,#f26522,#ff7e29);
       color:#fff; border:none; cursor:pointer; box-shadow:0 5px 15px rgba(0,0,0,0.3); font-weight:900;">
@@ -305,8 +363,39 @@
 
   <!-- Homemade Snacks -->
   <div class="menu-section" id="snacks">
-    <div class="item" onclick="prepareOptions({name:'Chocolate Chip Cookie',articleNumber:501,price:3.50,options:[]})"><h3>Chocolate Chip Cookie</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item" onclick="prepareOptions({name:'Banana Cake',articleNumber:502,price:4.00,options:[]})"><h3>Banana Cake</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item snack-card" onclick="prepareOptions({name:'Chocolate Chip Cookie',articleNumber:501,price:3.50,options:[]})"><h3>Chocolate Chip Cookie</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item snack-card" onclick="prepareOptions({name:'Banana Cake',articleNumber:502,price:4.00,options:[]})"><h3>Banana Cake</h3><p>€4.00</p><button>Add</button></div>
+  </div>
+
+
+  <!-- Things to Do / Affiliate Partners -->
+  <div class="menu-section" id="things">
+    <div class="things-hero">
+      <div>
+        <h2>Things to Do in Amsterdam</h2>
+        <p>Keep the Easy Times vibe going: bikes, culture, food and local favourites. Every click can be tracked with the Easy Times affiliate CID logic.</p>
+      </div>
+      <strong>Tap a card → open partner</strong>
+    </div>
+    <a class="partner-card" href="https://a-bike.nl/?ref=easy_times" target="_blank" rel="noopener noreferrer" data-partner="abike">
+      <img class="qr" src="images/qr_abike.png" alt="A-Bike QR">
+      <div class="logo-wrap"><img class="partner-logo" src="images/abike-logo.png" alt="A-Bike Rentals logo"></div>
+      <h3>A‑Bike Rentals</h3>
+      <p>See Amsterdam like a local. Great for tourists who want to explore after chilling upstairs.</p>
+      <span class="cta">Open partner</span>
+    </a>
+    <a class="partner-card" href="https://hashmuseum.com/?ref=easy_times" target="_blank" rel="noopener noreferrer" data-partner="hashmuseum">
+      <div class="logo-wrap"><img class="partner-logo" src="images/hashmuseum-logo.png" alt="Hash & Marijuana Museum logo"></div>
+      <h3>Hash & Marijuana Museum</h3>
+      <p>A perfect culture stop: history, cannabis heritage and a very Amsterdam story.</p>
+      <span class="cta">Open partner</span>
+    </a>
+    <a class="partner-card" href="https://garlicqueen.amsterdam/?ref=easy_times" target="_blank" rel="noopener noreferrer" data-partner="garlicqueen">
+      <div class="logo-wrap"><img class="partner-logo" src="images/garlic-queen-logo.png" alt="The Garlic Queen logo"></div>
+      <h3>The Garlic Queen</h3>
+      <p>Iconic Amsterdam restaurant with character. Ideal dinner tip for visitors nearby.</p>
+      <span class="cta">Open partner</span>
+    </a>
   </div>
 
   <!-- Basket -->
@@ -372,6 +461,35 @@
     </div>
   </div>
 <script>
+
+/* =============================
+   THINGS TO DO AFFILIATE TRACKING
+   ============================= */
+(function(){
+  const STORAGE_KEY = "easy_cid";
+  function getCid(){
+    const urlCid = new URLSearchParams(location.search).get("cid");
+    if(urlCid){ localStorage.setItem(STORAGE_KEY,urlCid); return urlCid; }
+    let existing = localStorage.getItem(STORAGE_KEY);
+    if(existing) return existing;
+    existing = Math.random().toString(36).slice(2,10);
+    localStorage.setItem(STORAGE_KEY, existing);
+    return existing;
+  }
+  const cid = getCid();
+  document.addEventListener("click", function(e){
+    const card = e.target.closest(".partner-card[data-partner]");
+    if(!card) return;
+    const url = new URL(card.href);
+    url.searchParams.set("ref", "easy_times");
+    url.searchParams.set("cid", cid);
+    card.href = url.toString();
+    try{
+      navigator.sendBeacon && navigator.sendBeacon("/api/affiliate_click", JSON.stringify({partner:card.dataset.partner,cid:cid,ts:Date.now()}));
+    }catch(err){}
+  }, true);
+})();
+
 /* =============================
    TELEGRAM SETTINGS
    ============================= */
@@ -705,6 +823,7 @@ function reflowForBanner() {
 window.addEventListener("resize", reflowForBanner);
 
 document.addEventListener("DOMContentLoaded", () => {
+  if (location.hash === "#things") switchTab("things");
   if (JSON.parse(localStorage.getItem("soloMode") || "false")) {
     document.getElementById("soloModeBanner").style.display = "block";
   }
