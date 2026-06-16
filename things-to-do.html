@@ -269,10 +269,10 @@
       <div class="partner-content" id="partnerIntro">
         <img id="popupLogo" src="" alt="">
         <p id="popupText"></p>
-        <button class="open-site-btn" onclick="openPartnerWebsite()">Open Inside App</button>
+        <button class="open-site-btn" onclick="openPartnerPage()">View Inside EasyTimes</button>
       </div>
 
-      <iframe id="partnerFrame" src="about:blank" title="Partner page"></iframe>
+      <iframe id="partnerFrame" src="about:blank" title="EasyTimes partner page"></iframe>
     </div>
   </div>
 
@@ -283,42 +283,42 @@ const partners = [
     name:"A-Bike Rentals",
     logo:"images/abike.png",
     text:"Discover Amsterdam by bike. One of the best ways to explore the city.",
-    url:"partner-abike.html"
+    page:"partner-abike.html"
   },
   {
     id:"hashmuseum",
     name:"Hash & Marijuana Museum",
     logo:"images/hash-museum.png",
     text:"Learn about the fascinating history of cannabis culture.",
-    url:"partner-hashmuseum.html"
+    page:"partner-hashmuseum.html"
   },
   {
     id:"canal",
     name:"Canal Cruise",
     logo:"images/canal-cruise.png",
     text:"Experience Amsterdam from the water with a classic canal cruise.",
-    url:"partner-canal.html"
+    page:"partner-canal.html"
   },
   {
     id:"heineken",
     name:"Heineken Experience",
     logo:"images/heineken.png",
     text:"Visit one of Amsterdam’s most famous attractions.",
-    url:"partner-heineken.html"
+    page:"partner-heineken.html"
   },
   {
     id:"rijksmuseum",
     name:"Rijksmuseum",
     logo:"images/rijksmuseum.png",
     text:"See masterpieces from Dutch history and art.",
-    url:"partner-rijksmuseum.html"
+    page:"partner-rijksmuseum.html"
   },
   {
     id:"annefrank",
     name:"Anne Frank House",
     logo:"images/annefrank.png",
     text:"A powerful historical experience in Amsterdam.",
-    url:"partner-annefrank.html"
+    page:"partner-annefrank.html"
   }
 ];
 
@@ -334,6 +334,7 @@ partners.forEach(partner => {
     <p>${partner.text}</p>
     <button class="partner-action" type="button">View Details</button>
   `;
+
   card.onclick = () => openPartnerPopup(partner);
   grid.appendChild(card);
 });
@@ -359,12 +360,12 @@ function closePartnerPopup(){
   activePartner = null;
 }
 
-function openPartnerWebsite(){
+function openPartnerPage(){
   if(!activePartner) return;
 
   document.getElementById("partnerIntro").style.display = "none";
   document.getElementById("partnerFrame").style.display = "block";
-  document.getElementById("partnerFrame").src = activePartner.url;
+  document.getElementById("partnerFrame").src = activePartner.page;
 }
 </script>
 </body>
