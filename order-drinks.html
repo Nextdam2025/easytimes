@@ -1,419 +1,781 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-<title>Easy Times Menu</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600;800&display=swap" rel="stylesheet"/>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>Easy Times Menu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600&display=swap" rel="stylesheet"/>
 
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100vh;width:100vw;overflow:hidden;background:#000;color:#fef5e6;font-family:'Barlow Condensed',sans-serif;text-align:center}
-body{display:flex;flex-direction:column;align-items:center}
+  <style>
+    /* Reset & Base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100vh; width: 100vw; overflow: hidden;
+      background: #000; color: #fef5e6;
+      font-family: 'Barlow Condensed', sans-serif;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+    }
 
-video.bg-video{position:fixed;top:50%;left:50%;min-width:100%;height:100%;transform:translate(-50%,-50%);object-fit:cover;opacity:.3;z-index:-1}
-.orange-frame{position:fixed;inset:0;border:10px solid #f26522;pointer-events:none;z-index:10000}
+    /* Background & Orange Frame */
+    video.bg-video {
+      position: fixed; top:50%; left:50%;
+      min-width:100%; height:100%;
+      transform:translate(-50%,-50%);
+      object-fit:cover; opacity:0.3; z-index:-1;
+    }
+    .orange-frame {
+      position:fixed; top:0; left:0;
+      width:100vw; height:100vh;
+      border:10px solid #f26522;
+      box-sizing:border-box; pointer-events:none; z-index:10000;
+    }
+    @keyframes floatLogo { to { transform: translateY(-8px); } }
 
-#soloModeBanner{position:fixed;top:0;left:0;width:100%;background:#000;color:#ffa500;padding:1em;display:none;z-index:10060;border-bottom:3px solid #f26522;font-weight:900}
+    /* Back Button */
+    .back-btn { margin:20px 0; }
+    .back-btn button {
+      padding:10px 20px; font-size:1rem; border-radius:10px;
+      background:rgba(255,255,255,0.1); border:none; color:#fff; cursor:pointer;
+    }
 
-.back-btn{margin:18px 0 5px}
-.back-btn button,.tab,#confirmOrder,.partner-open{cursor:pointer}
+    /* Logo */
+    .logo { animation:floatLogo 2s ease-in-out infinite alternate; }
+    .logo h1 { font-size:3rem; letter-spacing:.1em; }
+    .logo h2.sub { font-size:1.2rem; color:#f26522; margin-top:.2em; }
 
-.back-btn button{padding:10px 20px;border-radius:10px;background:rgba(255,255,255,.1);border:none;color:#fff}
+    /* Tabs */
+    .tabs { display:flex; gap:1em; margin-bottom:2em; flex-wrap:wrap; }
+    .tab {
+      padding:.6em 1.5em; border:2px solid #f26522; border-radius:999px;
+      color:#fef5e6; background:transparent; cursor:pointer; font-weight:600;
+      transition:.3s; user-select:none;
+    }
+    .tab.active { background:#f26522; color:#000; }
 
-.logo h1{font-size:3.4rem;letter-spacing:.18em;text-shadow:0 0 16px #f26522}
-.logo h2{font-size:1.3rem;color:#f0c040;letter-spacing:.35em}
+    /* Menu grid */
+    .menu-section {
+      display:none; width:100%; max-width:1080px;
+      margin:0 auto;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:1em; padding:0 1em;
+    }
+    .menu-section.active { display:grid; }
+    .item {
+      background:#111; border:2px solid #f26522; border-radius:16px;
+      padding:1em; color:#fef5e6; cursor:pointer;
+    }
+    .item h3 { font-size:1.4rem; margin-bottom:.5em; }
+    .item p  { font-size:1.1rem; margin-bottom:.8em; }
+    .item button {
+      padding:.5em 1.2em; background:#f26522; color:#000;
+      border:none; border-radius:8px; font-weight:600;
+      pointer-events:none; /* the whole card is clickable */
+    }
+    .item.hot-drink  { background:linear-gradient(145deg,#CC5A00,#E67300); }
+    .item.cold-drink { background:linear-gradient(145deg,#00BFA6,#00D7C3); }
+    .item:hover     { filter:brightness(1.1); }
 
-.tabs{display:flex;gap:.8em;margin:1em 0;flex-wrap:wrap;justify-content:center}
-.tab{padding:.7em 1.5em;border:2px solid #f26522;border-radius:999px;color:#fff;background:#050505;font-weight:800}
-.tab.active{background:linear-gradient(145deg,#f26522,#ffb347);color:#000}
+    /* Basket */
+    #basket {
+      background:#1c1c1c; border-top:2px solid #f26522;
+      width:100%; max-width:1080px; margin-top:1.5em; padding:1em; text-align:left;
+    }
+    #basket h2 { color:#f26522; margin-bottom:.5em; }
+    #basket ul { list-style:none; margin:0; padding:0; }
+    #basket li {
+      display:flex; justify-content:space-between; align-items:center;
+      margin:.4em 0; gap:12px;
+    }
+    #basket li button {
+      padding:.2em .6em; border-radius:10px; border:none;
+      background:rgba(255,255,255,0.12); color:#fff; cursor:pointer;
+    }
+    #confirmOrder {
+      margin-top:1em; padding:.75em 1.2em;
+      background:#f26522; color:#000; border:none; border-radius:12px;
+      font-weight:800; cursor:pointer; width:100%;
+    }
+    #confirmOrder:disabled { opacity:.65; cursor:not-allowed; }
 
-.surprise{margin:.3em auto 1em;padding:12px 36px;border:none;border-radius:999px;background:linear-gradient(145deg,#f26522,#ffb347);font-weight:900;font-size:1.1rem}
+    /* Notification */
+    #notification {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 86%; max-width: 520px;
+      background: #28a745;
+      border: 8px solid #155724;
+      color: #ffffff;
+      padding: 1.2em 1.2em;
+      border-radius: 12px;
+      font-size: 1.8rem;
+      font-weight: 800;
+      text-align: center;
+      display: none; opacity: 0;
+      transition: opacity .2s ease;
+      z-index: 10050;
+      line-height: 1.25;
+    }
+    #notification.show { display: block; opacity: 1; }
 
-.menu-section{display:none;width:100%;max-width:1080px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1em;padding:0 1em;overflow-y:auto}
-.menu-section.active{display:grid}
+    /* Option Modal */
+    .option-modal {
+      position:fixed; top:0; left:0; width:100%; height:100%;
+      background:rgba(0,0,0,0.85);
+      display:flex; align-items:center; justify-content:center;
+      z-index:10040; opacity:0; animation:fadeIn .2s forwards;
+    }
+    @keyframes fadeIn { to { opacity:1; } }
+    .option-box {
+      background:#222; padding:1.2em; border-radius:14px;
+      max-width:360px; width:92%; text-align:left; color:#fef5e6;
+      border:2px solid rgba(242,101,34,.55);
+    }
+    .option-box h3 { color:#f26522; margin-bottom:.8em; font-size:1.3rem; }
+    .option-box label { display:block; margin:.6em 0; font-size:1.05rem; }
+    .option-box button {
+      margin-top:.8em; width:100%; padding:.75em;
+      background:#f26522; color:#000; border:none; border-radius:10px;
+      cursor:pointer; font-weight:900;
+    }
 
-.item,.partner-card{background:rgba(20,20,20,.88);border:2px solid #f26522;border-radius:16px;padding:1em;color:#fef5e6;cursor:pointer;min-height:145px}
-.item:hover,.partner-card:hover{transform:scale(1.03);border-color:#f0c040}
-.item h3,.partner-card h3{font-size:1.45rem;color:#f0c040}
-.item p,.partner-card p{font-size:1rem;margin:.5em 0}
-.item button,.partner-open{padding:.55em 1.2em;background:#f26522;color:#000;border:none;border-radius:10px;font-weight:900}
+    /* Mini-cart */
+    #mini-cart {
+      position:fixed; bottom:20px; right:20px;
+      background:rgba(20,20,20,.95); border:3px solid #f26522;
+      border-radius:16px; padding:1em; width:280px; opacity:0;
+      transition:.25s; z-index:10010;
+    }
+    #mini-cart.show { opacity:1; }
+    #mini-cart h3 { color:#f26522; margin-bottom:.5em; font-size:1.4rem; }
+    #mini-cart ul { list-style:none; max-height:180px; overflow:hidden; padding:0; }
+    #mini-cart li { display:flex; justify-content:space-between; margin:.35em 0; font-size:1.05rem; }
+    #mini-cart .total { text-align:right; margin-top:.8em; font-weight:900; font-size:1.1rem; }
 
-.hot-drink{background:linear-gradient(145deg,rgba(204,90,0,.8),rgba(40,15,0,.88))}
-.cold-drink{background:linear-gradient(145deg,rgba(0,140,150,.75),rgba(0,25,30,.9))}
+    /* Solo Mode Banner */
+    :root { --banner-offset: 0px; }
+    body { padding-top: var(--banner-offset); }
+    #soloModeBanner{
+      position:fixed; top:0; left:0; width:100%;
+      background:rgba(0,0,0,0.95); color:#FFA500;
+      text-align:center; padding:1em; display:none;
+      z-index:10060;
+      border-bottom:4px solid #f26522;
+      font-size: 1.4rem; font-weight: 900; letter-spacing: .02em;
+    }
 
-.things-header{grid-column:1/-1;background:linear-gradient(145deg,#c96b2a,#d7a94b);color:#111;border-radius:16px;padding:1em;text-align:left}
-.things-header h2{font-size:2rem}
-.partner-card{text-align:left}
-.partner-card img{width:125px;height:70px;object-fit:contain;background:rgba(255,255,255,.12);border-radius:10px;padding:8px;margin-bottom:.8em}
+    /* Slideshow container (bottom) */
+    #slideshow-container {
+      margin-top:1.2em; width:100%; max-width:1080px; height:300px;
+      background:#000; position:relative;
+      border:2px solid #f26522; border-radius:12px; overflow:hidden;
+    }
+    #slideshow-container video { width:100%; height:100%; object-fit:cover; }
 
-#basket{width:100%;max-width:1080px;margin-top:1em;padding:1em;background:rgba(10,10,10,.9);border:2px solid #b98024;border-radius:16px;text-align:left}
-#basket h2{color:#f0c040}
-#basket ul{list-style:none}
-#basket li{display:flex;justify-content:space-between;gap:10px;margin:.35em 0}
-#basket li button{border:none;border-radius:8px;padding:.2em .6em;background:#f26522;color:#000}
-#confirmOrder{margin-top:1em;width:100%;padding:.8em;border:none;border-radius:999px;background:linear-gradient(145deg,#f26522,#ffca65);font-weight:900}
+    /* Star Wars Crawl */
+    .starwars-crawl-wrapper {
+      position: absolute; inset: 0;
+      perspective: 800px; overflow: hidden; z-index: 10;
+      pointer-events: none;
+    }
+    .starwars-crawl {
+      position: relative; height: 100%;
+      transform: rotateX(25deg); transform-origin: bottom center;
+      overflow: hidden;
+    }
+    .crawl-text {
+      position: absolute; bottom: -20%; width: 90%; left: 5%;
+      text-align: center; font-size: 4.2rem; font-weight: 900;
+      line-height: 1.55; color: #FFA500;
+      animation: crawlUp 90s linear infinite;
+      text-shadow: 0 4px 18px rgba(0,0,0,.6);
+    }
+    @keyframes crawlUp {
+      0% { bottom: -100%; }
+      100% { bottom: 230%; }
+    }
 
-#notification{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:86%;max-width:520px;background:#28a745;border:8px solid #155724;color:#fff;padding:1.2em;border-radius:14px;font-size:1.8rem;font-weight:900;display:none;z-index:10050}
-#notification.show{display:block}
-
-.option-modal{position:fixed;inset:0;background:rgba(0,0,0,.86);display:none;align-items:center;justify-content:center;z-index:10040}
-.option-box{background:#222;border:2px solid #f26522;border-radius:16px;padding:1.3em;width:92%;max-width:380px;text-align:left}
-.option-box h3{color:#f26522;margin-bottom:.8em}
-.option-box label{display:block;margin:.6em 0}
-.option-box button{width:100%;padding:.8em;margin-top:.7em;border:none;border-radius:10px;background:#f26522;font-weight:900}
-
-#mini-cart{position:fixed;bottom:20px;right:20px;width:280px;background:rgba(20,20,20,.95);border:3px solid #f26522;border-radius:16px;padding:1em;opacity:0;z-index:10010}
-#mini-cart.show{opacity:1}
-
-.quote-box{width:100%;max-width:1080px;margin:1em auto;padding:1.4em;border:1px solid #b98024;border-radius:16px;color:#f0c040;font-size:1.7rem;font-weight:900}
-
-/* PARTNER IFRAME POPUP */
-.partner-popup{position:fixed;inset:0;background:rgba(0,0,0,.95);display:none;align-items:center;justify-content:center;z-index:999999;padding:25px}
-.partner-popup-box{width:95vw;height:90vh;background:#000;border:8px solid #f26522;border-radius:24px;overflow:hidden;display:flex;flex-direction:column}
-.partner-popup-header{height:70px;background:#111;border-bottom:3px solid #f26522;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
-.partner-popup-header h3{color:#f26522;font-size:1.6rem}
-.partner-popup-header button{background:#f26522;color:#000;border:none;border-radius:12px;padding:12px 22px;font-weight:900;cursor:pointer}
-#partnerFrame{width:100%;height:100%;border:none;background:white}
-</style>
+    /* IDLE OVERLAY (fixed: clickable + separate IDs) */
+    #slideshow-overlay {
+      position: fixed; inset: 0;
+      width: 100vw; height: 100vh;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.9);
+      z-index: 10070;
+      pointer-events: auto; /* IMPORTANT */
+      gap: 18px;
+    }
+    #slideshow-overlay .video-frame {
+      width: calc(100vh * 9 / 16); max-width: 90vw; height: 90vh;
+      border: 10px solid #f26522; border-radius: 20px;
+      overflow: hidden; background: black; position: relative;
+    }
+    #slideshow-overlay video {
+      position:absolute; inset:0;
+      width:100%; height:100%; object-fit:cover;
+    }
+    #slideshow-overlay .idle-logo {
+      width: 200px;
+      margin-top: 10px;
+    }
+    #slideshow-overlay .idle-msg {
+      color: #FFA500;
+      font-size: 2rem;
+      font-weight: 900;
+      text-align: center;
+      text-shadow: 1px 1px 4px black;
+      padding: 0 18px;
+    }
+  </style>
 </head>
 
 <body>
-<video autoplay class="bg-video" loop muted playsinline>
-  <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4"/>
-</video>
+  <canvas id="particles" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-2;pointer-events:none;"></canvas>
 
-<div class="orange-frame"></div>
-<div id="soloModeBanner">Self Pickup Mode: Please collect your drinks downstairs after ordering.</div>
+  <!-- Background & Frame -->
+  <video autoplay class="bg-video" loop muted playsinline>
+    <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4"/>
+  </video>
+  <div class="orange-frame"></div>
 
-<div class="back-btn"><button onclick="location.href='index.html'">⬅ Back to Home</button></div>
-
-<div class="logo">
-  <h1>EASY TIMES</h1>
-  <h2>1985 - AMSTERDAM</h2>
-</div>
-
-<div class="tabs">
-  <div class="tab active" onclick="switchTab('hot')">Hot Drinks</div>
-  <div class="tab" onclick="switchTab('cold')">Cold Drinks</div>
-  <div class="tab" onclick="switchTab('snacks')">Homemade Snacks</div>
-  <div class="tab" onclick="switchTab('things')">Things to Do</div>
-</div>
-
-<button class="surprise" onclick="magicOrder()">🎲 Surprise Me!</button>
-
-<div class="menu-section active" id="hot"></div>
-<div class="menu-section" id="cold"></div>
-<div class="menu-section" id="snacks"></div>
-
-<div class="menu-section" id="things">
-  <div class="things-header">
-    <h2>Things to Do in Amsterdam</h2>
-    <p>Keep the Easy Times vibe going: bikes, culture, food and local favourites. Partner websites open only inside this framed popup.</p>
+  <!-- Back to Home -->
+  <div class="back-btn">
+    <button onclick="location.href='index.html'">⬅ Back to Home</button>
   </div>
-</div>
 
-<div id="basket">
-  <h2>Your Order</h2>
-  <ul id="basketList"></ul>
-  <strong>Total: €<span id="totalPrice">0.00</span></strong>
-  <button id="confirmOrder" onclick="handleSendClick()">Send Order</button>
-</div>
-
-<div class="quote-box">
-  It’s Not Just a Coffeeshop. It’s Malik’s House of Chill.<br>
-  EasyTimes Amsterdam — Born to Relax. Built to Remember.<br>
-  EasyTimes. The Legend Lives on Reguliers.
-</div>
-
-<div id="notification"></div>
-
-<div class="option-modal" id="optionModal">
-  <div class="option-box">
-    <h3 id="optionTitle"></h3>
-    <div id="optionList"></div>
-    <button onclick="confirmOptions()">Add to Order</button>
-    <button onclick="closeModal()" style="background:rgba(255,255,255,.1);color:white">Close</button>
+  <!-- Logo -->
+  <div class="logo">
+    <h1>EASY TIMES</h1>
+    <h2 class="sub">1985 – Amsterdam</h2>
   </div>
-</div>
 
-<div id="mini-cart"></div>
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('hot')">Hot Drinks</div>
+    <div class="tab" onclick="switchTab('cold')">Cold Drinks</div>
+    <div class="tab" onclick="switchTab('snacks')">Homemade Snacks</div>
+  </div>
 
-<div id="partnerPopup" class="partner-popup">
-  <div class="partner-popup-box">
-    <div class="partner-popup-header">
-      <h3 id="partnerTitle">Partner</h3>
-      <button onclick="closePartnerPopup()">Close</button>
+  <div style="margin:1em auto; text-align:center;">
+    <button onclick="magicOrder()"
+      style="padding:10px 25px; font-size:1.2rem; border-radius:12px; background:linear-gradient(145deg,#f26522,#ff7e29);
+      color:#fff; border:none; cursor:pointer; box-shadow:0 5px 15px rgba(0,0,0,0.3); font-weight:900;">
+      🎲 Surprise Me!
+    </button>
+  </div>
+
+  <!-- Hot Drinks -->
+  <div class="menu-section active" id="hot">
+    <div class="item hot-drink" onclick="prepareOptions({name:'Espresso',articleNumber:102,price:3.50,options:[{name:'Whipped Cream',price:1},{name:'Extra Oatmilk',price:1},{name:'Syrup',price:1}]})"><h3>Espresso</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Doppio',articleNumber:202,price:4.00,options:[{name:'Extra Oatmilk',price:1},{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})"><h3>Doppio</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Black Coffee',articleNumber:203,price:3.50,options:[]})"><h3>Black Coffee</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Americano',articleNumber:204,price:3.50,options:[]})"><h3>Americano</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Cappuccino',articleNumber:205,price:4.00,options:[]})"><h3>Cappuccino</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Flavored Latte',articleNumber:206,price:5.00,options:[{name:'Hazelnuts',price:0},{name:'Caramel',price:0}]})"><h3>Flavored Latte</h3><p>€5.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Café Latte',articleNumber:207,price:4.50,options:[]})"><h3>Café Latte</h3><p>€4.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Latte Macchiato',articleNumber:208,price:4.50,options:[{name:'Whipped Cream',price:1},{name:'Syrup',price:1}]})"><h3>Latte Macchiato</h3><p>€4.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Coffee Mocca',articleNumber:209,price:5.00,options:[{name:'Extra Shot Espresso',price:1},{name:'Whipped Cream',price:1}]})"><h3>Coffee Mocca</h3><p>€5.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Hot Chocolate',articleNumber:210,price:4.00,options:[{name:'Whipped Cream',price:1}]})"><h3>Hot Chocolate</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Tea',articleNumber:301,price:3.50,options:[{name:'Extra Lemon',price:1},{name:'Extra Ginger',price:1},{name:'Orange Blossom',price:1},{name:'Louiza',price:1}]})"><h3>Tea</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item hot-drink" onclick="prepareOptions({name:'Fresh Mint Tea',articleNumber:302,price:4.50,options:[{name:'Extra Lemon',price:0.50},{name:'Extra Ginger',price:0.50},{name:'Extra Blossom',price:0.50},{name:'Louiza',price:0.50}]})"><h3>Fresh Mint Tea</h3><p>€4.50</p><button>Add</button></div>
+  </div>
+
+  <!-- Cold Drinks -->
+  <div class="menu-section" id="cold">
+    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola',articleNumber:401,price:4.00,options:[]})"><h3>Coca-Cola</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Coca-Cola Zero',articleNumber:402,price:4.00,options:[]})"><h3>Coca-Cola Zero</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Orange',articleNumber:403,price:4.00,options:[]})"><h3>Fanta Orange</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Fanta Cassis',articleNumber:404,price:4.00,options:[]})"><h3>Fanta Cassis</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Still Water',articleNumber:405,price:3.50,options:[]})"><h3>Still Water</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Sparkling Water',articleNumber:406,price:3.50,options:[]})"><h3>Sparkling Water</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Sprite',articleNumber:407,price:4.00,options:[]})"><h3>Sprite</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Chocomel',articleNumber:408,price:4.00,options:[]})"><h3>Chocomel</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Peach/Mango',articleNumber:409,price:4.00,options:[{name:'Peach',price:0},{name:'Mango',price:0}]})"><h3>Iced Tea Peach/Mango</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Iced Tea Lemon Sparkling',articleNumber:410,price:4.00,options:[]})"><h3>Iced Tea Lemon Sparkling</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Bitter Lemon',articleNumber:411,price:4.00,options:[]})"><h3>Royal Bliss Bitter Lemon</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Royal Bliss Ginger Ale',articleNumber:412,price:4.00,options:[]})"><h3>Royal Bliss Ginger Ale</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Looza (Pear/Strawberry/Peach)',articleNumber:413,price:4.00,options:[{name:'Pear',price:0},{name:'Strawberry',price:0},{name:'Peach',price:0}]})"><h3>Looza (Pear/Strawberry/Peach)</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Minute Maid Orange/Apple',articleNumber:414,price:4.00,options:[{name:'Orange',price:0},{name:'Apple',price:0}]})"><h3>Minute Maid Orange/Apple</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'AA Energy Drink',articleNumber:415,price:4.00,options:[]})"><h3>AA Energy Drink</h3><p>€4.00</p><button>Add</button></div>
+    <div class="item cold-drink" onclick="prepareOptions({name:'Red Bull',articleNumber:416,price:5.00,options:[]})"><h3>Red Bull Energy Drink</h3><p>€5.00</p><button>Add</button></div>
+  </div>
+
+  <!-- Homemade Snacks -->
+  <div class="menu-section" id="snacks">
+    <div class="item" onclick="prepareOptions({name:'Chocolate Chip Cookie',articleNumber:501,price:3.50,options:[]})"><h3>Chocolate Chip Cookie</h3><p>€3.50</p><button>Add</button></div>
+    <div class="item" onclick="prepareOptions({name:'Banana Cake',articleNumber:502,price:4.00,options:[]})"><h3>Banana Cake</h3><p>€4.00</p><button>Add</button></div>
+  </div>
+
+  <!-- Basket -->
+  <div id="basket">
+    <h2>Your Order</h2>
+    <ul id="basketList"></ul>
+    <strong>Total: €<span id="totalPrice">0.00</span></strong>
+    <button id="confirmOrder" onclick="handleSendClick()">Send Order</button>
+  </div>
+
+  <!-- Slideshow Container & Crawl -->
+  <div id="slideshow-container">
+    <video id="slideshowVideo" muted playsinline></video>
+    <div class="starwars-crawl-wrapper">
+      <div class="starwars-crawl">
+        <div class="crawl-text">
+          <p>EasyTimes Amsterdam — Where the World Comes to Chill.</p>
+          <p>One Love. One Coffeeshop. A Thousand Stories.</p>
+          <p>Relax Like a Local, Float Like a Tourist.</p>
+          <p>Welcome to the Heartbeat of Chill in Amsterdam.</p>
+          <p>Your Couch Away from Home — Only at EasyTimes.</p>
+          <p>From Tokyo to Toronto — Everyone Finds Peace at EasyTimes.</p>
+          <p>Across Borders, One Destination: EasyTimes Amsterdam.</p>
+          <p>Jetlagged? High Spirits Only Here.</p>
+          <p>EasyTimes: The Pilgrimage for Chill Seekers.</p>
+          <p>Travel Light, Relax Heavy.</p>
+          <p>Where Time Slows Down and Smiles Light Up.</p>
+          <p>No Rush. No Worries. Just EasyTimes.</p>
+          <p>The Art of Relaxation — Served Daily.</p>
+          <p>Escape the Noise, Embrace the Vibe.</p>
+          <p>Let Go. Light Up. Live Easy.</p>
+          <p>Malik’s Arms Are Open. So Are Our Doors.</p>
+          <p>Come as a Stranger, Leave as Family.</p>
+          <p>It’s Not Just a Coffeeshop. It’s Malik’s House of Chill.</p>
+          <p>EasyTimes Amsterdam — Born to Relax. Built to Remember.</p>
+          <p>EasyTimes. The Legend Lives on Reguliers.</p>
+        </div>
+      </div>
     </div>
-    <iframe id="partnerFrame" src="" loading="lazy"></iframe>
   </div>
-</div>
 
+  <!-- Notification / Modal / Mini-cart / Solo banner -->
+  <div id="notification"></div>
+
+  <div class="option-modal" id="optionModal" style="display:none;">
+    <div class="option-box">
+      <h3 id="optionTitle"></h3>
+      <div id="optionList"></div>
+      <button onclick="confirmOptions()">Add to Order</button>
+      <button onclick="closeModal()" style="margin-top:.5em;background:rgba(255,255,255,0.1);color:#fff;">Close</button>
+    </div>
+  </div>
+
+  <div id="mini-cart"></div>
+  <div id="soloModeBanner">Self Pickup Mode: Please collect your drinks downstairs after ordering.</div>
+
+  <!-- Idle Overlay -->
+  <div id="slideshow-overlay">
+    <img class="idle-logo" src="EASY TIMES LOGO BLACK-01.png" alt="EasyTimes Logo">
+    <div class="idle-msg">CLICK THE SCREEN TO ORDER DRINKS</div>
+    <div class="video-frame">
+      <video id="slideshowVideoOverlay" muted playsinline autoplay></video>
+    </div>
+  </div>
 <script>
+/* =============================
+   TELEGRAM SETTINGS
+   ============================= */
 const botToken = "8004629550:AAGbBMSe-QQhs_sZmzKdCpol4Mrn2831PPw";
-const chatId = "-5170118091";
-const messageThreadId = null;
+const chatId   = "-5170118091";
+
+// OPTIONAL: if your group is set to "Mentions only", add staff usernames here
 const notifyMentions = [];
 
-const hotItems = [
-{name:"Espresso",articleNumber:102,price:3.50,options:[{name:"Whipped Cream",price:1},{name:"Extra Oatmilk",price:1},{name:"Syrup",price:1}]},
-{name:"Doppio",articleNumber:202,price:4.00,options:[{name:"Extra Oatmilk",price:1},{name:"Whipped Cream",price:1},{name:"Syrup",price:1}]},
-{name:"Black Coffee",articleNumber:203,price:3.50,options:[]},
-{name:"Americano",articleNumber:204,price:3.50,options:[]},
-{name:"Cappuccino",articleNumber:205,price:4.00,options:[]},
-{name:"Flavored Latte",articleNumber:206,price:5.00,options:[{name:"Hazelnuts",price:0},{name:"Caramel",price:0}]},
-{name:"Café Latte",articleNumber:207,price:4.50,options:[]},
-{name:"Latte Macchiato",articleNumber:208,price:4.50,options:[{name:"Whipped Cream",price:1},{name:"Syrup",price:1}]},
-{name:"Coffee Mocca",articleNumber:209,price:5.00,options:[{name:"Extra Shot Espresso",price:1},{name:"Whipped Cream",price:1}]},
-{name:"Hot Chocolate",articleNumber:210,price:4.00,options:[{name:"Whipped Cream",price:1}]},
-{name:"Tea",articleNumber:301,price:3.50,options:[{name:"Extra Lemon",price:1},{name:"Extra Ginger",price:1},{name:"Orange Blossom",price:1},{name:"Louiza",price:1}]},
-{name:"Fresh Mint Tea",articleNumber:302,price:4.50,options:[{name:"Extra Lemon",price:.5},{name:"Extra Ginger",price:.5},{name:"Extra Blossom",price:.5},{name:"Louiza",price:.5}]}
-];
+// OPTIONAL: if your Telegram group is a forum/topic group, set topic id here
+const messageThreadId = null;
 
-const coldItems = [
-{name:"Coca-Cola",articleNumber:401,price:4.00,options:[]},
-{name:"Coca-Cola Zero",articleNumber:402,price:4.00,options:[]},
-{name:"Fanta Orange",articleNumber:403,price:4.00,options:[]},
-{name:"Fanta Cassis",articleNumber:404,price:4.00,options:[]},
-{name:"Still Water",articleNumber:405,price:3.50,options:[]},
-{name:"Sparkling Water",articleNumber:406,price:3.50,options:[]},
-{name:"Sprite",articleNumber:407,price:4.00,options:[]},
-{name:"Chocomel",articleNumber:408,price:4.00,options:[]},
-{name:"Iced Tea Peach/Mango",articleNumber:409,price:4.00,options:[{name:"Peach",price:0},{name:"Mango",price:0}]},
-{name:"Iced Tea Lemon Sparkling",articleNumber:410,price:4.00,options:[]},
-{name:"Royal Bliss Bitter Lemon",articleNumber:411,price:4.00,options:[]},
-{name:"Royal Bliss Ginger Ale",articleNumber:412,price:4.00,options:[]},
-{name:"Looza",articleNumber:413,price:4.00,options:[{name:"Pear",price:0},{name:"Strawberry",price:0},{name:"Peach",price:0}]},
-{name:"Minute Maid",articleNumber:414,price:4.00,options:[{name:"Orange",price:0},{name:"Apple",price:0}]},
-{name:"AA Energy Drink",articleNumber:415,price:4.00,options:[]},
-{name:"Red Bull Energy Drink",articleNumber:416,price:5.00,options:[]}
-];
+/* =============================
+   BUSYLIGHT SETTINGS
+   ============================= */
+const BUSYLIGHT_URL = "http://localhost:8989/";
 
-const snackItems = [
-{name:"Chocolate Chip Cookie",articleNumber:501,price:3.50,options:[]},
-{name:"Banana Cake",articleNumber:502,price:4.00,options:[]}
-];
+function flashBusylight() {
+  fetch(`${BUSYLIGHT_URL}?action=blink&red=100&green=0&blue=0&ontime=5&offtime=5&deviceindex=0`)
+    .catch(() => {});
+}
 
-const partners = [
-{id:"abike",name:"A-Bike Rentals",logo:"images/abike-logo.png",text:"See Amsterdam like a local. Great for tourists who want to explore after chilling upstairs.",url:"https://a-bike.nl/"},
-{id:"hashmuseum",name:"Hash & Marijuana Museum",logo:"images/hashmuseum-logo.png",text:"A perfect culture stop: history, cannabis heritage and a very Amsterdam story.",url:"https://hashmuseum.com/en/cannabis-knowledge/"}
-];
+function clearBusylight() {
+  fetch(`${BUSYLIGHT_URL}?action=off&deviceindex=0`)
+    .catch(() => {});
+}
 
+/* =============================
+   DING SOUND (NO AUDIO FILE)
+   ============================= */
+let _dingCtx = null;
+
+function _ctx() {
+  if (_dingCtx && _dingCtx.state !== "closed") return _dingCtx;
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return null;
+  _dingCtx = new AC();
+  return _dingCtx;
+}
+
+function unlockAudioOnce() {
+  const c = _ctx();
+  if (!c) return;
+  if (c.state !== "running") c.resume().catch(() => {});
+}
+
+function ding(kind = "tap") {
+  const c = _ctx();
+  if (!c) return;
+
+  if (c.state !== "running") c.resume().catch(() => {});
+
+  const t = c.currentTime;
+  const osc = c.createOscillator();
+  const gain = c.createGain();
+
+  const freq = kind === "ok" ? 1046.5 : kind === "err" ? 220 : 880;
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(freq, t);
+
+  gain.gain.setValueAtTime(0.0001, t);
+  gain.gain.exponentialRampToValueAtTime(0.35, t + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
+
+  osc.connect(gain);
+  gain.connect(c.destination);
+
+  osc.start(t);
+  osc.stop(t + 0.16);
+}
+
+// unlock audio on first gesture only
+document.addEventListener("pointerdown", unlockAudioOnce, { once: true });
+document.addEventListener("touchstart", unlockAudioOnce, { once: true, passive: true });
+
+// IMPORTANT:
+// use click instead of pointerdown so it does not interfere with item/button presses
+document.addEventListener("click", (e) => {
+  const clickedSendButton = e.target.closest("#confirmOrder");
+  if (!clickedSendButton) {
+    clearBusylight();
+  }
+});
+
+/* =============================
+   ORDER STATE
+   ============================= */
 let orderList = [];
 let selectedArticle = null;
 let isSubmitting = false;
 
-function renderItems(id,items,type){
-  const box = document.getElementById(id);
-  items.forEach(item=>{
-    const div = document.createElement("div");
-    div.className = "item " + type;
-    div.innerHTML = `<h3>${item.name}</h3><p>€${item.price.toFixed(2)}</p><button>Add</button>`;
-    div.onclick = () => prepareOptions(item);
-    box.appendChild(div);
-  });
+function showNotification(msg, ms = 8000, isError = false) {
+  const n = document.getElementById("notification");
+  n.style.background = isError ? "#c0392b" : "#28a745";
+  n.style.borderColor = isError ? "#641e16" : "#155724";
+  n.innerHTML = msg + '<div style="margin-top:.6em;font-size:1rem;opacity:.92">Tap to close</div>';
+  n.classList.add("show");
+  clearTimeout(n._hideTO);
+  n.onclick = () => {
+    n.classList.remove("show");
+    clearTimeout(n._hideTO);
+    n.onclick = null;
+  };
+  n._hideTO = setTimeout(() => {
+    n.classList.remove("show");
+    n.onclick = null;
+  }, ms);
 }
 
-function renderPartners(){
-  const box = document.getElementById("things");
-  partners.forEach(partner=>{
-    const div = document.createElement("div");
-    div.className = "partner-card";
-    div.innerHTML = `
-      <img src="${partner.logo}" alt="${partner.name}">
-      <h3>${partner.name}</h3>
-      <p>${partner.text}</p>
-      <button class="partner-open" type="button">Open partner</button>
-    `;
-    div.onclick = () => openPartnerPopup(partner.name, partner.url);
-    box.appendChild(div);
-  });
-}
-
-renderItems("hot",hotItems,"hot-drink");
-renderItems("cold",coldItems,"cold-drink");
-renderItems("snacks",snackItems,"");
-renderPartners();
-
-function switchTab(id){
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  document.querySelectorAll(".menu-section").forEach(s=>s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-
-  const tabs = [...document.querySelectorAll(".tab")];
-  const names = {hot:0,cold:1,snacks:2,things:3};
-  tabs[names[id]].classList.add("active");
-}
-
-if(location.hash === "#things") switchTab("things");
-
-function openPartnerPopup(name,url){
-  document.getElementById("partnerTitle").innerText = name;
-  document.getElementById("partnerFrame").src = url;
-  document.getElementById("partnerPopup").style.display = "flex";
-}
-
-function closePartnerPopup(){
-  document.getElementById("partnerFrame").src = "";
-  document.getElementById("partnerPopup").style.display = "none";
-}
-
-function prepareOptions(article){
+function prepareOptions(article) {
   selectedArticle = article;
-  document.getElementById("optionTitle").innerText = "Options for " + article.name;
-  const list = document.getElementById("optionList");
-  list.innerHTML = "";
 
-  if(!article.options.length){
-    orderList.push({...article,selectedOptions:[],totalPrice:article.price});
-    updateOrderList();
-    updateMiniCart();
-    return;
-  }
+  document.getElementById("optionTitle").innerText = `Options for ${article.name}`;
+  const optList = document.getElementById("optionList");
+  optList.innerHTML = "";
 
-  article.options.forEach((o,i)=>{
-    const label = document.createElement("label");
-    label.innerHTML = `<input type="checkbox" data-index="${i}"> ${o.name} (+€${o.price.toFixed(2)})`;
-    list.appendChild(label);
+  (article.options || []).forEach((o, i) => {
+    const lbl = document.createElement("label");
+    lbl.innerHTML = `<input type="checkbox" data-index="${i}"> ${o.name} (+€${(+o.price).toFixed(2)})`;
+    optList.appendChild(lbl);
   });
 
   document.getElementById("optionModal").style.display = "flex";
 }
 
-function confirmOptions(){
+function confirmOptions() {
   let extra = 0;
   let chosen = [];
 
-  document.querySelectorAll("#optionList input").forEach(cb=>{
-    if(cb.checked){
-      const option = selectedArticle.options[cb.dataset.index];
-      chosen.push(option);
-      extra += option.price;
+  document.querySelectorAll("#optionList input[type='checkbox']").forEach(cb => {
+    if (cb.checked) {
+      const o = selectedArticle.options[cb.dataset.index];
+      chosen.push(o);
+      extra += (+o.price || 0);
     }
   });
 
-  orderList.push({...selectedArticle,selectedOptions:chosen,totalPrice:selectedArticle.price+extra});
+  orderList.push({
+    ...selectedArticle,
+    selectedOptions: chosen,
+    totalPrice: (+selectedArticle.price || 0) + extra
+  });
+
   updateOrderList();
   updateMiniCart();
   closeModal();
 }
 
-function closeModal(){
+function closeModal() {
   document.getElementById("optionModal").style.display = "none";
 }
 
-function updateOrderList(){
+function updateOrderList() {
   const ul = document.getElementById("basketList");
   ul.innerHTML = "";
-  orderList.forEach((item,i)=>{
-    ul.innerHTML += `<li><span>#${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})</span><button onclick="removeFromOrder(${i})">×</button></li>`;
+
+  orderList.forEach((it, i) => {
+    ul.innerHTML += `
+      <li>
+        <span>#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)})</span>
+        <button onclick="removeFromOrder(${i})">×</button>
+      </li>
+    `;
   });
-  document.getElementById("totalPrice").innerText = orderList.reduce((s,x)=>s+x.totalPrice,0).toFixed(2);
+
+  document.getElementById("totalPrice").innerText =
+    orderList.reduce((s, x) => s + (+x.totalPrice || 0), 0).toFixed(2);
 }
 
-function removeFromOrder(i){
-  orderList.splice(i,1);
+function removeFromOrder(idx) {
+  orderList.splice(idx, 1);
   updateOrderList();
   updateMiniCart();
 }
 
-function updateMiniCart(){
+function updateMiniCart() {
   const m = document.getElementById("mini-cart");
-  let total = 0;
-  let html = "<h3>Basket</h3>";
-  orderList.forEach(i=>{total+=i.totalPrice; html+=`<div>${i.name} €${i.totalPrice.toFixed(2)}</div>`});
-  html += `<strong>Total: €${total.toFixed(2)}</strong>`;
+  let html = "<h3>Basket</h3><ul>";
+  let tot = 0;
+
+  orderList.forEach(it => {
+    html += `<li><span>${it.name}</span><span>€${it.totalPrice.toFixed(2)}</span></li>`;
+    tot += (+it.totalPrice || 0);
+  });
+
+  html += `</ul><div class="total">Total: €${tot.toFixed(2)}</div>`;
   m.innerHTML = html;
+
   m.classList.add("show");
   clearTimeout(window._miniTO);
-  window._miniTO = setTimeout(()=>m.classList.remove("show"),8000);
+  window._miniTO = setTimeout(() => m.classList.remove("show"), 10000);
 }
 
-function showNotification(msg,isError=false){
-  const n = document.getElementById("notification");
-  n.innerHTML = msg;
-  n.style.background = isError ? "#c0392b" : "#28a745";
-  n.classList.add("show");
-  setTimeout(()=>n.classList.remove("show"),8000);
-}
-
-function handleSendClick(){
+// IMPORTANT: called directly by the send button
+function handleSendClick() {
+  unlockAudioOnce();
+  ding("tap");
   submitOrder();
 }
 
-async function submitOrder(){
-  if(isSubmitting) return;
-  if(!orderList.length){showNotification("No items in order!",true);return;}
+/* =============================
+   SUBMIT ORDER
+   ============================= */
+async function submitOrder() {
+  if (isSubmitting) return;
+
+  if (!orderList.length) {
+    ding("err");
+    showNotification("No items in order!", 7000, true);
+    return;
+  }
 
   const btn = document.getElementById("confirmOrder");
-  btn.disabled = true;
-  btn.innerText = "Sending...";
-  isSubmitting = true;
+  const prev = btn.innerHTML;
 
-  try{
+  try {
+    isSubmitting = true;
+    btn.disabled = true;
+    btn.innerHTML = "Sending…";
+
     let txt = "🟧 New Order:\n";
-    orderList.forEach(item=>{
-      txt += `#${item.articleNumber} ${item.name} (€${item.totalPrice.toFixed(2)})\n`;
-      if(item.selectedOptions.length) txt += " → " + item.selectedOptions.map(o=>o.name).join(", ") + "\n";
+
+    orderList.forEach(it => {
+      txt += `#${it.articleNumber} ${it.name} (€${it.totalPrice.toFixed(2)})\n`;
+      if (it.selectedOptions && it.selectedOptions.length) {
+        txt += "  → " + it.selectedOptions.map(o => o.name).join(", ") + "\n";
+      }
     });
 
-    txt += `\nTOTAL: €${orderList.reduce((s,x)=>s+x.totalPrice,0).toFixed(2)}\n`;
+    const total = orderList.reduce((s, x) => s + (+x.totalPrice || 0), 0).toFixed(2);
+    txt += `\nTOTAL: €${total}\n`;
 
-    if(JSON.parse(localStorage.getItem("soloMode") || "false")){
-      txt += "\nSELF PICKUP MODE ✅";
+    const isSolo = JSON.parse(localStorage.getItem("soloMode") || "false");
+    if (isSolo) txt += "\nSELF PICKUP MODE ✅";
+
+    const mentionLine = notifyMentions.length ? `🔔 ${notifyMentions.join(" ")}\n` : "";
+    const finalText = mentionLine + txt;
+
+    const payload = {
+      chat_id: chatId,
+      text: finalText,
+      disable_notification: false
+    };
+
+    if (messageThreadId) payload.message_thread_id = messageThreadId;
+
+    const resp = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await resp.json().catch(() => null);
+
+    if (!resp.ok || !data || !data.ok) {
+      const details = (data && data.description) ? data.description : `HTTP ${resp.status}`;
+      throw new Error(details);
     }
 
-    const payload = {chat_id:chatId,text:txt,disable_notification:false};
-    if(messageThreadId) payload.message_thread_id = messageThreadId;
+    const extraMsg = isSolo
+      ? "<br><strong>Self-Pickup Mode:</strong> Please collect your drinks downstairs."
+      : "";
 
-    const resp = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(payload)
-    });
+    ding("ok");
+flashBusylight();
+showNotification("✅ Order sent!" + extraMsg, 15000, false);
 
-    const data = await resp.json();
-    if(!resp.ok || !data.ok) throw new Error(data.description || "Telegram failed");
-
-    showNotification("✅ Order sent!");
     orderList = [];
     updateOrderList();
     updateMiniCart();
 
-    setTimeout(()=>location.href="index.html",3000);
+    setTimeout(() => {
+      location.href = "index.html";
+    }, 3000);
 
-  }catch(e){
-    showNotification("❌ Order failed: " + e.message,true);
-  }finally{
-    btn.disabled = false;
-    btn.innerText = "Send Order";
+  } catch (err) {
+    console.error("Order failed:", err);
+    ding("err");
+    showNotification(
+      "❌ Order failed.<br><span style='font-size:1.05rem;opacity:.95'>" +
+      String(err.message).replaceAll("<", "&lt;").replaceAll(">", "&gt;") +
+      "</span>",
+      15000,
+      true
+    );
+  } finally {
     isSubmitting = false;
+    btn.disabled = false;
+    btn.innerHTML = prev;
   }
 }
 
-function magicOrder(){
-  const activeItems = [...document.querySelectorAll(".menu-section.active .item")];
-  if(activeItems.length) activeItems[Math.floor(Math.random()*activeItems.length)].click();
+function switchTab(id) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".menu-section").forEach(s => s.classList.remove("active"));
+
+  const tab = document.querySelector(`.tab[onclick="switchTab('${id}')"]`);
+  if (tab) tab.classList.add("active");
+
+  const sec = document.getElementById(id);
+  if (sec) sec.classList.add("active");
 }
 
+/* =============================
+   SOLO MODE: long press top-left
+   ============================= */
 let pressTimer;
-document.body.addEventListener("touchstart",e=>{
-  if(e.touches[0].clientX < 100 && e.touches[0].clientY < 100){
-    pressTimer = setTimeout(toggleSoloMode,1500);
+
+document.body.addEventListener("touchstart", e => {
+  if (e.touches[0].clientX < 100 && e.touches[0].clientY < 100) {
+    pressTimer = setTimeout(toggleSoloMode, 1500);
   }
-},{passive:true});
+}, { passive: true });
 
-document.body.addEventListener("touchend",()=>clearTimeout(pressTimer),{passive:true});
+document.body.addEventListener("touchend", () => clearTimeout(pressTimer), { passive: true });
 
-function toggleSoloMode(){
+function toggleSoloMode() {
   const on = !JSON.parse(localStorage.getItem("soloMode") || "false");
-  localStorage.setItem("soloMode",on);
+  localStorage.setItem("soloMode", on);
   document.getElementById("soloModeBanner").style.display = on ? "block" : "none";
+  reflowForBanner();
 }
 
-if(JSON.parse(localStorage.getItem("soloMode") || "false")){
-  document.getElementById("soloModeBanner").style.display = "block";
+function reflowForBanner() {
+  const b = document.getElementById("soloModeBanner");
+  const visible = getComputedStyle(b).display !== "none";
+  const h = visible ? b.getBoundingClientRect().height : 0;
+  document.body.style.setProperty("--banner-offset", (h ? h + 8 : 0) + "px");
 }
+
+window.addEventListener("resize", reflowForBanner);
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (JSON.parse(localStorage.getItem("soloMode") || "false")) {
+    document.getElementById("soloModeBanner").style.display = "block";
+  }
+  reflowForBanner();
+});
+
+/* =============================
+   IDLE OVERLAY
+   ============================= */
+const idleOverlay = document.getElementById("slideshow-overlay");
+const idleVideo   = document.getElementById("slideshowVideoOverlay");
+const idleVideos  = ["smoke.mp4", "mascotte.mp4"];
+let idleIdx = 0;
+let idleTO;
+
+function playNextIdle() {
+  idleVideo.src = idleVideos[idleIdx];
+  idleVideo.load();
+  idleVideo.play().catch(() => {});
+  idleIdx = (idleIdx + 1) % idleVideos.length;
+}
+
+idleVideo.addEventListener("ended", playNextIdle);
+idleVideo.addEventListener("error", playNextIdle);
+
+function showIdle() {
+  idleOverlay.style.display = "flex";
+  playNextIdle();
+}
+
+function hideIdle() {
+  idleOverlay.style.display = "none";
+  try { idleVideo.pause(); } catch (e) {}
+}
+
+function resetIdle() {
+  clearTimeout(idleTO);
+  hideIdle();
+  idleTO = setTimeout(showIdle, 50000);
+}
+
+["pointerdown", "touchstart", "keydown", "wheel"].forEach(ev => {
+  document.addEventListener(ev, resetIdle, { passive: true });
+});
+
+idleOverlay.addEventListener("pointerdown", resetIdle, { passive: true });
+
+resetIdle();
+
+/* =============================
+   SURPRISE ME
+   ============================= */
+function magicOrder() {
+  const allItems = [...document.querySelectorAll(".item")];
+  if (!allItems.length) return;
+  allItems[Math.floor(Math.random() * allItems.length)].click();
+}
+
+/* OPTIONAL: quick sound/light test
+window.addEventListener("load", () => {
+  const b = document.createElement("button");
+  b.textContent = "TEST SOUND";
+  b.style.cssText = "position:fixed;left:20px;bottom:20px;z-index:99999;padding:10px 14px;border-radius:12px;border:none;background:#f26522;color:#000;font-weight:900;";
+  b.onclick = () => {
+    unlockAudioOnce();
+    ding("ok");
+    flashBusylight();
+  };
+  document.body.appendChild(b);
+});
+*/
 </script>
 </body>
 </html>
