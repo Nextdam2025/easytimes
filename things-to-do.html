@@ -1,208 +1,86 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
   <title>Easy Times • Things to Do</title>
-
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600&display=swap" rel="stylesheet"/>
 
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-
     html,body{
-      height:100vh;
-      width:100vw;
-      overflow:hidden;
-      background:#000;
-      color:#fef5e6;
-      font-family:'Barlow Condensed',sans-serif;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      text-align:center;
+      height:100vh;width:100vw;overflow:hidden;background:#000;color:#fef5e6;
+      font-family:'Barlow Condensed',sans-serif;display:flex;flex-direction:column;
+      align-items:center;text-align:center;
     }
-
     video.bg-video{
-      position:fixed;
-      top:50%;
-      left:50%;
-      min-width:100%;
-      height:100%;
-      transform:translate(-50%,-50%);
-      object-fit:cover;
-      opacity:.25;
-      z-index:-1;
+      position:fixed;top:50%;left:50%;min-width:100%;height:100%;
+      transform:translate(-50%,-50%);object-fit:cover;opacity:.25;z-index:-1;
     }
-
-    .orange-frame{
-      position:fixed;
-      inset:0;
-      border:10px solid #f26522;
-      pointer-events:none;
-      z-index:10000;
-    }
-
-    @keyframes floatLogo{
-      to{transform:translateY(-8px)}
-    }
-
-    .logo{
-      animation:floatLogo 2s ease-in-out infinite alternate;
-      margin:1rem 0;
-    }
-
-    .logo h1{
-      font-size:3rem;
-      letter-spacing:.1em;
-    }
-
-    .logo h2{
-      font-size:1.25rem;
-      color:#f26522;
-      margin-top:.2em;
-    }
-
-    .back-btn{
-      margin:1rem 0;
-    }
-
+    .orange-frame{position:fixed;inset:0;border:10px solid #f26522;pointer-events:none;z-index:10000}
+    @keyframes floatLogo{to{transform:translateY(-8px)}}
+    .logo{animation:floatLogo 2s ease-in-out infinite alternate;margin:1rem 0}
+    .logo h1{font-size:3rem;letter-spacing:.1em}
+    .logo h2{font-size:1.25rem;color:#f26522;margin-top:.2em}
+    .back-btn{margin:1rem 0}
     .back-btn button{
-      padding:10px 20px;
-      font-size:1rem;
-      border-radius:10px;
-      background:rgba(255,255,255,.1);
-      border:none;
-      color:#fff;
-      cursor:pointer;
+      padding:10px 20px;font-size:1rem;border-radius:10px;
+      background:rgba(255,255,255,.1);border:none;color:#fff;cursor:pointer;
     }
-
     .partners-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:1rem;
-      width:100%;
-      max-width:1200px;
-      padding:0 1rem 2rem;
-      overflow-y:auto;
-      flex:1;
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:1rem;width:100%;max-width:1200px;padding:0 1rem 2rem;
+      overflow-y:auto;flex:1;
     }
-
     .partner-card{
-      background:#111;
-      border:2px solid #f26522;
-      border-radius:16px;
-      padding:1rem;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:flex-start;
-      transition:.3s;
-      cursor:pointer;
+      background:#111;border:2px solid #f26522;border-radius:16px;padding:1rem;
+      display:flex;flex-direction:column;align-items:center;transition:.3s;cursor:pointer;
     }
-
-    .partner-card:hover{
-      transform:scale(1.03);
-      border-color:#ffb347;
-    }
-
+    .partner-card:hover{transform:scale(1.03);border-color:#ffb347}
     .partner-card img{
-      width:120px;
-      height:120px;
-      object-fit:contain;
-      background:rgba(255,255,255,.05);
-      border-radius:12px;
-      padding:10px;
-      margin-bottom:.75rem;
+      width:120px;height:120px;object-fit:contain;background:rgba(255,255,255,.05);
+      border-radius:12px;padding:10px;margin-bottom:.75rem;
     }
-
-    .partner-card h3{
-      font-size:1.5rem;
-      margin-bottom:.5rem;
-      color:#fff;
-    }
-
-    .partner-card p{
-      font-size:1rem;
-      line-height:1.4;
-      color:#ddd;
-      margin-bottom:1rem;
-    }
-
+    .partner-card h3{font-size:1.5rem;margin-bottom:.5rem;color:#fff}
+    .partner-card p{font-size:1rem;line-height:1.4;color:#ddd;margin-bottom:1rem}
     .partner-action{
-      margin-top:auto;
-      width:100%;
-      padding:.75rem;
-      border:none;
-      border-radius:10px;
-      background:#f26522;
-      color:#000;
-      font-weight:bold;
-      font-size:1rem;
-      cursor:pointer;
+      margin-top:auto;width:100%;padding:.75rem;border:none;border-radius:10px;
+      background:#f26522;color:#000;font-weight:bold;font-size:1rem;cursor:pointer;
     }
 
-    .iframe-popup{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.92);
-      z-index:20000;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:30px;
+    .partner-popup{
+      position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:20000;
+      display:none;align-items:center;justify-content:center;padding:30px;
     }
-
-    .iframe-box{
-      width:95vw;
-      height:90vh;
-      max-width:1300px;
-      background:#000;
-      border:8px solid #f26522;
-      border-radius:22px;
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-      box-shadow:0 0 60px rgba(0,0,0,.8);
+    .partner-box{
+      width:95vw;max-width:720px;background:#111;border:8px solid #f26522;
+      border-radius:22px;box-shadow:0 0 60px rgba(0,0,0,.8);overflow:hidden;
     }
-
-    .iframe-header{
-      height:64px;
-      background:#111;
-      border-bottom:3px solid #f26522;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 18px;
-      color:#fff;
+    .partner-header{
+      height:64px;background:#000;border-bottom:3px solid #f26522;
+      display:flex;align-items:center;justify-content:space-between;padding:0 18px;
     }
-
-    .iframe-header h3{
-      font-size:1.5rem;
-      color:#f26522;
+    .partner-header h3{font-size:1.5rem;color:#f26522}
+    .partner-header button{
+      padding:10px 18px;background:#f26522;color:#000;border:none;
+      border-radius:10px;font-weight:bold;cursor:pointer;
     }
-
-    .iframe-header button{
-      padding:10px 18px;
-      background:#f26522;
-      color:#000;
-      border:none;
-      border-radius:10px;
-      font-weight:bold;
-      cursor:pointer;
+    .partner-content{padding:2rem;display:flex;flex-direction:column;align-items:center;gap:1rem}
+    .partner-content img{
+      width:180px;height:180px;object-fit:contain;background:rgba(255,255,255,.06);
+      border-radius:18px;padding:16px;
     }
-
-    .iframe-box iframe{
-      width:100%;
-      height:100%;
-      border:none;
-      background:#fff;
+    .partner-content p{font-size:1.25rem;line-height:1.4;color:#ddd;max-width:520px}
+    .open-site-btn{
+      margin-top:1rem;width:100%;max-width:360px;padding:1rem;border:none;border-radius:14px;
+      background:linear-gradient(145deg,#f26522,#ff8a3d);color:#000;font-weight:bold;
+      font-size:1.15rem;cursor:pointer;
     }
   </style>
 </head>
 
 <body>
-
   <video class="bg-video" autoplay muted loop playsinline>
     <source src="smoke.mp4" type="video/mp4"/>
   </video>
@@ -220,13 +98,17 @@
 
   <div class="partners-grid" id="partnersGrid"></div>
 
-  <div class="iframe-popup" id="iframePopup">
-    <div class="iframe-box">
-      <div class="iframe-header">
-        <h3 id="iframeTitle">Partner</h3>
-        <button onclick="closePartnerFrame()">Close</button>
+  <div class="partner-popup" id="partnerPopup">
+    <div class="partner-box">
+      <div class="partner-header">
+        <h3 id="popupTitle">Partner</h3>
+        <button onclick="closePartnerPopup()">Close</button>
       </div>
-      <iframe id="partnerFrame" src=""></iframe>
+      <div class="partner-content">
+        <img id="popupLogo" src="" alt="">
+        <p id="popupText"></p>
+        <button class="open-site-btn" onclick="openPartnerWebsite()">Open Website</button>
+      </div>
     </div>
   </div>
 
@@ -235,14 +117,14 @@ const partners = [
   {
     id:"abike",
     name:"A-Bike Rentals",
-    logo:"images/abike-logo.png",
+    logo:"images/abike.png",
     text:"Discover Amsterdam by bike. One of the best ways to explore the city.",
     url:"https://a-bike.nl/"
   },
   {
     id:"hashmuseum",
     name:"Hash & Marijuana Museum",
-    logo:"images/hashmuseum-logo.png",
+    logo:"images/hash-museum.png",
     text:"Learn about the fascinating history of cannabis culture.",
     url:"https://hashmuseum.com/"
   },
@@ -276,35 +158,41 @@ const partners = [
   }
 ];
 
+let activePartner = null;
 const grid = document.getElementById("partnersGrid");
 
 partners.forEach(partner => {
   const card = document.createElement("div");
   card.className = "partner-card";
-
   card.innerHTML = `
     <img src="${partner.logo}" alt="${partner.name}">
     <h3>${partner.name}</h3>
     <p>${partner.text}</p>
-    <button class="partner-action" type="button">Open Inside App</button>
+    <button class="partner-action" type="button">View Details</button>
   `;
-
-  card.onclick = () => openPartnerFrame(partner);
-
+  card.onclick = () => openPartnerPopup(partner);
   grid.appendChild(card);
 });
 
-function openPartnerFrame(partner){
-  document.getElementById("iframeTitle").innerText = partner.name;
-  document.getElementById("partnerFrame").src = partner.url;
-  document.getElementById("iframePopup").style.display = "flex";
+function openPartnerPopup(partner){
+  activePartner = partner;
+  document.getElementById("popupTitle").innerText = partner.name;
+  document.getElementById("popupLogo").src = partner.logo;
+  document.getElementById("popupLogo").alt = partner.name;
+  document.getElementById("popupText").innerText = partner.text;
+  document.getElementById("partnerPopup").style.display = "flex";
 }
 
-function closePartnerFrame(){
-  document.getElementById("partnerFrame").src = "";
-  document.getElementById("iframePopup").style.display = "none";
+function closePartnerPopup(){
+  document.getElementById("partnerPopup").style.display = "none";
+  activePartner = null;
+}
+
+function openPartnerWebsite(){
+  if(!activePartner) return;
+  window.open(activePartner.url, "_blank", "noopener,noreferrer");
 }
 </script>
-
 </body>
 </html>
+```
