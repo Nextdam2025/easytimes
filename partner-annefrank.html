@@ -1,12 +1,78 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><title>Anne Frank House</title>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Anne Frank House</title>
+<base target="_self">
 <style>
-body{background:#000;color:#fff;font-family:Arial;padding:40px;text-align:center}
-img{max-width:250px}
-.btn{display:inline-block;background:#f26522;color:#000;padding:15px 30px;text-decoration:none;border-radius:12px;font-weight:bold}
-</style></head><body>
-<img src="images/annefrank.png">
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  width:100%;
+  min-height:100%;
+  background:#000;
+  color:#fff;
+  font-family:Arial, sans-serif;
+  text-align:center;
+}
+body{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:40px 24px;
+}
+img{
+  width:240px;
+  max-width:80%;
+  max-height:170px;
+  object-fit:contain;
+  background:rgba(255,255,255,.08);
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:24px;
+}
+h1{
+  color:#f26522;
+  font-size:2.3rem;
+  margin-bottom:16px;
+}
+p{
+  max-width:620px;
+  color:#eee;
+  font-size:1.2rem;
+  line-height:1.45;
+  margin-bottom:28px;
+}
+.btn{
+  display:inline-block;
+  background:linear-gradient(145deg,#f26522,#ff8a3d);
+  color:#000;
+  padding:16px 34px;
+  text-decoration:none;
+  border-radius:14px;
+  font-weight:900;
+  font-size:1.1rem;
+}
+.note{
+  margin-top:20px;
+  color:#aaa;
+  font-size:.95rem;
+  max-width:520px;
+}
+</style>
+</head>
+<body>
+
+<img src="images/annefrank.png" alt="Anne Frank House">
 <h1>Anne Frank House</h1>
-<p>One of Amsterdam's most important historical landmarks.</p>
-<a class="btn" href="https://www.annefrank.org/" target="_blank">Visit Official Website</a>
-</body></html>
+<p>One of Amsterdam’s most important historical landmarks.</p>
+
+<a class="btn" href="https://www.annefrank.org/" target="_self">Visit Website</a>
+
+<div class="note">
+  Opens inside the EasyTimes frame when the partner website allows iframe loading.
+</div>
+
+</body>
+</html>
