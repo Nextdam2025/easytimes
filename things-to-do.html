@@ -99,17 +99,21 @@
   <div class="partners-grid" id="partnersGrid"></div>
 
   <div class="partner-popup" id="partnerPopup">
-    <div class="partner-box">
-      <div class="partner-header">
-        <h3 id="popupTitle">Partner</h3>
-        <button onclick="closePartnerPopup()">Close</button>
-      </div>
-      <div class="partner-content">
-        <img id="popupLogo" src="" alt="">
-        <p id="popupText"></p>
-        <button class="open-site-btn" onclick="openPartnerWebsite()">Open Website</button>
-      </div>
+  <div class="partner-box">
+    <div class="partner-header">
+      <h3 id="popupTitle">Partner</h3>
+      <button onclick="closePartnerPopup()">Close</button>
     </div>
+
+    <div class="partner-content" id="partnerIntro">
+      <img id="popupLogo" src="" alt="">
+      <p id="popupText"></p>
+      <button class="open-site-btn" onclick="openPartnerWebsite()">Open Website</button>
+    </div>
+
+    <iframe id="partnerFrame" src="" style="display:none;width:100%;height:75vh;border:0;background:white;"></iframe>
+  </div>
+</div>
   </div>
 
 <script>
@@ -176,21 +180,31 @@ partners.forEach(partner => {
 
 function openPartnerPopup(partner){
   activePartner = partner;
+
   document.getElementById("popupTitle").innerText = partner.name;
   document.getElementById("popupLogo").src = partner.logo;
   document.getElementById("popupLogo").alt = partner.name;
   document.getElementById("popupText").innerText = partner.text;
+
+  document.getElementById("partnerIntro").style.display = "flex";
+  document.getElementById("partnerFrame").style.display = "none";
+  document.getElementById("partnerFrame").src = "";
+
   document.getElementById("partnerPopup").style.display = "flex";
 }
 
 function closePartnerPopup(){
   document.getElementById("partnerPopup").style.display = "none";
+  document.getElementById("partnerFrame").src = "";
   activePartner = null;
 }
 
 function openPartnerWebsite(){
   if(!activePartner) return;
-  window.open(activePartner.url, "_blank", "noopener,noreferrer");
+
+  document.getElementById("partnerIntro").style.display = "none";
+  document.getElementById("partnerFrame").style.display = "block";
+  document.getElementById("partnerFrame").src = activePartner.url;
 }
 </script>
 </body>
