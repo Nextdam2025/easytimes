@@ -5,8 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Rijksmuseum</title>
 <base target="_self">
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
 html,body{
   width:100%;
   min-height:100%;
@@ -15,13 +21,45 @@ html,body{
   font-family:Arial, sans-serif;
   text-align:center;
 }
+
 body{
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   padding:40px 24px;
+  overflow:hidden;
+  position:relative;
 }
+
+/* Soft EasyTimes background glow */
+body::before{
+  content:"";
+  position:fixed;
+  inset:-20%;
+  background:
+    radial-gradient(circle at top, rgba(242,101,34,.22), transparent 35%),
+    radial-gradient(circle at bottom, rgba(255,138,61,.15), transparent 40%);
+  z-index:-2;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  z-index:-1;
+}
+
+.card{
+  width:min(720px, 92vw);
+  background:rgba(17,17,17,.92);
+  border:3px solid #f26522;
+  border-radius:28px;
+  padding:34px 28px;
+  box-shadow:0 0 35px rgba(242,101,34,.35);
+}
+
 img{
   width:240px;
   max-width:80%;
@@ -32,19 +70,54 @@ img{
   padding:18px;
   margin-bottom:24px;
 }
+
 h1{
   color:#f26522;
-  font-size:2.3rem;
+  font-size:clamp(2rem, 5vw, 2.7rem);
   margin-bottom:16px;
+  line-height:1.05;
 }
+
 p{
   max-width:620px;
   color:#eee;
-  font-size:1.2rem;
+  font-size:clamp(1.05rem, 3vw, 1.25rem);
   line-height:1.45;
-  margin-bottom:28px;
+  margin:0 auto 22px;
 }
+
+.info-box{
+  margin:24px auto 0;
+  max-width:600px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(242,101,34,.45);
+  border-radius:18px;
+  padding:20px;
+}
+
+.info-box h2{
+  color:#ffb36b;
+  font-size:1.4rem;
+  margin-bottom:10px;
+}
+
+.info-box p{
+  font-size:1.05rem;
+  color:#ddd;
+  margin-bottom:0;
+}
+
+.actions{
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-top:28px;
+}
+
 .btn{
+  appearance:none;
+  border:none;
   display:inline-block;
   background:linear-gradient(145deg,#f26522,#ff8a3d);
   color:#000;
@@ -53,28 +126,157 @@ p{
   border-radius:14px;
   font-weight:900;
   font-size:1.1rem;
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(0,0,0,.35);
 }
+
+.btn.secondary{
+  background:rgba(255,255,255,.1);
+  color:#fff;
+  border:2px solid rgba(255,255,255,.2);
+}
+
 .note{
-  margin-top:20px;
+  margin-top:22px;
   color:#aaa;
   font-size:.95rem;
   max-width:520px;
 }
+
+/* Popup */
+.popup-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.88);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  padding:20px;
+}
+
+.popup-box{
+  width:min(560px, 92vw);
+  background:#111;
+  border:3px solid #f26522;
+  border-radius:24px;
+  padding:30px 24px;
+  color:#fef5e6;
+  text-align:center;
+  box-shadow:0 0 35px rgba(242,101,34,.45);
+  position:relative;
+}
+
+.popup-box h2{
+  color:#f26522;
+  margin-bottom:14px;
+  font-size:2rem;
+}
+
+.popup-box p{
+  font-size:1.15rem;
+  line-height:1.45;
+  margin-bottom:18px;
+}
+
+.popup-close{
+  position:absolute;
+  top:10px;
+  right:16px;
+  background:none;
+  border:none;
+  color:#fff;
+  font-size:2rem;
+  cursor:pointer;
+}
 </style>
 </head>
+
 <body>
 
-<img src="images/rijksmuseum.png" alt="Rijksmuseum">
-<h1>Rijksmuseum</h1>
-<p>See masterpieces from Dutch history and art.</p>
+<div class="card">
+  <img src="images/rijksmuseum.png" alt="Rijksmuseum">
 
-<a class="btn" href="https://www.rijksmuseum.nl/" target="_blank" rel="noopener">
-  Visit Rijksmuseum
-</a>
+  <h1>Rijksmuseum</h1>
 
-<div class="note">
-  You will be redirected to the official Rijksmuseum website for tickets, exhibitions and visitor information.
+  <p>
+    See masterpieces from Dutch history and art.
+    One of Amsterdam’s most famous cultural experiences.
+  </p>
+
+  <div class="info-box">
+    <h2>EasyTimes Recommendation</h2>
+    <p>
+      This page stays inside the EasyTimes touchscreen.
+      No external website will open from this screen.
+    </p>
+  </div>
+
+  <div class="actions">
+    <button class="btn" type="button" onclick="openRijksmuseumPopup()">
+      View Rijksmuseum Info
+    </button>
+
+    <button class="btn secondary" type="button" onclick="goBack()">
+      Back
+    </button>
+  </div>
+
+  <div class="note">
+    Ask our staff for directions, visitor tips, or local ticket recommendations.
+  </div>
 </div>
+
+<div id="rijksmuseumPopup" class="popup-overlay">
+  <div class="popup-box">
+    <button class="popup-close" onclick="closeRijksmuseumPopup()">×</button>
+
+    <h2>Rijksmuseum</h2>
+
+    <p>
+      The Rijksmuseum is home to famous Dutch masterpieces, historical objects,
+      and world-class exhibitions.
+    </p>
+
+    <p>
+      A great choice for tourists who want to experience Amsterdam’s art and culture.
+    </p>
+
+    <button class="btn" type="button" onclick="closeRijksmuseumPopup()">
+      Close
+    </button>
+  </div>
+</div>
+
+<script>
+function openRijksmuseumPopup(){
+  document.getElementById("rijksmuseumPopup").style.display = "flex";
+}
+
+function closeRijksmuseumPopup(){
+  document.getElementById("rijksmuseumPopup").style.display = "none";
+}
+
+function goBack(){
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    window.location.href = "things-to-do.html";
+  }
+}
+
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape"){
+    closeRijksmuseumPopup();
+  }
+});
+
+document.getElementById("rijksmuseumPopup").addEventListener("click", function(e){
+  if(e.target === this){
+    closeRijksmuseumPopup();
+  }
+});
+</script>
 
 </body>
 </html>
