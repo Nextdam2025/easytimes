@@ -4,39 +4,192 @@
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0, user-scalable=no" name="viewport"/>
   <title>EasyTimes Touchscreen Menu</title>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#12100c; --panel:#17130d; --panel2:#21180d;
-      --gold:#d9b65d; --gold-soft:#8a6a2c; --cream:#f5ead8;
-      --orange:#ec7623; --muted:#b8ab94;
+      --bg:#12100c;
+      --panel:#17130d;
+      --panel2:#21180d;
+      --gold:#d9b65d;
+      --gold-soft:#8a6a2c;
+      --cream:#f5ead8;
+      --orange:#ec7623;
+      --muted:#b8ab94;
+      --frame-inset:38px;
     }
     *{box-sizing:border-box;margin:0;padding:0}
-    html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:var(--cream);font-family:'Inter',Arial,sans-serif;}
+    html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:var(--cream);font-family:'Inter',Arial,sans-serif;touch-action:manipulation;}
     body{
-      display:grid;place-items:center;padding:28px;
+      display:grid;
+      place-items:center;
+      padding:var(--frame-inset);
       background:
-        radial-gradient(circle at 70% 5%,rgba(217,182,93,.16),transparent 35%),
+        radial-gradient(circle at 72% 8%,rgba(217,182,93,.18),transparent 34%),
+        radial-gradient(circle at 18% 88%,rgba(236,118,35,.14),transparent 34%),
         linear-gradient(105deg,#0c0b08 0%,#17120b 58%,#2b2112 100%);
     }
-    body:before{content:"";position:fixed;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.025),transparent 22%,rgba(236,118,35,.06) 51%,transparent 72%);pointer-events:none;}
-    .print-frame{position:fixed;inset:44px;border:3px solid var(--gold);border-radius:32px;pointer-events:none;z-index:20;box-shadow:inset 0 0 0 1px rgba(217,182,93,.18)}
+    body:before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:
+        linear-gradient(90deg,rgba(255,255,255,.025),transparent 22%,rgba(236,118,35,.055) 51%,transparent 72%),
+        repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 7px);
+      pointer-events:none;
+      opacity:.75;
+    }
+    .print-frame{
+      position:fixed;
+      inset:var(--frame-inset);
+      border:3px solid var(--gold);
+      border-radius:32px;
+      pointer-events:none;
+      z-index:20;
+      box-shadow:inset 0 0 0 1px rgba(217,182,93,.18),0 0 60px rgba(0,0,0,.35);
+    }
     .print-frame:after{content:"";position:absolute;inset:18px;border:1px solid rgba(217,182,93,.18);border-radius:22px;}
-    .screen{position:relative;z-index:5;width:min(1160px,90vw);min-height:min(720px,86vh);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;text-align:center;}
-    .brand h1{font-family:'Barlow Condensed',Arial,sans-serif;font-size:clamp(5rem,10vw,9.5rem);font-weight:700;letter-spacing:.055em;line-height:.82;color:var(--cream);text-shadow:0 10px 28px rgba(0,0,0,.38);}
-    .brand h2{font-family:'Barlow Condensed',Arial,sans-serif;font-size:clamp(1.7rem,3.4vw,3.1rem);font-weight:700;letter-spacing:.08em;color:var(--gold);margin-top:10px;}
-    .brand .line{width:min(520px,56vw);height:5px;background:var(--orange);border-radius:999px;margin:20px auto 0;}
-    .tagline{font-size:clamp(1.05rem,1.8vw,1.55rem);line-height:1.55;color:var(--cream);max-width:850px;}
-    .action-grid{display:grid;grid-template-columns:repeat(3,minmax(230px,1fr));gap:18px;width:100%;margin-top:8px;}
-    .action-card{position:relative;overflow:hidden;text-align:left;min-height:210px;border:1.8px solid rgba(217,182,93,.82);border-radius:22px;background:linear-gradient(145deg,rgba(18,16,12,.96),rgba(34,25,13,.96));padding:25px 24px;box-shadow:0 18px 40px rgba(0,0,0,.33);cursor:pointer;color:var(--cream);transition:transform .18s ease, border-color .18s ease, background .18s ease;}
+
+    .screen{
+      position:relative;
+      z-index:5;
+      width:min(1180px,calc(100vw - 115px));
+      height:calc(100vh - 118px);
+      display:grid;
+      grid-template-rows:auto auto 1fr auto;
+      align-items:stretch;
+      gap:clamp(14px,2.2vh,28px);
+      text-align:center;
+      min-height:0;
+    }
+
+    .brand{padding-top:clamp(4px,1vh,12px)}
+    .brand h1{
+      font-family:'Barlow Condensed',Arial,sans-serif;
+      font-size:clamp(4.3rem,8.2vw,8.2rem);
+      font-weight:700;
+      letter-spacing:.055em;
+      line-height:.82;
+      color:var(--cream);
+      text-shadow:0 10px 28px rgba(0,0,0,.38);
+    }
+    .brand h2{
+      font-family:'Barlow Condensed',Arial,sans-serif;
+      font-size:clamp(1.45rem,2.9vw,2.7rem);
+      font-weight:700;
+      letter-spacing:.08em;
+      color:var(--gold);
+      margin-top:8px;
+    }
+    .brand .line{width:min(520px,56vw);height:5px;background:var(--orange);border-radius:999px;margin:16px auto 0;}
+    .tagline{
+      font-size:clamp(1.05rem,1.7vw,1.45rem);
+      line-height:1.45;
+      color:var(--cream);
+      max-width:900px;
+      justify-self:center;
+      font-weight:700;
+      text-wrap:balance;
+    }
+
+    .action-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:clamp(16px,1.7vw,24px);
+      width:100%;
+      min-height:0;
+      align-self:stretch;
+    }
+    .action-card{
+      position:relative;
+      overflow:hidden;
+      text-align:left;
+      border:2px solid rgba(217,182,93,.88);
+      border-radius:24px;
+      background:linear-gradient(145deg,rgba(18,16,12,.98),rgba(34,25,13,.98));
+      padding:clamp(22px,2.2vw,32px);
+      box-shadow:0 18px 40px rgba(0,0,0,.33);
+      cursor:pointer;
+      color:var(--cream);
+      transition:transform .18s ease,border-color .18s ease,background .18s ease;
+      display:grid;
+      grid-template-rows:auto auto 1fr auto;
+      gap:clamp(12px,1.2vw,18px);
+      min-height:0;
+      height:100%;
+      font:inherit;
+    }
+    .action-card:before{
+      content:"";
+      position:absolute;
+      inset:auto -25% -48% 35%;
+      height:70%;
+      background:radial-gradient(circle,rgba(236,118,35,.24),transparent 64%);
+      pointer-events:none;
+    }
     .action-card:hover,.action-card:focus{transform:translateY(-4px);border-color:var(--orange);outline:none;}
-    .action-card .eyebrow{font-family:'Barlow Condensed',Arial,sans-serif;color:var(--gold);font-size:1.45rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
-    .action-card h3{font-family:'Barlow Condensed',Arial,sans-serif;font-size:clamp(2.35rem,3.4vw,3.8rem);line-height:.9;margin:18px 0 14px;color:var(--cream);text-transform:uppercase;}
-    .action-card p{font-size:1.05rem;line-height:1.45;color:#e6dac4;max-width:300px;}
-    .cta-pill{position:absolute;left:24px;right:24px;bottom:20px;display:flex;justify-content:space-between;align-items:center;background:var(--orange);color:#111;font-weight:900;border-radius:999px;padding:13px 18px;text-transform:uppercase;letter-spacing:.04em;}
-    .cta-pill span:last-child{font-size:1.5rem;line-height:1;}
-    .music-card{background:linear-gradient(145deg,rgba(18,16,12,.96),rgba(46,31,12,.98));}
-    footer{position:fixed;left:0;right:0;bottom:18px;text-align:center;color:rgba(245,234,216,.78);font-size:.9rem;z-index:25;font-weight:700;letter-spacing:.04em;}
+    .action-card .eyebrow{
+      font-family:'Barlow Condensed',Arial,sans-serif;
+      color:var(--gold);
+      font-size:clamp(1.35rem,2vw,1.85rem);
+      font-weight:700;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      line-height:.95;
+    }
+    .action-card h3{
+      font-family:'Barlow Condensed',Arial,sans-serif;
+      font-size:clamp(2.8rem,4.6vw,5.1rem);
+      line-height:.85;
+      color:var(--cream);
+      text-transform:uppercase;
+      letter-spacing:.01em;
+    }
+    .action-card p{
+      font-size:clamp(1rem,1.45vw,1.25rem);
+      line-height:1.38;
+      color:#e6dac4;
+      max-width:360px;
+      font-weight:700;
+      align-self:start;
+    }
+    .cta-pill{
+      position:relative;
+      z-index:2;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      background:linear-gradient(90deg,#ffd755,var(--orange));
+      color:#111;
+      font-weight:900;
+      border-radius:999px;
+      padding:clamp(13px,1.4vw,18px) clamp(18px,2vw,26px);
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      min-height:54px;
+      font-size:clamp(.95rem,1.25vw,1.15rem);
+      white-space:nowrap;
+      box-shadow:0 10px 24px rgba(0,0,0,.24);
+    }
+    .cta-pill span:last-child{font-size:1.8rem;line-height:1;}
+    .music-card{background:linear-gradient(145deg,rgba(18,16,12,.98),rgba(46,31,12,.98));}
+    .bottom-strip{
+      align-self:end;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      color:rgba(245,234,216,.88);
+      font-size:clamp(.9rem,1.2vw,1.1rem);
+      font-weight:900;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      padding-bottom:4px;
+    }
+    .bottom-strip span{display:inline-flex;align-items:center;gap:10px;}
+    .bottom-strip span:not(:last-child):after{content:"•";color:var(--gold);margin-left:12px;}
+
     .iframe-popup{position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:30000;display:none;align-items:center;justify-content:center;padding:28px;}
     .iframe-box{width:95vw;height:90vh;max-width:1320px;background:#0e0d0a;border:3px solid var(--gold);border-radius:28px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 70px rgba(0,0,0,.85)}
     .iframe-header{height:72px;min-height:72px;background:#15110b;border-bottom:1px solid rgba(217,182,93,.6);display:flex;align-items:center;justify-content:space-between;padding:0 24px;}
@@ -48,7 +201,50 @@
     #idleOverlay .idle-msg{background:var(--orange);color:#111;border-radius:999px;padding:13px 26px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;font-size:clamp(1.05rem,2vw,1.7rem);}
     #idleOverlay .video-frame{width:min(960px,82vw);height:min(540px,52vh);border:3px solid var(--gold);border-radius:24px;overflow:hidden;background:#000;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.5)}
     #idleOverlay video{width:100%;height:100%;object-fit:cover;}
-    @media (max-width:900px){.action-grid{grid-template-columns:1fr}.screen{justify-content:flex-start;padding-top:40px;overflow:auto;height:100%;}.action-card{min-height:185px}.print-frame{inset:18px}.brand h1{font-size:4.4rem}}
+
+    @media (orientation:portrait){
+      :root{--frame-inset:30px;}
+      body{padding:var(--frame-inset);}
+      .screen{
+        width:min(780px,calc(100vw - 90px));
+        height:calc(100vh - 98px);
+        grid-template-rows:auto auto 1fr auto;
+        gap:clamp(16px,1.7vh,28px);
+      }
+      .brand h1{font-size:clamp(4.6rem,8vh,7.4rem);}
+      .brand h2{font-size:clamp(1.55rem,2.6vh,2.55rem);margin-top:8px;}
+      .brand .line{height:5px;margin-top:14px;width:min(540px,70vw);}
+      .tagline{font-size:clamp(1.12rem,1.65vh,1.42rem);line-height:1.36;max-width:720px;}
+      .action-grid{
+        grid-template-columns:1fr;
+        grid-template-rows:repeat(3,minmax(0,1fr));
+        gap:clamp(18px,2vh,30px);
+        max-width:720px;
+        justify-self:center;
+      }
+      .action-card{
+        padding:clamp(24px,2.3vh,36px);
+        border-radius:28px;
+        gap:clamp(10px,1.1vh,18px);
+      }
+      .action-card .eyebrow{font-size:clamp(1.45rem,2vh,2rem);}
+      .action-card h3{font-size:clamp(3.15rem,5.3vh,5.7rem);}
+      .action-card p{font-size:clamp(1.05rem,1.65vh,1.45rem);max-width:620px;}
+      .cta-pill{min-height:clamp(56px,6vh,74px);font-size:clamp(1rem,1.5vh,1.25rem);padding-left:26px;padding-right:26px;}
+      .bottom-strip{font-size:clamp(.95rem,1.25vh,1.15rem);padding-bottom:6px;}
+    }
+
+    @media (orientation:landscape) and (max-height:760px){
+      :root{--frame-inset:24px;}
+      .screen{height:calc(100vh - 72px);width:calc(100vw - 86px);gap:14px;}
+      .brand h1{font-size:clamp(3.6rem,8vw,6rem);}
+      .brand h2{font-size:clamp(1.25rem,2.5vw,2.1rem);}
+      .brand .line{margin-top:10px;}
+      .tagline{font-size:1.05rem;line-height:1.25;}
+      .action-card{padding:20px;gap:10px;}
+      .action-card h3{font-size:clamp(2.35rem,4.2vw,4rem);}
+      .cta-pill{min-height:48px;padding:12px 18px;font-size:.9rem;}
+    }
   </style>
 </head>
 <body>
@@ -59,29 +255,38 @@
       <h2>AMSTERDAM</h2>
       <div class="line"></div>
     </section>
-    <p class="tagline">Order drinks from the touchscreen, explore our upstairs lounge, or discover EZ Malik music and social channels.</p>
+
+    <p class="tagline">Order drinks, discover Amsterdam tips, or scan EZ Malik music and social channels.</p>
+
     <section class="action-grid" aria-label="Main touchscreen menu">
       <button class="action-card" onclick="location.href='order-drinks.html'">
         <div class="eyebrow">Touchscreen Ordering</div>
         <h3>Order<br>Drinks</h3>
-        <p>Place your drinks order upstairs. Fast, simple and clear for the staff.</p>
+        <p>Place your drinks order upstairs. Fast, clear, and sent directly to the staff.</p>
         <div class="cta-pill"><span>Start order</span><span>›</span></div>
       </button>
+
       <button class="action-card" onclick="openThingsPopup()">
         <div class="eyebrow">Amsterdam Tips</div>
         <h3>Things<br>To Do</h3>
-        <p>Tourist-friendly activities and partner pages, staying inside the touchscreen frame.</p>
+        <p>Tourist-friendly activities, partner QR codes, and local ideas inside the touchscreen frame.</p>
         <div class="cta-pill"><span>Explore</span><span>›</span></div>
       </button>
+
       <button class="action-card music-card" onclick="location.href='ez-malik.html'">
         <div class="eyebrow">Music & Socials</div>
         <h3>EZ<br>Malik</h3>
-        <p>Promote EZ Malik with QR codes for Spotify, Instagram and YouTube.</p>
+        <p>Scan and follow EZ Malik on Spotify, Instagram, and YouTube.</p>
         <div class="cta-pill"><span>Scan & follow</span><span>›</span></div>
       </button>
     </section>
+
+    <div class="bottom-strip" aria-label="Easy Times highlights">
+      <span>Upstairs Lounge</span>
+      <span>Live Sports</span>
+      <span>Chill Zone</span>
+    </div>
   </main>
-  <footer>UPSTAIRS LOUNGE • LIVE SPORTS • CHILL ZONE</footer>
 
   <div class="iframe-popup" id="thingsPopup">
     <div class="iframe-box">
