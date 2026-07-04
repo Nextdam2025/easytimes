@@ -2,185 +2,86 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="width=device-width, initial-scale=1.0, user-scalable=no" name="viewport"/>
   <title>EasyTimes Touchscreen Menu</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700&family=Oleo+Script&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html, body {
-      height: 100%;
-      font-family: 'Urbanist', sans-serif;
-      background-color: #121212;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="92.38" viewBox="0 0 80 92.38"><path fill="%23222222" fill-opacity="0.15" d="M40 0l40 23.09v46.18L40 92.38 0 69.27V23.09L40 0z"/></svg>');
-      background-repeat: repeat;
-      background-size: 100px;
-      color: white;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-      padding: 2rem;
+    :root{
+      --bg:#12100c; --panel:#17130d; --panel2:#21180d;
+      --gold:#d9b65d; --gold-soft:#8a6a2c; --cream:#f5ead8;
+      --orange:#ec7623; --muted:#b8ab94;
     }
-
-    .orange-frame {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      border: 10px solid #f26522;
-      pointer-events: none;
-      z-index: 10001;
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:var(--cream);font-family:'Inter',Arial,sans-serif;}
+    body{
+      display:grid;place-items:center;padding:28px;
+      background:
+        radial-gradient(circle at 70% 5%,rgba(217,182,93,.16),transparent 35%),
+        linear-gradient(105deg,#0c0b08 0%,#17120b 58%,#2b2112 100%);
     }
-
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 2rem;
-      max-width: 90vw;
-    }
-
-    header img {
-      width: clamp(280px, 40vw, 480px);
-      max-width: 90vw;
-      height: auto;
-      animation: pulseLogo 3s infinite ease-in-out;
-    }
-
-    header h1 {
-      font-family: 'Oleo Script', cursive;
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      color: #f26522;
-      text-shadow: 0 3px 15px rgba(0,0,0,.6);
-      margin-top: -10px;
-    }
-
-    .main-button {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .main-button button {
-      padding: 20px 50px;
-      font-size: 1.8rem;
-      border: none;
-      border-radius: 20px;
-      background: linear-gradient(145deg, #f26522, #ff7e29);
-      color: #fff;
-      font-weight: bold;
-      box-shadow: 0 6px 20px rgba(0,0,0,.4);
-      transition: all .3s ease;
-      cursor: pointer;
-    }
-
-    .main-button button:hover {
-      background: #f0c040;
-      transform: scale(1.08);
-      color: #121212;
-    }
-
-    .things-btn {
-      background: linear-gradient(145deg,#f0c040,#f26522) !important;
-      color: #121212 !important;
-    }
-
-    footer {
-      position: absolute;
-      bottom: 10px;
-      width: 100%;
-      text-align: center;
-      font-size: .85rem;
-      color: #aaa;
-    }
-
-    @keyframes pulseLogo {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.04); opacity: .95; }
-    }
-
-    /* Popup iframe */
-    .iframe-popup {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.94);
-      z-index: 30000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 28px;
-    }
-
-    .iframe-box {
-      width: 95vw;
-      height: 90vh;
-      max-width: 1300px;
-      background: #000;
-      border: 8px solid #f26522;
-      border-radius: 24px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 0 70px rgba(0,0,0,.85);
-    }
-
-    .iframe-header {
-      height: 68px;
-      background: #111;
-      border-bottom: 3px solid #f26522;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-    }
-
-    .iframe-header h3 {
-      color: #f26522;
-      font-size: 1.6rem;
-    }
-
-    .iframe-header button {
-      padding: 12px 22px;
-      background: #f26522;
-      color: #000;
-      border: none;
-      border-radius: 12px;
-      font-weight: 900;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-
-    .iframe-box iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      background: #000;
-    }
+    body:before{content:"";position:fixed;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.025),transparent 22%,rgba(236,118,35,.06) 51%,transparent 72%);pointer-events:none;}
+    .print-frame{position:fixed;inset:44px;border:3px solid var(--gold);border-radius:32px;pointer-events:none;z-index:20;box-shadow:inset 0 0 0 1px rgba(217,182,93,.18)}
+    .print-frame:after{content:"";position:absolute;inset:18px;border:1px solid rgba(217,182,93,.18);border-radius:22px;}
+    .screen{position:relative;z-index:5;width:min(1160px,90vw);min-height:min(720px,86vh);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;text-align:center;}
+    .brand h1{font-family:'Barlow Condensed',Arial,sans-serif;font-size:clamp(5rem,10vw,9.5rem);font-weight:700;letter-spacing:.055em;line-height:.82;color:var(--cream);text-shadow:0 10px 28px rgba(0,0,0,.38);}
+    .brand h2{font-family:'Barlow Condensed',Arial,sans-serif;font-size:clamp(1.7rem,3.4vw,3.1rem);font-weight:700;letter-spacing:.08em;color:var(--gold);margin-top:10px;}
+    .brand .line{width:min(520px,56vw);height:5px;background:var(--orange);border-radius:999px;margin:20px auto 0;}
+    .tagline{font-size:clamp(1.05rem,1.8vw,1.55rem);line-height:1.55;color:var(--cream);max-width:850px;}
+    .action-grid{display:grid;grid-template-columns:repeat(3,minmax(230px,1fr));gap:18px;width:100%;margin-top:8px;}
+    .action-card{position:relative;overflow:hidden;text-align:left;min-height:210px;border:1.8px solid rgba(217,182,93,.82);border-radius:22px;background:linear-gradient(145deg,rgba(18,16,12,.96),rgba(34,25,13,.96));padding:25px 24px;box-shadow:0 18px 40px rgba(0,0,0,.33);cursor:pointer;color:var(--cream);transition:transform .18s ease, border-color .18s ease, background .18s ease;}
+    .action-card:hover,.action-card:focus{transform:translateY(-4px);border-color:var(--orange);outline:none;}
+    .action-card .eyebrow{font-family:'Barlow Condensed',Arial,sans-serif;color:var(--gold);font-size:1.45rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
+    .action-card h3{font-family:'Barlow Condensed',Arial,sans-serif;font-size:clamp(2.35rem,3.4vw,3.8rem);line-height:.9;margin:18px 0 14px;color:var(--cream);text-transform:uppercase;}
+    .action-card p{font-size:1.05rem;line-height:1.45;color:#e6dac4;max-width:300px;}
+    .cta-pill{position:absolute;left:24px;right:24px;bottom:20px;display:flex;justify-content:space-between;align-items:center;background:var(--orange);color:#111;font-weight:900;border-radius:999px;padding:13px 18px;text-transform:uppercase;letter-spacing:.04em;}
+    .cta-pill span:last-child{font-size:1.5rem;line-height:1;}
+    .music-card{background:linear-gradient(145deg,rgba(18,16,12,.96),rgba(46,31,12,.98));}
+    footer{position:fixed;left:0;right:0;bottom:18px;text-align:center;color:rgba(245,234,216,.78);font-size:.9rem;z-index:25;font-weight:700;letter-spacing:.04em;}
+    .iframe-popup{position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:30000;display:none;align-items:center;justify-content:center;padding:28px;}
+    .iframe-box{width:95vw;height:90vh;max-width:1320px;background:#0e0d0a;border:3px solid var(--gold);border-radius:28px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 70px rgba(0,0,0,.85)}
+    .iframe-header{height:72px;min-height:72px;background:#15110b;border-bottom:1px solid rgba(217,182,93,.6);display:flex;align-items:center;justify-content:space-between;padding:0 24px;}
+    .iframe-header h3{font-family:'Barlow Condensed',Arial,sans-serif;color:var(--gold);font-size:2rem;text-transform:uppercase;letter-spacing:.05em;}
+    .iframe-header button{padding:12px 24px;background:var(--orange);color:#111;border:none;border-radius:999px;font-weight:900;cursor:pointer;font-size:1rem;text-transform:uppercase;}
+    .iframe-box iframe{width:100%;height:100%;border:none;background:#000;}
+    #idleOverlay{position:fixed;inset:0;background:rgba(10,8,5,.96);z-index:40000;display:none;align-items:center;justify-content:center;flex-direction:column;gap:22px;padding:34px;}
+    #idleOverlay .idle-title{font-family:'Barlow Condensed',Arial,sans-serif;font-size:clamp(3rem,6vw,6rem);letter-spacing:.06em;color:var(--cream);}
+    #idleOverlay .idle-msg{background:var(--orange);color:#111;border-radius:999px;padding:13px 26px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;font-size:clamp(1.05rem,2vw,1.7rem);}
+    #idleOverlay .video-frame{width:min(960px,82vw);height:min(540px,52vh);border:3px solid var(--gold);border-radius:24px;overflow:hidden;background:#000;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+    #idleOverlay video{width:100%;height:100%;object-fit:cover;}
+    @media (max-width:900px){.action-grid{grid-template-columns:1fr}.screen{justify-content:flex-start;padding-top:40px;overflow:auto;height:100%;}.action-card{min-height:185px}.print-frame{inset:18px}.brand h1{font-size:4.4rem}}
   </style>
 </head>
-
 <body>
-  <div class="orange-frame"></div>
-
-  <div class="container">
-    <header>
-      <img src="EASY TIMES LOGO BLACK-01.png" alt="EasyTimes Logo">
-      <h1>Easy Times Touchscreen Order Menu</h1>
-    </header>
-
-    <div class="main-button">
-      <button onclick="location.href='order-drinks.html'">🛒 Order Drinks Here</button>
-      <button class="things-btn" onclick="openThingsPopup()">✨ Things to Do</button>
-    </div>
-  </div>
-
-  <footer>
-    <p>&copy; 2025 Easy Times Amsterdam. All rights reserved.</p>
-  </footer>
+  <div class="print-frame"></div>
+  <main class="screen">
+    <section class="brand" aria-label="Easy Times">
+      <h1>EASY TIMES</h1>
+      <h2>AMSTERDAM</h2>
+      <div class="line"></div>
+    </section>
+    <p class="tagline">Order drinks from the touchscreen, explore our upstairs lounge, or discover EZ Malik music and social channels.</p>
+    <section class="action-grid" aria-label="Main touchscreen menu">
+      <button class="action-card" onclick="location.href='order-drinks.html'">
+        <div class="eyebrow">Touchscreen Ordering</div>
+        <h3>Order<br>Drinks</h3>
+        <p>Place your drinks order upstairs. Fast, simple and clear for the staff.</p>
+        <div class="cta-pill"><span>Start order</span><span>›</span></div>
+      </button>
+      <button class="action-card" onclick="openThingsPopup()">
+        <div class="eyebrow">Amsterdam Tips</div>
+        <h3>Things<br>To Do</h3>
+        <p>Tourist-friendly activities and partner pages, staying inside the touchscreen frame.</p>
+        <div class="cta-pill"><span>Explore</span><span>›</span></div>
+      </button>
+      <button class="action-card music-card" onclick="location.href='ez-malik.html'">
+        <div class="eyebrow">Music & Socials</div>
+        <h3>EZ<br>Malik</h3>
+        <p>Promote EZ Malik with QR codes for Spotify, Instagram and YouTube.</p>
+        <div class="cta-pill"><span>Scan & follow</span><span>›</span></div>
+      </button>
+    </section>
+  </main>
+  <footer>UPSTAIRS LOUNGE • LIVE SPORTS • CHILL ZONE</footer>
 
   <div class="iframe-popup" id="thingsPopup">
     <div class="iframe-box">
@@ -192,128 +93,55 @@
     </div>
   </div>
 
+  <div id="idleOverlay">
+    <div class="idle-title">EASY TIMES</div>
+    <div class="idle-msg">Tap the screen to order drinks</div>
+    <div class="video-frame"><video id="idleVideo" muted playsinline autoplay></video></div>
+  </div>
+
 <script>
 const videos = ['smoke.mp4', 'mascotte.mp4'];
 let currentVideoIndex = 0;
 let slideshowIdleTimeout;
+const idleOverlay = document.getElementById('idleOverlay');
+const idleVideo = document.getElementById('idleVideo');
 
-function openThingsPopup() {
-  document.getElementById("thingsFrame").src = "things-to-do.html";
-  document.getElementById("thingsPopup").style.display = "flex";
+function openThingsPopup(){
+  document.getElementById('thingsFrame').src='things-to-do.html';
+  document.getElementById('thingsPopup').style.display='flex';
+  resetSlideshowIdle();
 }
-
-function closeThingsPopup() {
-  document.getElementById("thingsFrame").src = "";
-  document.getElementById("thingsPopup").style.display = "none";
+function closeThingsPopup(){
+  document.getElementById('thingsFrame').src='';
+  document.getElementById('thingsPopup').style.display='none';
+  resetSlideshowIdle();
 }
-
-// Idle slideshow overlay
-const videoOverlay = document.createElement('div');
-Object.assign(videoOverlay.style, {
-  position: 'fixed',
-  top: '10px',
-  left: '10px',
-  right: '10px',
-  bottom: '10px',
-  backgroundColor: '#000',
-  zIndex: '4',
-  display: 'none',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  transition: 'opacity 1s ease, transform 1s ease',
-  opacity: '0',
-  transform: 'scale(0.9)',
-  borderRadius: '20px'
-});
-
-const videoLogo = document.createElement('img');
-videoLogo.src = 'EASY TIMES LOGO BLACK-01.png';
-videoLogo.alt = 'Easytimes Logo';
-videoLogo.style.width = '200px';
-videoLogo.style.margin = '40px 0 20px';
-
-const videoMessage = document.createElement('div');
-videoMessage.innerText = 'CLICK THE SCREEN TO ORDER DRINKS';
-Object.assign(videoMessage.style, {
-  color: '#FFA500',
-  fontSize: '2rem',
-  fontWeight: 'bold',
-  textAlign: 'center',
-  textShadow: '1px 1px 4px black',
-  marginBottom: '30px'
-});
-
-const videoFrame = document.createElement('div');
-Object.assign(videoFrame.style, {
-  position: 'relative',
-  width: '90vw',
-  maxWidth: '1280px',
-  border: '10px solid #f26522',
-  borderRadius: '20px',
-  overflow: 'hidden',
-  background: 'black',
-  aspectRatio: '9 / 16'
-});
-
-const video = document.createElement('video');
-video.muted = true;
-video.controls = false;
-video.autoplay = true;
-video.playsInline = true;
-Object.assign(video.style, {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '100%',
-  height: '100%',
-  objectFit: 'cover'
-});
-
-videoFrame.appendChild(video);
-videoOverlay.append(videoLogo, videoMessage, videoFrame);
-document.body.appendChild(videoOverlay);
-
-function playNextVideo() {
-  video.src = videos[currentVideoIndex];
-  video.load();
-  video.play().catch(() => {});
+function playNextVideo(){
+  idleVideo.src = videos[currentVideoIndex];
+  idleVideo.load();
+  idleVideo.play().catch(()=>{});
   currentVideoIndex = (currentVideoIndex + 1) % videos.length;
 }
-
-video.addEventListener('ended', playNextVideo);
-video.addEventListener('error', playNextVideo);
-
-function resetSlideshowIdle() {
-  clearTimeout(slideshowIdleTimeout);
-  video.pause();
-
-  videoOverlay.style.opacity = '0';
-  videoOverlay.style.transform = 'scale(0.9)';
-  setTimeout(() => videoOverlay.style.display = 'none', 800);
-
-  slideshowIdleTimeout = setTimeout(() => {
-    if (document.getElementById("thingsPopup").style.display === "flex") return;
-
-    videoOverlay.style.display = 'flex';
-    requestAnimationFrame(() => {
-      videoOverlay.style.opacity = '1';
-      videoOverlay.style.transform = 'scale(1)';
-    });
-
-    currentVideoIndex = 0;
-    playNextVideo();
-  }, 25000);
+idleVideo.addEventListener('ended', playNextVideo);
+idleVideo.addEventListener('error', playNextVideo);
+function showIdle(){
+  if(document.getElementById('thingsPopup').style.display === 'flex') return;
+  idleOverlay.style.display='flex';
+  currentVideoIndex = 0;
+  playNextVideo();
 }
-
-['click','mousemove','keydown','touchstart'].forEach(evt =>
-  document.addEventListener(evt, resetSlideshowIdle)
-);
-
-videoOverlay.addEventListener('click', resetSlideshowIdle);
+function hideIdle(){
+  idleOverlay.style.display='none';
+  try{idleVideo.pause();}catch(e){}
+}
+function resetSlideshowIdle(){
+  clearTimeout(slideshowIdleTimeout);
+  hideIdle();
+  slideshowIdleTimeout = setTimeout(showIdle, 35000);
+}
+['click','mousemove','keydown','touchstart','pointerdown'].forEach(evt => document.addEventListener(evt, resetSlideshowIdle, {passive:true}));
+idleOverlay.addEventListener('click', resetSlideshowIdle);
 resetSlideshowIdle();
 </script>
-
 </body>
 </html>
