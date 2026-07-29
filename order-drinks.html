@@ -23,10 +23,10 @@
     .tabs{display:flex;gap:.75em;margin:10px 0 18px;flex-wrap:wrap;justify-content:center;z-index:2}.tab{padding:.72em 1.4em;border:1.8px solid rgba(217,182,93,.75);border-radius:999px;color:var(--cream);background:rgba(18,16,12,.82);cursor:pointer;font-weight:700;font-size:1.25rem;letter-spacing:.04em;text-transform:uppercase;transition:.2s;user-select:none}.tab.active,.tab:hover{background:var(--orange);border-color:var(--orange);color:#111;box-shadow:0 12px 30px rgba(0,0,0,.28)}
     div[style*="margin:1em auto"]{margin:.3em auto 16px!important}.tabs + div button{background:rgba(217,182,93,.95)!important;color:#111!important;border-radius:999px!important;box-shadow:none!important;text-transform:uppercase;letter-spacing:.04em;}
     .menu-section{display:none;width:100%;max-width:1180px;margin:0 auto;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.85em;padding:0 1em;max-height:39vh;overflow:auto;scrollbar-width:thin;scrollbar-color:var(--gold) transparent}.menu-section.active{display:grid}.item{background:linear-gradient(145deg,rgba(18,16,12,.94),rgba(32,24,13,.96))!important;border:1.8px solid rgba(217,182,93,.76);border-radius:18px;padding:.95em 1em;color:var(--cream);cursor:pointer;text-align:left;min-height:116px;box-shadow:0 12px 28px rgba(0,0,0,.22);transition:.16s}.item:hover{filter:none;transform:translateY(-2px);border-color:var(--orange)}.item h3{font-size:1.65rem;margin-bottom:.2em;line-height:.95;color:var(--cream);letter-spacing:.02em;text-transform:uppercase}.item p{font-family:Arial,sans-serif;font-size:1.1rem;margin-bottom:.45em;color:var(--gold);font-weight:800}.item button{padding:.45em 1em;background:var(--orange);color:#111;border:none;border-radius:999px;font-weight:900;pointer-events:none;text-transform:uppercase;font-size:.85rem;letter-spacing:.04em}.item.hot-drink,.item.cold-drink{background:linear-gradient(145deg,rgba(18,16,12,.94),rgba(32,24,13,.96))!important}
-    #basket{background:rgba(18,16,12,.94);border:1.8px solid rgba(217,182,93,.78);border-radius:22px;width:100%;max-width:1180px;margin-top:16px;padding:1em 1.15em;text-align:left;position:relative;z-index:10020;box-shadow:0 16px 40px rgba(0,0,0,.3)}#basket h2{color:var(--gold);margin-bottom:.35em;font-size:1.75rem;text-transform:uppercase;letter-spacing:.05em}#basket ul{list-style:none;margin:0;padding:0;max-height:84px;overflow:auto}#basket li{display:flex;justify-content:space-between;align-items:center;margin:.24em 0;gap:12px;font-family:Arial,sans-serif;font-size:.98rem;color:#f2e8d6}#basket li button{padding:.18em .55em;border-radius:999px;border:none;background:rgba(236,118,35,.85);color:#111;cursor:pointer;font-weight:900}#basket strong{display:block;margin-top:.45em;color:var(--cream);font-size:1.25rem}#confirmOrder{margin-top:.65em;padding:.78em 1.2em;background:var(--orange);color:#111;border:none;border-radius:999px;font-weight:900;cursor:pointer;width:100%;font-size:1.1rem;text-transform:uppercase;letter-spacing:.05em;position:relative;z-index:10030;pointer-events:auto}#confirmOrder:disabled{opacity:.65;cursor:not-allowed}
+    #basket{position:relative;z-index:10020;background:rgba(18,16,12,.94);border:1.8px solid rgba(217,182,93,.78);border-radius:22px;width:100%;max-width:1180px;margin-top:16px;padding:1em 1.15em;text-align:left;z-index:3;box-shadow:0 16px 40px rgba(0,0,0,.3)}#basket h2{color:var(--gold);margin-bottom:.35em;font-size:1.75rem;text-transform:uppercase;letter-spacing:.05em}#basket ul{list-style:none;margin:0;padding:0;max-height:84px;overflow:auto}#basket li{display:flex;justify-content:space-between;align-items:center;margin:.24em 0;gap:12px;font-family:Arial,sans-serif;font-size:.98rem;color:#f2e8d6}#basket li button{padding:.18em .55em;border-radius:999px;border:none;background:rgba(236,118,35,.85);color:#111;cursor:pointer;font-weight:900}#basket strong{display:block;margin-top:.45em;color:var(--cream);font-size:1.25rem}#confirmOrder{position:relative;z-index:10021;margin-top:.65em;padding:.78em 1.2em;background:var(--orange);color:#111;border:none;border-radius:999px;font-weight:900;cursor:pointer;width:100%;font-size:1.1rem;text-transform:uppercase;letter-spacing:.05em}#confirmOrder:disabled{opacity:.65;cursor:not-allowed}
     #notification{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:86%;max-width:560px;background:#28a745;border:4px solid #155724;color:#fff;padding:1.2em;border-radius:22px;font-size:1.8rem;font-weight:900;text-align:center;display:none;opacity:0;transition:opacity .2s ease;z-index:10050;line-height:1.25}#notification.show{display:block;opacity:1}
     .option-modal{position:fixed;inset:0;background:rgba(0,0,0,.86);display:flex;align-items:center;justify-content:center;z-index:10040;opacity:0;animation:fadeIn .2s forwards}@keyframes fadeIn{to{opacity:1}}.option-box{background:#17130d;padding:1.25em;border-radius:24px;max-width:430px;width:92%;text-align:left;color:var(--cream);border:2px solid rgba(217,182,93,.78);box-shadow:0 20px 70px rgba(0,0,0,.48)}.option-box h3{color:var(--gold);margin-bottom:.8em;font-size:1.65rem;text-transform:uppercase}.option-box label{display:block;margin:.65em 0;font-size:1.1rem;font-family:Arial,sans-serif}.option-box button{margin-top:.8em;width:100%;padding:.78em;background:var(--orange);color:#111;border:none;border-radius:999px;cursor:pointer;font-weight:900;text-transform:uppercase}
-    #mini-cart{position:fixed;bottom:28px;right:42px;background:rgba(18,16,12,.95);border:2px solid var(--gold);border-radius:18px;padding:1em;width:300px;opacity:0;transition:.25s;z-index:10010;box-shadow:0 12px 38px rgba(0,0,0,.42);pointer-events:none}#mini-cart.show{opacity:1}#mini-cart h3{color:var(--gold);margin-bottom:.5em;font-size:1.4rem;text-transform:uppercase}#mini-cart ul{list-style:none;max-height:180px;overflow:hidden;padding:0}#mini-cart li{display:flex;justify-content:space-between;margin:.35em 0;font-size:.98rem;font-family:Arial,sans-serif}#mini-cart .total{text-align:right;margin-top:.8em;font-weight:900;font-size:1.1rem;color:var(--cream)}
+    #mini-cart{pointer-events:none;position:fixed;bottom:28px;right:42px;background:rgba(18,16,12,.95);border:2px solid var(--gold);border-radius:18px;padding:1em;width:300px;opacity:0;transition:.25s;z-index:10010;box-shadow:0 12px 38px rgba(0,0,0,.42)}#mini-cart.show{opacity:1}#mini-cart h3{color:var(--gold);margin-bottom:.5em;font-size:1.4rem;text-transform:uppercase}#mini-cart ul{list-style:none;max-height:180px;overflow:hidden;padding:0}#mini-cart li{display:flex;justify-content:space-between;margin:.35em 0;font-size:.98rem;font-family:Arial,sans-serif}#mini-cart .total{text-align:right;margin-top:.8em;font-weight:900;font-size:1.1rem;color:var(--cream)}
     :root{--banner-offset:0px}body{padding-top:calc(28px + var(--banner-offset))}#soloModeBanner{position:fixed;top:0;left:0;width:100%;background:rgba(0,0,0,.95);color:var(--gold);text-align:center;padding:1em;display:none;z-index:10060;border-bottom:3px solid var(--gold);font-size:1.35rem;font-weight:900;letter-spacing:.02em}
     #slideshow-container{display:none}
     #slideshow-overlay{position:fixed;inset:0;width:100vw;height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(10,8,5,.96);z-index:10070;pointer-events:auto;gap:18px}#slideshow-overlay .video-frame{width:min(960px,82vw);height:min(540px,52vh);border:3px solid var(--gold);border-radius:24px;overflow:hidden;background:#000;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.5)}#slideshow-overlay video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}#slideshow-overlay .idle-logo{display:none}#slideshow-overlay .idle-msg{background:var(--orange);color:#111;border-radius:999px;padding:13px 26px;font-weight:900;text-align:center;text-transform:uppercase;letter-spacing:.05em;font-size:clamp(1.05rem,2vw,1.7rem);text-shadow:none}.crawl-text{color:var(--gold)}
@@ -202,7 +202,10 @@ function clearBusylight() {
 }
 
 /* =============================
-   DING SOUND (NO AUDIO FILE)
+   DING SOUND - LOUDER + MORE RELIABLE
+   Plays through the browser/device audio output.
+   Make sure the touchscreen is connected to the shop audio system
+   and the browser/tab/media volume is not muted.
    ============================= */
 let _dingCtx = null;
 
@@ -214,40 +217,70 @@ function _ctx() {
   return _dingCtx;
 }
 
-function unlockAudioOnce() {
+async function unlockAudioOnce() {
   const c = _ctx();
-  if (!c) return;
-  if (c.state !== "running") c.resume().catch(() => {});
+  if (!c) return false;
+
+  try {
+    if (c.state !== "running") await c.resume();
+
+    // tiny silent tick: helps Android/iOS unlock audio after a user touch
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    gain.gain.value = 0.00001;
+    osc.connect(gain);
+    gain.connect(c.destination);
+    osc.start();
+    osc.stop(c.currentTime + 0.02);
+
+    return c.state === "running";
+  } catch (e) {
+    console.warn("Audio unlock failed:", e);
+    return false;
+  }
 }
 
-function ding(kind = "tap") {
+async function ding(kind = "tap") {
   const c = _ctx();
   if (!c) return;
 
-  if (c.state !== "running") c.resume().catch(() => {});
+  try {
+    if (c.state !== "running") await c.resume();
+  } catch (e) {
+    console.warn("Audio resume failed:", e);
+  }
 
-  const t = c.currentTime;
-  const osc = c.createOscillator();
-  const gain = c.createGain();
+  const now = c.currentTime + 0.01;
+  const master = c.createGain();
+  master.connect(c.destination);
 
-  const freq = kind === "ok" ? 1046.5 : kind === "err" ? 220 : 880;
-  osc.type = "sine";
-  osc.frequency.setValueAtTime(freq, t);
+  const volume = kind === "ok" ? 0.9 : kind === "err" ? 0.75 : 0.55;
+  const totalDuration = kind === "ok" ? 0.72 : kind === "err" ? 0.55 : 0.22;
 
-  gain.gain.setValueAtTime(0.0001, t);
-  gain.gain.exponentialRampToValueAtTime(0.35, t + 0.01);
-  gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
+  master.gain.setValueAtTime(0.0001, now);
+  master.gain.exponentialRampToValueAtTime(volume, now + 0.018);
+  master.gain.exponentialRampToValueAtTime(0.0001, now + totalDuration);
 
-  osc.connect(gain);
-  gain.connect(c.destination);
+  const notes = kind === "ok"
+    ? [{freq: 880, start: 0.00, dur: 0.18}, {freq: 1318.51, start: 0.18, dur: 0.42}]
+    : kind === "err"
+      ? [{freq: 220, start: 0.00, dur: 0.24}, {freq: 164.81, start: 0.22, dur: 0.28}]
+      : [{freq: 880, start: 0.00, dur: 0.16}];
 
-  osc.start(t);
-  osc.stop(t + 0.16);
+  notes.forEach(note => {
+    const osc = c.createOscillator();
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(note.freq, now + note.start);
+    osc.connect(master);
+    osc.start(now + note.start);
+    osc.stop(now + note.start + note.dur);
+  });
 }
 
-// unlock audio on first gesture only
-document.addEventListener("pointerdown", unlockAudioOnce, { once: true });
-document.addEventListener("touchstart", unlockAudioOnce, { once: true, passive: true });
+// Unlock audio as soon as the guest touches the screen.
+["pointerdown", "touchstart", "click", "keydown"].forEach(evt => {
+  document.addEventListener(evt, unlockAudioOnce, { once: true, passive: true });
+});
 
 // IMPORTANT:
 // use click instead of pointerdown so it does not interfere with item/button presses
@@ -368,9 +401,9 @@ function updateMiniCart() {
 }
 
 // IMPORTANT: called directly by the send button
-function handleSendClick() {
-  unlockAudioOnce();
-  ding("tap");
+async function handleSendClick() {
+  await unlockAudioOnce();
+  await ding("tap");
   submitOrder();
 }
 
@@ -381,7 +414,7 @@ async function submitOrder() {
   if (isSubmitting) return;
 
   if (!orderList.length) {
-    ding("err");
+    await ding("err");
     showNotification("No items in order!", 7000, true);
     return;
   }
@@ -437,8 +470,8 @@ async function submitOrder() {
       ? "<br><strong>Self-Pickup Mode:</strong> Please collect your drinks downstairs."
       : "";
 
-    ding("ok");
-flashBusylight();
+    await ding("ok");
+    flashBusylight();
 showNotification("✅ Order sent!" + extraMsg, 15000, false);
 
     orderList = [];
@@ -451,7 +484,7 @@ showNotification("✅ Order sent!" + extraMsg, 15000, false);
 
   } catch (err) {
     console.error("Order failed:", err);
-    ding("err");
+    await ding("err");
     showNotification(
       "❌ Order failed.<br><span style='font-size:1.05rem;opacity:.95'>" +
       String(err.message).replaceAll("<", "&lt;").replaceAll(">", "&gt;") +
