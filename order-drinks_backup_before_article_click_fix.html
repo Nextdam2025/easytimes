@@ -23,11 +23,10 @@
     .tabs{display:flex;gap:.75em;margin:10px 0 18px;flex-wrap:wrap;justify-content:center;z-index:2}.tab{padding:.72em 1.4em;border:1.8px solid rgba(217,182,93,.75);border-radius:999px;color:var(--cream);background:rgba(18,16,12,.82);cursor:pointer;font-weight:700;font-size:1.25rem;letter-spacing:.04em;text-transform:uppercase;transition:.2s;user-select:none}.tab.active,.tab:hover{background:var(--orange);border-color:var(--orange);color:#111;box-shadow:0 12px 30px rgba(0,0,0,.28)}
     div[style*="margin:1em auto"]{margin:.3em auto 16px!important}.tabs + div button{background:rgba(217,182,93,.95)!important;color:#111!important;border-radius:999px!important;box-shadow:none!important;text-transform:uppercase;letter-spacing:.04em;}
     .menu-section{display:none;width:100%;max-width:1180px;margin:0 auto;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.85em;padding:0 1em;max-height:39vh;overflow:auto;scrollbar-width:thin;scrollbar-color:var(--gold) transparent}.menu-section.active{display:grid}.item{background:linear-gradient(145deg,rgba(18,16,12,.94),rgba(32,24,13,.96))!important;border:1.8px solid rgba(217,182,93,.76);border-radius:18px;padding:.95em 1em;color:var(--cream);cursor:pointer;text-align:left;min-height:116px;box-shadow:0 12px 28px rgba(0,0,0,.22);transition:.16s}.item:hover{filter:none;transform:translateY(-2px);border-color:var(--orange)}.item h3{font-size:1.65rem;margin-bottom:.2em;line-height:.95;color:var(--cream);letter-spacing:.02em;text-transform:uppercase}.item p{font-family:Arial,sans-serif;font-size:1.1rem;margin-bottom:.45em;color:var(--gold);font-weight:800}.item button{padding:.45em 1em;background:var(--orange);color:#111;border:none;border-radius:999px;font-weight:900;pointer-events:none;text-transform:uppercase;font-size:.85rem;letter-spacing:.04em}.item.hot-drink,.item.cold-drink{background:linear-gradient(145deg,rgba(18,16,12,.94),rgba(32,24,13,.96))!important}
-    .menu-section{position:relative;z-index:40;pointer-events:auto}.item{position:relative;z-index:41;pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:rgba(236,118,35,.25);user-select:none}.item *{pointer-events:none}#basket{position:relative;z-index:60;pointer-events:auto}#confirmOrder{position:relative;z-index:61;pointer-events:auto;touch-action:manipulation}.option-modal,.option-box,.option-box *{pointer-events:auto}
     #basket{background:rgba(18,16,12,.94);border:1.8px solid rgba(217,182,93,.78);border-radius:22px;width:100%;max-width:1180px;margin-top:16px;padding:1em 1.15em;text-align:left;z-index:3;box-shadow:0 16px 40px rgba(0,0,0,.3)}#basket h2{color:var(--gold);margin-bottom:.35em;font-size:1.75rem;text-transform:uppercase;letter-spacing:.05em}#basket ul{list-style:none;margin:0;padding:0;max-height:84px;overflow:auto}#basket li{display:flex;justify-content:space-between;align-items:center;margin:.24em 0;gap:12px;font-family:Arial,sans-serif;font-size:.98rem;color:#f2e8d6}#basket li button{padding:.18em .55em;border-radius:999px;border:none;background:rgba(236,118,35,.85);color:#111;cursor:pointer;font-weight:900}#basket strong{display:block;margin-top:.45em;color:var(--cream);font-size:1.25rem}#confirmOrder{margin-top:.65em;padding:.78em 1.2em;background:var(--orange);color:#111;border:none;border-radius:999px;font-weight:900;cursor:pointer;width:100%;font-size:1.1rem;text-transform:uppercase;letter-spacing:.05em}#confirmOrder:disabled{opacity:.65;cursor:not-allowed}
     #notification{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:86%;max-width:560px;background:#28a745;border:4px solid #155724;color:#fff;padding:1.2em;border-radius:22px;font-size:1.8rem;font-weight:900;text-align:center;display:none;opacity:0;transition:opacity .2s ease;z-index:10050;line-height:1.25}#notification.show{display:block;opacity:1}
     .option-modal{position:fixed;inset:0;background:rgba(0,0,0,.86);display:flex;align-items:center;justify-content:center;z-index:10040;opacity:0;animation:fadeIn .2s forwards}@keyframes fadeIn{to{opacity:1}}.option-box{background:#17130d;padding:1.25em;border-radius:24px;max-width:430px;width:92%;text-align:left;color:var(--cream);border:2px solid rgba(217,182,93,.78);box-shadow:0 20px 70px rgba(0,0,0,.48)}.option-box h3{color:var(--gold);margin-bottom:.8em;font-size:1.65rem;text-transform:uppercase}.option-box label{display:block;margin:.65em 0;font-size:1.1rem;font-family:Arial,sans-serif}.option-box button{margin-top:.8em;width:100%;padding:.78em;background:var(--orange);color:#111;border:none;border-radius:999px;cursor:pointer;font-weight:900;text-transform:uppercase}
-    #mini-cart{pointer-events:none;position:fixed;bottom:28px;right:42px;background:rgba(18,16,12,.95);border:2px solid var(--gold);border-radius:18px;padding:1em;width:300px;opacity:0;transition:.25s;z-index:10010;box-shadow:0 12px 38px rgba(0,0,0,.42)}#mini-cart.show{opacity:1}#mini-cart h3{color:var(--gold);margin-bottom:.5em;font-size:1.4rem;text-transform:uppercase}#mini-cart ul{list-style:none;max-height:180px;overflow:hidden;padding:0}#mini-cart li{display:flex;justify-content:space-between;margin:.35em 0;font-size:.98rem;font-family:Arial,sans-serif}#mini-cart .total{text-align:right;margin-top:.8em;font-weight:900;font-size:1.1rem;color:var(--cream)}
+    #mini-cart{position:fixed;bottom:28px;right:42px;background:rgba(18,16,12,.95);border:2px solid var(--gold);border-radius:18px;padding:1em;width:300px;opacity:0;transition:.25s;z-index:10010;box-shadow:0 12px 38px rgba(0,0,0,.42)}#mini-cart.show{opacity:1}#mini-cart h3{color:var(--gold);margin-bottom:.5em;font-size:1.4rem;text-transform:uppercase}#mini-cart ul{list-style:none;max-height:180px;overflow:hidden;padding:0}#mini-cart li{display:flex;justify-content:space-between;margin:.35em 0;font-size:.98rem;font-family:Arial,sans-serif}#mini-cart .total{text-align:right;margin-top:.8em;font-weight:900;font-size:1.1rem;color:var(--cream)}
     :root{--banner-offset:0px}body{padding-top:calc(28px + var(--banner-offset))}#soloModeBanner{position:fixed;top:0;left:0;width:100%;background:rgba(0,0,0,.95);color:var(--gold);text-align:center;padding:1em;display:none;z-index:10060;border-bottom:3px solid var(--gold);font-size:1.35rem;font-weight:900;letter-spacing:.02em}
     #slideshow-container{display:none}
     #slideshow-overlay{position:fixed;inset:0;width:100vw;height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(10,8,5,.96);z-index:10070;pointer-events:auto;gap:18px}#slideshow-overlay .video-frame{width:min(960px,82vw);height:min(540px,52vh);border:3px solid var(--gold);border-radius:24px;overflow:hidden;background:#000;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.5)}#slideshow-overlay video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}#slideshow-overlay .idle-logo{display:none}#slideshow-overlay .idle-msg{background:var(--orange);color:#111;border-radius:999px;padding:13px 26px;font-weight:900;text-align:center;text-transform:uppercase;letter-spacing:.05em;font-size:clamp(1.05rem,2vw,1.7rem);text-shadow:none}.crawl-text{color:var(--gold)}
@@ -286,27 +285,12 @@ function showNotification(msg, ms = 8000, isError = false) {
 
 function prepareOptions(article) {
   selectedArticle = article;
-  const options = article.options || [];
-
-  // Items without options should react immediately when tapped.
-  // This prevents the customer from thinking the article click did nothing.
-  if (!options.length) {
-    orderList.push({
-      ...article,
-      selectedOptions: [],
-      totalPrice: (+article.price || 0)
-    });
-    updateOrderList();
-    updateMiniCart();
-    try { ding("tap"); } catch (e) {}
-    return;
-  }
 
   document.getElementById("optionTitle").innerText = `Options for ${article.name}`;
   const optList = document.getElementById("optionList");
   optList.innerHTML = "";
 
-  options.forEach((o, i) => {
+  (article.options || []).forEach((o, i) => {
     const lbl = document.createElement("label");
     lbl.innerHTML = `<input type="checkbox" data-index="${i}"> ${o.name} (+€${(+o.price).toFixed(2)})`;
     optList.appendChild(lbl);
@@ -571,43 +555,6 @@ function resetIdle() {
 idleOverlay.addEventListener("pointerdown", resetIdle, { passive: true });
 
 resetIdle();
-
-
-/* =============================
-   ARTICLE TAP FIX
-   Works on Android/iPad touchscreens even when the browser suppresses normal click.
-   ============================= */
-function bindArticleTapFix() {
-  document.querySelectorAll(".item").forEach(item => {
-    if (item.dataset.tapFixBound === "1") return;
-    item.dataset.tapFixBound = "1";
-
-    let lastTap = 0;
-    const fireArticle = (e) => {
-      const now = Date.now();
-      if (now - lastTap < 320) return;
-      lastTap = now;
-
-      if (e && e.cancelable) e.preventDefault();
-      if (e) e.stopPropagation();
-
-      if (typeof item.onclick === "function") {
-        item.onclick.call(item, e || window.event);
-      }
-    };
-
-    item.addEventListener("touchend", fireArticle, { passive: false });
-    item.addEventListener("pointerup", (e) => {
-      if (e.pointerType === "touch" || e.pointerType === "pen") fireArticle(e);
-    }, { passive: false });
-  });
-}
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", bindArticleTapFix);
-} else {
-  bindArticleTapFix();
-}
 
 /* =============================
    SURPRISE ME
