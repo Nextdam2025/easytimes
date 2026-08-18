@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="theme-color" content="#100e0b">
+  <title>Easy Times Jukebox</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#12100c;--panel:#17130d;--panel2:#21180d;--cream:#f5ead8;--gold:#d9b65d;--orange:#ec7623;--muted:#b8ab94;--line:rgba(217,182,93,.55);--shadow:0 14px 34px rgba(0,0,0,.38)}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;min-height:100%;background:var(--ink);color:var(--cream);font-family:Inter,Segoe UI,Arial,sans-serif}
+    body{overflow-x:hidden;background-image:radial-gradient(circle at 78% 4%,rgba(239,108,25,.08),transparent 28%),linear-gradient(30deg,rgba(217,169,79,.035) 12%,transparent 12.5%,transparent 87%,rgba(217,169,79,.035) 87.5%),linear-gradient(150deg,rgba(217,169,79,.035) 12%,transparent 12.5%,transparent 87%,rgba(217,169,79,.035) 87.5%);background-size:auto,58px 101px,58px 101px}
+    button,input{font:inherit}.app{width:min(100%,1080px);min-height:100vh;margin:auto;padding:22px 22px 122px}
+    header{display:grid;grid-template-columns:auto 1fr auto auto;gap:16px;align-items:center;margin-bottom:20px}
+    .logo{width:105px;aspect-ratio:1;clip-path:polygon(50% 0,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);background:#0d0c0a;border:1px solid var(--gold);display:grid;place-content:center;text-align:center;color:white;line-height:.78;box-shadow:0 0 0 2px rgba(217,169,79,.22) inset}
+    .logo b{font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-size:24px;letter-spacing:1px}.logo small{font-size:8px;color:var(--orange);font-weight:800;margin:6px 0}.title{font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-size:clamp(32px,5.5vw,64px);font-weight:700;letter-spacing:2px;margin:0}.title span{color:var(--gold)}
+    .icon-btn{width:78px;height:70px;border:1px solid var(--gold);border-radius:20px;background:var(--panel);color:var(--cream);display:grid;place-content:center;font-size:29px;box-shadow:var(--shadow)}.icon-btn small{font-size:10px;color:var(--gold);font-weight:900;margin-top:4px}
+    .now{display:grid;grid-template-columns:minmax(240px,39%) 1fr;gap:28px;padding:22px;border:1px solid var(--gold);border-radius:24px;background:linear-gradient(135deg,rgba(33,26,18,.98),rgba(15,13,10,.98));box-shadow:var(--shadow)}
+    .cover{aspect-ratio:1;border-radius:18px;border:1px solid var(--line);overflow:hidden;position:relative;background:linear-gradient(145deg,#ef6c19 0 24%,#d7aa54 24% 42%,#17140f 42% 67%,#80501d 67%);isolation:isolate}.cover:before,.cover:after{content:"";position:absolute;border-radius:50%;background:#0e0d0b}.cover:before{width:38%;aspect-ratio:1;right:9%;top:8%}.cover:after{width:70%;height:16%;left:-8%;bottom:18%;border-radius:50%;transform:rotate(-12deg);box-shadow:130px 0 0 #b25a1d}
+    .now-info{min-width:0;display:flex;flex-direction:column;justify-content:center}.eyebrow{color:var(--orange);font-size:20px;font-weight:900;letter-spacing:.8px}.now h2{font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-size:clamp(32px,5vw,58px);letter-spacing:1px;margin:14px 0 4px}.artist{color:var(--gold);font-size:24px}.progress{height:10px;border-radius:10px;background:#38332d;margin:28px 0 8px;overflow:hidden}.progress>i{display:block;width:0;height:100%;background:var(--orange)}.times{display:flex;justify-content:space-between;color:var(--cream)}
+    .eq{height:64px;display:flex;gap:7px;align-items:end;margin-top:14px}.eq i{width:7px;height:24%;border-radius:3px;background:linear-gradient(var(--gold),var(--orange));animation:bounce .9s infinite ease-in-out}.eq i:nth-child(2n){animation-delay:-.4s;height:70%}.eq i:nth-child(3n){animation-delay:-.7s;height:45%}.paused .eq i{animation-play-state:paused;height:12%}@keyframes bounce{50%{height:92%}}
+    .tools{margin:22px 0 14px}.search{height:72px;width:100%;border:1px solid var(--gold);border-radius:20px;background:#15130f;color:white;font-size:24px;padding:0 25px;outline:none}.search::placeholder{color:#948a7b}.filters{display:flex;gap:12px;overflow:auto;padding:14px 2px 8px;scrollbar-width:none}.filters::-webkit-scrollbar{display:none}.filter{flex:0 0 auto;min-width:126px;padding:14px 20px;border-radius:40px;border:1px solid var(--gold);background:#15130f;color:var(--gold);font-size:18px}.filter.active{background:var(--orange);color:#0e0c09;border-color:var(--orange);font-weight:900}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{min-width:0;padding:13px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(160deg,#211b14,#100f0c);box-shadow:var(--shadow)}.card .cover{border-radius:14px}.card:nth-child(2) .cover{filter:hue-rotate(25deg)}.card:nth-child(3) .cover{filter:hue-rotate(315deg)}.card:nth-child(4) .cover{filter:hue-rotate(150deg)}.card:nth-child(5) .cover{filter:hue-rotate(195deg)}.card:nth-child(6) .cover{filter:hue-rotate(280deg)}.song-title{font-weight:900;font-size:21px;margin:12px 0 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.meta{color:var(--gold);font-size:16px;min-height:43px}.add{width:100%;min-height:54px;margin-top:11px;border:0;border-radius:12px;background:var(--orange);color:#120e0a;font-weight:950;font-size:17px}.add:disabled{opacity:.45}.empty{grid-column:1/-1;text-align:center;padding:55px;color:var(--muted);font-size:22px}
+    .queue-bar{position:fixed;z-index:20;left:50%;bottom:16px;transform:translateX(-50%);width:min(calc(100% - 36px),1036px);display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;padding:14px 18px;border:1px solid var(--gold);border-radius:20px;background:rgba(20,17,12,.97);box-shadow:0 0 40px #000}.queue-label{font-size:22px;font-weight:900;color:var(--gold)}.view{min-width:300px;height:66px;border:0;border-radius:14px;background:var(--orange);font-weight:950;font-size:24px;color:#110d09}
+    .sheet{position:fixed;z-index:40;inset:0;background:rgba(0,0,0,.78);display:none;align-items:end}.sheet.open{display:flex}.sheet-inner{width:min(100%,1080px);max-height:82vh;margin:auto;background:#17130f;border:1px solid var(--gold);border-radius:26px 26px 0 0;padding:25px;overflow:auto}.sheet-head{display:flex;justify-content:space-between;align-items:center}.sheet h3{font-family:Impact,'Arial Narrow',sans-serif;font-size:38px;letter-spacing:1px;margin:0}.close{width:58px;height:58px;border-radius:50%;border:1px solid var(--gold);background:#211a12;color:white;font-size:26px}.queue-item{display:grid;grid-template-columns:58px 1fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(217,169,79,.22)}.queue-no{width:50px;height:50px;border-radius:14px;background:#2a2118;color:var(--gold);display:grid;place-content:center;font-weight:900}.remove{border:1px solid #7b5432;border-radius:12px;background:transparent;color:#e4b886;padding:11px 14px}.notice{position:fixed;z-index:80;left:50%;top:24px;transform:translate(-50%,-140%);background:var(--cream);color:#17120d;padding:16px 25px;border-radius:16px;font-weight:900;box-shadow:var(--shadow);transition:.25s}.notice.show{transform:translate(-50%,0)}
+    .staff-panel{display:grid;gap:12px;margin-top:20px}.staff-panel button{min-height:58px;border:1px solid var(--gold);border-radius:14px;background:#241b12;color:white;font-weight:900}.staff-panel input{min-height:58px;border:1px solid var(--gold);border-radius:14px;background:#0e0c0a;color:white;padding:0 18px;font-size:22px}
+    @media(max-width:760px){.app{padding:14px 14px 112px}header{grid-template-columns:auto 1fr auto;gap:9px}.logo{width:78px}.logo b{font-size:19px}.title{font-size:32px}.staff-open{display:none}.icon-btn{width:62px;height:60px;border-radius:16px}.now{grid-template-columns:34% 1fr;gap:15px;padding:14px}.now h2{font-size:30px}.artist,.eyebrow{font-size:17px}.grid{grid-template-columns:repeat(2,1fr);gap:12px}.song-title{font-size:18px}.view{min-width:180px}.queue-label{font-size:17px}}
+    @media(max-width:440px){.title{font-size:25px}.now{grid-template-columns:1fr}.now .cover{display:none}.grid{grid-template-columns:1fr}.queue-bar{grid-template-columns:1fr}.view{width:100%}}
+  </style>
+</head>
+<body>
+<main class="app" id="app">
+  <header>
+    <div class="logo" aria-label="Easy Times"><b>EASY</b><small>1985 · Amsterdam</small><b>TIMES</b></div>
+    <h1 class="title">EASY TIMES <span>JUKEBOX</span></h1>
+    <button class="icon-btn" id="homeBtn" aria-label="Home">⌂<small>HOME</small></button>
+    <button class="icon-btn staff-open" id="staffBtn" aria-label="Staff controls">🔒<small>STAFF</small></button>
+  </header>
+
+  <section class="now paused" id="nowPanel">
+    <div class="cover"></div>
+    <div class="now-info">
+      <div class="eyebrow">NOW PLAYING</div>
+      <h2 id="nowTitle">CHOOSE A SONG</h2>
+      <div class="artist" id="nowArtist">Easy Times Amsterdam</div>
+      <div class="progress"><i id="progressFill"></i></div>
+      <div class="times"><span id="currentTime">00:00</span><span id="duration">00:00</span></div>
+      <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+  </section>
+
+  <section class="tools">
+    <input class="search" id="search" type="search" autocomplete="off" placeholder="Search songs or artists" aria-label="Search songs or artists">
+    <div class="filters" id="filters"></div>
+  </section>
+  <section class="grid" id="songGrid"></section>
+</main>
+
+<div class="queue-bar">
+  <div class="queue-label">♫ &nbsp; UP NEXT · <span id="queueCount">0</span> SONGS</div>
+  <button class="view" id="viewQueue">VIEW QUEUE</button>
+</div>
+
+<div class="sheet" id="queueSheet" aria-hidden="true"><div class="sheet-inner">
+  <div class="sheet-head"><h3>UP NEXT</h3><button class="close" data-close="queueSheet">×</button></div>
+  <div id="queueList"></div>
+</div></div>
+
+<div class="sheet" id="staffSheet" aria-hidden="true"><div class="sheet-inner">
+  <div class="sheet-head"><h3>STAFF CONTROLS</h3><button class="close" data-close="staffSheet">×</button></div>
+  <div class="staff-panel" id="staffLogin"><input id="staffPin" type="password" inputmode="numeric" placeholder="Enter staff PIN"><button id="unlock">UNLOCK</button></div>
+  <div class="staff-panel" id="staffControls" hidden><button id="togglePlay">PLAY / PAUSE</button><button id="skip">SKIP CURRENT SONG</button><button id="clearQueue">CLEAR QUEUE</button><button id="lockStaff">LOCK CONTROLS</button></div>
+</div></div>
+<div class="notice" id="notice"></div>
+<audio id="player" preload="metadata"></audio>
+
+<script>
+  /* Replace each file value with your real local MP3 path, e.g. "music/golden-canals.mp3". */
+  const songs=[
+    {id:1,title:'Golden Canals',artist:'Luna Sol',genre:'CHILL',file:'music/golden-canals.mp3'},
+    {id:2,title:'City Lights',artist:'Northside',genre:'HIP-HOP',file:'music/city-lights.mp3'},
+    {id:3,title:'Afterglow',artist:'Jayem',genre:'R&B',file:'music/afterglow.mp3'},
+    {id:4,title:'Summer Vibes',artist:'Kairo',genre:'AFRO',file:'music/summer-vibes.mp3'},
+    {id:5,title:'Midnight Drive',artist:'Soultrip',genre:'CHILL',file:'music/midnight-drive.mp3'},
+    {id:6,title:'Deeper',artist:'Maya Jane',genre:'REGGAE',file:'music/deeper.mp3'}
+  ];
+  const genres=['ALL',...new Set(songs.map(s=>s.genre))];
+  let activeGenre='ALL',queue=[],current=null,staffUnlocked=false;
+  const $=s=>document.querySelector(s), player=$('#player');
+  const escapeHtml=s=>String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  function toast(message){const n=$('#notice');n.textContent=message;n.classList.add('show');clearTimeout(n.t);n.t=setTimeout(()=>n.classList.remove('show'),2400)}
+  function formatTime(n){if(!Number.isFinite(n))return'00:00';return String(Math.floor(n/60)).padStart(2,'0')+':'+String(Math.floor(n%60)).padStart(2,'0')}
+  function renderFilters(){$('#filters').innerHTML=genres.map(g=>`<button class="filter ${g===activeGenre?'active':''}" data-genre="${g}">${g}</button>`).join('')}
+  function renderSongs(){const q=$('#search').value.trim().toLowerCase();const found=songs.filter(s=>(activeGenre==='ALL'||s.genre===activeGenre)&&(!q||`${s.title} ${s.artist}`.toLowerCase().includes(q)));$('#songGrid').innerHTML=found.length?found.map(s=>`<article class="card"><div class="cover"></div><div class="song-title">${escapeHtml(s.title)}</div><div class="meta">${escapeHtml(s.artist)}<br>${escapeHtml(s.genre)}</div><button class="add" data-add="${s.id}">ADD TO QUEUE</button></article>`).join(''):'<div class="empty">No songs found</div>'}
+  function renderQueue(){$('#queueCount').textContent=queue.length;$('#queueList').innerHTML=queue.length?queue.map((s,i)=>`<div class="queue-item"><div class="queue-no">${i+1}</div><div><b>${escapeHtml(s.title)}</b><br><span class="meta">${escapeHtml(s.artist)}</span></div><button class="remove" data-remove="${i}">REMOVE</button></div>`).join(''):'<div class="empty">The queue is empty</div>'}
+  function addSong(id){const song=songs.find(s=>s.id===id);if(!song)return;if(current?.id===id||queue.some(s=>s.id===id)){toast('This song is already selected');return}queue.push(song);renderQueue();toast(`${song.title} added to queue`);if(!current)playNext()}
+  function playNext(){if(!queue.length){current=null;player.removeAttribute('src');updateNow();return}current=queue.shift();renderQueue();player.src=current.file;player.play().catch(()=>toast('Add the MP3 file to the music folder'));updateNow()}
+  function updateNow(){$('#nowTitle').textContent=current?current.title:'CHOOSE A SONG';$('#nowArtist').textContent=current?current.artist:'Easy Times Amsterdam';$('#nowPanel').classList.toggle('paused',player.paused);if(!current){$('#currentTime').textContent='00:00';$('#duration').textContent='00:00';$('#progressFill').style.width='0'}}
+  function openSheet(id){const el=$('#'+id);el.classList.add('open');el.setAttribute('aria-hidden','false')}
+  function closeSheet(el){el.classList.remove('open');el.setAttribute('aria-hidden','true')}
+  $('#filters').addEventListener('click',e=>{if(!e.target.dataset.genre)return;activeGenre=e.target.dataset.genre;renderFilters();renderSongs()});
+  $('#songGrid').addEventListener('click',e=>{if(e.target.dataset.add)addSong(Number(e.target.dataset.add))});
+  $('#search').addEventListener('input',renderSongs);
+  $('#viewQueue').onclick=()=>{renderQueue();openSheet('queueSheet')};
+  $('#queueList').addEventListener('click',e=>{if(e.target.dataset.remove!==undefined){queue.splice(Number(e.target.dataset.remove),1);renderQueue()}});
+  document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeSheet(b.closest('.sheet')));
+  document.querySelectorAll('.sheet').forEach(s=>s.addEventListener('click',e=>{if(e.target===s)closeSheet(s)}));
+  $('#homeBtn').onclick=()=>location.href='index.html';
+  $('#staffBtn').onclick=()=>openSheet('staffSheet');
+  $('#unlock').onclick=()=>{if($('#staffPin').value==='1985'){staffUnlocked=true;$('#staffLogin').hidden=true;$('#staffControls').hidden=false;toast('Staff controls unlocked')}else toast('Incorrect PIN')};
+  $('#lockStaff').onclick=()=>{staffUnlocked=false;$('#staffLogin').hidden=false;$('#staffControls').hidden=true;$('#staffPin').value='';closeSheet($('#staffSheet'))};
+  $('#togglePlay').onclick=()=>{if(!current){playNext();return}player.paused?player.play():player.pause()};
+  $('#skip').onclick=playNext;$('#clearQueue').onclick=()=>{queue=[];renderQueue();toast('Queue cleared')};
+  player.addEventListener('play',updateNow);player.addEventListener('pause',updateNow);player.addEventListener('ended',playNext);player.addEventListener('error',()=>{$('#nowPanel').classList.add('paused')});
+  player.addEventListener('timeupdate',()=>{$('#currentTime').textContent=formatTime(player.currentTime);$('#duration').textContent=formatTime(player.duration);$('#progressFill').style.width=(player.duration?player.currentTime/player.duration*100:0)+'%'});
+  renderFilters();renderSongs();renderQueue();updateNow();
+</script>
+</body>
+</html>
