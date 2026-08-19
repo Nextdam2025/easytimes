@@ -20,7 +20,7 @@
     .cover{aspect-ratio:1;border-radius:18px;border:1px solid var(--line);overflow:hidden;position:relative;background:linear-gradient(145deg,#ef6c19 0 24%,#d7aa54 24% 42%,#17140f 42% 67%,#80501d 67%);isolation:isolate}.cover:before,.cover:after{content:"";position:absolute;border-radius:50%;background:#0e0d0b}.cover:before{width:38%;aspect-ratio:1;right:9%;top:8%}.cover:after{width:70%;height:16%;left:-8%;bottom:18%;border-radius:50%;transform:rotate(-12deg);box-shadow:130px 0 0 #b25a1d}
     .now-info{min-width:0;display:flex;flex-direction:column;justify-content:center}.eyebrow{color:var(--orange);font-size:20px;font-weight:900;letter-spacing:.8px}.now h2{font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-size:clamp(32px,5vw,58px);letter-spacing:1px;margin:14px 0 4px}.artist{color:var(--gold);font-size:24px}.progress{height:10px;border-radius:10px;background:#38332d;margin:28px 0 8px;overflow:hidden}.progress>i{display:block;width:0;height:100%;background:var(--orange)}.times{display:flex;justify-content:space-between;color:var(--cream)}
     .eq{height:64px;display:flex;gap:7px;align-items:end;margin-top:14px}.eq i{width:7px;height:24%;border-radius:3px;background:linear-gradient(var(--gold),var(--orange));animation:bounce .9s infinite ease-in-out}.eq i:nth-child(2n){animation-delay:-.4s;height:70%}.eq i:nth-child(3n){animation-delay:-.7s;height:45%}.paused .eq i{animation-play-state:paused;height:12%}@keyframes bounce{50%{height:92%}}
-    .tools{margin:22px 0 14px}.search{height:72px;width:100%;border:1px solid var(--gold);border-radius:20px;background:#15130f;color:white;font-size:24px;padding:0 25px;outline:none}.search::placeholder{color:#948a7b}.filters{display:flex;gap:12px;overflow:auto;padding:14px 2px 8px;scrollbar-width:none}.filters::-webkit-scrollbar{display:none}.filter{flex:0 0 auto;min-width:126px;padding:14px 20px;border-radius:40px;border:1px solid var(--gold);background:#15130f;color:var(--gold);font-size:18px}.filter.active{background:var(--orange);color:#0e0c09;border-color:var(--orange);font-weight:900}
+    .tools{margin:22px 0 14px}.search{height:72px;width:100%;border:1px solid var(--gold);border-radius:20px;background:#15130f;color:white;font-size:24px;padding:0 25px;outline:none}.search::placeholder{color:#948a7b}.filters{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:14px 2px 8px;scrollbar-width:none}.filters::-webkit-scrollbar{display:none}.filter{flex:0 0 auto;min-width:94px;padding:12px 18px;border-radius:40px;border:1px solid var(--gold);background:#15130f;color:var(--gold);font-size:18px;white-space:nowrap}.filter.active{background:var(--orange);color:#0e0c09;border-color:var(--orange);font-weight:900}
     .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{min-width:0;padding:13px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(160deg,#211b14,#100f0c);box-shadow:var(--shadow)}.card .cover{border-radius:14px}.card:nth-child(2) .cover{filter:hue-rotate(25deg)}.card:nth-child(3) .cover{filter:hue-rotate(315deg)}.card:nth-child(4) .cover{filter:hue-rotate(150deg)}.card:nth-child(5) .cover{filter:hue-rotate(195deg)}.card:nth-child(6) .cover{filter:hue-rotate(280deg)}.song-title{font-weight:900;font-size:21px;margin:12px 0 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.meta{color:var(--gold);font-size:16px;min-height:43px}.add{width:100%;min-height:54px;margin-top:11px;border:0;border-radius:12px;background:var(--orange);color:#120e0a;font-weight:950;font-size:17px}.add:disabled{opacity:.45}.empty{grid-column:1/-1;text-align:center;padding:55px;color:var(--muted);font-size:22px}
     .queue-bar{position:fixed;z-index:20;left:50%;bottom:16px;transform:translateX(-50%);width:min(calc(100% - 36px),1036px);display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;padding:14px 18px;border:1px solid var(--gold);border-radius:20px;background:rgba(20,17,12,.97);box-shadow:0 0 40px #000}.queue-label{font-size:22px;font-weight:900;color:var(--gold)}.view{min-width:300px;height:66px;border:0;border-radius:14px;background:var(--orange);font-weight:950;font-size:24px;color:#110d09}
     .sheet{position:fixed;z-index:40;inset:0;background:rgba(0,0,0,.78);display:none;align-items:end}.sheet.open{display:flex}.sheet-inner{width:min(100%,1080px);max-height:82vh;margin:auto;background:#17130f;border:1px solid var(--gold);border-radius:26px 26px 0 0;padding:25px;overflow:auto}.sheet-head{display:flex;justify-content:space-between;align-items:center}.sheet h3{font-family:Impact,'Arial Narrow',sans-serif;font-size:38px;letter-spacing:1px;margin:0}.close{width:58px;height:58px;border-radius:50%;border:1px solid var(--gold);background:#211a12;color:white;font-size:26px}.queue-item{display:grid;grid-template-columns:58px 1fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(217,169,79,.22)}.queue-no{width:50px;height:50px;border-radius:14px;background:#2a2118;color:var(--gold);display:grid;place-content:center;font-weight:900}.remove{border:1px solid #7b5432;border-radius:12px;background:transparent;color:#e4b886;padding:11px 14px}.notice{position:fixed;z-index:80;left:50%;top:24px;transform:translate(-50%,-140%);background:var(--cream);color:#17120d;padding:16px 25px;border-radius:16px;font-weight:900;box-shadow:var(--shadow);transition:.25s}.notice.show{transform:translate(-50%,0)}
@@ -39,7 +39,7 @@
   </header>
 
   <section class="now paused" id="nowPanel">
-    <div class="cover"></div>
+    <div class="cover" id="nowCover"></div>
     <div class="now-info">
       <div class="eyebrow">NOW PLAYING</div>
       <h2 id="nowTitle">CHOOSE A SONG</h2>
@@ -74,38 +74,36 @@
 </div></div>
 <div class="notice" id="notice"></div>
 <audio id="player" preload="metadata"></audio>
-<script src="https://cdn.jsdelivr.net/npm/jsmediatags@3.0.3/dist/jsmediatags.min.js"></script>
 <script>
   const songs=[
-    {id:1,title:'Amsterdam Blues',artist:'Easy Times',genre:'BLUES',file:'Amsterdam Blues.mp3'},
-    {id:2,title:'Before the Names',artist:'Easy Times',genre:'CHILL',file:'Before the Names.mp3'},
-    {id:3,title:'Bloodline DNA 2',artist:'Easy Times',genre:'HIP-HOP',file:'Bloodline DNA 2.mp3'},
-    {id:4,title:'BLOODLINE DNA',artist:'Easy Times',genre:'HIP-HOP',file:'BLOODLINE DNA.mp3'},
-    {id:5,title:'EASY TIMES REGGAE ANTHEM',artist:'Easy Times',genre:'REGGAE',file:'EASY TIMES REGGAE ANTHEM.mp3'},
-    {id:6,title:'EASY TIMES TONIGHT',artist:'Easy Times',genre:'HOUSE',file:'EASY TIMES TONIGHT.mp3'},
-    {id:7,title:'EASY TIMES WORLDWIDE',artist:'Easy Times',genre:'WORLD',file:'EASY TIMES WORLDWIDE.mp3'},
-    {id:8,title:'EASY TIMES – Deep House Lounge remix',artist:'Easy Times',genre:'DEEP HOUSE',file:'EASY TIMES – Deep House Lounge remix.mp3'},
-    {id:9,title:'EASY TIMES – Deep House Lounge',artist:'Easy Times',genre:'DEEP HOUSE',file:'EASY TIMES – Deep House Lounge.mp3'},
-    {id:10,title:'EASYTIMES HIGH NOTES',artist:'Easy Times',genre:'HOUSE',file:'EASYTIMES HIGH NOTES.mp3'},
-    {id:11,title:'Easytimes United',artist:'Easy Times',genre:'AFRO',file:'Easytimes United.mp3'},
-    {id:12,title:'Glowline (Dutch 90s House)',artist:'Easy Times',genre:'HOUSE',file:'Glowline (Dutch 90s House).mp3'},
-    {id:13,title:'Gold in Our Veins',artist:'Easy Times',genre:'AFRO',file:'Gold in Our Veins.mp3'},
-    {id:14,title:'Headphones On',artist:'Easy Times',genre:'DANCE',file:'Headphones On.mp3'},
-    {id:15,title:'LIGHT UP THE DARK',artist:'Easy Times',genre:'DANCE',file:'LIGHT UP THE DARK.mp3'},
-    {id:16,title:'Little Lion of Gaza',artist:'Easy Times',genre:'WORLD',file:'Little Lion of Gaza.mp3'},
-    {id:17,title:'MAN OF THE WORLD - Chapter I',artist:'Easy Times',genre:'WORLD',file:'MAN OF THE WORLD - Chapter I.mp3'},
-    {id:18,title:'The Green Café – Easy Times',artist:'Easy Times',genre:'REGGAE',file:'The Green Café – Easy Times.mp3'},
-    {id:19,title:'Tour du Monde en 24 Heures',artist:'Easy Times',genre:'WORLD',file:'Tour du Monde en 24 Heures.mp3'}
+    {id:1,title:'Amsterdam Blues',artist:'Easy Times',genre:'BLUES',file:'Amsterdam Blues.mp3',cover:'music/Amsterdam Blues.jpeg'},
+    {id:2,title:'Before the Names',artist:'Easy Times',genre:'CHILL',file:'Before the Names.mp3',cover:null},
+    {id:3,title:'Bloodline DNA 2',artist:'Easy Times',genre:'HIP-HOP',file:'Bloodline DNA 2.mp3',cover:'music/Bloodline DNA 2.jpeg'},
+    {id:4,title:'BLOODLINE DNA',artist:'Easy Times',genre:'HIP-HOP',file:'BLOODLINE DNA.mp3',cover:'music/BLOODLINE DNA.jpeg'},
+    {id:5,title:'EASY TIMES REGGAE ANTHEM',artist:'Easy Times',genre:'REGGAE',file:'EASY TIMES REGGAE ANTHEM.mp3',cover:'music/EASY TIMES REGGAE ANTHEM.jpeg'},
+    {id:6,title:'EASY TIMES TONIGHT',artist:'Easy Times',genre:'HOUSE',file:'EASY TIMES TONIGHT.mp3',cover:'music/EASY TIMES TONIGHT.jpeg'},
+    {id:7,title:'EASY TIMES WORLDWIDE',artist:'Easy Times',genre:'WORLD',file:'EASY TIMES WORLDWIDE.mp3',cover:'music/EASY TIMES WORLDWIDE.jpeg'},
+    {id:8,title:'EASY TIMES – Deep House Lounge remix',artist:'Easy Times',genre:'DEEP HOUSE',file:'EASY TIMES – Deep House Lounge remix.mp3',cover:'music/EASY TIMES – Deep House Lounge (1).jpeg'},
+    {id:9,title:'EASY TIMES – Deep House Lounge',artist:'Easy Times',genre:'DEEP HOUSE',file:'EASY TIMES – Deep House Lounge.mp3',cover:'music/EASY TIMES – Deep House Lounge.jpeg'},
+    {id:10,title:'EASYTIMES HIGH NOTES',artist:'Easy Times',genre:'HOUSE',file:'EASYTIMES HIGH NOTES.mp3',cover:'music/EASYTIMES HIGH NOTES.jpeg'},
+    {id:11,title:'Easytimes United',artist:'Easy Times',genre:'AFRO',file:'Easytimes United.mp3',cover:'music/Easytimes United.jpeg'},
+    {id:12,title:'Glowline (Dutch 90s House)',artist:'Easy Times',genre:'HOUSE',file:'Glowline (Dutch 90s House).mp3',cover:'music/Glowline (Dutch 90s House).jpeg'},
+    {id:13,title:'Gold in Our Veins',artist:'Easy Times',genre:'AFRO',file:'Gold in Our Veins.mp3',cover:'music/Gold in Our Veins.jpeg'},
+    {id:14,title:'Headphones On',artist:'Easy Times',genre:'DANCE',file:'Headphones On.mp3',cover:'music/Headphones On.jpeg'},
+    {id:15,title:'LIGHT UP THE DARK',artist:'Easy Times',genre:'DANCE',file:'LIGHT UP THE DARK.mp3',cover:'music/LIGHT UP THE DARK.jpeg'},
+    {id:16,title:'Little Lion of Gaza',artist:'Easy Times',genre:'WORLD',file:'Little Lion of Gaza.mp3',cover:'music/Little Lion of Gaza.jpeg'},
+    {id:17,title:'MAN OF THE WORLD - Chapter I',artist:'Easy Times',genre:'WORLD',file:'MAN OF THE WORLD - Chapter I.mp3',cover:'music/MAN OF THE WORLD - Chapter I.jpeg'},
+    {id:18,title:'The Green Café – Easy Times',artist:'Easy Times',genre:'REGGAE',file:'The Green Café – Easy Times.mp3',cover:'music/The Green Café – Easy Times.jpeg'},
+    {id:19,title:'Tour du Monde en 24 Heures',artist:'Easy Times',genre:'WORLD',file:'Tour du Monde en 24 Heures.mp3',cover:'music/Tour du Monde en 24 Heures.jpeg'}
   ];
   let genres=['ALL'];
   let activeGenre='ALL',queue=[],current=null,staffUnlocked=false;
   const $=s=>document.querySelector(s), player=$('#player');
   const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const musicPath=file=>`music/${encodeURI(file)}`;
-  const normalizeGenre=value=>{const v=String(value||'').trim().toUpperCase();if(!v)return'WORLD';if(v.includes('REGGAE'))return'Reggae';if(v.includes('HIP'))return'HIP-HOP';if(v.includes('AFRO'))return'AFRO';if(v.includes('BLUES'))return'BLUES';if(v.includes('HOUSE')||v.includes('90S'))return'HOUSE';if(v.includes('DEEP'))return'DEEP HOUSE';if(v.includes('DANCE')||v.includes('ELECTRO'))return'DANCE';if(v.includes('CHILL')||v.includes('AMBIENT'))return'CHILL';return'WORLD'};
   const palette={BLUES:'linear-gradient(145deg,#2a1a14 0%,#6d3f2f 32%,#d4ad6d 100%)',CHILL:'linear-gradient(145deg,#0f2a2a 0%,#346c6d 32%,#efbb55 100%)',"HIP-HOP":'linear-gradient(145deg,#1b1b2d 0%,#4d2b6d 30%,#f0753d 100%)',REGGAE:'linear-gradient(145deg,#12351d 0%,#2d7a4f 28%,#d9a75f 100%)',HOUSE:'linear-gradient(145deg,#1b1d2a 0%,#2b598b 26%,#f58e2f 100%)',"DEEP HOUSE":'linear-gradient(145deg,#17151c 0%,#473d7d 28%,#d79342 100%)',AFRO:'linear-gradient(145deg,#153d22 0%,#2d8b53 28%,#f0b548 100%)',WORLD:'linear-gradient(145deg,#1d382a 0%,#6f8d38 30%,#e4852d 100%)',DANCE:'linear-gradient(145deg,#2c1730 0%,#7a2e87 30%,#ff8f3d 100%)'};
   function updateGenreList(){genres=['ALL',...new Set(songs.map(s=>s.genre))];}
-  function coverStyle(song){return song.cover?`background:url("${song.cover}") center/cover no-repeat;`:`background:${palette[song.genre]||palette.WORLD};background-size:cover;`}
+  function coverStyle(song){const fallback=`background:${palette[song.genre]||palette.WORLD};background-size:cover;background-position:center;background-repeat:no-repeat;`;if(!song.cover)return fallback;return `background-image:url("${song.cover}");background-color:${palette[song.genre]||palette.WORLD};background-size:cover;background-position:center;background-repeat:no-repeat;`}
   function toast(message){const n=$('#notice');n.textContent=message;n.classList.add('show');clearTimeout(n.t);n.t=setTimeout(()=>n.classList.remove('show'),2400)}
   function formatTime(n){if(!Number.isFinite(n))return'00:00';return String(Math.floor(n/60)).padStart(2,'0')+':'+String(Math.floor(n%60)).padStart(2,'0')}
   function renderFilters(){$('#filters').innerHTML=genres.map(g=>`<button class="filter ${g===activeGenre?'active':''}" data-genre="${g}">${g}</button>`).join('')}
@@ -113,12 +111,9 @@
   function renderQueue(){$('#queueCount').textContent=queue.length;$('#queueList').innerHTML=queue.length?queue.map((s,i)=>`<div class="queue-item"><div class="queue-no">${i+1}</div><div><b>${escapeHtml(s.title)}</b><br><span class="meta">${escapeHtml(s.artist)}</span></div><button class="remove" data-remove="${i}">REMOVE</button></div>`).join(''):'<div class="empty">The queue is empty</div>'}
   function addSong(id){const song=songs.find(s=>s.id===id);if(!song)return;if(current?.id===id||queue.some(s=>s.id===id)){toast('This song is already selected');return}queue.push(song);renderQueue();toast(`${song.title} added to queue`);if(!current)playNext()}
   function playNext(){if(!queue.length){current=null;player.removeAttribute('src');updateNow();return}current=queue.shift();renderQueue();player.src=musicPath(current.file);player.play().catch(()=>toast('Add the MP3 file to the music folder'));updateNow()}
-  function updateNow(){const cover=$('#nowCover');if(cover)cover.style.cssText=current?coverStyle(current):'background:linear-gradient(145deg,#ef6c19 0 24%,#d7aa54 24% 42%,#17140f 42% 67%,#80501d 67%);background-size:cover;';$('#nowTitle').textContent=current?current.title:'CHOOSE A SONG';$('#nowArtist').textContent=current?current.artist:'Easy Times Amsterdam';$('#nowPanel').classList.toggle('paused',player.paused);if(!current){$('#currentTime').textContent='00:00';$('#duration').textContent='00:00';$('#progressFill').style.width='0'}}
+  function updateNow(){const nowCover=$('#nowCover');if(nowCover)nowCover.style.cssText=current?coverStyle(current):'background:linear-gradient(145deg,#ef6c19 0 24%,#d7aa54 24% 42%,#17140f 42% 67%,#80501d 67%);background-size:cover;';$('#nowTitle').textContent=current?current.title:'CHOOSE A SONG';$('#nowArtist').textContent=current?current.artist:'Easy Times Amsterdam';$('#nowPanel').classList.toggle('paused',player.paused);if(!current){$('#currentTime').textContent='00:00';$('#duration').textContent='00:00';$('#progressFill').style.width='0'}}
   function openSheet(id){const el=$('#'+id);el.classList.add('open');el.setAttribute('aria-hidden','false')}
   function closeSheet(el){el.classList.remove('open');el.setAttribute('aria-hidden','true')}
-  function arrayBufferToBase64(buffer){let binary='';const bytes=new Uint8Array(buffer);bytes.forEach(byte=>binary+=String.fromCharCode(byte));return btoa(binary)}
-  function readSongMetadata(song){return new Promise(resolve=>{if(!window.jsmediatags){resolve(song);return}jsmediatags.read(musicPath(song.file),{onSuccess:function({tags}){const title=(tags.title||tags.TIT2||song.title||song.file.replace(/\.[^/.]+$/,'')).trim();const artist=(tags.artist||tags.TPE1||song.artist||'Easy Times').trim();const genre=normalizeGenre(tags.genre||song.genre||'WORLD');let cover=null;if(tags.picture&&tags.picture.data&&tags.picture.format){const base64=arrayBufferToBase64(tags.picture.data);cover=`data:${tags.picture.format};base64,${base64}`;}resolve({...song,title,artist,genre,cover:cover||song.cover||null});},onError:function(){resolve(song);}});});}
-  async function hydrateSongs(){const hydrated=[];for(const song of songs){hydrated.push(await readSongMetadata(song));}songs.splice(0,songs.length,...hydrated);updateGenreList();activeGenre='ALL';renderFilters();renderSongs();}
   $('#filters').addEventListener('click',e=>{if(!e.target.dataset.genre)return;activeGenre=e.target.dataset.genre;renderFilters();renderSongs()});
   $('#songGrid').addEventListener('click',e=>{if(e.target.dataset.add)addSong(Number(e.target.dataset.add))});
   $('#search').addEventListener('input',renderSongs);
@@ -134,7 +129,7 @@
   $('#skip').onclick=playNext;$('#clearQueue').onclick=()=>{queue=[];renderQueue();toast('Queue cleared')};
   player.addEventListener('play',updateNow);player.addEventListener('pause',updateNow);player.addEventListener('ended',playNext);player.addEventListener('error',()=>{$('#nowPanel').classList.add('paused')});
   player.addEventListener('timeupdate',()=>{$('#currentTime').textContent=formatTime(player.currentTime);$('#duration').textContent=formatTime(player.duration);$('#progressFill').style.width=(player.duration?player.currentTime/player.duration*100:0)+'%'});
-  updateGenreList();renderFilters();renderSongs();renderQueue();updateNow();hydrateSongs();
+  updateGenreList();renderFilters();renderSongs();renderQueue();updateNow();
 </script>
 </body>
 </html>
