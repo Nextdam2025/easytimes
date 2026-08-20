@@ -11,7 +11,7 @@
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
     html,body{margin:0;min-height:100%;background:var(--ink);color:var(--cream);font-family:Inter,Segoe UI,Arial,sans-serif}
     body{overflow-x:hidden;background-image:radial-gradient(circle at 78% 4%,rgba(239,108,25,.08),transparent 28%),linear-gradient(30deg,rgba(217,169,79,.035) 12%,transparent 12.5%,transparent 87%,rgba(217,169,79,.035) 87.5%),linear-gradient(150deg,rgba(217,169,79,.035) 12%,transparent 12.5%,transparent 87%,rgba(217,169,79,.035) 87.5%);background-size:auto,58px 101px,58px 101px}
-    button,input{font:inherit}.app{width:min(100%,1080px);min-height:100vh;margin:auto;padding:22px 22px 122px}
+    button,input{font:inherit}.app{width:min(calc(100% - 540px),1080px);min-height:100vh;margin-left:max(22px,calc((100vw - 1650px)/2));padding:22px 22px 122px}
     header{display:grid;grid-template-columns:auto 1fr auto auto;gap:16px;align-items:center;margin-bottom:20px}
     .logo{width:105px;aspect-ratio:1;clip-path:polygon(50% 0,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);background:#0d0c0a;border:1px solid var(--gold);display:grid;place-content:center;text-align:center;color:white;line-height:.78;box-shadow:0 0 0 2px rgba(217,169,79,.22) inset;background-image:url("music/Bloodline%20DNA%202.jpeg");background-size:contain;background-position:center;background-repeat:no-repeat;overflow:hidden}
     .logo b,.logo small{opacity:0;font-size:0;line-height:0;margin:0}.title{font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-size:clamp(32px,5.5vw,64px);font-weight:700;letter-spacing:2px;margin:0}.title span{color:var(--gold)}
@@ -25,7 +25,11 @@
     .queue-bar{position:fixed;z-index:20;left:50%;bottom:16px;transform:translateX(-50%);width:min(calc(100% - 36px),1036px);display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;padding:14px 18px;border:1px solid var(--gold);border-radius:20px;background:rgba(20,17,12,.97);box-shadow:0 0 40px #000}.queue-label{font-size:22px;font-weight:900;color:var(--gold)}.view{min-width:300px;height:66px;border:0;border-radius:14px;background:var(--orange);font-weight:950;font-size:24px;color:#110d09}
     .sheet{position:fixed;z-index:40;inset:0;background:rgba(0,0,0,.78);display:none;align-items:end}.sheet.open{display:flex}.sheet-inner{width:min(100%,1080px);max-height:82vh;margin:auto;background:#17130f;border:1px solid var(--gold);border-radius:26px 26px 0 0;padding:25px;overflow:auto}.sheet-head{display:flex;justify-content:space-between;align-items:center}.sheet h3{font-family:Impact,'Arial Narrow',sans-serif;font-size:38px;letter-spacing:1px;margin:0}.close{width:58px;height:58px;border-radius:50%;border:1px solid var(--gold);background:#211a12;color:white;font-size:26px}.queue-item{display:grid;grid-template-columns:58px 1fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(217,169,79,.22)}.queue-no{width:50px;height:50px;border-radius:14px;background:#2a2118;color:var(--gold);display:grid;place-content:center;font-weight:900}.remove{border:1px solid #7b5432;border-radius:12px;background:transparent;color:#e4b886;padding:11px 14px}.notice{position:fixed;z-index:80;left:50%;top:24px;transform:translate(-50%,-140%);background:var(--cream);color:#17120d;padding:16px 25px;border-radius:16px;font-weight:900;box-shadow:var(--shadow);transition:.25s}.notice.show{transform:translate(-50%,0)}
     .staff-panel{display:grid;gap:12px;margin-top:20px}.staff-panel button{min-height:58px;border:1px solid var(--gold);border-radius:14px;background:#241b12;color:white;font-weight:900}.staff-panel input{min-height:58px;border:1px solid var(--gold);border-radius:14px;background:#0e0c0a;color:white;padding:0 18px;font-size:22px}
-    @media(max-width:760px){.app{padding:14px 14px 112px}header{grid-template-columns:auto 1fr auto;gap:9px}.logo{width:78px}.logo b{font-size:19px}.title{font-size:32px}.staff-open{display:none}.icon-btn{width:62px;height:60px;border-radius:16px}.now{grid-template-columns:34% 1fr;gap:15px;padding:14px}.now h2{font-size:30px}.artist,.eyebrow{font-size:17px}.grid{grid-template-columns:repeat(2,1fr);gap:12px}.song-title{font-size:18px}.view{min-width:180px}.queue-label{font-size:17px}}
+    .lyrics-panel{position:fixed;z-index:10;right:24px;top:80px;bottom:112px;width:min(480px,calc(100vw - 1160px));min-width:360px;border:1px solid var(--gold);border-radius:24px;background:linear-gradient(160deg,rgba(33,27,19,.98),rgba(13,12,10,.98));box-shadow:var(--shadow);overflow:hidden}
+    .lyrics-head{padding:22px 24px 17px;border-bottom:1px solid rgba(217,182,93,.28)}.lyrics-kicker{color:var(--orange);font-weight:950;letter-spacing:1px}.lyrics-song{margin-top:5px;color:var(--gold);font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-size:27px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .lyrics-window{height:calc(100% - 91px);overflow-y:auto;scroll-behavior:smooth;padding:45% 25px;scrollbar-width:none}.lyrics-window::-webkit-scrollbar{display:none}.lyric-line{margin:0;padding:10px 7px;color:#786f62;font-size:21px;font-weight:700;line-height:1.32;transition:.28s;transform-origin:left center}.lyric-line.section{color:var(--gold);font-size:14px;letter-spacing:1px;text-transform:uppercase}.lyric-line.active{color:var(--cream);font-size:27px;transform:scale(1.03);text-shadow:0 0 20px rgba(236,118,35,.26)}.lyric-line.active::before{content:'●';color:var(--orange);font-size:11px;margin-right:10px;vertical-align:middle}.lyrics-empty{height:100%;display:grid;place-content:center;text-align:center;color:var(--muted);font-size:20px;padding:30px}
+    @media(max-width:1500px){.app{width:min(100%,1080px);margin:auto}.lyrics-panel{position:relative;inset:auto;width:min(calc(100% - 28px),1052px);min-width:0;height:430px;margin:-96px auto 122px}.lyrics-window{padding:150px 25px}}
+    @media(max-width:760px){.app{padding:14px 14px 112px}header{grid-template-columns:auto 1fr auto;gap:9px}.logo{width:78px}.logo b{font-size:19px}.title{font-size:32px}.staff-open{display:none}.icon-btn{width:62px;height:60px;border-radius:16px}.now{grid-template-columns:34% 1fr;gap:15px;padding:14px}.now h2{font-size:30px}.artist,.eyebrow{font-size:17px}.grid{grid-template-columns:repeat(2,1fr);gap:12px}.song-title{font-size:18px}.view{min-width:180px}.queue-label{font-size:17px}.lyrics-panel{height:360px;margin:-94px 14px 112px;width:calc(100% - 28px)}.lyrics-window{padding:120px 18px}.lyric-line{font-size:18px}.lyric-line.active{font-size:23px}}
     @media(max-width:440px){.title{font-size:25px}.now{grid-template-columns:1fr}.now .cover{display:none}.grid{grid-template-columns:1fr}.queue-bar{grid-template-columns:1fr}.view{width:100%}}
   </style>
 </head>
@@ -41,27 +45,7 @@
   <section class="now paused" id="nowPanel">
     <div class="cover" id="nowCover"></div>
     <div class="now-info">
-      <div class="now-heading">
-  <div class="now-logo" aria-label="Easy Times logo"></div>
-  <div class="eyebrow">NOW PLAYING</div>
-</div>
-      .now-heading {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 10px;
-}
-
-.now-logo {
-  width: 90px;
-  height: 90px;
-  flex: 0 0 90px;
-  border-radius: 14px;
-  background-image: url("music/Bloodline%20DNA%202.jpeg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
+      <div class="eyebrow">NOW PLAYING</div>
       <h2 id="nowTitle">CHOOSE A SONG</h2>
       <div class="artist" id="nowArtist">Easy Times Amsterdam</div>
       <div class="progress"><i id="progressFill"></i></div>
@@ -76,6 +60,16 @@
   </section>
   <section class="grid" id="songGrid"></section>
 </main>
+
+<aside class="lyrics-panel" id="lyricsPanel" aria-live="polite">
+  <div class="lyrics-head">
+    <div class="lyrics-kicker">LIVE LYRICS</div>
+    <div class="lyrics-song" id="lyricsSong">Choose a song</div>
+  </div>
+  <div class="lyrics-window" id="lyricsWindow">
+    <div class="lyrics-empty">Lyrics appear here when a song starts.</div>
+  </div>
+</aside>
 
 <div class="queue-bar">
   <div class="queue-label">♫ &nbsp; UP NEXT · <span id="queueCount">0</span> SONGS</div>
@@ -97,7 +91,7 @@
 <script>
   const songs=[
     {id:1,title:'Amsterdam Blues',artist:'Easy Times',genre:'BLUES',file:'Amsterdam Blues.mp3',cover:'music/Amsterdam Blues.jpeg'},
-    {id:2,title:'Before the Names',artist:'Easy Times',genre:'CHILL',file:'Before the Names.mp3',cover:'EASY TIMES LOGO BLACK-01.png'},
+    {id:2,title:'Before the Names',artist:'Easy Times',genre:'CHILL',file:'Before the Names.mp3',cover:'music/EASY TIMES LOGO BLACK-01.png'},
     {id:3,title:'Bloodline DNA 2',artist:'Easy Times',genre:'HIP-HOP',file:'Bloodline DNA 2.mp3',cover:'music/Bloodline DNA 2.jpeg'},
     {id:4,title:'BLOODLINE DNA',artist:'Easy Times',genre:'HIP-HOP',file:'BLOODLINE DNA.mp3',cover:'music/BLOODLINE DNA.jpeg'},
     {id:5,title:'EASY TIMES REGGAE ANTHEM',artist:'Easy Times',genre:'REGGAE',file:'EASY TIMES REGGAE ANTHEM.mp3',cover:'music/EASY TIMES REGGAE ANTHEM.jpeg'},
@@ -116,8 +110,87 @@
     {id:18,title:'The Green Café – Easy Times',artist:'Easy Times',genre:'REGGAE',file:'The Green Café – Easy Times.mp3',cover:'music/The Green Café – Easy Times.jpeg'},
     {id:19,title:'Tour du Monde en 24 Heures',artist:'Easy Times',genre:'WORLD',file:'Tour du Monde en 24 Heures.mp3',cover:'music/Tour du Monde en 24 Heures.jpeg'}
   ];
+  const embeddedLyrics={
+    'Before the Names':`[Intro – spoken / whispered]
+Before the names,
+Before the fear,
+Before the crown and the throne,
+They came down quiet,
+Not to rule —
+But to remember.
+
+(mmm… ahh…)
+
+[Verse 1 – blues, hypnotic]
+Dust in the sky, fire in the stone,
+Stars above, but we weren’t alone.
+They walked the land with golden eyes,
+Taught us the truth, taught us the lie.
+
+Hands in the soil, breath in the wind,
+Light in the dark, beginning again.
+Time was slow, hearts were wide,
+We were more than flesh inside.
+
+[Pre-Chorus – melodic lift]
+I feel it still,
+In my bones,
+Something old,
+Calling home…
+
+[Chorus – RAP (calm, confident, hypnotic)]
+Gold in the veins, yeah, that’s ancient code,
+Heaven touched earth, then the message froze.
+Five elements, all in alignment,
+Fire, water, air — earth, spirit inside them.
+
+Run it back, yeah, remember the sound,
+When the gods walked slow on human ground.
+Not above us, not below,
+They planted the seed — now watch it grow.
+
+(yeah…)
+(run it…)
+(gold in the veins…)
+
+[Verse 2 – blues, philosophical]
+They left signs in the way we speak,
+In the way we love, in the way we bleed.
+Some forgot, some still see,
+Reflections of what we used to be.
+
+Power split when the fear came in,
+Names turned holy, truth turned sin.
+But deep inside, past the pain,
+The old light runs through the veins.
+
+[Pre-Chorus – melodic]
+I hear the drums,
+Under my skin,
+Ancient voice,
+Breathing again…
+
+[Chorus – RAP]
+Gold in the veins, yeah, that’s ancient code,
+Heaven touched earth, then the message froze.
+Five elements, all in alignment,
+Fire, water, air — earth, spirit inside them.
+
+Slow motion mind, wide awake soul,
+They never left — they let us grow.
+Look in the mirror, that’s the sign,
+Annunaki bloodline, timeless design.
+
+[Outro – spoken / ambient]
+Not gods…
+Not men…
+Something in between.
+
+(mmm… ahh…)`
+  };
   let genres=['ALL'];
   let activeGenre='ALL',queue=[],current=null,staffUnlocked=false;
+  let lyricSongId=null,lyricTimedNodes=[],lyricRequest=0;
   const $=s=>document.querySelector(s), player=$('#player');
   const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const musicPath=file=>`music/${encodeURI(file)}`;
@@ -150,12 +223,49 @@
 }
   function toast(message){const n=$('#notice');n.textContent=message;n.classList.add('show');clearTimeout(n.t);n.t=setTimeout(()=>n.classList.remove('show'),2400)}
   function formatTime(n){if(!Number.isFinite(n))return'00:00';return String(Math.floor(n/60)).padStart(2,'0')+':'+String(Math.floor(n%60)).padStart(2,'0')}
+  function lyricFileCandidates(song){
+    const base=song.title.replace(/[\\/:*?"<>|]/g,'').trim();
+    return [`music/${encodeURI(base)}.txt`,`music/${encodeURI(song.file.replace(/\.mp3$/i,''))}.txt`];
+  }
+  async function getLyrics(song){
+    if(embeddedLyrics[song.title])return embeddedLyrics[song.title];
+    for(const path of lyricFileCandidates(song)){
+      try{const response=await fetch(path,{cache:'no-store'});if(response.ok){const text=await response.text();if(text.trim())return text}}catch(_error){}
+    }
+    return '';
+  }
+  function parseLyrics(text){
+    return text.replace(/\r/g,'').split('\n').map(line=>line.trim()).filter(Boolean).map(text=>({text,section:/^\[[^\]]+\]$/.test(text)}));
+  }
+  async function loadLyrics(song){
+    const request=++lyricRequest;lyricSongId=song?.id??null;lyricTimedNodes=[];
+    $('#lyricsSong').textContent=song?song.title:'Choose a song';
+    if(!song){$('#lyricsWindow').innerHTML='<div class="lyrics-empty">Lyrics appear here when a song starts.</div>';return}
+    $('#lyricsWindow').innerHTML='<div class="lyrics-empty">Loading lyrics…</div>';
+    const text=await getLyrics(song);if(request!==lyricRequest)return;
+    if(!text){$('#lyricsWindow').innerHTML=`<div class="lyrics-empty">Add <b>${escapeHtml(song.title)}.txt</b> to the <b>music</b> folder to show synchronized lyrics.</div>`;return}
+    const lines=parseLyrics(text);
+    $('#lyricsWindow').innerHTML=lines.map((line,index)=>`<p class="lyric-line ${line.section?'section':''}" data-line="${index}">${escapeHtml(line.text)}</p>`).join('');
+    lyricTimedNodes=[...$('#lyricsWindow').querySelectorAll('.lyric-line:not(.section)')];
+    syncLyrics(true);
+  }
+  function syncLyrics(force=false){
+    if(!current||!lyricTimedNodes.length||!Number.isFinite(player.duration)||player.duration<=0)return;
+    const lead=player.duration*.025,usable=Math.max(1,player.duration-lead-player.duration*.035);
+    const ratio=Math.max(0,Math.min(.999,(player.currentTime-lead)/usable));
+    const activeIndex=Math.min(lyricTimedNodes.length-1,Math.floor(ratio*lyricTimedNodes.length));
+    const active=lyricTimedNodes[activeIndex];
+    if(!active||(!force&&active.classList.contains('active')))return;
+    $('#lyricsWindow').querySelectorAll('.lyric-line.active').forEach(node=>node.classList.remove('active'));
+    active.classList.add('active');
+    active.scrollIntoView({behavior:force?'auto':'smooth',block:'center'});
+  }
   function renderFilters(){$('#filters').innerHTML=genres.map(g=>`<button class="filter ${g===activeGenre?'active':''}" data-genre="${g}">${g}</button>`).join('')}
   function renderSongs(){const q=$('#search').value.trim().toLowerCase();const found=songs.filter(s=>(activeGenre==='ALL'||s.genre===activeGenre)&&(!q||`${s.title} ${s.artist}`.toLowerCase().includes(q)));$('#songGrid').innerHTML=found.length?found.map(s=>`<article class="card"><div class="cover ${s.cover?'has-image':''}" style="${coverStyle(s)}"></div><div class="song-title">${escapeHtml(s.title)}</div><div class="meta">${escapeHtml(s.artist)}<br>${escapeHtml(s.genre)}</div><button class="add" data-add="${s.id}">ADD TO QUEUE</button></article>`).join(''):'<div class="empty">No songs found</div>'}
   function renderQueue(){$('#queueCount').textContent=queue.length;$('#queueList').innerHTML=queue.length?queue.map((s,i)=>`<div class="queue-item"><div class="queue-no">${i+1}</div><div><b>${escapeHtml(s.title)}</b><br><span class="meta">${escapeHtml(s.artist)}</span></div><button class="remove" data-remove="${i}">REMOVE</button></div>`).join(''):'<div class="empty">The queue is empty</div>'}
   function addSong(id){const song=songs.find(s=>s.id===id);if(!song)return;if(current?.id===id||queue.some(s=>s.id===id)){toast('This song is already selected');return}queue.push(song);renderQueue();toast(`${song.title} added to queue`);if(!current)playNext()}
   function playNext(){if(!queue.length){current=null;player.removeAttribute('src');updateNow();return}current=queue.shift();renderQueue();player.src=musicPath(current.file);player.play().catch(()=>toast('Add the MP3 file to the music folder'));updateNow()}
-  function updateNow(){const nowCover=$('#nowCover');if(nowCover){nowCover.classList.toggle('has-image', Boolean(current && current.cover));nowCover.style.cssText=current?coverStyle(current):'background:linear-gradient(145deg,#ef6c19 0 24%,#d7aa54 24% 42%,#17140f 42% 67%,#80501d 67%);background-size:cover;';if(!current)nowCover.classList.remove('has-image');}$('#nowTitle').textContent=current?current.title:'CHOOSE A SONG';$('#nowArtist').textContent=current?current.artist:'Easy Times Amsterdam';$('#nowPanel').classList.toggle('paused',player.paused);if(!current){$('#currentTime').textContent='00:00';$('#duration').textContent='00:00';$('#progressFill').style.width='0'}}
+  function updateNow(){const nowCover=$('#nowCover');if(nowCover){nowCover.classList.toggle('has-image', Boolean(current && current.cover));nowCover.style.cssText=current?coverStyle(current):'background:linear-gradient(145deg,#ef6c19 0 24%,#d7aa54 24% 42%,#17140f 42% 67%,#80501d 67%);background-size:cover;';if(!current)nowCover.classList.remove('has-image');}$('#nowTitle').textContent=current?current.title:'CHOOSE A SONG';$('#nowArtist').textContent=current?current.artist:'Easy Times Amsterdam';$('#nowPanel').classList.toggle('paused',player.paused);if(current?.id!==lyricSongId)loadLyrics(current);if(!current){$('#currentTime').textContent='00:00';$('#duration').textContent='00:00';$('#progressFill').style.width='0'}}
   function openSheet(id){const el=$('#'+id);el.classList.add('open');el.setAttribute('aria-hidden','false')}
   function closeSheet(el){el.classList.remove('open');el.setAttribute('aria-hidden','true')}
   $('#filters').addEventListener('click',e=>{if(!e.target.dataset.genre)return;activeGenre=e.target.dataset.genre;renderFilters();renderSongs()});
@@ -172,7 +282,8 @@
   $('#togglePlay').onclick=()=>{if(!current){playNext();return}player.paused?player.play():player.pause()};
   $('#skip').onclick=playNext;$('#clearQueue').onclick=()=>{queue=[];renderQueue();toast('Queue cleared')};
   player.addEventListener('play',updateNow);player.addEventListener('pause',updateNow);player.addEventListener('ended',playNext);player.addEventListener('error',()=>{$('#nowPanel').classList.add('paused')});
-  player.addEventListener('timeupdate',()=>{$('#currentTime').textContent=formatTime(player.currentTime);$('#duration').textContent=formatTime(player.duration);$('#progressFill').style.width=(player.duration?player.currentTime/player.duration*100:0)+'%'});
+  player.addEventListener('timeupdate',()=>{$('#currentTime').textContent=formatTime(player.currentTime);$('#duration').textContent=formatTime(player.duration);$('#progressFill').style.width=(player.duration?player.currentTime/player.duration*100:0)+'%';syncLyrics()});
+  player.addEventListener('seeked',()=>syncLyrics(true));
   updateGenreList();renderFilters();renderSongs();renderQueue();updateNow();
 </script>
 </body>
