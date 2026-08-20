@@ -103,7 +103,31 @@
   const musicPath=file=>`music/${encodeURI(file)}`;
   const palette={BLUES:'linear-gradient(145deg,#2a1a14 0%,#6d3f2f 32%,#d4ad6d 100%)',CHILL:'linear-gradient(145deg,#0f2a2a 0%,#346c6d 32%,#efbb55 100%)',"HIP-HOP":'linear-gradient(145deg,#1b1b2d 0%,#4d2b6d 30%,#f0753d 100%)',REGGAE:'linear-gradient(145deg,#12351d 0%,#2d7a4f 28%,#d9a75f 100%)',HOUSE:'linear-gradient(145deg,#1b1d2a 0%,#2b598b 26%,#f58e2f 100%)',"DEEP HOUSE":'linear-gradient(145deg,#17151c 0%,#473d7d 28%,#d79342 100%)',AFRO:'linear-gradient(145deg,#153d22 0%,#2d8b53 28%,#f0b548 100%)',WORLD:'linear-gradient(145deg,#1d382a 0%,#6f8d38 30%,#e4852d 100%)',DANCE:'linear-gradient(145deg,#2c1730 0%,#7a2e87 30%,#ff8f3d 100%)'};
   function updateGenreList(){genres=['ALL',...new Set(songs.map(s=>s.genre))];}
-  function coverStyle(song){const fallback=`background:${palette[song.genre]||palette.WORLD};background-size:cover;background-position:center;background-repeat:no-repeat;`;if(!song.cover)return fallback;const url=`url("${encodeURI(song.cover)}")`;return `background-image:${url};background-color:${palette[song.genre]||palette.WORLD};background-size:cover;background-position:center;background-repeat:no-repeat;`}
+  function coverStyle(song) {
+  const gradient = palette[song.genre] || palette.WORLD;
+
+  if (!song.cover) {
+    return `
+      background-image: ${gradient};
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    `;
+  }
+
+  const safeUrl = encodeURI(song.cover)
+    .replace(/'/g, '%27')
+    .replace(/"/g, '%22');
+
+  return `
+    background-image:
+      url('${safeUrl}'),
+      ${gradient};
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  `;
+}
   function toast(message){const n=$('#notice');n.textContent=message;n.classList.add('show');clearTimeout(n.t);n.t=setTimeout(()=>n.classList.remove('show'),2400)}
   function formatTime(n){if(!Number.isFinite(n))return'00:00';return String(Math.floor(n/60)).padStart(2,'0')+':'+String(Math.floor(n%60)).padStart(2,'0')}
   function renderFilters(){$('#filters').innerHTML=genres.map(g=>`<button class="filter ${g===activeGenre?'active':''}" data-genre="${g}">${g}</button>`).join('')}
