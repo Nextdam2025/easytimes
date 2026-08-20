@@ -41,7 +41,27 @@
   <section class="now paused" id="nowPanel">
     <div class="cover" id="nowCover"></div>
     <div class="now-info">
-      <div class="eyebrow">NOW PLAYING</div>
+      <div class="now-heading">
+  <div class="now-logo" aria-label="Easy Times logo"></div>
+  <div class="eyebrow">NOW PLAYING</div>
+</div>
+      .now-heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.now-logo {
+  width: 90px;
+  height: 90px;
+  flex: 0 0 90px;
+  border-radius: 14px;
+  background-image: url("music/Bloodline%20DNA%202.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
       <h2 id="nowTitle">CHOOSE A SONG</h2>
       <div class="artist" id="nowArtist">Easy Times Amsterdam</div>
       <div class="progress"><i id="progressFill"></i></div>
