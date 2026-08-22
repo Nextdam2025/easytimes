@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Easy Times — QR Code</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<style>
+  :root{
+    --bg:#12100c; --gold:#d9b65d; --cream:#f5ead8;
+    --orange:#ec7623; --muted:#b8ab94;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--cream);font-family:'Barlow Condensed',Arial,sans-serif;display:flex;align-items:center;justify-content:center;padding:28px;}
+
+  .card{
+    background:linear-gradient(160deg,rgba(23,19,13,.96),rgba(33,24,13,.96));
+    border:2px solid var(--gold);
+    border-radius:28px;
+    padding:1.8em 2em 2.1em;
+    text-align:center;
+    box-shadow:0 18px 40px rgba(0,0,0,.42);
+    position:relative;
+    overflow:hidden;
+    max-width:380px;
+  }
+  .card:before{content:"";position:absolute;inset:11px;border:1px solid rgba(217,182,93,.28);border-radius:22px;pointer-events:none}
+  .brand{font-size:2rem;letter-spacing:.09em;font-weight:700;color:var(--cream);text-transform:uppercase;line-height:1}
+  .brand .accent{color:var(--gold)}
+  .sub{font-family:Arial,sans-serif;font-size:.85rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-top:.2em}
+  .qr-wrap{background:#fff;border-radius:18px;padding:16px;margin:1.3em auto .9em;width:fit-content;box-shadow:0 8px 22px rgba(0,0,0,.35)}
+  .qr-wrap canvas{display:block}
+  .cta{font-family:Arial,sans-serif;font-weight:800;font-size:1rem;letter-spacing:.04em;text-transform:uppercase;color:#111;background:var(--orange);border-radius:999px;padding:.6em 1.2em;display:inline-block;margin-top:.6em}
+
+  .print-btn{position:fixed;top:20px;right:20px;background:rgba(245,234,216,.12);color:var(--cream);border:1.6px solid var(--gold);border-radius:999px;padding:.6em 1.2em;font-family:Arial,sans-serif;font-weight:800;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;font-size:.85rem}
+
+  @media print{
+    body{background:#12100c}
+    .print-btn{display:none}
+    .card{box-shadow:none}
+  }
+</style>
+</head>
+<body>
+
+  <button class="print-btn" onclick="window.print()">🖨️ Print</button>
+
+  <div class="card">
+    <div class="brand">EASY <span class="accent">TIMES</span></div>
+    <div class="sub">1985 — Amsterdam</div>
+    <div class="qr-wrap"><canvas id="qr"></canvas></div>
+    <div class="cta">📱 Scan to order drinks</div>
+  </div>
+
+<script>
+const ORDER_URL = "https://nextdam2025.github.io/easytimes/order-drinks.html";
+
+QRCode.toCanvas(document.getElementById("qr"), ORDER_URL, {
+  width: 260,
+  margin: 1,
+  color: { dark: "#12100c", light: "#ffffff" }
+});
+</script>
+</body>
+</html>
