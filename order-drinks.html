@@ -31,7 +31,42 @@
     :root{--banner-offset:0px}body{padding-top:calc(28px + var(--banner-offset))}#soloModeBanner{position:fixed;top:0;left:0;width:100%;background:rgba(0,0,0,.95);color:var(--gold);text-align:center;padding:1em;display:none;z-index:10060;border-bottom:3px solid var(--gold);font-size:1.35rem;font-weight:900;letter-spacing:.02em}
     #slideshow-container{display:none}
     #slideshow-overlay{position:fixed;inset:0;width:100vw;height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(10,8,5,.96);z-index:10070;pointer-events:auto;gap:18px}#slideshow-overlay .video-frame{width:min(960px,82vw);height:min(540px,52vh);border:3px solid var(--gold);border-radius:24px;overflow:hidden;background:#000;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.5)}#slideshow-overlay video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}#slideshow-overlay .idle-logo{display:none}#slideshow-overlay .idle-msg{background:var(--orange);color:#111;border-radius:999px;padding:13px 26px;font-weight:900;text-align:center;text-transform:uppercase;letter-spacing:.05em;font-size:clamp(1.05rem,2vw,1.7rem);text-shadow:none}.crawl-text{color:var(--gold)}
-    @media (max-width:920px){body{padding:18px;overflow:auto}.orange-frame{inset:18px}.back-btn{position:static;margin:12px 0 6px}.logo{margin-top:6px}.menu-section{max-height:none;overflow:visible;grid-template-columns:1fr}#basket{margin-bottom:28px}#mini-cart{right:20px;bottom:20px}.tabs{gap:.45em}.tab{font-size:1.05rem;padding:.6em 1em}}
+    @media (max-width:920px){
+      body{padding:18px;overflow-y:auto;overflow-x:hidden}
+      .orange-frame{inset:18px}
+      .back-btn{position:static;margin:12px 0 6px}
+      .logo{margin-top:6px}
+      .menu-section{max-height:none;overflow:visible;grid-template-columns:1fr}
+      #mini-cart{right:20px;bottom:20px}
+      .tabs{gap:.45em}
+      .tab{font-size:1.05rem;padding:.6em 1em}
+      /* Keep the order button reachable at all times: the basket sticks to the
+         bottom of the page instead of scrolling away, and sits above the mini-cart. */
+      #basket{
+        position:sticky;
+        bottom:0;
+        margin:16px 0 0;
+        z-index:500;
+        padding-bottom:calc(1em + env(safe-area-inset-bottom));
+        box-shadow:0 -14px 34px rgba(0,0,0,.55);
+      }
+    }
+    @media (max-width:600px){
+      body{padding:12px 12px 0}
+      .logo h1{font-size:2.5rem}
+      .logo h2.sub{font-size:1rem}
+      .tabs{gap:.35em;margin:8px 0 12px}
+      .tab{font-size:.92rem;padding:.55em .9em}
+      .menu-section{gap:.6em;padding:0}
+      .item{min-height:88px;padding:.85em .9em}
+      .item h3{font-size:1.35rem}
+      /* Mini-cart duplicates the always-visible basket on small screens and
+         can otherwise cover the Send Order button, so it's hidden here. */
+      #mini-cart{display:none!important}
+      #basket{padding:.9em 1em calc(1em + env(safe-area-inset-bottom))}
+      #basket ul{max-height:26vh}
+      #confirmOrder{font-size:1.15rem;padding:1em 1.2em;min-height:52px}
+    }
   </style>
 </head>
 
@@ -178,7 +213,10 @@
 /* =============================
    TELEGRAM SETTINGS
    ============================= */
-const botToken = "8004629550:AAGbBMSe-QQhs_sZmzKdCpol4Mrn2831PPw";
+// NOTE: if orders start failing again with "chat not found" or "unauthorized",
+// the bot token was revoked or the bot was removed from the group — see
+// describeTelegramError() below for how to diagnose it.
+const botToken = "8004629550:AAEYpOqypoZy6gu8AwT7kqDYT92tnbE7_nQ";
 const chatId   = "-5170118091";
 
 // OPTIONAL: if your group is set to "Mentions only", add staff usernames here
@@ -186,6 +224,24 @@ const notifyMentions = ["@easytimesorders2"];
 
 // OPTIONAL: if your Telegram group is a forum/topic group, set topic id here
 const messageThreadId = null;
+
+// Turns a raw Telegram API error into a message staff can act on.
+function describeTelegramError(details, httpStatus) {
+  const d = String(details || "").toLowerCase();
+  if (d.includes("chat not found")) {
+    return "Telegram chat not found. The bot's chat ID is wrong, or the bot was removed from the group. Ask an admin to re-add @easytimesorders2 to the group and confirm the chat ID.";
+  }
+  if (d.includes("bot was blocked") || d.includes("kicked")) {
+    return "The bot was removed/blocked in the Telegram group. Re-add the bot to the group to resume receiving orders.";
+  }
+  if (httpStatus === 401 || d.includes("unauthorized")) {
+    return "Telegram bot token is invalid or was revoked. Generate a new token in BotFather and update it in order-drinks.html.";
+  }
+  if (httpStatus === 403) {
+    return "Telegram refused the request (bot not allowed in this chat). Check the bot is still a member of the group.";
+  }
+  return details || `HTTP ${httpStatus}`;
+}
 
 /* =============================
    BUSYLIGHT SETTINGS
@@ -445,8 +501,8 @@ async function submitOrder() {
     const data = await resp.json().catch(() => null);
 
     if (!resp.ok || !data || !data.ok) {
-      const details = (data && data.description) ? data.description : `HTTP ${resp.status}`;
-      throw new Error(details);
+      const rawDetails = (data && data.description) ? data.description : `HTTP ${resp.status}`;
+      throw new Error(describeTelegramError(rawDetails, resp.status));
     }
 
     const extraMsg = isSolo
@@ -468,9 +524,13 @@ showNotification("✅ Order sent!" + extraMsg, 15000, false);
   } catch (err) {
     console.error("Order failed:", err);
     ding("err");
+    const isNetworkError = err instanceof TypeError; // e.g. "Failed to fetch" (offline/CORS/DNS)
+    const friendly = isNetworkError
+      ? "No connection to Telegram. Check the internet/network and try again."
+      : String(err.message);
     showNotification(
       "❌ Order failed.<br><span style='font-size:1.05rem;opacity:.95'>" +
-      String(err.message).replaceAll("<", "&lt;").replaceAll(">", "&gt;") +
+      friendly.replaceAll("<", "&lt;").replaceAll(">", "&gt;") +
       "</span>",
       15000,
       true
@@ -578,14 +638,26 @@ resetIdle();
    Works on Android/iPad touchscreens even when the browser suppresses normal click.
    ============================= */
 function bindArticleTapFix() {
+  // Distance (px) a finger can move before a touch is treated as a scroll/drag
+  // instead of a tap. Keeps things forgiving for shaky hands without letting
+  // an accidental brush of the screen while scrolling add an item.
+  const MOVE_CANCEL_PX = 12;
+  // Minimum time between two accepted taps on the same item, so an eager
+  // customer tapping twice in a row doesn't add the item twice by mistake.
+  const TAP_DEBOUNCE_MS = 450;
+
   document.querySelectorAll(".item").forEach(item => {
     if (item.dataset.tapFixBound === "1") return;
     item.dataset.tapFixBound = "1";
 
     let lastTap = 0;
+    let startX = 0, startY = 0, moved = false;
+
     const fireArticle = (e) => {
+      if (moved) return;
+
       const now = Date.now();
-      if (now - lastTap < 320) return;
+      if (now - lastTap < TAP_DEBOUNCE_MS) return;
       lastTap = now;
 
       if (e && e.cancelable) e.preventDefault();
@@ -595,6 +667,20 @@ function bindArticleTapFix() {
         item.onclick.call(item, e || window.event);
       }
     };
+
+    item.addEventListener("touchstart", (e) => {
+      const t = e.touches[0];
+      startX = t.clientX;
+      startY = t.clientY;
+      moved = false;
+    }, { passive: true });
+
+    item.addEventListener("touchmove", (e) => {
+      const t = e.touches[0];
+      if (Math.abs(t.clientX - startX) > MOVE_CANCEL_PX || Math.abs(t.clientY - startY) > MOVE_CANCEL_PX) {
+        moved = true;
+      }
+    }, { passive: true });
 
     item.addEventListener("touchend", fireArticle, { passive: false });
     item.addEventListener("pointerup", (e) => {
