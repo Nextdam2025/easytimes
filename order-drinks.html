@@ -216,11 +216,11 @@
 // NOTE: if orders start failing again with "chat not found" or "unauthorized",
 // the bot token was revoked or the bot was removed from the group — see
 // describeTelegramError() below for how to diagnose it.
-const botToken = "8004629550:AAEYpOqypoZy6gu8AwT7kqDYT92tnbE7_nQ";
-const chatId   = "-5170118091";
+const botToken = "8854414326:AAEySBeH3YNCLG7027RZx1o8DON0I4ygvMM";
+const chatId   = "-1004261215704";
 
 // OPTIONAL: if your group is set to "Mentions only", add staff usernames here
-const notifyMentions = ["@easytimesorders2"];
+const notifyMentions = ["@Easytimesorderbot"];
 
 // OPTIONAL: if your Telegram group is a forum/topic group, set topic id here
 const messageThreadId = null;
@@ -229,7 +229,7 @@ const messageThreadId = null;
 function describeTelegramError(details, httpStatus) {
   const d = String(details || "").toLowerCase();
   if (d.includes("chat not found")) {
-    return "Telegram chat not found. The bot's chat ID is wrong, or the bot was removed from the group. Ask an admin to re-add @easytimesorders2 to the group and confirm the chat ID.";
+    return "Telegram chat not found. The bot's chat ID is wrong, or the bot was removed from the group. Ask an admin to re-add @Easytimesorderbot to the group and confirm the chat ID.";
   }
   if (d.includes("bot was blocked") || d.includes("kicked")) {
     return "The bot was removed/blocked in the Telegram group. Re-add the bot to the group to resume receiving orders.";
