@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Easy Times — QR Code</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600;700&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <style>
   :root{
     --bg:#12100c; --gold:#d9b65d; --cream:#f5ead8;
@@ -31,7 +30,7 @@
   .brand .accent{color:var(--gold)}
   .sub{font-family:Arial,sans-serif;font-size:.85rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-top:.2em}
   .qr-wrap{background:#fff;border-radius:18px;padding:16px;margin:1.3em auto .9em;width:fit-content;box-shadow:0 8px 22px rgba(0,0,0,.35)}
-  .qr-wrap canvas{display:block}
+  .qr-wrap img{display:block;width:260px;height:260px}
   .cta{font-family:Arial,sans-serif;font-weight:800;font-size:1rem;letter-spacing:.04em;text-transform:uppercase;color:#111;background:var(--orange);border-radius:999px;padding:.6em 1.2em;display:inline-block;margin-top:.6em}
 
   .print-btn{position:fixed;top:20px;right:20px;background:rgba(245,234,216,.12);color:var(--cream);border:1.6px solid var(--gold);border-radius:999px;padding:.6em 1.2em;font-family:Arial,sans-serif;font-weight:800;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;font-size:.85rem}
@@ -50,18 +49,22 @@
   <div class="card">
     <div class="brand">EASY <span class="accent">TIMES</span></div>
     <div class="sub">1985 — Amsterdam</div>
-    <div class="qr-wrap"><canvas id="qr"></canvas></div>
+    <div class="qr-wrap"><img id="qr" alt="QR code to order drinks"/></div>
     <div class="cta">📱 Scan to order drinks</div>
   </div>
 
 <script>
 const ORDER_URL = "https://nextdam2025.github.io/easytimes/order-drinks.html";
 
-QRCode.toCanvas(document.getElementById("qr"), ORDER_URL, {
-  width: 260,
-  margin: 1,
-  color: { dark: "#12100c", light: "#ffffff" }
-});
+// Image-based QR API: no JS library/CDN dependency, so it can't silently fail to load.
+const qrImg = document.getElementById("qr");
+qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=6&data=" + encodeURIComponent(ORDER_URL);
+qrImg.onerror = () => {
+  qrImg.replaceWith(Object.assign(document.createElement("div"), {
+    style: "padding:2em;font-family:Arial,sans-serif;color:#c0392b;font-weight:700",
+    textContent: "QR code failed to load — check your internet connection."
+  }));
+};
 </script>
 </body>
 </html>
