@@ -4,260 +4,455 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
   <title>Easy Times • Things to Do</title>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600&display=swap" rel="stylesheet"/>
-
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
   <style>
+    :root{
+      --bg:#12100c;
+      --panel:#17130d;
+      --gold:#d9b65d;
+      --cream:#f5ead8;
+      --orange:#ec7623;
+      --muted:#b8ab94;
+      --safe:clamp(14px,2.2vw,34px);
+      --frame:clamp(12px,2.2vw,34px);
+    }
     *{box-sizing:border-box;margin:0;padding:0}
-
     html,body{
-      height:100vh;
-      width:100vw;
+      width:100%;
+      min-height:100%;
+      background:var(--bg);
+      color:var(--cream);
+      font-family:'Inter',Arial,sans-serif;
+      touch-action:manipulation;
+    }
+    body{
+      min-height:100dvh;
       overflow:hidden;
-      background:#000;
-      color:#fef5e6;
-      font-family:'Barlow Condensed',sans-serif;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
+      padding:var(--safe);
+      background:
+        radial-gradient(circle at 75% 8%,rgba(217,182,93,.18),transparent 32%),
+        radial-gradient(circle at 16% 90%,rgba(236,118,35,.16),transparent 34%),
+        linear-gradient(112deg,#0c0b08 0%,#17120b 58%,#2b2112 100%);
       text-align:center;
     }
-
     video.bg-video{
       position:fixed;
-      top:50%;
-      left:50%;
-      min-width:100%;
-      height:100%;
-      transform:translate(-50%,-50%);
-      object-fit:cover;
-      opacity:.25;
-      z-index:-1;
-    }
-
-    .orange-frame{
-      position:fixed;
       inset:0;
-      border:10px solid #f26522;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      opacity:.14;
+      z-index:0;
+      filter:contrast(1.1);
+    }
+    .frame{
+      position:fixed;
+      inset:var(--frame);
+      border:3px solid var(--gold);
+      border-radius:clamp(22px,3vw,36px);
       pointer-events:none;
-      z-index:10000;
+      z-index:5;
+      box-shadow:inset 0 0 0 1px rgba(217,182,93,.16),0 0 54px rgba(0,0,0,.32);
     }
-
-    @keyframes floatLogo{
-      to{transform:translateY(-8px)}
+    .frame:after{
+      content:"";
+      position:absolute;
+      inset:clamp(10px,1.4vw,18px);
+      border:1px solid rgba(217,182,93,.18);
+      border-radius:clamp(15px,2vw,25px);
     }
-
-    .logo{
-      animation:floatLogo 2s ease-in-out infinite alternate;
-      margin:1rem 0;
+    .page{
+      position:relative;
+      z-index:2;
+      height:calc(100dvh - (var(--safe) * 2));
+      max-width:1440px;
+      margin:0 auto;
+      padding:clamp(18px,2.4vw,34px);
+      display:grid;
+      grid-template-rows:auto 1fr;
+      gap:clamp(14px,2vh,28px);
+      min-height:0;
     }
-
-    .logo h1{
-      font-size:3rem;
-      letter-spacing:.1em;
+    .topbar{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      align-items:center;
+      gap:clamp(14px,2vw,28px);
+      min-height:0;
     }
-
-    .logo h2{
-      font-size:1.25rem;
-      color:#f26522;
-      margin-top:.2em;
-    }
-
-    .back-btn{
-      margin:1rem 0;
-    }
-
-    .back-btn button{
-      padding:10px 20px;
-      font-size:1rem;
-      border-radius:10px;
-      background:rgba(255,255,255,.1);
-      border:none;
-      color:#fff;
+    .back{
+      border:1px solid rgba(217,182,93,.62);
+      background:rgba(245,234,216,.09);
+      color:var(--cream);
+      border-radius:999px;
+      padding:clamp(12px,1.2vw,17px) clamp(18px,1.8vw,28px);
+      font-size:clamp(.95rem,1.15vw,1.2rem);
+      font-weight:900;
       cursor:pointer;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      white-space:nowrap;
     }
-
+    .back:hover,.back:focus{background:var(--orange);color:#111;border-color:var(--orange);outline:none;}
+    .brand{
+      min-width:0;
+      text-align:center;
+    }
+    .brand h1{
+      font-family:'Barlow Condensed',Arial,sans-serif;
+      font-size:clamp(4.4rem,8.4vw,8.8rem);
+      line-height:.78;
+      letter-spacing:.055em;
+      color:var(--cream);
+      text-transform:uppercase;
+      text-shadow:0 10px 28px rgba(0,0,0,.38);
+    }
+    .brand h2{
+      font-family:'Barlow Condensed',Arial,sans-serif;
+      font-size:clamp(1.55rem,3vw,3rem);
+      line-height:.92;
+      color:var(--gold);
+      letter-spacing:.075em;
+      text-transform:uppercase;
+      margin-top:8px;
+    }
+    .brand .line{
+      width:min(560px,56vw);
+      height:5px;
+      background:var(--orange);
+      border-radius:999px;
+      margin:clamp(10px,1.4vw,18px) auto 0;
+    }
+    .hint{
+      justify-self:end;
+      align-self:center;
+      font-family:'Barlow Condensed',Arial,sans-serif;
+      font-size:clamp(1.35rem,2.4vw,2.65rem);
+      line-height:.9;
+      font-weight:700;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      background:linear-gradient(90deg,#ffd755,var(--orange));
+      color:#111;
+      padding:clamp(11px,1vw,16px) clamp(16px,1.7vw,28px);
+      border-radius:999px;
+      white-space:nowrap;
+      box-shadow:0 10px 24px rgba(0,0,0,.25);
+    }
     .partners-grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:1rem;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      grid-template-rows:repeat(2,minmax(0,1fr));
+      gap:clamp(14px,1.6vw,24px);
       width:100%;
-      max-width:1200px;
-      padding:0 1rem 2rem;
-      overflow-y:auto;
-      flex:1;
+      height:100%;
+      min-height:0;
+      overflow:hidden;
     }
-
     .partner-card{
-      background:#111;
-      border:2px solid #f26522;
-      border-radius:16px;
-      padding:1rem;
-      display:flex;
-      flex-direction:column;
+      min-width:0;
+      min-height:0;
+      height:100%;
+      background:linear-gradient(145deg,rgba(18,16,12,.98),rgba(38,27,12,.98));
+      border:2px solid rgba(217,182,93,.86);
+      border-radius:clamp(20px,2vw,28px);
+      padding:clamp(14px,1.35vw,22px);
+      display:grid;
+      grid-template-rows:auto auto 1fr auto;
       align-items:center;
-      transition:.3s;
+      gap:clamp(9px,1vw,14px);
       cursor:pointer;
-      min-height:290px;
+      transition:transform .18s ease,border-color .18s ease,background .18s ease;
+      box-shadow:0 16px 42px rgba(0,0,0,.32);
+      overflow:hidden;
     }
-
-    .partner-card:hover{
-      transform:scale(1.03);
-      border-color:#ffb347;
+    .partner-card:hover,.partner-card:focus-within{
+      transform:translateY(-3px);
+      border-color:var(--orange);
     }
-
     .partner-card img{
-      width:120px;
-      height:120px;
+      width:clamp(82px,7vw,126px);
+      aspect-ratio:1;
       object-fit:contain;
-      background:rgba(255,255,255,.05);
-      border-radius:12px;
-      padding:10px;
-      margin-bottom:.75rem;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(217,182,93,.35);
+      border-radius:16px;
+      padding:clamp(8px,1vw,12px);
     }
-
     .partner-card h3{
-      font-size:1.5rem;
-      margin-bottom:.5rem;
-      color:#fff;
+      font-family:'Barlow Condensed',Arial,sans-serif;
+      font-size:clamp(1.8rem,2.8vw,3.55rem);
+      line-height:.86;
+      color:var(--gold);
+      letter-spacing:.045em;
+      text-transform:uppercase;
     }
-
     .partner-card p{
-      font-size:1rem;
-      line-height:1.4;
-      color:#ddd;
-      margin-bottom:1rem;
+      align-self:start;
+      font-size:clamp(.98rem,1.25vw,1.22rem);
+      line-height:1.28;
+      color:#e8dcc6;
+      font-weight:700;
+      max-width:420px;
+      margin:0 auto;
     }
-
     .partner-action{
-      margin-top:auto;
       width:100%;
-      padding:.75rem;
+      min-height:clamp(46px,4.7vh,62px);
+      padding:.75rem 1rem;
       border:none;
-      border-radius:10px;
-      background:#f26522;
-      color:#000;
-      font-weight:bold;
-      font-size:1rem;
+      border-radius:999px;
+      background:linear-gradient(90deg,#ffd755,var(--orange));
+      color:#111;
+      font-weight:900;
+      font-size:clamp(.95rem,1.15vw,1.15rem);
+      letter-spacing:.07em;
+      text-transform:uppercase;
       cursor:pointer;
     }
-
     .partner-popup{
       position:fixed;
       inset:0;
-      background:rgba(0,0,0,.92);
+      background:rgba(0,0,0,.94);
       z-index:20000;
       display:none;
       align-items:center;
       justify-content:center;
-      padding:30px;
+      padding:clamp(12px,2vw,30px);
     }
-
     .partner-box{
-      width:95vw;
-      max-width:920px;
-      height:88vh;
+      width:min(1040px,96vw);
+      height:min(88dvh,900px);
       background:#111;
-      border:8px solid #f26522;
-      border-radius:22px;
-      box-shadow:0 0 60px rgba(0,0,0,.8);
+      border:3px solid var(--gold);
+      border-radius:clamp(20px,2vw,28px);
+      box-shadow:0 0 60px rgba(0,0,0,.82);
       overflow:hidden;
       display:flex;
       flex-direction:column;
     }
-
     .partner-header{
-      height:64px;
-      min-height:64px;
-      background:#000;
-      border-bottom:3px solid #f26522;
+      min-height:clamp(58px,7vh,76px);
+      background:#15110b;
+      border-bottom:1px solid rgba(217,182,93,.62);
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding:0 18px;
+      gap:14px;
+      padding:0 clamp(14px,1.8vw,24px);
     }
-
     .partner-header h3{
-      font-size:1.5rem;
-      color:#f26522;
+      font-family:'Barlow Condensed',Arial,sans-serif;
+      font-size:clamp(1.65rem,3vw,2.7rem);
+      line-height:.88;
+      color:var(--gold);
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      text-align:left;
     }
-
     .partner-header button{
-      padding:10px 18px;
-      background:#f26522;
-      color:#000;
+      padding:11px 18px;
+      background:var(--orange);
+      color:#111;
       border:none;
-      border-radius:10px;
-      font-weight:bold;
+      border-radius:999px;
+      font-weight:900;
       cursor:pointer;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      white-space:nowrap;
     }
-
     .partner-content{
       flex:1;
-      padding:2rem;
+      min-height:0;
+      padding:clamp(20px,3vw,42px);
       display:flex;
       flex-direction:column;
       align-items:center;
       justify-content:center;
-      gap:1rem;
+      gap:clamp(16px,2vw,24px);
     }
-
     .partner-content img{
-      width:180px;
-      height:180px;
+      width:clamp(150px,16vw,220px);
+      aspect-ratio:1;
       object-fit:contain;
       background:rgba(255,255,255,.06);
-      border-radius:18px;
-      padding:16px;
+      border:1px solid rgba(217,182,93,.4);
+      border-radius:22px;
+      padding:18px;
     }
-
     .partner-content p{
-      font-size:1.25rem;
-      line-height:1.4;
-      color:#ddd;
-      max-width:520px;
+      font-size:clamp(1.2rem,2.1vw,1.7rem);
+      line-height:1.35;
+      color:#e8dcc6;
+      max-width:680px;
+      font-weight:800;
+      text-wrap:balance;
     }
-
     .open-site-btn{
-      margin-top:1rem;
-      width:100%;
-      max-width:360px;
-      padding:1rem;
+      margin-top:4px;
+      width:min(420px,100%);
+      min-height:58px;
+      padding:1rem 1.2rem;
       border:none;
-      border-radius:14px;
-      background:linear-gradient(145deg,#f26522,#ff8a3d);
-      color:#000;
-      font-weight:bold;
-      font-size:1.15rem;
+      border-radius:999px;
+      background:linear-gradient(90deg,#ffd755,var(--orange));
+      color:#111;
+      font-weight:900;
+      font-size:clamp(1rem,1.4vw,1.25rem);
+      letter-spacing:.06em;
+      text-transform:uppercase;
       cursor:pointer;
     }
-
     #partnerFrame{
       display:none;
       width:100%;
       flex:1;
+      min-height:0;
       border:0;
       background:#000;
     }
+
+    @media (orientation:landscape) and (max-height:760px){
+      :root{--safe:14px;--frame:14px;}
+      .page{padding:18px 22px;gap:12px;}
+      .brand h1{font-size:clamp(3.4rem,7vw,5.9rem);}
+      .brand h2{font-size:clamp(1.2rem,2.2vw,2rem);}
+      .hint{font-size:1.45rem;}
+      .partner-card{padding:12px;gap:8px;}
+      .partner-card img{width:70px;}
+      .partner-card h3{font-size:clamp(1.55rem,2.4vw,2.45rem);}
+      .partner-card p{font-size:.9rem;line-height:1.18;}
+      .partner-action{min-height:42px;font-size:.85rem;padding:.55rem .8rem;}
+    }
+
+    @media (max-width:1080px){
+      body{
+        min-height:100dvh;
+        overflow:auto;
+        padding:14px;
+      }
+      .frame{inset:10px;border-width:3px;border-radius:28px;}
+      .frame:after{inset:12px;border-radius:20px;}
+      .page{
+        height:auto;
+        min-height:calc(100dvh - 28px);
+        padding:22px 20px 24px;
+        grid-template-rows:auto auto;
+        gap:18px;
+      }
+      .topbar{
+        grid-template-columns:1fr;
+        gap:13px;
+      }
+      .back,.hint{
+        width:100%;
+        justify-self:stretch;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        min-height:50px;
+      }
+      .back{font-size:1rem;}
+      .hint{font-size:clamp(1.45rem,5.5vw,2.1rem);white-space:normal;}
+      .brand{order:-1;}
+      .brand h1{
+        font-size:clamp(4.6rem,18vw,7.5rem);
+        line-height:.74;
+      }
+      .brand h2{
+        font-size:clamp(1.45rem,5.2vw,2.2rem);
+        line-height:.95;
+      }
+      .brand .line{width:86%;height:6px;}
+      .partners-grid{
+        grid-template-columns:1fr;
+        grid-template-rows:none;
+        height:auto;
+        overflow:visible;
+        gap:16px;
+      }
+      .partner-card{
+        min-height:0;
+        height:auto;
+        padding:18px;
+        grid-template-columns:clamp(86px,22vw,118px) 1fr;
+        grid-template-rows:auto auto auto;
+        column-gap:14px;
+        row-gap:9px;
+        text-align:left;
+        align-items:center;
+      }
+      .partner-card img{
+        grid-row:1 / span 3;
+        width:100%;
+        align-self:center;
+      }
+      .partner-card h3{
+        font-size:clamp(2.15rem,8.2vw,3.55rem);
+        text-align:left;
+      }
+      .partner-card p{
+        max-width:none;
+        font-size:clamp(1.02rem,4vw,1.25rem);
+        line-height:1.25;
+        margin:0;
+        text-align:left;
+      }
+      .partner-action{
+        min-height:48px;
+        font-size:.98rem;
+      }
+      .partner-box{
+        width:calc(100vw - 24px);
+        height:calc(100dvh - 24px);
+        border-radius:22px;
+      }
+      .partner-header{
+        min-height:64px;
+        padding:0 14px;
+      }
+      .partner-header h3{font-size:clamp(1.55rem,6vw,2.35rem);}
+      .partner-content{padding:22px;}
+      .partner-content img{width:clamp(142px,38vw,190px);}
+      .partner-content p{font-size:clamp(1.15rem,4.6vw,1.45rem);}
+    }
+
+    @media (max-width:430px){
+      body{padding:10px;}
+      .page{min-height:calc(100dvh - 20px);padding:20px 16px 22px;gap:14px;}
+      .brand h1{font-size:clamp(4rem,20vw,5.7rem);}
+      .brand h2{font-size:clamp(1.25rem,5.5vw,1.8rem);}
+      .partner-card{
+        grid-template-columns:1fr;
+        text-align:center;
+        justify-items:center;
+        padding:16px;
+      }
+      .partner-card img{grid-row:auto;width:112px;}
+      .partner-card h3,.partner-card p{text-align:center;}
+      .partner-action{width:100%;}
+      .partner-header button{padding:10px 14px;}
+    }
   </style>
 </head>
-
 <body>
-  <video class="bg-video" autoplay muted loop playsinline>
-    <source src="smoke.mp4" type="video/mp4"/>
-  </video>
+  <video class="bg-video" autoplay muted loop playsinline><source src="smoke.mp4" type="video/mp4"/></video>
+  <div class="frame"></div>
 
-  <div class="orange-frame"></div>
+  <main class="page">
+    <div class="topbar">
+      <button class="back" onclick="goBack()">‹ Back</button>
+      <section class="brand" aria-label="Easy Times Things To Do">
+        <h1>EASY TIMES</h1>
+        <h2>Things To Do In Amsterdam</h2>
+        <div class="line"></div>
+      </section>
+      <div class="hint">Tap • Scan • Explore</div>
+    </div>
 
-  <div class="back-btn">
-    <button onclick="history.back()">⬅ Back</button>
-  </div>
-
-  <div class="logo">
-    <h1>EASY TIMES</h1>
-    <h2>Things To Do In Amsterdam</h2>
-  </div>
-
-  <div class="partners-grid" id="partnersGrid"></div>
+    <section class="partners-grid" id="partnersGrid" aria-label="Amsterdam tips and partners"></section>
+  </main>
 
   <div class="partner-popup" id="partnerPopup">
     <div class="partner-box">
@@ -278,79 +473,56 @@
 
 <script>
 const partners = [
-  {
-    id:"abike",
-    name:"A-Bike Rentals",
-    logo:"images/abike.png",
-    text:"Discover Amsterdam by bike. One of the best ways to explore the city.",
-    page:"partner-abike.html"
-  },
-  {
-    id:"hashmuseum",
-    name:"Hash & Marijuana Museum",
-    logo:"images/hash-museum.png",
-    text:"Learn about the fascinating history of cannabis culture.",
-    page:"partner-hashmuseum.html"
-  },
-  {
-    id:"canal",
-    name:"Canal Cruise",
-    logo:"images/canal-cruise.png",
-    text:"Experience Amsterdam from the water with a classic canal cruise.",
-    page:"partner-canal.html"
-  },
-  {
-    id:"heineken",
-    name:"Heineken Experience",
-    logo:"images/heineken.png",
-    text:"Visit one of Amsterdam’s most famous attractions.",
-    page:"partner-heineken.html"
-  },
-  {
-    id:"rijksmuseum",
-    name:"Rijksmuseum",
-    logo:"images/rijksmuseum.png",
-    text:"See masterpieces from Dutch history and art.",
-    page:"partner-rijksmuseum.html"
-  },
-  {
-    id:"annefrank",
-    name:"Anne Frank House",
-    logo:"images/annefrank.png",
-    text:"A powerful historical experience in Amsterdam.",
-    page:"partner-annefrank.html"
-  }
+  {id:"abike",name:"A-Bike Rentals",logo:"images/abike.png",text:"Discover Amsterdam by bike. One of the best ways to explore the city.",page:"partner-abike.html"},
+  {id:"hashmuseum",name:"Hash & Marijuana Museum",logo:"images/hash-museum.png",text:"Learn about the fascinating history of cannabis culture.",page:"partner-hashmuseum.html"},
+  {id:"canal",name:"Canal Cruise",logo:"images/canal-cruise.png",text:"Experience Amsterdam from the water with a classic canal cruise.",page:"partner-canal.html"},
+  {id:"heineken",name:"Heineken Experience",logo:"images/heineken.png",text:"Visit one of Amsterdam’s most famous attractions.",page:"partner-heineken.html"},
+  {id:"rijksmuseum",name:"Rijksmuseum",logo:"images/rijksmuseum.png",text:"See masterpieces from Dutch history and art.",page:"partner-rijksmuseum.html"},
+  {id:"annefrank",name:"Anne Frank House",logo:"images/annefrank.png",text:"A powerful historical experience in Amsterdam.",page:"partner-annefrank.html"}
 ];
 
 let activePartner = null;
 const grid = document.getElementById("partnersGrid");
 
 partners.forEach(partner => {
-  const card = document.createElement("div");
+  const card = document.createElement("article");
   card.className = "partner-card";
+  card.tabIndex = 0;
   card.innerHTML = `
     <img src="${partner.logo}" alt="${partner.name}">
     <h3>${partner.name}</h3>
     <p>${partner.text}</p>
     <button class="partner-action" type="button">View Details</button>
   `;
-
-  card.onclick = () => openPartnerPopup(partner);
+  card.addEventListener("click", () => openPartnerPopup(partner));
+  card.addEventListener("keydown", e => {
+    if(e.key === "Enter" || e.key === " "){
+      e.preventDefault();
+      openPartnerPopup(partner);
+    }
+  });
   grid.appendChild(card);
 });
 
+function goBack(){
+  try{
+    if(window.parent && window.parent !== window && typeof window.parent.closeThingsPopup === "function"){
+      window.parent.closeThingsPopup();
+      return;
+    }
+  }catch(e){}
+  location.href = "index.html";
+}
+
 function openPartnerPopup(partner){
   activePartner = partner;
-
   document.getElementById("popupTitle").innerText = partner.name;
   document.getElementById("popupLogo").src = partner.logo;
   document.getElementById("popupLogo").alt = partner.name;
   document.getElementById("popupText").innerText = partner.text;
-
   document.getElementById("partnerIntro").style.display = "flex";
   document.getElementById("partnerFrame").style.display = "none";
   document.getElementById("partnerFrame").src = "about:blank";
-
   document.getElementById("partnerPopup").style.display = "flex";
 }
 
@@ -362,7 +534,6 @@ function closePartnerPopup(){
 
 function openPartnerPage(){
   if(!activePartner) return;
-
   document.getElementById("partnerIntro").style.display = "none";
   document.getElementById("partnerFrame").style.display = "block";
   document.getElementById("partnerFrame").src = activePartner.page;
