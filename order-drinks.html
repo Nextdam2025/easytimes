@@ -1,12 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-  <title>Easy Times Menu</title>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600&display=swap" rel="stylesheet"/>
-
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Easy Times Menu</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600&amp;display=swap" rel="stylesheet"/>
+<style>
     :root{
       --bg:#12100c; --panel:#17130d; --panel2:#21180d;
       --gold:#d9b65d; --gold-soft:#8a6a2c; --cream:#f5ead8;
@@ -20,11 +20,11 @@
     .orange-frame:after{content:"";position:absolute;inset:18px;border:1px solid rgba(217,182,93,.18);border-radius:22px;}
     .back-btn{position:fixed;top:52px;left:62px;z-index:10010;margin:0}.back-btn button{padding:12px 22px;font-size:1rem;border-radius:999px;background:rgba(245,234,216,.08);border:1px solid rgba(217,182,93,.65);color:var(--cream);cursor:pointer;font-weight:900;text-transform:uppercase;letter-spacing:.04em}.back-btn button:hover{background:var(--orange);color:#111;border-color:var(--orange)}
     .logo{margin-top:30px;margin-bottom:14px;animation:none}.logo h1{font-size:clamp(4rem,7vw,7.2rem);letter-spacing:.07em;line-height:.8;font-weight:700;color:var(--cream)}.logo h2.sub{font-size:clamp(1.35rem,2.1vw,2.3rem);color:var(--gold);margin-top:.28em;letter-spacing:.08em;text-transform:uppercase}.logo:after{content:"";display:block;width:min(420px,44vw);height:5px;background:var(--orange);border-radius:999px;margin:18px auto 0;}
-    .tabs{display:flex;gap:.75em;margin:10px 0 18px;flex-wrap:wrap;justify-content:center;z-index:2}.tab{padding:.72em 1.4em;border:1.8px solid rgba(217,182,93,.75);border-radius:999px;color:var(--cream);background:rgba(18,16,12,.82);cursor:pointer;font-weight:700;font-size:1.25rem;letter-spacing:.04em;text-transform:uppercase;transition:.2s;user-select:none}.tab.active,.tab:hover{background:var(--orange);border-color:var(--orange);color:#111;box-shadow:0 12px 30px rgba(0,0,0,.28)}
+    .tabs{position:relative;display:flex;gap:.75em;margin:10px 0 18px;flex-wrap:wrap;justify-content:center;z-index:700}.tab{padding:.72em 1.4em;border:1.8px solid rgba(217,182,93,.75);border-radius:999px;color:var(--cream);background:rgba(18,16,12,.82);cursor:pointer;font-weight:700;font-size:1.25rem;letter-spacing:.04em;text-transform:uppercase;transition:.2s;user-select:none}.tab.active,.tab:hover{background:var(--orange);border-color:var(--orange);color:#111;box-shadow:0 12px 30px rgba(0,0,0,.28)}
     div[style*="margin:1em auto"]{margin:.3em auto 16px!important}.tabs + div button{background:rgba(217,182,93,.95)!important;color:#111!important;border-radius:999px!important;box-shadow:none!important;text-transform:uppercase;letter-spacing:.04em;}
     .menu-section{display:none;width:100%;max-width:1180px;margin:0 auto;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.85em;padding:0 1em;max-height:39vh;overflow:auto;scrollbar-width:thin;scrollbar-color:var(--gold) transparent}.menu-section.active{display:grid}.item{background:linear-gradient(145deg,rgba(18,16,12,.94),rgba(32,24,13,.96))!important;border:1.8px solid rgba(217,182,93,.76);border-radius:18px;padding:.95em 1em;color:var(--cream);cursor:pointer;text-align:left;min-height:116px;box-shadow:0 12px 28px rgba(0,0,0,.22);transition:.16s}.item:hover{filter:none;transform:translateY(-2px);border-color:var(--orange)}.item h3{font-size:1.65rem;margin-bottom:.2em;line-height:.95;color:var(--cream);letter-spacing:.02em;text-transform:uppercase}.item p{font-family:Arial,sans-serif;font-size:1.1rem;margin-bottom:.45em;color:var(--gold);font-weight:800}.item button{padding:.45em 1em;background:var(--orange);color:#111;border:none;border-radius:999px;font-weight:900;pointer-events:none;text-transform:uppercase;font-size:.85rem;letter-spacing:.04em}.item.hot-drink,.item.cold-drink{background:linear-gradient(145deg,rgba(18,16,12,.94),rgba(32,24,13,.96))!important}
-    .menu-section{position:relative;z-index:40;pointer-events:auto}.item{position:relative;z-index:41;pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:rgba(236,118,35,.25);user-select:none}.item *{pointer-events:none}#basket{position:relative;z-index:60;pointer-events:auto}#confirmOrder{position:relative;z-index:61;pointer-events:auto;touch-action:manipulation}.option-modal,.option-box,.option-box *{pointer-events:auto}
-    #basket{background:rgba(18,16,12,.94);border:1.8px solid rgba(217,182,93,.78);border-radius:22px;width:100%;max-width:1180px;margin-top:16px;padding:1em 1.15em;text-align:left;z-index:3;box-shadow:0 16px 40px rgba(0,0,0,.3)}#basket h2{color:var(--gold);margin-bottom:.35em;font-size:1.75rem;text-transform:uppercase;letter-spacing:.05em}#basket ul{list-style:none;margin:0;padding:0;max-height:84px;overflow:auto}#basket li{display:flex;justify-content:space-between;align-items:center;margin:.24em 0;gap:12px;font-family:Arial,sans-serif;font-size:.98rem;color:#f2e8d6}#basket li button{padding:.18em .55em;border-radius:999px;border:none;background:rgba(236,118,35,.85);color:#111;cursor:pointer;font-weight:900}#basket strong{display:block;margin-top:.45em;color:var(--cream);font-size:1.25rem}#confirmOrder{margin-top:.65em;padding:.78em 1.2em;background:var(--orange);color:#111;border:none;border-radius:999px;font-weight:900;cursor:pointer;width:100%;font-size:1.1rem;text-transform:uppercase;letter-spacing:.05em}#confirmOrder:disabled{opacity:.65;cursor:not-allowed}
+    .menu-section{position:relative;z-index:40;pointer-events:auto}.item{position:relative;z-index:41;pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:rgba(236,118,35,.25);user-select:none}.item *{pointer-events:none}#basket{position:relative;z-index:600;pointer-events:auto}#confirmOrder{position:relative;z-index:610;pointer-events:auto;touch-action:manipulation}.option-modal,.option-box,.option-box *{pointer-events:auto}
+    #basket{background:rgba(18,16,12,.94);border:1.8px solid rgba(217,182,93,.78);border-radius:22px;width:100%;max-width:1180px;margin-top:16px;padding:1em 1.15em;text-align:left;z-index:600;box-shadow:0 16px 40px rgba(0,0,0,.3)}#basket h2{color:var(--gold);margin-bottom:.35em;font-size:1.75rem;text-transform:uppercase;letter-spacing:.05em}#basket ul{list-style:none;margin:0;padding:0;max-height:84px;overflow:auto}#basket li{display:flex;justify-content:space-between;align-items:center;margin:.24em 0;gap:12px;font-family:Arial,sans-serif;font-size:.98rem;color:#f2e8d6}#basket li button{padding:.18em .55em;border-radius:999px;border:none;background:rgba(236,118,35,.85);color:#111;cursor:pointer;font-weight:900}#basket strong{display:block;margin-top:.45em;color:var(--cream);font-size:1.25rem}#confirmOrder{margin-top:.65em;padding:.78em 1.2em;background:var(--orange);color:#111;border:none;border-radius:999px;font-weight:900;cursor:pointer;width:100%;font-size:1.1rem;text-transform:uppercase;letter-spacing:.05em}#confirmOrder:disabled{opacity:.65;cursor:not-allowed}
     #tableRow{display:flex;align-items:center;gap:.6em;margin:0 0 .55em;padding:.55em .75em;background:rgba(0,0,0,.28);border:1.4px solid rgba(217,182,93,.5);border-radius:14px}#tableRow label{font-family:Arial,sans-serif;font-weight:800;color:var(--gold);font-size:.92rem;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap}#tableInput{flex:1;min-width:0;background:rgba(245,234,216,.06);border:1.4px solid rgba(217,182,93,.5);border-radius:10px;color:var(--cream);font-family:Arial,sans-serif;font-size:1rem;padding:.5em .7em}#tableInput:focus{outline:none;border-color:var(--orange)}#tableRow.locked #tableInput{opacity:.85}#tableLockedBadge{display:none;font-family:Arial,sans-serif;font-size:.85rem;color:var(--muted);white-space:nowrap}#tableRow.locked #tableLockedBadge{display:inline}#pickupNote{margin:.5em 0 .35em;padding:.62em .8em;background:rgba(217,182,93,.12);border:1.4px solid rgba(217,182,93,.45);border-radius:14px;color:var(--cream);font-family:Arial,sans-serif;font-size:1rem;font-weight:900;text-align:center;line-height:1.25}#pickupNote strong{color:var(--gold);text-transform:uppercase;letter-spacing:.03em}
     #notification{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:86%;max-width:560px;background:#28a745;border:4px solid #155724;color:#fff;padding:1.2em;border-radius:22px;font-size:1.8rem;font-weight:900;text-align:center;display:none;opacity:0;transition:opacity .2s ease;z-index:10050;line-height:1.25}#notification.show{display:block;opacity:1}
     .option-modal{position:fixed;inset:0;background:rgba(0,0,0,.86);display:flex;align-items:center;justify-content:center;z-index:10040;opacity:0;animation:fadeIn .2s forwards}@keyframes fadeIn{to{opacity:1}}.option-box{background:#17130d;padding:1.25em;border-radius:24px;max-width:430px;width:92%;text-align:left;color:var(--cream);border:2px solid rgba(217,182,93,.78);box-shadow:0 20px 70px rgba(0,0,0,.48)}.option-box h3{color:var(--gold);margin-bottom:.8em;font-size:1.65rem;text-transform:uppercase}.option-box label{display:block;margin:.65em 0;font-size:1.1rem;font-family:Arial,sans-serif}.option-box button{margin-top:.8em;width:100%;padding:.78em;background:var(--orange);color:#111;border:none;border-radius:999px;cursor:pointer;font-weight:900;text-transform:uppercase}
@@ -70,152 +70,136 @@
     }
   </style>
 </head>
-
 <body>
-  <canvas id="particles" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-2;pointer-events:none;"></canvas>
-
-  <!-- Background & Frame -->
-  <video autoplay class="bg-video" loop muted playsinline>
-    <source src="Smoke_4___45s___4k_res.mp4" type="video/mp4"/>
-  </video>
-  <div class="orange-frame"></div>
-
-  <!-- Back to Home -->
-  <div class="back-btn">
-    <button onclick="location.href='index.html'">⬅ Back to Home</button>
-  </div>
-
-  <!-- Logo -->
-  <div class="logo">
-    <h1>EASY TIMES</h1>
-    <h2 class="sub">1985 – Amsterdam</h2>
-  </div>
-
-  <!-- Tabs -->
-  <div class="tabs">
-    <div class="tab active" onclick="switchTab('hot')">Hot Drinks</div>
-    <div class="tab" onclick="switchTab('cold')">Cold Drinks</div>
-    <div class="tab" onclick="switchTab('snacks')">Homemade Snacks</div>
-  </div>
-
-  <div style="margin:1em auto; text-align:center;">
-    <button onclick="magicOrder()"
-      style="padding:10px 25px; font-size:1.2rem; border-radius:12px; background:linear-gradient(145deg,#f26522,#ff7e29);
+<canvas id="particles" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-2;pointer-events:none;"></canvas>
+<!-- Background & Frame -->
+<video autoplay="" class="bg-video" loop="" muted="" playsinline="">
+<source src="Smoke_4___45s___4k_res.mp4" type="video/mp4"/>
+</video>
+<div class="orange-frame"></div>
+<!-- Back to Home -->
+<div class="back-btn">
+<button onclick="location.href='index.html'">⬅ Back to Home</button>
+</div>
+<!-- Logo -->
+<div class="logo">
+<h1>EASY TIMES</h1>
+<h2 class="sub">1985 – Amsterdam</h2>
+</div>
+<!-- Tabs -->
+<div class="tabs">
+<div class="tab active" data-tab="hot" role="button" tabindex="0">Hot Drinks</div>
+<div class="tab" data-tab="cold" role="button" tabindex="0">Cold Drinks</div>
+<div class="tab" data-tab="snacks" role="button" tabindex="0">Homemade Snacks</div>
+</div>
+<div style="margin:1em auto; text-align:center;">
+<button id="surpriseBtn" style="padding:10px 25px; font-size:1.2rem; border-radius:12px; background:linear-gradient(145deg,#f26522,#ff7e29);
       color:#fff; border:none; cursor:pointer; box-shadow:0 5px 15px rgba(0,0,0,0.3); font-weight:900;">
       🎲 Surprise Me!
     </button>
-  </div>
-
-  <!-- Hot Drinks -->
-  <div class="menu-section active" id="hot">
-    <div class="item hot-drink" data-article-call="prepareOptions({name:&#x27;Espresso&#x27;,articleNumber:102,price:3.50,options:[{name:&#x27;Whipped Cream&#x27;,price:1},{name:&#x27;Extra Oatmilk&#x27;,price:1},{name:&#x27;Syrup&#x27;,price:1}]})"><h3>Espresso</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" data-article-call="prepareOptions({name:&#x27;Doppio&#x27;,articleNumber:202,price:4.00,options:[{name:&#x27;Extra Oatmilk&#x27;,price:1},{name:&#x27;Whipped Cream&#x27;,price:1},{name:&#x27;Syrup&#x27;,price:1}]})"><h3>Doppio</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item hot-drink" data-article-call="prepareOptions({name:&#x27;Black Coffee&#x27;,articleNumber:203,price:3.50,options:[]})"><h3>Black Coffee</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" data-article-call="prepareOptions({name:&#x27;Americano&#x27;,articleNumber:204,price:3.50,options:[]})"><h3>Americano</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" data-article-call="prepareOptions({name:&#x27;Cappuccino&#x27;,articleNumber:205,price:4.00,options:[]})"><h3>Cappuccino</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item hot-drink" data-article-call="prepareOptions({name:&#x27;Flavored Latte&#x27;,articleNumber:206,price:5.00,options:[{name:&#x27;Hazelnuts&#x27;,price:0},{name:&#x27;Caramel&#x27;,price:0}]})"><h3>Flavored Latte</h3><p>€5.00</p><button>Add</button></div>
-    <div class="item hot-drink" data-article-call="prepareOptions({name:&#x27;Café Latte&#x27;,articleNumber:207,price:4.50,options:[]})"><h3>Café Latte</h3><p>€4.50</p><button>Add</button></div>
-    <div class="item hot-drink" data-article-call="prepareOptions({name:&#x27;Latte Macchiato&#x27;,articleNumber:208,price:4.50,options:[{name:&#x27;Whipped Cream&#x27;,price:1},{name:&#x27;Syrup&#x27;,price:1}]})"><h3>Latte Macchiato</h3><p>€4.50</p><button>Add</button></div>
-    <div class="item hot-drink" data-article-call="prepareOptions({name:&#x27;Coffee Mocca&#x27;,articleNumber:209,price:5.00,options:[{name:&#x27;Extra Shot Espresso&#x27;,price:1},{name:&#x27;Whipped Cream&#x27;,price:1}]})"><h3>Coffee Mocca</h3><p>€5.00</p><button>Add</button></div>
-    <div class="item hot-drink" data-article-call="prepareOptions({name:&#x27;Hot Chocolate&#x27;,articleNumber:210,price:4.00,options:[{name:&#x27;Whipped Cream&#x27;,price:1}]})"><h3>Hot Chocolate</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item hot-drink" data-article-call="prepareOptions({name:&#x27;Tea&#x27;,articleNumber:301,price:3.50,options:[{name:&#x27;Extra Lemon&#x27;,price:1},{name:&#x27;Extra Ginger&#x27;,price:1},{name:&#x27;Orange Blossom&#x27;,price:1},{name:&#x27;Louiza&#x27;,price:1}]})"><h3>Tea</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item hot-drink" data-article-call="prepareOptions({name:&#x27;Fresh Mint Tea&#x27;,articleNumber:302,price:4.50,options:[{name:&#x27;Extra Lemon&#x27;,price:0.50},{name:&#x27;Extra Ginger&#x27;,price:0.50},{name:&#x27;Extra Blossom&#x27;,price:0.50},{name:&#x27;Louiza&#x27;,price:0.50}]})"><h3>Fresh Mint Tea</h3><p>€4.50</p><button>Add</button></div>
-  </div>
-
-  <!-- Cold Drinks -->
-  <div class="menu-section" id="cold">
-    <div class="item cold-drink" data-article-call="prepareOptions({name:&#x27;Coca-Cola&#x27;,articleNumber:401,price:4.00,options:[]})"><h3>Coca-Cola</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" data-article-call="prepareOptions({name:&#x27;Coca-Cola Zero&#x27;,articleNumber:402,price:4.00,options:[]})"><h3>Coca-Cola Zero</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" data-article-call="prepareOptions({name:&#x27;Fanta Orange&#x27;,articleNumber:403,price:4.00,options:[]})"><h3>Fanta Orange</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" data-article-call="prepareOptions({name:&#x27;Fanta Cassis&#x27;,articleNumber:404,price:4.00,options:[]})"><h3>Fanta Cassis</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" data-article-call="prepareOptions({name:&#x27;Still Water&#x27;,articleNumber:405,price:3.50,options:[]})"><h3>Still Water</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item cold-drink" data-article-call="prepareOptions({name:&#x27;Sparkling Water&#x27;,articleNumber:406,price:3.50,options:[]})"><h3>Sparkling Water</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item cold-drink" data-article-call="prepareOptions({name:&#x27;Sprite&#x27;,articleNumber:407,price:4.00,options:[]})"><h3>Sprite</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" data-article-call="prepareOptions({name:&#x27;Chocomel&#x27;,articleNumber:408,price:4.00,options:[]})"><h3>Chocomel</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" data-article-call="prepareOptions({name:&#x27;Iced Tea Peach/Mango&#x27;,articleNumber:409,price:4.00,options:[{name:&#x27;Peach&#x27;,price:0},{name:&#x27;Mango&#x27;,price:0}]})"><h3>Iced Tea Peach/Mango</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" data-article-call="prepareOptions({name:&#x27;Iced Tea Lemon Sparkling&#x27;,articleNumber:410,price:4.00,options:[]})"><h3>Iced Tea Lemon Sparkling</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" data-article-call="prepareOptions({name:&#x27;Royal Bliss Bitter Lemon&#x27;,articleNumber:411,price:4.00,options:[]})"><h3>Royal Bliss Bitter Lemon</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" data-article-call="prepareOptions({name:&#x27;Royal Bliss Ginger Ale&#x27;,articleNumber:412,price:4.00,options:[]})"><h3>Royal Bliss Ginger Ale</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" data-article-call="prepareOptions({name:&#x27;Looza (Pear/Strawberry/Peach)&#x27;,articleNumber:413,price:4.00,options:[{name:&#x27;Pear&#x27;,price:0},{name:&#x27;Strawberry&#x27;,price:0},{name:&#x27;Peach&#x27;,price:0}]})"><h3>Looza (Pear/Strawberry/Peach)</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" data-article-call="prepareOptions({name:&#x27;Minute Maid Orange/Apple&#x27;,articleNumber:414,price:4.00,options:[{name:&#x27;Orange&#x27;,price:0},{name:&#x27;Apple&#x27;,price:0}]})"><h3>Minute Maid Orange/Apple</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" data-article-call="prepareOptions({name:&#x27;AA Energy Drink&#x27;,articleNumber:415,price:4.00,options:[]})"><h3>AA Energy Drink</h3><p>€4.00</p><button>Add</button></div>
-    <div class="item cold-drink" data-article-call="prepareOptions({name:&#x27;Red Bull&#x27;,articleNumber:416,price:5.00,options:[]})"><h3>Red Bull Energy Drink</h3><p>€5.00</p><button>Add</button></div>
-  </div>
-
-  <!-- Homemade Snacks -->
-  <div class="menu-section" id="snacks">
-    <div class="item" data-article-call="prepareOptions({name:&#x27;Chocolate Chip Cookie&#x27;,articleNumber:501,price:3.50,options:[]})"><h3>Chocolate Chip Cookie</h3><p>€3.50</p><button>Add</button></div>
-    <div class="item" data-article-call="prepareOptions({name:&#x27;Banana Cake&#x27;,articleNumber:502,price:4.00,options:[]})"><h3>Banana Cake</h3><p>€4.00</p><button>Add</button></div>
-  </div>
-
-  <!-- Basket -->
-  <div id="basket">
-    <h2>Your Order</h2>
-    <div id="tableRow">
-      <label for="tableInput">📍 Table</label>
-      <input id="tableInput" type="text" inputmode="text" maxlength="20" placeholder="e.g. 5 or Terrace 2" autocomplete="off"/>
-      <span id="tableLockedBadge">from QR code</span>
-    </div>
-    <ul id="basketList"></ul>
-    <strong>Total: €<span id="totalPrice">0.00</span></strong>
-    <div id="pickupNote"><strong>Pick-up at the bar</strong><br>Please collect your drinks yourself after ordering.</div>
-    <button id="confirmOrder" onclick="handleSendClick()">Send Order</button>
-  </div>
-
-  <!-- Slideshow Container & Crawl -->
-  <div id="slideshow-container">
-    <video id="slideshowVideo" muted playsinline></video>
-    <div class="starwars-crawl-wrapper">
-      <div class="starwars-crawl">
-        <div class="crawl-text">
-          <p>EasyTimes Amsterdam — Where the World Comes to Chill.</p>
-          <p>One Love. One Coffeeshop. A Thousand Stories.</p>
-          <p>Relax Like a Local, Float Like a Tourist.</p>
-          <p>Welcome to the Heartbeat of Chill in Amsterdam.</p>
-          <p>Your Couch Away from Home — Only at EasyTimes.</p>
-          <p>From Tokyo to Toronto — Everyone Finds Peace at EasyTimes.</p>
-          <p>Across Borders, One Destination: EasyTimes Amsterdam.</p>
-          <p>Jetlagged? High Spirits Only Here.</p>
-          <p>EasyTimes: The Pilgrimage for Chill Seekers.</p>
-          <p>Travel Light, Relax Heavy.</p>
-          <p>Where Time Slows Down and Smiles Light Up.</p>
-          <p>No Rush. No Worries. Just EasyTimes.</p>
-          <p>The Art of Relaxation — Served Daily.</p>
-          <p>Escape the Noise, Embrace the Vibe.</p>
-          <p>Let Go. Light Up. Live Easy.</p>
-          <p>Malik’s Arms Are Open. So Are Our Doors.</p>
-          <p>Come as a Stranger, Leave as Family.</p>
-          <p>It’s Not Just a Coffeeshop. It’s Malik’s House of Chill.</p>
-          <p>EasyTimes Amsterdam — Born to Relax. Built to Remember.</p>
-          <p>EasyTimes. The Legend Lives on Reguliers.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Notification / Modal / Mini-cart / Solo banner -->
-  <div id="notification"></div>
-
-  <div class="option-modal" id="optionModal" style="display:none;">
-    <div class="option-box">
-      <h3 id="optionTitle"></h3>
-      <div id="optionList"></div>
-      <button onclick="confirmOptions()">Add to Order</button>
-      <button onclick="closeModal()" style="margin-top:.5em;background:rgba(255,255,255,0.1);color:#fff;">Close</button>
-    </div>
-  </div>
-
-  <div id="mini-cart"></div>
-  <div id="soloModeBanner">Self Pickup Mode: Please collect your drinks downstairs after ordering.</div>
-
-  <!-- Idle Overlay -->
-  <div id="slideshow-overlay">
-    <img class="idle-logo" src="EASY TIMES LOGO BLACK-01.png" alt="EasyTimes Logo">
-    <div class="idle-msg">CLICK THE SCREEN TO ORDER DRINKS</div>
-    <div class="video-frame">
-      <video id="slideshowVideoOverlay" muted playsinline autoplay></video>
-    </div>
-  </div>
+</div>
+<!-- Hot Drinks -->
+<div class="menu-section active" id="hot">
+<div class="item hot-drink" data-article-id="espresso" role="button" tabindex="0"><h3>Espresso</h3><p>€3.50</p><button>Add</button></div>
+<div class="item hot-drink" data-article-id="doppio" role="button" tabindex="0"><h3>Doppio</h3><p>€4.00</p><button>Add</button></div>
+<div class="item hot-drink" data-article-id="black-coffee" role="button" tabindex="0"><h3>Black Coffee</h3><p>€3.50</p><button>Add</button></div>
+<div class="item hot-drink" data-article-id="americano" role="button" tabindex="0"><h3>Americano</h3><p>€3.50</p><button>Add</button></div>
+<div class="item hot-drink" data-article-id="cappuccino" role="button" tabindex="0"><h3>Cappuccino</h3><p>€4.00</p><button>Add</button></div>
+<div class="item hot-drink" data-article-id="flavored-latte" role="button" tabindex="0"><h3>Flavored Latte</h3><p>€5.00</p><button>Add</button></div>
+<div class="item hot-drink" data-article-id="caf-latte" role="button" tabindex="0"><h3>Café Latte</h3><p>€4.50</p><button>Add</button></div>
+<div class="item hot-drink" data-article-id="latte-macchiato" role="button" tabindex="0"><h3>Latte Macchiato</h3><p>€4.50</p><button>Add</button></div>
+<div class="item hot-drink" data-article-id="coffee-mocca" role="button" tabindex="0"><h3>Coffee Mocca</h3><p>€5.00</p><button>Add</button></div>
+<div class="item hot-drink" data-article-id="hot-chocolate" role="button" tabindex="0"><h3>Hot Chocolate</h3><p>€4.00</p><button>Add</button></div>
+<div class="item hot-drink" data-article-id="tea" role="button" tabindex="0"><h3>Tea</h3><p>€3.50</p><button>Add</button></div>
+<div class="item hot-drink" data-article-id="fresh-mint-tea" role="button" tabindex="0"><h3>Fresh Mint Tea</h3><p>€4.50</p><button>Add</button></div>
+</div>
+<!-- Cold Drinks -->
+<div class="menu-section" id="cold">
+<div class="item cold-drink" data-article-id="coca-cola" role="button" tabindex="0"><h3>Coca-Cola</h3><p>€4.00</p><button>Add</button></div>
+<div class="item cold-drink" data-article-id="coca-cola-zero" role="button" tabindex="0"><h3>Coca-Cola Zero</h3><p>€4.00</p><button>Add</button></div>
+<div class="item cold-drink" data-article-id="fanta-orange" role="button" tabindex="0"><h3>Fanta Orange</h3><p>€4.00</p><button>Add</button></div>
+<div class="item cold-drink" data-article-id="fanta-cassis" role="button" tabindex="0"><h3>Fanta Cassis</h3><p>€4.00</p><button>Add</button></div>
+<div class="item cold-drink" data-article-id="still-water" role="button" tabindex="0"><h3>Still Water</h3><p>€3.50</p><button>Add</button></div>
+<div class="item cold-drink" data-article-id="sparkling-water" role="button" tabindex="0"><h3>Sparkling Water</h3><p>€3.50</p><button>Add</button></div>
+<div class="item cold-drink" data-article-id="sprite" role="button" tabindex="0"><h3>Sprite</h3><p>€4.00</p><button>Add</button></div>
+<div class="item cold-drink" data-article-id="chocomel" role="button" tabindex="0"><h3>Chocomel</h3><p>€4.00</p><button>Add</button></div>
+<div class="item cold-drink" data-article-id="iced-tea-peach-mango" role="button" tabindex="0"><h3>Iced Tea Peach/Mango</h3><p>€4.00</p><button>Add</button></div>
+<div class="item cold-drink" data-article-id="iced-tea-lemon-sparkling" role="button" tabindex="0"><h3>Iced Tea Lemon Sparkling</h3><p>€4.00</p><button>Add</button></div>
+<div class="item cold-drink" data-article-id="royal-bliss-bitter-lemon" role="button" tabindex="0"><h3>Royal Bliss Bitter Lemon</h3><p>€4.00</p><button>Add</button></div>
+<div class="item cold-drink" data-article-id="royal-bliss-ginger-ale" role="button" tabindex="0"><h3>Royal Bliss Ginger Ale</h3><p>€4.00</p><button>Add</button></div>
+<div class="item cold-drink" data-article-id="looza-pear-strawberry-peach" role="button" tabindex="0"><h3>Looza (Pear/Strawberry/Peach)</h3><p>€4.00</p><button>Add</button></div>
+<div class="item cold-drink" data-article-id="minute-maid-orange-apple" role="button" tabindex="0"><h3>Minute Maid Orange/Apple</h3><p>€4.00</p><button>Add</button></div>
+<div class="item cold-drink" data-article-id="aa-energy-drink" role="button" tabindex="0"><h3>AA Energy Drink</h3><p>€4.00</p><button>Add</button></div>
+<div class="item cold-drink" data-article-id="red-bull" role="button" tabindex="0"><h3>Red Bull Energy Drink</h3><p>€5.00</p><button>Add</button></div>
+</div>
+<!-- Homemade Snacks -->
+<div class="menu-section" id="snacks">
+<div class="item" data-article-id="chocolate-chip-cookie" role="button" tabindex="0"><h3>Chocolate Chip Cookie</h3><p>€3.50</p><button>Add</button></div>
+<div class="item" data-article-id="banana-cake" role="button" tabindex="0"><h3>Banana Cake</h3><p>€4.00</p><button>Add</button></div>
+</div>
+<!-- Basket -->
+<div id="basket">
+<h2>Your Order</h2>
+<div id="tableRow">
+<label for="tableInput">📍 Table</label>
+<input autocomplete="off" id="tableInput" inputmode="text" maxlength="20" placeholder="e.g. 5 or Terrace 2" type="text"/>
+<span id="tableLockedBadge">from QR code</span>
+</div>
+<ul id="basketList"></ul>
+<strong>Total: €<span id="totalPrice">0.00</span></strong>
+<div id="pickupNote"><strong>Pick-up at the bar</strong><br/>Please collect your drinks yourself after ordering.</div>
+<button id="confirmOrder" onclick="handleSendClick()">Send Order</button>
+</div>
+<!-- Slideshow Container & Crawl -->
+<div id="slideshow-container">
+<video id="slideshowVideo" muted="" playsinline=""></video>
+<div class="starwars-crawl-wrapper">
+<div class="starwars-crawl">
+<div class="crawl-text">
+<p>EasyTimes Amsterdam — Where the World Comes to Chill.</p>
+<p>One Love. One Coffeeshop. A Thousand Stories.</p>
+<p>Relax Like a Local, Float Like a Tourist.</p>
+<p>Welcome to the Heartbeat of Chill in Amsterdam.</p>
+<p>Your Couch Away from Home — Only at EasyTimes.</p>
+<p>From Tokyo to Toronto — Everyone Finds Peace at EasyTimes.</p>
+<p>Across Borders, One Destination: EasyTimes Amsterdam.</p>
+<p>Jetlagged? High Spirits Only Here.</p>
+<p>EasyTimes: The Pilgrimage for Chill Seekers.</p>
+<p>Travel Light, Relax Heavy.</p>
+<p>Where Time Slows Down and Smiles Light Up.</p>
+<p>No Rush. No Worries. Just EasyTimes.</p>
+<p>The Art of Relaxation — Served Daily.</p>
+<p>Escape the Noise, Embrace the Vibe.</p>
+<p>Let Go. Light Up. Live Easy.</p>
+<p>Malik’s Arms Are Open. So Are Our Doors.</p>
+<p>Come as a Stranger, Leave as Family.</p>
+<p>It’s Not Just a Coffeeshop. It’s Malik’s House of Chill.</p>
+<p>EasyTimes Amsterdam — Born to Relax. Built to Remember.</p>
+<p>EasyTimes. The Legend Lives on Reguliers.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Notification / Modal / Mini-cart / Solo banner -->
+<div id="notification"></div>
+<div class="option-modal" id="optionModal" style="display:none;">
+<div class="option-box">
+<h3 id="optionTitle"></h3>
+<div id="optionList"></div>
+<button onclick="confirmOptions()">Add to Order</button>
+<button onclick="closeModal()" style="margin-top:.5em;background:rgba(255,255,255,0.1);color:#fff;">Close</button>
+</div>
+</div>
+<div id="mini-cart"></div>
+<div id="soloModeBanner">Self Pickup Mode: Please collect your drinks downstairs after ordering.</div>
+<!-- Idle Overlay -->
+<div id="slideshow-overlay">
+<img alt="EasyTimes Logo" class="idle-logo" src="EASY TIMES LOGO BLACK-01.png"/>
+<div class="idle-msg">CLICK THE SCREEN TO ORDER DRINKS</div>
+<div class="video-frame">
+<video autoplay="" id="slideshowVideoOverlay" muted="" playsinline=""></video>
+</div>
+</div>
 <script>
 /* =============================
    TELEGRAM SETTINGS
@@ -274,6 +258,21 @@ function clearBusylight() {
 // customer can type where they are (kept between orders on this device).
 let tableLabel = "";
 
+function safeStorageGet(key, fallback = "") {
+  try {
+    const value = localStorage.getItem(key);
+    return value === null ? fallback : value;
+  } catch (e) {
+    return fallback;
+  }
+}
+
+function safeStorageSet(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch (e) {}
+}
+
 function initTableField() {
   const input = document.getElementById("tableInput");
   const row = document.getElementById("tableRow");
@@ -285,26 +284,27 @@ function initTableField() {
     input.value = fromUrl;
     input.readOnly = true;
     row.classList.add("locked");
-    localStorage.setItem("lastTable", fromUrl);
+    safeStorageSet("lastTable", fromUrl);
   } else {
-    tableLabel = localStorage.getItem("lastTable") || "";
+    tableLabel = safeStorageGet("lastTable", "");
     input.value = tableLabel;
   }
 
   input.addEventListener("input", () => {
     tableLabel = input.value.trim().slice(0, 20);
-    localStorage.setItem("lastTable", tableLabel);
+    safeStorageSet("lastTable", tableLabel);
   });
 }
 
 document.addEventListener("DOMContentLoaded", initTableField);
 
 /* =============================
-   LOCAL WEBSITE DING
-   Telegram notification sound is the real order alert on the iPad.
-   Keep this false so the website does not try to replace Telegram sound.
+   ORDER DING THROUGH THE TOUCHSCREEN AUDIO
+   The Dell/touchscreen is connected to the Devine DI box and main audio system.
+   Telegram notifications can be silent/duck the music depending on Windows/Telegram,
+   so the reliable audible alert is played here after Telegram confirms the order.
    ============================= */
-const WEBSITE_DING_ENABLED = false;
+const WEBSITE_DING_ENABLED = true;
 let _dingCtx = null;
 
 function _ctx() {
@@ -318,35 +318,70 @@ function _ctx() {
 
 function unlockAudioOnce() {
   const c = _ctx();
-  if (!c) return;
-  if (c.state !== "running") c.resume().catch(() => {});
+  if (!c) return Promise.resolve(false);
+  if (c.state !== "running") return c.resume().then(() => true).catch(() => false);
+  return Promise.resolve(true);
+}
+
+function playTone(c, start, freq, duration, volume = 0.62, type = "square") {
+  const osc = c.createOscillator();
+  const gain = c.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, start);
+
+  gain.gain.setValueAtTime(0.0001, start);
+  gain.gain.exponentialRampToValueAtTime(volume, start + 0.012);
+  gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+
+  osc.connect(gain);
+  gain.connect(c.destination);
+  osc.start(start);
+  osc.stop(start + duration + 0.02);
 }
 
 function ding(kind = "tap") {
   if (!WEBSITE_DING_ENABLED) return;
+
+  // Keep normal menu taps silent. The loud alert is only for order success/errors.
+  if (kind === "tap") return;
+
   const c = _ctx();
   if (!c) return;
-
   if (c.state !== "running") c.resume().catch(() => {});
 
-  const t = c.currentTime;
-  const osc = c.createOscillator();
-  const gain = c.createGain();
+  const t = c.currentTime + 0.03;
 
-  const freq = kind === "ok" ? 1046.5 : kind === "err" ? 220 : 880;
-  osc.type = "sine";
-  osc.frequency.setValueAtTime(freq, t);
+  if (kind === "ok") {
+    // Loud 3-tone order bell designed to cut through low-volume music.
+    playTone(c, t, 784, 0.20, 0.62, "square");
+    playTone(c, t + 0.23, 1046.5, 0.22, 0.62, "square");
+    playTone(c, t + 0.49, 1568, 0.32, 0.56, "triangle");
+    return;
+  }
 
-  gain.gain.setValueAtTime(0.0001, t);
-  gain.gain.exponentialRampToValueAtTime(0.35, t + 0.01);
-  gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
-
-  osc.connect(gain);
-  gain.connect(c.destination);
-
-  osc.start(t);
-  osc.stop(t + 0.16);
+  if (kind === "err") {
+    playTone(c, t, 220, 0.22, 0.45, "sawtooth");
+    playTone(c, t + 0.28, 196, 0.28, 0.45, "sawtooth");
+    return;
+  }
 }
+
+// Manual audio test: open order-drinks.html?testding=1 and click the test button.
+function maybeAddDingTestButton() {
+  const params = new URLSearchParams(location.search);
+  if (params.get("testding") !== "1") return;
+  const b = document.createElement("button");
+  b.type = "button";
+  b.textContent = "TEST ORDER DING";
+  b.style.cssText = "position:fixed;right:18px;top:18px;z-index:99999;padding:12px 18px;border-radius:999px;border:2px solid #d9b65d;background:#ec7623;color:#111;font-weight:900;letter-spacing:.04em;";
+  b.addEventListener("click", async () => {
+    await unlockAudioOnce();
+    ding("ok");
+  });
+  document.body.appendChild(b);
+}
+
+document.addEventListener("DOMContentLoaded", maybeAddDingTestButton);
 
 // unlock audio on first gesture only
 document.addEventListener("pointerdown", unlockAudioOnce, { once: true });
@@ -367,6 +402,315 @@ document.addEventListener("click", (e) => {
 let orderList = [];
 let selectedArticle = null;
 let isSubmitting = false;
+
+// Static menu data. No inline onclick and no dynamic code execution.
+// This is more reliable on iPad/Android touchscreen browsers.
+const MENU_ITEMS = {
+  "espresso": {
+    "name": "Espresso",
+    "articleNumber": 102,
+    "price": 3.5,
+    "options": [
+      {
+        "name": "Whipped Cream",
+        "price": 1.0
+      },
+      {
+        "name": "Extra Oatmilk",
+        "price": 1.0
+      },
+      {
+        "name": "Syrup",
+        "price": 1.0
+      }
+    ]
+  },
+  "doppio": {
+    "name": "Doppio",
+    "articleNumber": 202,
+    "price": 4.0,
+    "options": [
+      {
+        "name": "Extra Oatmilk",
+        "price": 1.0
+      },
+      {
+        "name": "Whipped Cream",
+        "price": 1.0
+      },
+      {
+        "name": "Syrup",
+        "price": 1.0
+      }
+    ]
+  },
+  "black-coffee": {
+    "name": "Black Coffee",
+    "articleNumber": 203,
+    "price": 3.5,
+    "options": []
+  },
+  "americano": {
+    "name": "Americano",
+    "articleNumber": 204,
+    "price": 3.5,
+    "options": []
+  },
+  "cappuccino": {
+    "name": "Cappuccino",
+    "articleNumber": 205,
+    "price": 4.0,
+    "options": []
+  },
+  "flavored-latte": {
+    "name": "Flavored Latte",
+    "articleNumber": 206,
+    "price": 5.0,
+    "options": [
+      {
+        "name": "Hazelnuts",
+        "price": 0.0
+      },
+      {
+        "name": "Caramel",
+        "price": 0.0
+      }
+    ]
+  },
+  "caf-latte": {
+    "name": "Café Latte",
+    "articleNumber": 207,
+    "price": 4.5,
+    "options": []
+  },
+  "latte-macchiato": {
+    "name": "Latte Macchiato",
+    "articleNumber": 208,
+    "price": 4.5,
+    "options": [
+      {
+        "name": "Whipped Cream",
+        "price": 1.0
+      },
+      {
+        "name": "Syrup",
+        "price": 1.0
+      }
+    ]
+  },
+  "coffee-mocca": {
+    "name": "Coffee Mocca",
+    "articleNumber": 209,
+    "price": 5.0,
+    "options": [
+      {
+        "name": "Extra Shot Espresso",
+        "price": 1.0
+      },
+      {
+        "name": "Whipped Cream",
+        "price": 1.0
+      }
+    ]
+  },
+  "hot-chocolate": {
+    "name": "Hot Chocolate",
+    "articleNumber": 210,
+    "price": 4.0,
+    "options": [
+      {
+        "name": "Whipped Cream",
+        "price": 1.0
+      }
+    ]
+  },
+  "tea": {
+    "name": "Tea",
+    "articleNumber": 301,
+    "price": 3.5,
+    "options": [
+      {
+        "name": "Extra Lemon",
+        "price": 1.0
+      },
+      {
+        "name": "Extra Ginger",
+        "price": 1.0
+      },
+      {
+        "name": "Orange Blossom",
+        "price": 1.0
+      },
+      {
+        "name": "Louiza",
+        "price": 1.0
+      }
+    ]
+  },
+  "fresh-mint-tea": {
+    "name": "Fresh Mint Tea",
+    "articleNumber": 302,
+    "price": 4.5,
+    "options": [
+      {
+        "name": "Extra Lemon",
+        "price": 0.5
+      },
+      {
+        "name": "Extra Ginger",
+        "price": 0.5
+      },
+      {
+        "name": "Extra Blossom",
+        "price": 0.5
+      },
+      {
+        "name": "Louiza",
+        "price": 0.5
+      }
+    ]
+  },
+  "coca-cola": {
+    "name": "Coca-Cola",
+    "articleNumber": 401,
+    "price": 4.0,
+    "options": []
+  },
+  "coca-cola-zero": {
+    "name": "Coca-Cola Zero",
+    "articleNumber": 402,
+    "price": 4.0,
+    "options": []
+  },
+  "fanta-orange": {
+    "name": "Fanta Orange",
+    "articleNumber": 403,
+    "price": 4.0,
+    "options": []
+  },
+  "fanta-cassis": {
+    "name": "Fanta Cassis",
+    "articleNumber": 404,
+    "price": 4.0,
+    "options": []
+  },
+  "still-water": {
+    "name": "Still Water",
+    "articleNumber": 405,
+    "price": 3.5,
+    "options": []
+  },
+  "sparkling-water": {
+    "name": "Sparkling Water",
+    "articleNumber": 406,
+    "price": 3.5,
+    "options": []
+  },
+  "sprite": {
+    "name": "Sprite",
+    "articleNumber": 407,
+    "price": 4.0,
+    "options": []
+  },
+  "chocomel": {
+    "name": "Chocomel",
+    "articleNumber": 408,
+    "price": 4.0,
+    "options": []
+  },
+  "iced-tea-peach-mango": {
+    "name": "Iced Tea Peach/Mango",
+    "articleNumber": 409,
+    "price": 4.0,
+    "options": [
+      {
+        "name": "Peach",
+        "price": 0.0
+      },
+      {
+        "name": "Mango",
+        "price": 0.0
+      }
+    ]
+  },
+  "iced-tea-lemon-sparkling": {
+    "name": "Iced Tea Lemon Sparkling",
+    "articleNumber": 410,
+    "price": 4.0,
+    "options": []
+  },
+  "royal-bliss-bitter-lemon": {
+    "name": "Royal Bliss Bitter Lemon",
+    "articleNumber": 411,
+    "price": 4.0,
+    "options": []
+  },
+  "royal-bliss-ginger-ale": {
+    "name": "Royal Bliss Ginger Ale",
+    "articleNumber": 412,
+    "price": 4.0,
+    "options": []
+  },
+  "looza-pear-strawberry-peach": {
+    "name": "Looza (Pear/Strawberry/Peach)",
+    "articleNumber": 413,
+    "price": 4.0,
+    "options": [
+      {
+        "name": "Pear",
+        "price": 0.0
+      },
+      {
+        "name": "Strawberry",
+        "price": 0.0
+      },
+      {
+        "name": "Peach",
+        "price": 0.0
+      }
+    ]
+  },
+  "minute-maid-orange-apple": {
+    "name": "Minute Maid Orange/Apple",
+    "articleNumber": 414,
+    "price": 4.0,
+    "options": [
+      {
+        "name": "Orange",
+        "price": 0.0
+      },
+      {
+        "name": "Apple",
+        "price": 0.0
+      }
+    ]
+  },
+  "aa-energy-drink": {
+    "name": "AA Energy Drink",
+    "articleNumber": 415,
+    "price": 4.0,
+    "options": []
+  },
+  "red-bull": {
+    "name": "Red Bull",
+    "articleNumber": 416,
+    "price": 5.0,
+    "options": []
+  },
+  "chocolate-chip-cookie": {
+    "name": "Chocolate Chip Cookie",
+    "articleNumber": 501,
+    "price": 3.5,
+    "options": []
+  },
+  "banana-cake": {
+    "name": "Banana Cake",
+    "articleNumber": 502,
+    "price": 4.0,
+    "options": []
+  }
+};
+
 
 function showNotification(msg, ms = 8000, isError = false) {
   const n = document.getElementById("notification");
@@ -527,7 +871,7 @@ async function submitOrder() {
     const total = orderList.reduce((s, x) => s + (+x.totalPrice || 0), 0).toFixed(2);
     txt += `\nTOTAL: €${total}\n`;
 
-    const isSolo = JSON.parse(localStorage.getItem("soloMode") || "false");
+    const isSolo = JSON.parse(safeStorageGet("soloMode", "false"));
     if (isSolo) txt += "\nSELF PICKUP MODE ✅";
 
     const mentionLine = notifyMentions.length ? `🔔 ${notifyMentions.join(" ")}\n` : "";
@@ -594,14 +938,43 @@ showNotification("✅ Order sent!" + extraMsg, 15000, false);
 }
 
 function switchTab(id) {
-  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-  document.querySelectorAll(".menu-section").forEach(s => s.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t => {
+    t.classList.toggle("active", t.dataset.tab === id);
+  });
 
-  const tab = document.querySelector(`.tab[onclick="switchTab('${id}')"]`);
-  if (tab) tab.classList.add("active");
+  document.querySelectorAll(".menu-section").forEach(s => {
+    s.classList.toggle("active", s.id === id);
+  });
 
-  const sec = document.getElementById(id);
-  if (sec) sec.classList.add("active");
+  resetIdle();
+}
+
+// Keep global access for compatibility if an older cached button calls switchTab().
+window.switchTab = switchTab;
+
+function handleTabActivate(tab) {
+  if (!tab || !tab.dataset.tab) return;
+  switchTab(tab.dataset.tab);
+}
+
+function bindTabs() {
+  document.querySelectorAll(".tab[data-tab]").forEach(tab => {
+    if (tab.dataset.tabBound === "1") return;
+    tab.dataset.tabBound = "1";
+
+    tab.addEventListener("click", e => {
+      e.preventDefault();
+      e.stopPropagation();
+      handleTabActivate(tab);
+    });
+
+    tab.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        handleTabActivate(tab);
+      }
+    });
+  });
 }
 
 /* =============================
@@ -618,8 +991,8 @@ document.body.addEventListener("touchstart", e => {
 document.body.addEventListener("touchend", () => clearTimeout(pressTimer), { passive: true });
 
 function toggleSoloMode() {
-  const on = !JSON.parse(localStorage.getItem("soloMode") || "false");
-  localStorage.setItem("soloMode", on);
+  const on = !JSON.parse(safeStorageGet("soloMode", "false"));
+  safeStorageSet("soloMode", on);
   document.getElementById("soloModeBanner").style.display = on ? "block" : "none";
   reflowForBanner();
 }
@@ -634,7 +1007,7 @@ function reflowForBanner() {
 window.addEventListener("resize", reflowForBanner);
 
 document.addEventListener("DOMContentLoaded", () => {
-  if (JSON.parse(localStorage.getItem("soloMode") || "false")) {
+  if (JSON.parse(safeStorageGet("soloMode", "false"))) {
     document.getElementById("soloModeBanner").style.display = "block";
   }
   reflowForBanner();
@@ -685,86 +1058,83 @@ resetIdle();
 
 
 /* =============================
-   ARTICLE TAP HANDLER
-   One tap = one item. Inline item onclick attributes were removed because
-   touchend + pointerup + browser click can double-add items on tablets.
+   ARTICLE / CATEGORY TAP HANDLERS
+   Stable version:
+   - categories use data-tab listeners, not inline onclick
+   - articles use data-article-id + MENU_ITEMS, not dynamic code execution
+   - one tap adds one item only
    ============================= */
-function runArticleElement(item) {
-  if (!item) return;
-  const call = item.getAttribute("data-article-call");
-  if (!call) return;
+function getArticleFromElement(item) {
+  if (!item) return null;
+  const id = item.dataset.articleId;
+  const base = MENU_ITEMS[id];
+  if (!base) return null;
 
-  try {
-    // Trusted local menu definitions from this file.
-    new Function(call).call(item);
-  } catch (err) {
-    console.error("Article tap failed:", err);
-    showNotification("Article could not be added. Please try again.", 7000, true);
-  }
+  return {
+    name: base.name,
+    articleNumber: base.articleNumber,
+    price: base.price,
+    options: (base.options || []).map(o => ({ name: o.name, price: o.price }))
+  };
 }
 
-function bindArticleTapFix() {
-  const MOVE_CANCEL_PX = 14;
-  const DUPLICATE_BLOCK_MS = 650;
+function runArticleElement(item) {
+  const article = getArticleFromElement(item);
+  if (!article) {
+    showNotification("Article could not be added. Please try again.", 7000, true);
+    return;
+  }
+  prepareOptions(article);
+  resetIdle();
+}
 
-  document.querySelectorAll(".item[data-article-call]").forEach(item => {
-    if (item.dataset.tapFixBound === "1") return;
-    item.dataset.tapFixBound = "1";
-
-    let startX = 0;
-    let startY = 0;
-    let moved = false;
-    let lastHandled = 0;
-
-    item.addEventListener("pointerdown", e => {
-      startX = e.clientX;
-      startY = e.clientY;
-      moved = false;
-    }, { passive: true });
-
-    item.addEventListener("pointermove", e => {
-      if (Math.abs(e.clientX - startX) > MOVE_CANCEL_PX || Math.abs(e.clientY - startY) > MOVE_CANCEL_PX) {
-        moved = true;
-      }
-    }, { passive: true });
-
-    item.addEventListener("pointerup", e => {
-      if (moved) return;
-      if (e.pointerType !== "touch" && e.pointerType !== "pen") return;
-      if (e.cancelable) e.preventDefault();
-      e.stopPropagation();
-      lastHandled = Date.now();
-      runArticleElement(item);
-    }, { passive: false });
+function bindArticleCards() {
+  document.querySelectorAll(".item[data-article-id]").forEach(item => {
+    if (item.dataset.articleBound === "1") return;
+    item.dataset.articleBound = "1";
 
     item.addEventListener("click", e => {
-      const now = Date.now();
-      if (now - lastHandled < DUPLICATE_BLOCK_MS) {
-        if (e.cancelable) e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      if (e.cancelable) e.preventDefault();
+      e.preventDefault();
       e.stopPropagation();
-      lastHandled = now;
       runArticleElement(item);
-    }, { passive: false });
+    });
+
+    item.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        runArticleElement(item);
+      }
+    });
   });
 }
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", bindArticleTapFix);
-} else {
-  bindArticleTapFix();
-}
-
-/* =============================
-   SURPRISE ME
-   ============================= */
 function magicOrder() {
-  const activeItems = [...document.querySelectorAll(".menu-section.active .item[data-article-call]")];
+  const activeItems = [...document.querySelectorAll(".menu-section.active .item[data-article-id]")];
   if (!activeItems.length) return;
   runArticleElement(activeItems[Math.floor(Math.random() * activeItems.length)]);
+}
+
+function bindSurpriseButton() {
+  const btn = document.getElementById("surpriseBtn");
+  if (!btn || btn.dataset.surpriseBound === "1") return;
+  btn.dataset.surpriseBound = "1";
+  btn.addEventListener("click", e => {
+    e.preventDefault();
+    e.stopPropagation();
+    magicOrder();
+  });
+}
+
+function bindOrderMenu() {
+  bindTabs();
+  bindArticleCards();
+  bindSurpriseButton();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", bindOrderMenu);
+} else {
+  bindOrderMenu();
 }
 
 /* OPTIONAL: quick sound/light test
