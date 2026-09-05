@@ -31,6 +31,63 @@
     @media(max-width:1500px){.app{width:min(100%,1080px);margin:auto}.lyrics-panel{position:relative;inset:auto;width:min(calc(100% - 28px),1052px);min-width:0;height:430px;margin:-96px auto 122px}.lyrics-window{padding:150px 25px}}
     @media(max-width:760px){.app{padding:14px 14px 112px}header{grid-template-columns:auto 1fr auto;gap:9px}.logo{width:78px}.logo b{font-size:19px}.title{font-size:32px}.staff-open{display:none}.icon-btn{width:62px;height:60px;border-radius:16px}.now{grid-template-columns:34% 1fr;gap:15px;padding:14px}.now h2{font-size:30px}.artist,.eyebrow{font-size:17px}.grid{grid-template-columns:repeat(2,1fr);gap:12px}.song-title{font-size:18px}.view{min-width:180px}.queue-label{font-size:17px}.lyrics-panel{height:360px;margin:-94px 14px 112px;width:calc(100% - 28px)}.lyrics-window{padding:120px 18px}.lyric-line{font-size:18px}.lyric-line.active{font-size:23px}}
     @media(max-width:440px){.title{font-size:25px}.now{grid-template-columns:1fr}.now .cover{display:none}.grid{grid-template-columns:1fr}.queue-bar{grid-template-columns:1fr}.view{width:100%}}
+  
+/* SAFE IDLE VIDEO OVERLAY
+   Videos are NOT loaded at page start. One lightweight video loads only after idle
+   and is unloaded immediately when the screen is touched again. */
+#safeIdleOverlay{
+  position:fixed;
+  inset:0;
+  z-index:45000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:22px;
+  padding:34px;
+  background:rgba(10,8,5,.96);
+  color:var(--cream,#f5ead8);
+  text-align:center;
+  pointer-events:auto;
+}
+#safeIdleOverlay .safe-idle-title{
+  font-family:'Barlow Condensed',Arial,sans-serif;
+  font-size:clamp(3rem,6vw,6rem);
+  font-weight:700;
+  letter-spacing:.06em;
+  line-height:.82;
+}
+#safeIdleOverlay .safe-idle-msg{
+  background:var(--orange,#ec7623);
+  color:#111;
+  border-radius:999px;
+  padding:13px 26px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  font-size:clamp(1.05rem,2vw,1.7rem);
+}
+#safeIdleOverlay .safe-idle-video-frame{
+  width:min(960px,82vw);
+  height:min(540px,52vh);
+  border:3px solid var(--gold,#d9b65d);
+  border-radius:24px;
+  overflow:hidden;
+  background:#000;
+  position:relative;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+#safeIdleOverlay video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+@media (orientation:portrait){
+  #safeIdleOverlay{padding:18px;gap:16px;}
+  #safeIdleOverlay .safe-idle-video-frame{width:min(92vw,720px);height:min(58vh,720px);}
+}
+
   </style>
 </head>
 <body>
@@ -86,6 +143,15 @@
   <div class="staff-panel" id="staffLogin"><input id="staffPin" type="password" inputmode="numeric" placeholder="Enter staff PIN"><button id="unlock">UNLOCK</button></div>
   <div class="staff-panel" id="staffControls" hidden><button id="togglePlay">PLAY / PAUSE</button><button id="skip">SKIP CURRENT SONG</button><button id="clearQueue">CLEAR QUEUE</button><button id="lockStaff">LOCK CONTROLS</button></div>
 </div></div>
+
+<div id="safeIdleOverlay" aria-hidden="true">
+  <div class="safe-idle-title">EASY TIMES</div>
+  <div class="safe-idle-msg">Tap the screen to continue</div>
+  <div class="safe-idle-video-frame">
+    <video id="safeIdleVideo" muted playsinline preload="none" disablepictureinpicture></video>
+  </div>
+</div>
+
 <div class="notice" id="notice"></div>
 <audio id="player" preload="metadata"></audio>
 <script>
@@ -1111,6 +1177,117 @@ Demain ce sera autre chose. Même monde. Nouvelles lignes.`
   player.addEventListener('timeupdate',()=>{$('#currentTime').textContent=formatTime(player.currentTime);$('#duration').textContent=formatTime(player.duration);$('#progressFill').style.width=(player.duration?player.currentTime/player.duration*100:0)+'%';syncLyrics()});
   player.addEventListener('seeked',()=>syncLyrics(true));
   updateGenreList();renderFilters();renderSongs();renderQueue();updateNow();
+
+
+/* =============================
+   SAFE IDLE VIDEO PLAYER
+   ============================= */
+(function(){
+  const IDLE_DELAY_MS = 45000;
+  const idleVideoPairs = [
+    { safe: 'idle-smoke-safe.mp4', original: 'smoke.mp4' },
+    { safe: 'idle-mascotte-safe.mp4', original: 'mascotte.mp4' }
+  ];
+
+  const overlay = document.getElementById('safeIdleOverlay');
+  const video = document.getElementById('safeIdleVideo');
+  if (!overlay || !video) return;
+
+  let timer = null;
+  let currentIndex = 0;
+  let visible = false;
+  let fallbackActive = false;
+  let lastMouseReset = 0;
+
+  function unloadVideo(){
+    try{
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
+    }catch(e){}
+  }
+
+  function loadVideo(useOriginalFallback){
+    if (!visible) return;
+    const pair = idleVideoPairs[currentIndex];
+    const src = useOriginalFallback ? pair.original : pair.safe;
+    fallbackActive = !!useOriginalFallback;
+    try{
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
+      video.src = src;
+      video.load();
+      const p = video.play();
+      if (p && typeof p.catch === 'function') p.catch(() => {});
+    }catch(e){
+      console.warn('Safe idle video skipped:', src, e);
+    }
+  }
+
+  function nextVideo(){
+    if (!visible) return;
+    currentIndex = (currentIndex + 1) % idleVideoPairs.length;
+    fallbackActive = false;
+    loadVideo(false);
+  }
+
+  function canShowIdle(){
+    const popup = document.querySelector('.partner-popup[style*="flex"], .iframe-popup[style*="flex"], .option-modal[style*="flex"], .sheet.open');
+    if (popup) return false;
+    const activeInput = document.activeElement;
+    if (activeInput && ['INPUT','TEXTAREA','SELECT'].includes(activeInput.tagName)) return false;
+    const audio = document.getElementById('player');
+    if (audio && !audio.paused) return false;
+    return true;
+  }
+
+  function showIdle(){
+    if (!canShowIdle()) { resetIdle(); return; }
+    visible = true;
+    overlay.style.display = 'flex';
+    overlay.setAttribute('aria-hidden','false');
+    currentIndex = 0;
+    fallbackActive = false;
+    requestAnimationFrame(() => loadVideo(false));
+  }
+
+  function hideIdle(){
+    visible = false;
+    overlay.style.display = 'none';
+    overlay.setAttribute('aria-hidden','true');
+    unloadVideo();
+  }
+
+  function resetIdle(){
+    clearTimeout(timer);
+    hideIdle();
+    timer = setTimeout(showIdle, IDLE_DELAY_MS);
+  }
+
+  video.addEventListener('ended', nextVideo);
+  video.addEventListener('error', () => {
+    if (!fallbackActive) { loadVideo(true); return; }
+    nextVideo();
+  });
+
+  ['click','keydown','touchstart','pointerdown','wheel','input'].forEach(evt => {
+    document.addEventListener(evt, resetIdle, {passive:true});
+  });
+
+  document.addEventListener('mousemove', () => {
+    const now = Date.now();
+    if (now - lastMouseReset > 1500) {
+      lastMouseReset = now;
+      resetIdle();
+    }
+  }, {passive:true});
+
+  overlay.addEventListener('click', resetIdle, {passive:true});
+  window.safeIdleReset = resetIdle;
+  resetIdle();
+})();
+
 </script>
 </body>
 </html>

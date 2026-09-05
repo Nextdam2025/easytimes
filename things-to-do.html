@@ -170,26 +170,14 @@
       transform:translateY(-3px);
       border-color:var(--orange);
     }
-    .partner-visual{
-      width:100%;
-      min-height:clamp(92px,13vh,150px);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:
-        radial-gradient(circle at 50% 20%,rgba(217,182,93,.18),transparent 62%),
-        rgba(255,255,255,.055);
-      border:1px solid rgba(217,182,93,.35);
-      border-radius:18px;
-      overflow:hidden;
-      padding:clamp(8px,1vw,13px);
-    }
-    .partner-visual img{
-      width:100%;
-      height:100%;
-      max-height:132px;
+    .partner-card img{
+      width:clamp(82px,7vw,126px);
+      aspect-ratio:1;
       object-fit:contain;
-      display:block;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(217,182,93,.35);
+      border-radius:16px;
+      padding:clamp(8px,1vw,12px);
     }
     .partner-card h3{
       font-family:'Barlow Condensed',Arial,sans-serif;
@@ -332,8 +320,7 @@
       .brand h2{font-size:clamp(1.2rem,2.2vw,2rem);}
       .hint{font-size:1.45rem;}
       .partner-card{padding:12px;gap:8px;}
-      .partner-visual{min-height:68px;padding:8px;}
-      .partner-visual img{max-height:58px;}
+      .partner-card img{width:70px;}
       .partner-card h3{font-size:clamp(1.55rem,2.4vw,2.45rem);}
       .partner-card p{font-size:.9rem;line-height:1.18;}
       .partner-action{min-height:42px;font-size:.85rem;padding:.55rem .8rem;}
@@ -396,13 +383,11 @@
         text-align:left;
         align-items:center;
       }
-      .partner-visual{
+      .partner-card img{
         grid-row:1 / span 3;
         width:100%;
-        min-height:clamp(86px,22vw,118px);
         align-self:center;
       }
-      .partner-visual img{max-height:96px;}
       .partner-card h3{
         font-size:clamp(2.15rem,8.2vw,3.55rem);
         text-align:left;
@@ -444,16 +429,72 @@
         justify-items:center;
         padding:16px;
       }
-      .partner-visual{grid-row:auto;width:112px;min-height:112px;}
-      .partner-visual img{max-height:92px;}
+      .partner-card img{grid-row:auto;width:112px;}
       .partner-card h3,.partner-card p{text-align:center;}
       .partner-action{width:100%;}
       .partner-header button{padding:10px 14px;}
     }
+  
+/* SAFE IDLE VIDEO OVERLAY
+   Videos are NOT loaded at page start. One lightweight video loads only after idle
+   and is unloaded immediately when the screen is touched again. */
+#safeIdleOverlay{
+  position:fixed;
+  inset:0;
+  z-index:45000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:22px;
+  padding:34px;
+  background:rgba(10,8,5,.96);
+  color:var(--cream,#f5ead8);
+  text-align:center;
+  pointer-events:auto;
+}
+#safeIdleOverlay .safe-idle-title{
+  font-family:'Barlow Condensed',Arial,sans-serif;
+  font-size:clamp(3rem,6vw,6rem);
+  font-weight:700;
+  letter-spacing:.06em;
+  line-height:.82;
+}
+#safeIdleOverlay .safe-idle-msg{
+  background:var(--orange,#ec7623);
+  color:#111;
+  border-radius:999px;
+  padding:13px 26px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  font-size:clamp(1.05rem,2vw,1.7rem);
+}
+#safeIdleOverlay .safe-idle-video-frame{
+  width:min(960px,82vw);
+  height:min(540px,52vh);
+  border:3px solid var(--gold,#d9b65d);
+  border-radius:24px;
+  overflow:hidden;
+  background:#000;
+  position:relative;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+#safeIdleOverlay video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+@media (orientation:portrait){
+  #safeIdleOverlay{padding:18px;gap:16px;}
+  #safeIdleOverlay .safe-idle-video-frame{width:min(92vw,720px);height:min(58vh,720px);}
+}
+
   </style>
 </head>
 <body>
-  <video class="bg-video" autoplay muted loop playsinline><source src="smoke.mp4" type="video/mp4"/></video>
+  <video id="ambientBgVideo" class="bg-video" muted loop playsinline preload="none" aria-hidden="true"></video>
   <div class="frame"></div>
 
   <main class="page">
@@ -469,6 +510,16 @@
 
     <section class="partners-grid" id="partnersGrid" aria-label="Amsterdam tips and partners"></section>
   </main>
+
+
+<div id="safeIdleOverlay" aria-hidden="true">
+  <div class="safe-idle-title">EASY TIMES</div>
+  <div class="safe-idle-msg">Tap the screen to continue</div>
+  <div class="safe-idle-video-frame">
+    <video id="safeIdleVideo" muted playsinline preload="none" disablepictureinpicture></video>
+  </div>
+</div>
+
 
   <div class="partner-popup" id="partnerPopup">
     <div class="partner-box">
@@ -489,12 +540,12 @@
 
 <script>
 const partners = [
-  {id:"abike",name:"A-Bike Rentals",logo:"images/abike.png",image:"images/abike.png",text:"Discover Amsterdam by bike. One of the best ways to explore the city.",page:"partner-abike.html"},
-  {id:"hashmuseum",name:"Hash & Marijuana Museum",logo:"images/hash-museum.png",image:"images/hash-museum.png",text:"Learn about the fascinating history of cannabis culture.",page:"partner-hashmuseum.html"},
-  {id:"canal",name:"Canal Cruise",logo:"images/canal-cruise.png",image:"images/canal-cruise.png",text:"Experience Amsterdam from the water with a classic canal cruise.",page:"partner-canal.html"},
-  {id:"heineken",name:"Heineken Experience",logo:"images/heineken.png",image:"images/heineken.png",text:"Visit one of Amsterdam’s most famous attractions.",page:"partner-heineken.html"},
-  {id:"rijksmuseum",name:"Rijksmuseum",logo:"images/rijksmuseum.png",image:"images/rijksmuseum.png",text:"See masterpieces from Dutch history and art.",page:"partner-rijksmuseum.html"},
-  {id:"annefrank",name:"Anne Frank House",logo:"images/annefrank.png",image:"images/annefrank.png",text:"A powerful historical experience in Amsterdam.",page:"partner-annefrank.html"}
+  {id:"abike",name:"A-Bike Rentals",logo:"images/abike.png",text:"Discover Amsterdam by bike. One of the best ways to explore the city.",page:"partner-abike.html"},
+  {id:"hashmuseum",name:"Hash & Marijuana Museum",logo:"images/hash-museum.png",text:"Learn about the fascinating history of cannabis culture.",page:"partner-hashmuseum.html"},
+  {id:"canal",name:"Canal Cruise",logo:"images/canal-cruise.png",text:"Experience Amsterdam from the water with a classic canal cruise.",page:"partner-canal.html"},
+  {id:"heineken",name:"Heineken Experience",logo:"images/heineken.png",text:"Visit one of Amsterdam’s most famous attractions.",page:"partner-heineken.html"},
+  {id:"rijksmuseum",name:"Rijksmuseum",logo:"images/rijksmuseum.png",text:"See masterpieces from Dutch history and art.",page:"partner-rijksmuseum.html"},
+  {id:"annefrank",name:"Anne Frank House",logo:"images/annefrank.png",text:"A powerful historical experience in Amsterdam.",page:"partner-annefrank.html"}
 ];
 
 let activePartner = null;
@@ -505,7 +556,7 @@ partners.forEach(partner => {
   card.className = "partner-card";
   card.tabIndex = 0;
   card.innerHTML = `
-    <div class="partner-visual"><img src="${partner.image || partner.logo}" alt="${partner.name}"></div>
+    <img src="${partner.logo}" alt="${partner.name}">
     <h3>${partner.name}</h3>
     <p>${partner.text}</p>
     <button class="partner-action" type="button">View Details</button>
@@ -533,7 +584,7 @@ function goBack(){
 function openPartnerPopup(partner){
   activePartner = partner;
   document.getElementById("popupTitle").innerText = partner.name;
-  document.getElementById("popupLogo").src = partner.image || partner.logo;
+  document.getElementById("popupLogo").src = partner.logo;
   document.getElementById("popupLogo").alt = partner.name;
   document.getElementById("popupText").innerText = partner.text;
   document.getElementById("partnerIntro").style.display = "flex";
@@ -554,6 +605,116 @@ function openPartnerPage(){
   document.getElementById("partnerFrame").style.display = "block";
   document.getElementById("partnerFrame").src = activePartner.page;
 }
+
+/* =============================
+   SAFE IDLE VIDEO PLAYER
+   ============================= */
+(function(){
+  const IDLE_DELAY_MS = 45000;
+  const idleVideoPairs = [
+    { safe: 'idle-smoke-safe.mp4', original: 'smoke.mp4' },
+    { safe: 'idle-mascotte-safe.mp4', original: 'mascotte.mp4' }
+  ];
+
+  const overlay = document.getElementById('safeIdleOverlay');
+  const video = document.getElementById('safeIdleVideo');
+  if (!overlay || !video) return;
+
+  let timer = null;
+  let currentIndex = 0;
+  let visible = false;
+  let fallbackActive = false;
+  let lastMouseReset = 0;
+
+  function unloadVideo(){
+    try{
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
+    }catch(e){}
+  }
+
+  function loadVideo(useOriginalFallback){
+    if (!visible) return;
+    const pair = idleVideoPairs[currentIndex];
+    const src = useOriginalFallback ? pair.original : pair.safe;
+    fallbackActive = !!useOriginalFallback;
+    try{
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
+      video.src = src;
+      video.load();
+      const p = video.play();
+      if (p && typeof p.catch === 'function') p.catch(() => {});
+    }catch(e){
+      console.warn('Safe idle video skipped:', src, e);
+    }
+  }
+
+  function nextVideo(){
+    if (!visible) return;
+    currentIndex = (currentIndex + 1) % idleVideoPairs.length;
+    fallbackActive = false;
+    loadVideo(false);
+  }
+
+  function canShowIdle(){
+    const popup = document.querySelector('.partner-popup[style*="flex"], .iframe-popup[style*="flex"], .option-modal[style*="flex"], .sheet.open');
+    if (popup) return false;
+    const activeInput = document.activeElement;
+    if (activeInput && ['INPUT','TEXTAREA','SELECT'].includes(activeInput.tagName)) return false;
+    const audio = document.getElementById('player');
+    if (audio && !audio.paused) return false;
+    return true;
+  }
+
+  function showIdle(){
+    if (!canShowIdle()) { resetIdle(); return; }
+    visible = true;
+    overlay.style.display = 'flex';
+    overlay.setAttribute('aria-hidden','false');
+    currentIndex = 0;
+    fallbackActive = false;
+    requestAnimationFrame(() => loadVideo(false));
+  }
+
+  function hideIdle(){
+    visible = false;
+    overlay.style.display = 'none';
+    overlay.setAttribute('aria-hidden','true');
+    unloadVideo();
+  }
+
+  function resetIdle(){
+    clearTimeout(timer);
+    hideIdle();
+    timer = setTimeout(showIdle, IDLE_DELAY_MS);
+  }
+
+  video.addEventListener('ended', nextVideo);
+  video.addEventListener('error', () => {
+    if (!fallbackActive) { loadVideo(true); return; }
+    nextVideo();
+  });
+
+  ['click','keydown','touchstart','pointerdown','wheel','input'].forEach(evt => {
+    document.addEventListener(evt, resetIdle, {passive:true});
+  });
+
+  document.addEventListener('mousemove', () => {
+    const now = Date.now();
+    if (now - lastMouseReset > 1500) {
+      lastMouseReset = now;
+      resetIdle();
+    }
+  }, {passive:true});
+
+  overlay.addEventListener('click', resetIdle, {passive:true});
+  window.safeIdleReset = resetIdle;
+  resetIdle();
+})();
+
 </script>
 </body>
 </html>

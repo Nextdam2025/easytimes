@@ -73,9 +73,7 @@
 <body>
 <canvas id="particles" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-2;pointer-events:none;"></canvas>
 <!-- Background & Frame -->
-<video autoplay="" class="bg-video" loop="" muted="" playsinline="">
-<source src="Smoke_4___45s___4k_res.mp4" type="video/mp4"/>
-</video>
+<video id="ambientBgVideo" class="bg-video" muted loop playsinline preload="none" aria-hidden="true"></video>
 <div class="orange-frame"></div>
 <!-- Back to Home -->
 <div class="back-btn">
@@ -197,7 +195,7 @@
 <img alt="EasyTimes Logo" class="idle-logo" src="EASY TIMES LOGO BLACK-01.png"/>
 <div class="idle-msg">CLICK THE SCREEN TO ORDER DRINKS</div>
 <div class="video-frame">
-<video autoplay="" id="slideshowVideoOverlay" muted="" playsinline=""></video>
+<video id="slideshowVideoOverlay" muted playsinline preload="none" disablepictureinpicture></video>
 </div>
 </div>
 <script>
@@ -1014,47 +1012,110 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* =============================
-   IDLE OVERLAY
+   SAFE IDLE OVERLAY
+   Loads one lightweight idle video only after idle. Unloads it on touch.
    ============================= */
 const idleOverlay = document.getElementById("slideshow-overlay");
 const idleVideo   = document.getElementById("slideshowVideoOverlay");
-const idleVideos  = ["smoke.mp4", "mascotte.mp4"];
+const idleVideoPairs = [
+  { safe: "idle-smoke-safe.mp4", original: "smoke.mp4" },
+  { safe: "idle-mascotte-safe.mp4", original: "mascotte.mp4" }
+];
 let idleIdx = 0;
-let idleTO;
+let idleTO = null;
+let idleVisible = false;
+let idleFallbackActive = false;
+let lastMouseIdleReset = 0;
+const IDLE_DELAY_MS = 45000;
 
-function playNextIdle() {
-  idleVideo.src = idleVideos[idleIdx];
-  idleVideo.load();
-  idleVideo.play().catch(() => {});
-  idleIdx = (idleIdx + 1) % idleVideos.length;
+function unloadIdleVideo() {
+  if (!idleVideo) return;
+  try {
+    idleVideo.pause();
+    idleVideo.removeAttribute("src");
+    idleVideo.load();
+  } catch (e) {}
 }
 
-idleVideo.addEventListener("ended", playNextIdle);
-idleVideo.addEventListener("error", playNextIdle);
+function loadIdleVideo(useOriginalFallback = false) {
+  if (!idleVisible || !idleVideo) return;
+  const pair = idleVideoPairs[idleIdx];
+  const src = useOriginalFallback ? pair.original : pair.safe;
+  idleFallbackActive = !!useOriginalFallback;
+  try {
+    idleVideo.pause();
+    idleVideo.removeAttribute("src");
+    idleVideo.load();
+    idleVideo.src = src;
+    idleVideo.load();
+    const p = idleVideo.play();
+    if (p && typeof p.catch === "function") p.catch(() => {});
+  } catch (e) {
+    console.warn("Idle video skipped:", src, e);
+  }
+}
+
+function playNextIdle() {
+  if (!idleVisible) return;
+  idleIdx = (idleIdx + 1) % idleVideoPairs.length;
+  idleFallbackActive = false;
+  loadIdleVideo(false);
+}
+
+if (idleVideo) {
+  idleVideo.addEventListener("ended", playNextIdle);
+  idleVideo.addEventListener("error", () => {
+    if (!idleFallbackActive) { loadIdleVideo(true); return; }
+    playNextIdle();
+  });
+}
+
+function canShowOrderIdle() {
+  const modal = document.getElementById("optionModal");
+  const notification = document.getElementById("notification");
+  if (modal && modal.style.display === "flex") return false;
+  if (notification && notification.classList.contains("show")) return false;
+  const activeInput = document.activeElement;
+  if (activeInput && ["INPUT","TEXTAREA","SELECT"].includes(activeInput.tagName)) return false;
+  return true;
+}
 
 function showIdle() {
+  if (!idleOverlay || !canShowOrderIdle()) { resetIdle(); return; }
+  idleVisible = true;
   idleOverlay.style.display = "flex";
-  playNextIdle();
+  idleIdx = 0;
+  idleFallbackActive = false;
+  requestAnimationFrame(() => loadIdleVideo(false));
 }
 
 function hideIdle() {
-  idleOverlay.style.display = "none";
-  try { idleVideo.pause(); } catch (e) {}
+  idleVisible = false;
+  if (idleOverlay) idleOverlay.style.display = "none";
+  unloadIdleVideo();
 }
 
 function resetIdle() {
   clearTimeout(idleTO);
   hideIdle();
-  idleTO = setTimeout(showIdle, 50000);
+  idleTO = setTimeout(showIdle, IDLE_DELAY_MS);
 }
 
-["pointerdown", "touchstart", "keydown", "wheel"].forEach(ev => {
+["pointerdown", "touchstart", "keydown", "wheel", "click", "input"].forEach(ev => {
   document.addEventListener(ev, resetIdle, { passive: true });
 });
 
-idleOverlay.addEventListener("pointerdown", resetIdle, { passive: true });
+document.addEventListener("mousemove", () => {
+  const now = Date.now();
+  if (now - lastMouseIdleReset > 1500) {
+    lastMouseIdleReset = now;
+    resetIdle();
+  }
+}, { passive: true });
 
+if (idleOverlay) idleOverlay.addEventListener("pointerdown", resetIdle, { passive: true });
 resetIdle();
+
 
 
 /* =============================

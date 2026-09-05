@@ -1,0 +1,8 @@
+Upload these files to the same GitHub folder as index.html:
+- order-drinks.html
+- things-to-do.html
+- jukebox.html
+- idle-smoke-safe.mp4
+- idle-mascotte-safe.mp4
+
+The safe idle videos are required by all kiosk pages. The original smoke.mp4 and mascotte.mp4 can stay as fallback.
