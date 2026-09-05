@@ -462,7 +462,7 @@
       <div class="line"></div>
     </section>
 
-    <p class="tagline">Order drinks, choose the jukebox music, or discover Amsterdam tips.</p>
+    <p class="tagline">Order drinks, scan EZ Malik music and social channels, or discover Amsterdam tips.</p>
 
     <section class="action-grid" aria-label="Main touchscreen menu">
       <button class="action-card" onclick="location.href='order-drinks.html'">
@@ -507,104 +507,51 @@
   <div id="idleOverlay">
     <div class="idle-title">EASY TIMES</div>
     <div class="idle-msg">Tap the screen to order drinks</div>
-    <div class="video-frame" id="idleVideoFrame"><video id="idleVideo" muted playsinline preload="none"></video></div>
+    <div class="video-frame"><video id="idleVideo" muted playsinline autoplay></video></div>
   </div>
 
 <script>
-/* SAFE START FIX
-   The old homepage loaded/played idle MP4 videos after inactivity. On this Dell
-   touchscreen that can trigger Windows/GPU instability. Keep video disabled by
-   default so the page starts cleanly and never loads smoke.mp4/mascotte.mp4
-   unless you deliberately switch this to true later. */
-const IDLE_VIDEO_ENABLED = false;
 const videos = ['smoke.mp4', 'mascotte.mp4'];
 let currentVideoIndex = 0;
-let slideshowIdleTimeout = null;
-
+let slideshowIdleTimeout;
 const idleOverlay = document.getElementById('idleOverlay');
 const idleVideo = document.getElementById('idleVideo');
-const idleVideoFrame = document.getElementById('idleVideoFrame');
-const thingsPopup = document.getElementById('thingsPopup');
-const thingsFrame = document.getElementById('thingsFrame');
-
-if (!IDLE_VIDEO_ENABLED && idleVideoFrame) {
-  idleVideoFrame.style.display = 'none';
-}
 
 function openThingsPopup(){
-  if (thingsFrame) thingsFrame.src = 'things-to-do.html';
-  if (thingsPopup) thingsPopup.style.display = 'flex';
+  document.getElementById('thingsFrame').src='things-to-do.html';
+  document.getElementById('thingsPopup').style.display='flex';
   resetSlideshowIdle();
 }
-
 function closeThingsPopup(){
-  if (thingsFrame) thingsFrame.src = '';
-  if (thingsPopup) thingsPopup.style.display = 'none';
+  document.getElementById('thingsFrame').src='';
+  document.getElementById('thingsPopup').style.display='none';
   resetSlideshowIdle();
 }
-
 function playNextVideo(){
-  if (!IDLE_VIDEO_ENABLED || !idleVideo || !videos.length) return;
-
-  const nextVideo = videos[currentVideoIndex];
+  idleVideo.src = videos[currentVideoIndex];
+  idleVideo.load();
+  idleVideo.play().catch(()=>{});
   currentVideoIndex = (currentVideoIndex + 1) % videos.length;
-
-  try {
-    idleVideo.pause();
-    idleVideo.src = nextVideo;
-    idleVideo.load();
-    const playPromise = idleVideo.play();
-    if (playPromise && typeof playPromise.catch === 'function') {
-      playPromise.catch(() => {});
-    }
-  } catch (e) {
-    console.warn('Idle video skipped:', e);
-  }
 }
-
-if (idleVideo) {
-  idleVideo.addEventListener('ended', playNextVideo);
-  idleVideo.addEventListener('error', () => {
-    try {
-      idleVideo.pause();
-      idleVideo.removeAttribute('src');
-      idleVideo.load();
-    } catch (e) {}
-  });
-}
-
+idleVideo.addEventListener('ended', playNextVideo);
+idleVideo.addEventListener('error', playNextVideo);
 function showIdle(){
-  if (thingsPopup && thingsPopup.style.display === 'flex') return;
-  if (!idleOverlay) return;
-
-  idleOverlay.style.display = 'flex';
+  if(document.getElementById('thingsPopup').style.display === 'flex') return;
+  idleOverlay.style.display='flex';
   currentVideoIndex = 0;
   playNextVideo();
 }
-
 function hideIdle(){
-  if (idleOverlay) idleOverlay.style.display = 'none';
-  if (idleVideo) {
-    try {
-      idleVideo.pause();
-      idleVideo.removeAttribute('src');
-      idleVideo.load();
-    } catch (e) {}
-  }
+  idleOverlay.style.display='none';
+  try{idleVideo.pause();}catch(e){}
 }
-
 function resetSlideshowIdle(){
   clearTimeout(slideshowIdleTimeout);
   hideIdle();
-  slideshowIdleTimeout = setTimeout(showIdle, 60000);
+  slideshowIdleTimeout = setTimeout(showIdle, 35000);
 }
-
-['click','mousemove','keydown','touchstart','pointerdown'].forEach(evt => {
-  document.addEventListener(evt, resetSlideshowIdle, {passive:true});
-});
-
-if (idleOverlay) idleOverlay.addEventListener('click', resetSlideshowIdle, {passive:true});
-
+['click','mousemove','keydown','touchstart','pointerdown'].forEach(evt => document.addEventListener(evt, resetSlideshowIdle, {passive:true}));
+idleOverlay.addEventListener('click', resetSlideshowIdle);
 resetSlideshowIdle();
 </script>
 </body>
