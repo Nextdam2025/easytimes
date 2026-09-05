@@ -511,12 +511,13 @@
   </div>
 
 <script>
-/* SAFE IDLE VIDEO RESTORE
-   Idle video is enabled again, but it uses the lightweight safe MP4 files.
-   Nothing is loaded on page start: the video source is attached only after the
-   screen has been idle, so the start screen stays stable. */
-const IDLE_VIDEO_ENABLED = true;
-const videos = ['idle-smoke-safe.mp4', 'idle-mascotte-safe.mp4'];
+/* SAFE START FIX
+   The old homepage loaded/played idle MP4 videos after inactivity. On this Dell
+   touchscreen that can trigger Windows/GPU instability. Keep video disabled by
+   default so the page starts cleanly and never loads smoke.mp4/mascotte.mp4
+   unless you deliberately switch this to true later. */
+const IDLE_VIDEO_ENABLED = false;
+const videos = ['smoke.mp4', 'mascotte.mp4'];
 let currentVideoIndex = 0;
 let slideshowIdleTimeout = null;
 
@@ -604,12 +605,7 @@ function resetSlideshowIdle(){
 
 if (idleOverlay) idleOverlay.addEventListener('click', resetSlideshowIdle, {passive:true});
 
-// Optional test: open index.html?idle=1 to show the idle video immediately.
-if (new URLSearchParams(location.search).get('idle') === '1') {
-  setTimeout(showIdle, 400);
-} else {
-  resetSlideshowIdle();
-}
+resetSlideshowIdle();
 </script>
 </body>
 </html>
