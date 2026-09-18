@@ -1082,7 +1082,7 @@ Demain ce sera autre chose. Même monde. Nouvelles lignes.`
   };
   let genres=['ALL'];
   let activeGenre='ALL',queue=[],current=null,staffUnlocked=false;
-  let lyricSongId=null,lyricTimedNodes=[],lyricRequest=0;
+  let lyricSongId=null,lyricTimedNodes=[],lyricRequest=0,lyricSchedule=[];
   const $=s=>document.querySelector(s), player=$('#player');
   const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const musicPath=file=>`music/${encodeURI(file)}`;
@@ -1130,7 +1130,7 @@ Demain ce sera autre chose. Même monde. Nouvelles lignes.`
     return text.replace(/\r/g,'').split('\n').map(line=>line.trim()).filter(Boolean).map(text=>({text,section:/^\[[^\]]+\]$/.test(text)}));
   }
   async function loadLyrics(song){
-    const request=++lyricRequest;lyricSongId=song?.id??null;lyricTimedNodes=[];
+    const request=++lyricRequest;lyricSongId=song?.id??null;lyricTimedNodes=[];lyricSchedule=[];
     $('#lyricsSong').textContent=song?song.title:'Choose a song';
     if(!song){$('#lyricsWindow').innerHTML='<div class="lyrics-empty">Lyrics appear here when a song starts.</div>';return}
     $('#lyricsWindow').innerHTML='<div class="lyrics-empty">Loading lyrics…</div>';
@@ -1141,12 +1141,39 @@ Demain ce sera autre chose. Même monde. Nouvelles lignes.`
     lyricTimedNodes=[...$('#lyricsWindow').querySelectorAll('.lyric-line:not(.section)')];
     syncLyrics(true);
   }
+  // Without real timestamps, a line's share of the runtime is estimated from how
+  // much is said in it (characters + words) rather than splitting time evenly.
+  function lineWeight(text){
+    return Math.max(14,text.length)+text.split(/\s+/).filter(Boolean).length*3;
+  }
+  function buildLyricSchedule(){
+    lyricSchedule=[];
+    if(!lyricTimedNodes.length||!Number.isFinite(player.duration)||player.duration<=0)return;
+    const duration=player.duration;
+    // Fixed-second intro/outro (capped) feel right on both short and long tracks,
+    // unlike a flat percentage which under/over-shoots on longer songs.
+    const leadIn=Math.min(8,duration*.08);
+    const leadOut=Math.min(6,duration*.05);
+    const usable=Math.max(1,duration-leadIn-leadOut);
+    const weights=lyricTimedNodes.map(node=>lineWeight(node.textContent));
+    const total=weights.reduce((sum,w)=>sum+w,0)||1;
+    let acc=0;
+    lyricSchedule=lyricTimedNodes.map((node,i)=>{
+      const start=leadIn+usable*(acc/total);
+      acc+=weights[i];
+      return{node,start};
+    });
+  }
   function syncLyrics(force=false){
-    if(!current||!lyricTimedNodes.length||!Number.isFinite(player.duration)||player.duration<=0)return;
-    const lead=player.duration*.025,usable=Math.max(1,player.duration-lead-player.duration*.035);
-    const ratio=Math.max(0,Math.min(.999,(player.currentTime-lead)/usable));
-    const activeIndex=Math.min(lyricTimedNodes.length-1,Math.floor(ratio*lyricTimedNodes.length));
-    const active=lyricTimedNodes[activeIndex];
+    if(!current||!lyricTimedNodes.length)return;
+    if(!lyricSchedule.length)buildLyricSchedule();
+    if(!lyricSchedule.length)return;
+    const t=player.currentTime;
+    let activeIndex=0;
+    for(let i=0;i<lyricSchedule.length;i++){
+      if(lyricSchedule[i].start<=t)activeIndex=i;else break;
+    }
+    const active=lyricSchedule[activeIndex]&&lyricSchedule[activeIndex].node;
     if(!active||(!force&&active.classList.contains('active')))return;
     $('#lyricsWindow').querySelectorAll('.lyric-line.active').forEach(node=>node.classList.remove('active'));
     active.classList.add('active');
@@ -1176,6 +1203,9 @@ Demain ce sera autre chose. Même monde. Nouvelles lignes.`
   player.addEventListener('play',updateNow);player.addEventListener('pause',updateNow);player.addEventListener('ended',playNext);player.addEventListener('error',()=>{$('#nowPanel').classList.add('paused')});
   player.addEventListener('timeupdate',()=>{$('#currentTime').textContent=formatTime(player.currentTime);$('#duration').textContent=formatTime(player.duration);$('#progressFill').style.width=(player.duration?player.currentTime/player.duration*100:0)+'%';syncLyrics()});
   player.addEventListener('seeked',()=>syncLyrics(true));
+  // Duration isn't known yet when a new src is set, so the weighted schedule is (re)built once it is.
+  player.addEventListener('loadedmetadata',()=>{lyricSchedule=[];syncLyrics(true)});
+  player.addEventListener('durationchange',()=>{lyricSchedule=[];syncLyrics(true)});
   updateGenreList();renderFilters();renderSongs();renderQueue();updateNow();
 
 
