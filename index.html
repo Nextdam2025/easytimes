@@ -106,7 +106,8 @@
     .action-grid{
       display:grid;
       grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:clamp(18px,2vw,30px);
+      grid-template-rows:repeat(2,minmax(0,1fr));
+      gap:clamp(14px,1.6vw,24px);
       width:100%;
       height:100%;
       min-height:0;
@@ -117,16 +118,16 @@
       overflow:hidden;
       text-align:left;
       border:2px solid rgba(217,182,93,.9);
-      border-radius:30px;
+      border-radius:24px;
       background:linear-gradient(145deg,rgba(18,16,12,.98),rgba(34,25,13,.98));
-      padding:clamp(26px,3vw,48px);
-      box-shadow:0 18px 40px rgba(0,0,0,.36);
+      padding:clamp(16px,1.8vw,28px);
+      box-shadow:0 14px 32px rgba(0,0,0,.36);
       cursor:pointer;
       color:var(--cream);
       transition:transform .18s ease,border-color .18s ease,background .18s ease;
       display:grid;
       grid-template-rows:min-content min-content minmax(0,1fr) min-content;
-      gap:clamp(14px,1.6vh,24px);
+      gap:clamp(6px,1vh,14px);
       min-height:0;
       height:100%;
       font:inherit;
@@ -152,7 +153,7 @@
       z-index:2;
       font-family:'Barlow Condensed',Arial,sans-serif;
       color:var(--gold);
-      font-size:clamp(1.6rem,2.05vw,2.45rem);
+      font-size:clamp(1rem,1.25vw,1.5rem);
       font-weight:700;
       letter-spacing:.06em;
       text-transform:uppercase;
@@ -162,8 +163,8 @@
       position:relative;
       z-index:2;
       font-family:'Barlow Condensed',Arial,sans-serif;
-      font-size:clamp(4.2rem,6.4vw,8.4rem);
-      line-height:.78;
+      font-size:clamp(2.2rem,3.6vw,4.4rem);
+      line-height:.8;
       color:var(--cream);
       text-transform:uppercase;
       letter-spacing:.01em;
@@ -172,8 +173,8 @@
     .action-card p{
       position:relative;
       z-index:2;
-      font-size:clamp(1.22rem,1.65vw,1.85rem);
-      line-height:1.26;
+      font-size:clamp(.92rem,1.05vw,1.15rem);
+      line-height:1.22;
       color:#e6dac4;
       max-width:520px;
       font-weight:800;
@@ -186,21 +187,24 @@
       display:flex;
       justify-content:space-between;
       align-items:center;
-      gap:16px;
+      gap:12px;
       background:linear-gradient(90deg,#ffd755,var(--orange));
       color:#111;
       font-weight:900;
       border-radius:999px;
-      padding:clamp(16px,1.6vw,24px) clamp(22px,2.3vw,34px);
+      padding:clamp(10px,1.1vw,16px) clamp(16px,1.6vw,22px);
       text-transform:uppercase;
-      letter-spacing:.07em;
-      min-height:clamp(66px,7vh,88px);
-      font-size:clamp(1.05rem,1.35vw,1.35rem);
+      letter-spacing:.06em;
+      min-height:clamp(44px,4.6vh,58px);
+      font-size:clamp(.82rem,1vw,1.02rem);
       white-space:nowrap;
       box-shadow:0 10px 24px rgba(0,0,0,.24);
     }
-    .cta-pill span:last-child{font-size:2.15rem;line-height:1;}
+    .cta-pill span:last-child{font-size:1.5rem;line-height:1;}
     .music-card{background:linear-gradient(145deg,rgba(18,16,12,.98),rgba(48,32,12,.98));}
+    .staff-card{background:linear-gradient(145deg,rgba(18,16,12,.98),rgba(20,34,26,.98));}
+    .info-card{background:linear-gradient(145deg,rgba(18,16,12,.98),rgba(18,26,38,.98));}
+    .vibe-card{background:linear-gradient(145deg,rgba(18,16,12,.98),rgba(40,20,36,.98));}
     .bottom-strip{
       align-self:end;
       display:flex;
@@ -244,12 +248,11 @@
       .brand h2{font-size:clamp(1.25rem,2.4vw,2.2rem);margin-top:5px;}
       .brand .line{height:4px;margin-top:8px;}
       .tagline{font-size:clamp(1rem,1.45vw,1.32rem);line-height:1.18;}
-      .action-grid{gap:14px;min-height:0;}
-      .action-card{padding:clamp(18px,2vw,26px);border-radius:22px;gap:10px;}
-      .action-card .eyebrow{font-size:clamp(1.25rem,1.75vw,1.6rem);}
-      .action-card h3{font-size:clamp(3.05rem,5.2vw,5.2rem);}
-      .action-card p{font-size:clamp(1rem,1.25vw,1.18rem);line-height:1.22;}
-      .cta-pill{min-height:52px;padding:12px 18px;font-size:.95rem;}
+      .action-grid{gap:10px;min-height:0;}
+      .action-card{padding:clamp(10px,1.4vw,16px);border-radius:18px;gap:6px;}
+      .action-card .eyebrow{font-size:clamp(.8rem,1.2vw,1.05rem);}
+      .action-card h3{font-size:clamp(1.7rem,3.4vw,2.9rem);}
+      .action-card p,.action-card .cta-pill{display:none;}
       .bottom-strip{font-size:.9rem;padding-top:6px;}
     }
 
@@ -269,22 +272,21 @@
       .brand .line{height:5px;margin-top:10px;width:min(520px,76vw);}
       .tagline{font-size:clamp(1.25rem,3.8vw,1.75rem);line-height:1.22;max-width:720px;font-weight:900;}
       .action-grid{
-        grid-template-columns:1fr;
+        grid-template-columns:repeat(2,minmax(0,1fr));
         grid-template-rows:repeat(3,minmax(0,1fr));
-        gap:clamp(12px,1.7vh,20px);
+        gap:clamp(10px,1.5vh,16px);
         max-width:none;
         justify-self:stretch;
         height:100%;
       }
       .action-card{
-        padding:clamp(20px,4.8vw,34px);
-        border-radius:24px;
-        gap:clamp(7px,1vh,13px);
+        padding:clamp(14px,3.2vw,22px);
+        border-radius:20px;
+        gap:clamp(4px,.7vh,8px);
       }
-      .action-card .eyebrow{font-size:clamp(1.25rem,4vw,1.9rem);}
-      .action-card h3{font-size:clamp(3.35rem,12.5vw,6.4rem);line-height:.78;}
-      .action-card p{font-size:clamp(1.05rem,3.6vw,1.48rem);line-height:1.18;max-width:none;align-self:end;}
-      .cta-pill{min-height:clamp(56px,6.4vh,76px);font-size:clamp(1rem,3.2vw,1.28rem);padding:12px 22px;}
+      .action-card .eyebrow{font-size:clamp(.95rem,3vw,1.35rem);}
+      .action-card h3{font-size:clamp(2.1rem,7.8vw,3.6rem);line-height:.8;}
+      .action-card p,.action-card .cta-pill{display:none;}
       .bottom-strip{font-size:clamp(.85rem,2.9vw,1.05rem);padding:4px 0 0;gap:8px;}
       .bottom-strip span:not(:last-child):after{margin-left:8px;}
       .iframe-popup{padding:16px;}
@@ -301,12 +303,10 @@
       .brand h2{font-size:clamp(1.15rem,3.4vw,1.65rem);margin-top:3px;}
       .brand .line{height:4px;margin-top:7px;}
       .tagline{font-size:clamp(1rem,3.2vw,1.22rem);line-height:1.12;}
-      .action-grid{gap:9px;}
-      .action-card{padding:14px 17px;border-radius:19px;gap:5px;}
-      .action-card .eyebrow{font-size:clamp(1rem,3.35vw,1.2rem);}
-      .action-card h3{font-size:clamp(2.6rem,10.5vw,4.2rem);}
-      .action-card p{font-size:clamp(.9rem,2.9vw,1.05rem);line-height:1.1;}
-      .cta-pill{min-height:44px;padding:9px 16px;font-size:.84rem;}
+      .action-grid{gap:7px;}
+      .action-card{padding:10px 14px;border-radius:16px;gap:4px;}
+      .action-card .eyebrow{font-size:clamp(.75rem,2.6vw,.95rem);}
+      .action-card h3{font-size:clamp(1.5rem,6.6vw,2.5rem);}
       .bottom-strip{font-size:.72rem;letter-spacing:.045em;}
     }
 
@@ -462,7 +462,7 @@
       <div class="line"></div>
     </section>
 
-    <p class="tagline">Order drinks, choose the jukebox music, or discover Amsterdam tips.</p>
+    <p class="tagline">Order drinks, pick the music, call staff, or discover Amsterdam tips — all from one screen.</p>
 
     <section class="action-grid" aria-label="Main touchscreen menu">
       <button class="action-card" onclick="location.href='order-drinks.html'">
@@ -484,6 +484,27 @@
         <h3>Things<br>To Do</h3>
         <p>Tourist-friendly activities, partner QR codes, and local ideas inside the touchscreen frame.</p>
         <div class="cta-pill"><span>Explore</span><span>›</span></div>
+      </button>
+
+      <button class="action-card staff-card" onclick="location.href='call-staff.html'">
+        <div class="eyebrow">Need Something?</div>
+        <h3>Call<br>Staff</h3>
+        <p>Ask for the bill, water, or a hand — sent straight to the team.</p>
+        <div class="cta-pill"><span>Notify staff</span><span>›</span></div>
+      </button>
+
+      <button class="action-card info-card" onclick="location.href='house-info.html'">
+        <div class="eyebrow">Wi-Fi &amp; Hours</div>
+        <h3>House<br>Info</h3>
+        <p>Wi-Fi password, opening hours, house rules, and how to find us online.</p>
+        <div class="cta-pill"><span>View info</span><span>›</span></div>
+      </button>
+
+      <button class="action-card vibe-card" onclick="location.href='vibe-guide.html'">
+        <div class="eyebrow">First Time Here?</div>
+        <h3>Vibe<br>Guide</h3>
+        <p>Indica vs sativa, dosing tips, and what to do if you take it too far.</p>
+        <div class="cta-pill"><span>Get tips</span><span>›</span></div>
       </button>
     </section>
 

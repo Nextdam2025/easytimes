@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, user-scalable=no" name="viewport"/>
+  <title>Easy Times • House Info</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--bg:#12100c;--gold:#d9b65d;--cream:#f5ead8;--orange:#ec7623;--muted:#b8ab94;--safe:clamp(14px,2.2vw,34px);--frame:clamp(12px,2.2vw,34px);}
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{width:100%;min-height:100%;background:var(--bg);color:var(--cream);font-family:'Inter',Arial,sans-serif;touch-action:manipulation;}
+    body{
+      min-height:100dvh;padding:var(--safe);
+      background:radial-gradient(circle at 75% 8%,rgba(217,182,93,.18),transparent 32%),
+        radial-gradient(circle at 16% 90%,rgba(236,118,35,.16),transparent 34%),
+        linear-gradient(112deg,#0c0b08 0%,#17120b 58%,#2b2112 100%);
+    }
+    .frame{position:fixed;inset:var(--frame);border:3px solid var(--gold);border-radius:clamp(22px,3vw,36px);pointer-events:none;z-index:5;box-shadow:inset 0 0 0 1px rgba(217,182,93,.16),0 0 54px rgba(0,0,0,.32);}
+    .frame:after{content:"";position:absolute;inset:clamp(10px,1.4vw,18px);border:1px solid rgba(217,182,93,.18);border-radius:clamp(15px,2vw,25px);}
+    .page{position:relative;z-index:2;min-height:calc(100dvh - (var(--safe) * 2));max-width:1240px;margin:0 auto;padding:clamp(18px,2.4vw,34px);display:flex;flex-direction:column;gap:clamp(16px,2vh,28px);}
+    .topbar{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:clamp(14px,2vw,28px);}
+    .back{border:1px solid rgba(217,182,93,.62);background:rgba(245,234,216,.09);color:var(--cream);border-radius:999px;padding:clamp(12px,1.2vw,17px) clamp(18px,1.8vw,28px);font-size:clamp(.95rem,1.15vw,1.2rem);font-weight:900;cursor:pointer;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;}
+    .back:hover,.back:focus{background:var(--orange);color:#111;border-color:var(--orange);outline:none;}
+    .brand{text-align:center;}
+    .brand h1{font-family:'Barlow Condensed',Arial,sans-serif;font-size:clamp(3.4rem,6vw,6.4rem);line-height:.8;letter-spacing:.05em;color:var(--cream);text-transform:uppercase;text-shadow:0 10px 28px rgba(0,0,0,.38);}
+    .brand h2{font-family:'Barlow Condensed',Arial,sans-serif;font-size:clamp(1.3rem,2.2vw,2.1rem);line-height:.9;color:var(--gold);letter-spacing:.07em;text-transform:uppercase;margin-top:6px;}
+    .spacer{width:1px;}
+
+    .info-grid{
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,1.8vw,26px);
+      align-items:start;
+    }
+    .info-card{
+      border:2px solid rgba(217,182,93,.85);border-radius:26px;
+      background:linear-gradient(145deg,rgba(18,16,12,.98),rgba(34,25,13,.98));
+      padding:clamp(20px,2.2vw,30px);text-align:left;
+    }
+    .info-card h3{font-family:'Barlow Condensed',Arial,sans-serif;font-size:clamp(1.5rem,2vw,2.1rem);color:var(--gold);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.6em;}
+    .info-card p, .info-card li{font-size:clamp(.98rem,1.1vw,1.15rem);line-height:1.42;color:#e6dac4;font-weight:600;}
+    .info-card ul{list-style:none;display:flex;flex-direction:column;gap:.55em;}
+    .info-card li{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed rgba(217,182,93,.25);padding-bottom:.5em;}
+    .info-card li:last-child{border-bottom:none;padding-bottom:0;}
+    .info-card li span:last-child{color:var(--cream);font-weight:800;white-space:nowrap;}
+
+    .wifi-box{
+      display:flex;flex-direction:column;gap:.5em;background:rgba(0,0,0,.28);border:1.4px solid rgba(217,182,93,.5);
+      border-radius:16px;padding:.9em 1.1em;margin-top:.4em;
+    }
+    .wifi-box div{display:flex;justify-content:space-between;align-items:center;gap:12px;}
+    .wifi-box span:first-child{color:var(--gold);font-weight:800;text-transform:uppercase;font-size:.85rem;letter-spacing:.03em;}
+    .wifi-box span:last-child{font-family:'Inter',Arial,sans-serif;font-weight:900;font-size:1.15rem;color:var(--cream);}
+
+    .rules-card ul{list-style:disc;padding-left:1.2em;display:block;}
+    .rules-card li{display:list-item;border-bottom:none;padding-bottom:.3em;}
+
+    .link-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:.7em;}
+    .link-btn{
+      flex:1;min-width:160px;text-align:center;padding:.85em 1em;border-radius:999px;border:none;
+      background:linear-gradient(90deg,#ffd755,var(--orange));color:#111;font-weight:900;
+      text-transform:uppercase;letter-spacing:.05em;font-size:.95rem;cursor:pointer;text-decoration:none;
+    }
+    .link-btn.secondary{background:rgba(245,234,216,.1);color:var(--cream);border:1px solid rgba(217,182,93,.6);}
+
+    @media (max-width:980px){
+      .info-grid{grid-template-columns:1fr;}
+      .topbar{grid-template-columns:1fr;gap:12px;}
+      .back{justify-self:stretch;text-align:center;}
+      .spacer{display:none;}
+      body{overflow-y:auto;}
+      html,body{height:auto;}
+    }
+  </style>
+</head>
+<body>
+  <div class="frame"></div>
+  <main class="page">
+    <div class="topbar">
+      <button class="back" onclick="location.href='index.html'">‹ Back</button>
+      <section class="brand" aria-label="Easy Times House Info">
+        <h1>House Info</h1>
+        <h2>Everything you need to know</h2>
+      </section>
+      <div class="spacer"></div>
+    </div>
+
+    <section class="info-grid" aria-label="House information">
+      <article class="info-card">
+        <h3>📶 Wi-Fi</h3>
+        <p>Free Wi-Fi for every guest — just connect and enjoy.</p>
+        <div class="wifi-box">
+          <div><span>Network</span><span>EasyTimes-Guest</span></div>
+          <div><span>Password</span><span>EasyTimes1985</span></div>
+        </div>
+      </article>
+
+      <article class="info-card">
+        <h3>🕒 Opening Hours</h3>
+        <ul>
+          <li><span>Mon – Thu</span><span>10:00 – 01:00</span></li>
+          <li><span>Fri – Sat</span><span>10:00 – 03:00</span></li>
+          <li><span>Sunday</span><span>10:00 – 01:00</span></li>
+        </ul>
+      </article>
+
+      <article class="info-card rules-card">
+        <h3>📋 House Rules</h3>
+        <ul>
+          <li>18+ only — valid ID may be requested.</li>
+          <li>Only cannabis products without tobacco may be smoked indoors.</li>
+          <li>Please respect other guests and keep the volume relaxed.</li>
+          <li>Cash and card are both welcome.</li>
+        </ul>
+      </article>
+
+      <article class="info-card">
+        <h3>⭐ Loved Your Visit?</h3>
+        <p>Tell the world — a review means a lot to our small team.</p>
+        <div class="link-row">
+          <a class="link-btn" href="https://www.google.com/search?q=easytimes+amsterdam+reviews" target="_blank" rel="noopener">Leave a Review</a>
+        </div>
+      </article>
+
+      <article class="info-card">
+        <h3>📍 Find Us Online</h3>
+        <p>Follow Easy Times Amsterdam for events, deals, and updates.</p>
+        <div class="link-row">
+          <a class="link-btn secondary" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
+          <a class="link-btn secondary" href="https://www.google.com/maps/search/easytimes+amsterdam" target="_blank" rel="noopener">Directions</a>
+        </div>
+      </article>
+
+      <article class="info-card">
+        <h3>🙋 Need Anything Else?</h3>
+        <p>Ready to order, pick a song, or ask staff for help?</p>
+        <div class="link-row">
+          <a class="link-btn secondary" href="order-drinks.html">Order Drinks</a>
+          <a class="link-btn secondary" href="call-staff.html">Call Staff</a>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
