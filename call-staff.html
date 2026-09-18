@@ -42,8 +42,8 @@
     .table-row.locked .locked-badge{display:inline;}
 
     .request-grid{
-      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(16px,2vw,26px);
-      max-width:960px;margin:0 auto;width:100%;
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2vw,26px);
+      max-width:1200px;margin:0 auto;width:100%;
     }
     .request-card{
       position:relative;border:2px solid rgba(217,182,93,.85);border-radius:26px;
@@ -56,6 +56,7 @@
     .request-card .icon{font-size:clamp(2rem,3vw,2.8rem);}
     .request-card h3{font-family:'Barlow Condensed',Arial,sans-serif;font-size:clamp(1.6rem,2.3vw,2.4rem);letter-spacing:.03em;text-transform:uppercase;color:var(--gold);}
     .request-card p{font-size:clamp(.95rem,1.15vw,1.15rem);color:#e6dac4;font-weight:700;line-height:1.28;}
+    .request-card.review-card{text-decoration:none;}
 
     #toast{
       position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:88%;max-width:560px;
@@ -98,21 +99,16 @@
         <h3>Call Staff</h3>
         <p>General help — just ask us to come over.</p>
       </button>
-      <button class="request-card" onclick="sendRequest('🧾 Request the Bill', 'A customer is ready to pay.')">
-        <div class="icon">🧾</div>
-        <h3>The Bill, Please</h3>
-        <p>Ready to settle up — we'll bring it right over.</p>
-      </button>
-      <button class="request-card" onclick="sendRequest('💧 Water / Napkins', 'A customer would like water or napkins.')">
-        <div class="icon">💧</div>
-        <h3>Water / Napkins</h3>
-        <p>A quick refill or a few extra napkins.</p>
-      </button>
       <button class="request-card" onclick="sendRequest('🔥 Ashtray / Lighter', 'A customer needs an ashtray or lighter.')">
         <div class="icon">🔥</div>
         <h3>Ashtray / Lighter</h3>
         <p>Need a fresh ashtray or a light.</p>
       </button>
+      <a class="request-card review-card" href="https://www.google.com/search?q=easytimes+amsterdam+reviews" target="_blank" rel="noopener">
+        <div class="icon">⭐</div>
+        <h3>Leave A Review</h3>
+        <p>Enjoying Easy Times? A Google review means a lot to our team.</p>
+      </a>
     </section>
   </main>
 

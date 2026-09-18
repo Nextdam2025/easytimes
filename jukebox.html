@@ -1082,7 +1082,7 @@ Demain ce sera autre chose. Même monde. Nouvelles lignes.`
   };
   let genres=['ALL'];
   let activeGenre='ALL',queue=[],current=null,staffUnlocked=false;
-  let lyricSongId=null,lyricTimedNodes=[],lyricRequest=0,lyricSchedule=[];
+  let lyricSongId=null,lyricTimedNodes=[],lyricRequest=0,lyricSchedule=[],lyricLineTimes=[],lyricHasTimestamps=false;
   const $=s=>document.querySelector(s), player=$('#player');
   const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const musicPath=file=>`music/${encodeURI(file)}`;
@@ -1126,19 +1126,35 @@ Demain ce sera autre chose. Même monde. Nouvelles lignes.`
     }
     return '';
   }
+  // A line can start with a real timestamp, e.g. "[01:23.45]Some lyric", captured
+  // by listening to the track — those are used verbatim instead of the estimate below.
+  const TIMESTAMP_RE=/^\[(\d{1,2}):(\d{2}(?:\.\d{1,3})?)\]\s*(.*)$/;
   function parseLyrics(text){
-    return text.replace(/\r/g,'').split('\n').map(line=>line.trim()).filter(Boolean).map(text=>({text,section:/^\[[^\]]+\]$/.test(text)}));
+    let timed=false;
+    const lines=text.replace(/\r/g,'').split('\n').map(line=>line.trim()).filter(Boolean).map(raw=>{
+      const match=raw.match(TIMESTAMP_RE);
+      if(match){
+        timed=true;
+        const time=parseInt(match[1],10)*60+parseFloat(match[2]);
+        const body=match[3];
+        return{text:body,time,section:/^\[[^\]]+\]$/.test(body)};
+      }
+      return{text:raw,time:null,section:/^\[[^\]]+\]$/.test(raw)};
+    }).filter(line=>line.text);
+    return{lines,timed};
   }
   async function loadLyrics(song){
-    const request=++lyricRequest;lyricSongId=song?.id??null;lyricTimedNodes=[];lyricSchedule=[];
+    const request=++lyricRequest;lyricSongId=song?.id??null;lyricTimedNodes=[];lyricSchedule=[];lyricLineTimes=[];lyricHasTimestamps=false;
     $('#lyricsSong').textContent=song?song.title:'Choose a song';
     if(!song){$('#lyricsWindow').innerHTML='<div class="lyrics-empty">Lyrics appear here when a song starts.</div>';return}
     $('#lyricsWindow').innerHTML='<div class="lyrics-empty">Loading lyrics…</div>';
     const text=await getLyrics(song);if(request!==lyricRequest)return;
     if(!text){$('#lyricsWindow').innerHTML=`<div class="lyrics-empty">Add <b>${escapeHtml(song.title)}.txt</b> to the <b>music</b> folder to show synchronized lyrics.</div>`;return}
-    const lines=parseLyrics(text);
-    $('#lyricsWindow').innerHTML=lines.map((line,index)=>`<p class="lyric-line ${line.section?'section':''}" data-line="${index}">${escapeHtml(line.text)}</p>`).join('');
+    const{lines,timed}=parseLyrics(text);
+    lyricHasTimestamps=timed;
+    $('#lyricsWindow').innerHTML=lines.map((line,index)=>`<p class="lyric-line ${line.section?'section':''}" data-line="${index}" ${line.time!==null?`data-time="${line.time}"`:''}>${escapeHtml(line.text)}</p>`).join('');
     lyricTimedNodes=[...$('#lyricsWindow').querySelectorAll('.lyric-line:not(.section)')];
+    lyricLineTimes=lyricTimedNodes.map(node=>node.hasAttribute('data-time')?parseFloat(node.dataset.time):NaN);
     syncLyrics(true);
   }
   // Without real timestamps, a line's share of the runtime is estimated from how
@@ -1148,7 +1164,13 @@ Demain ce sera autre chose. Même monde. Nouvelles lignes.`
   }
   function buildLyricSchedule(){
     lyricSchedule=[];
-    if(!lyricTimedNodes.length||!Number.isFinite(player.duration)||player.duration<=0)return;
+    if(!lyricTimedNodes.length)return;
+    // Real per-line timestamps (from listening to the track) always win over the estimate.
+    if(lyricHasTimestamps&&lyricLineTimes.length===lyricTimedNodes.length&&lyricLineTimes.every(Number.isFinite)){
+      lyricSchedule=lyricTimedNodes.map((node,i)=>({node,start:lyricLineTimes[i]}));
+      return;
+    }
+    if(!Number.isFinite(player.duration)||player.duration<=0)return;
     const duration=player.duration;
     // Fixed-second intro/outro (capped) feel right on both short and long tracks,
     // unlike a flat percentage which under/over-shoots on longer songs.

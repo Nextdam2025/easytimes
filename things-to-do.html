@@ -156,11 +156,8 @@
       background:linear-gradient(145deg,rgba(18,16,12,.98),rgba(38,27,12,.98));
       border:2px solid rgba(217,182,93,.86);
       border-radius:clamp(20px,2vw,28px);
-      padding:clamp(14px,1.35vw,22px);
       display:grid;
-      grid-template-rows:auto auto 1fr auto;
-      align-items:center;
-      gap:clamp(9px,1vw,14px);
+      grid-template-rows:auto 1fr;
       cursor:pointer;
       transition:transform .18s ease,border-color .18s ease,background .18s ease;
       box-shadow:0 16px 42px rgba(0,0,0,.32);
@@ -170,14 +167,40 @@
       transform:translateY(-3px);
       border-color:var(--orange);
     }
-    .partner-card img{
-      width:clamp(82px,7vw,126px);
-      aspect-ratio:1;
-      object-fit:contain;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(217,182,93,.35);
-      border-radius:16px;
-      padding:clamp(8px,1vw,12px);
+    .card-media{
+      position:relative;
+      height:clamp(78px,13vh,150px);
+      background:rgba(0,0,0,.35);
+      border-bottom:1px solid rgba(217,182,93,.35);
+      overflow:hidden;
+    }
+    .card-media img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .card-icon{
+      position:absolute;
+      left:clamp(10px,1.2vw,16px);
+      bottom:clamp(-14px,-1.6vw,-18px);
+      width:clamp(36px,3.6vw,52px);
+      height:clamp(36px,3.6vw,52px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:clamp(1.1rem,1.8vw,1.6rem);
+      background:linear-gradient(145deg,#ffd755,var(--orange));
+      border:2px solid rgba(18,16,12,.9);
+      border-radius:50%;
+      box-shadow:0 8px 18px rgba(0,0,0,.4);
+    }
+    .card-body{
+      display:grid;
+      grid-template-rows:auto 1fr auto;
+      align-items:center;
+      gap:clamp(9px,1vw,14px);
+      padding:clamp(18px,1.6vw,24px) clamp(14px,1.35vw,22px) clamp(14px,1.35vw,22px);
     }
     .partner-card h3{
       font-family:'Barlow Condensed',Arial,sans-serif;
@@ -273,13 +296,11 @@
       gap:clamp(16px,2vw,24px);
     }
     .partner-content img{
-      width:clamp(150px,16vw,220px);
-      aspect-ratio:1;
-      object-fit:contain;
-      background:rgba(255,255,255,.06);
+      width:min(480px,86vw);
+      height:clamp(150px,20vh,220px);
+      object-fit:cover;
       border:1px solid rgba(217,182,93,.4);
       border-radius:22px;
-      padding:18px;
     }
     .partner-content p{
       font-size:clamp(1.2rem,2.1vw,1.7rem);
@@ -319,8 +340,9 @@
       .brand h1{font-size:clamp(3.4rem,7vw,5.9rem);}
       .brand h2{font-size:clamp(1.2rem,2.2vw,2rem);}
       .hint{font-size:1.45rem;}
-      .partner-card{padding:12px;gap:8px;}
-      .partner-card img{width:70px;}
+      .partner-card{padding:0;}
+      .card-media{height:clamp(56px,10vh,96px);}
+      .card-body{padding:10px 14px 12px;gap:6px;}
       .partner-card h3{font-size:clamp(1.55rem,2.4vw,2.45rem);}
       .partner-card p{font-size:.9rem;line-height:1.18;}
       .partner-action{min-height:42px;font-size:.85rem;padding:.55rem .8rem;}
@@ -375,18 +397,14 @@
       .partner-card{
         min-height:0;
         height:auto;
-        padding:18px;
-        grid-template-columns:clamp(86px,22vw,118px) 1fr;
-        grid-template-rows:auto auto auto;
-        column-gap:14px;
-        row-gap:9px;
-        text-align:left;
-        align-items:center;
+        padding:0;
       }
-      .partner-card img{
-        grid-row:1 / span 3;
-        width:100%;
-        align-self:center;
+      .card-media{
+        height:clamp(120px,32vw,180px);
+      }
+      .card-body{
+        padding:16px 18px 18px;
+        text-align:left;
       }
       .partner-card h3{
         font-size:clamp(2.15rem,8.2vw,3.55rem);
@@ -424,12 +442,12 @@
       .brand h1{font-size:clamp(4rem,20vw,5.7rem);}
       .brand h2{font-size:clamp(1.25rem,5.5vw,1.8rem);}
       .partner-card{
-        grid-template-columns:1fr;
         text-align:center;
-        justify-items:center;
-        padding:16px;
+        padding:0;
       }
-      .partner-card img{grid-row:auto;width:112px;}
+      .card-body{
+        text-align:center;
+      }
       .partner-card h3,.partner-card p{text-align:center;}
       .partner-action{width:100%;}
       .partner-header button{padding:10px 14px;}
@@ -540,26 +558,33 @@
 
 <script>
 const partners = [
-  {id:"abike",name:"A-Bike Rentals",logo:"images/abike.png",text:"Discover Amsterdam by bike. One of the best ways to explore the city.",page:"partner-abike.html"},
-  {id:"hashmuseum",name:"Hash & Marijuana Museum",logo:"images/hash-museum.png",text:"Learn about the fascinating history of cannabis culture.",page:"partner-hashmuseum.html"},
-  {id:"canal",name:"Canal Cruise",logo:"images/canal-cruise.png",text:"Experience Amsterdam from the water with a classic canal cruise.",page:"partner-canal.html"},
-  {id:"heineken",name:"Heineken Experience",logo:"images/heineken.png",text:"Visit one of Amsterdam’s most famous attractions.",page:"partner-heineken.html"},
-  {id:"rijksmuseum",name:"Rijksmuseum",logo:"images/rijksmuseum.png",text:"See masterpieces from Dutch history and art.",page:"partner-rijksmuseum.html"},
-  {id:"annefrank",name:"Anne Frank House",logo:"images/annefrank.png",text:"A powerful historical experience in Amsterdam.",page:"partner-annefrank.html"}
+  {id:"abike",name:"A-Bike Rentals",icon:"🚲",logo:"images/abike.png",photo:"images/abike-photo.jpg",text:"Discover Amsterdam by bike. One of the best ways to explore the city.",page:"partner-abike.html"},
+  {id:"hashmuseum",name:"Hash & Marijuana Museum",icon:"🌿",logo:"images/hash-museum.png",photo:"images/hash-museum-photo.jpg",text:"Learn about the fascinating history of cannabis culture.",page:"partner-hashmuseum.html"},
+  {id:"canal",name:"Canal Cruise",icon:"🛶",logo:"images/canal-cruise.png",photo:"images/canal-cruise-photo.jpg",text:"Experience Amsterdam from the water with a classic canal cruise.",page:"partner-canal.html"},
+  {id:"heineken",name:"Heineken Experience",icon:"🍺",logo:"images/heineken.png",photo:"images/heineken-photo.jpg",text:"Visit one of Amsterdam’s most famous attractions.",page:"partner-heineken.html"},
+  {id:"rijksmuseum",name:"Rijksmuseum",icon:"🖼️",logo:"images/rijksmuseum.png",photo:"images/rijksmuseum-photo.jpg",text:"See masterpieces from Dutch history and art.",page:"partner-rijksmuseum.html"},
+  {id:"annefrank",name:"Anne Frank House",icon:"📖",logo:"images/annefrank.png",photo:"images/annefrank-photo.jpg",text:"A powerful historical experience in Amsterdam.",page:"partner-annefrank.html"}
 ];
 
 let activePartner = null;
 const grid = document.getElementById("partnersGrid");
 
+// Drop a matching photo file (e.g. images/canal-cruise-photo.jpg) into the images
+// folder to show a real venue photo — falls back to the current artwork until then.
 partners.forEach(partner => {
   const card = document.createElement("article");
   card.className = "partner-card";
   card.tabIndex = 0;
   card.innerHTML = `
-    <img src="${partner.logo}" alt="${partner.name}">
-    <h3>${partner.name}</h3>
-    <p>${partner.text}</p>
-    <button class="partner-action" type="button">View Details</button>
+    <div class="card-media">
+      <img src="${partner.photo}" alt="${partner.name}" onerror="this.onerror=null;this.src='${partner.logo}';this.style.objectFit='contain';this.style.padding='14px';">
+      <span class="card-icon">${partner.icon}</span>
+    </div>
+    <div class="card-body">
+      <h3>${partner.name}</h3>
+      <p>${partner.text}</p>
+      <button class="partner-action" type="button">View Details</button>
+    </div>
   `;
   card.addEventListener("click", () => openPartnerPopup(partner));
   card.addEventListener("keydown", e => {
@@ -583,9 +608,13 @@ function goBack(){
 
 function openPartnerPopup(partner){
   activePartner = partner;
-  document.getElementById("popupTitle").innerText = partner.name;
-  document.getElementById("popupLogo").src = partner.logo;
-  document.getElementById("popupLogo").alt = partner.name;
+  document.getElementById("popupTitle").innerText = partner.icon + " " + partner.name;
+  const popupLogo = document.getElementById("popupLogo");
+  popupLogo.onerror = () => { popupLogo.onerror = null; popupLogo.src = partner.logo; popupLogo.style.objectFit = 'contain'; popupLogo.style.padding = '18px'; };
+  popupLogo.style.objectFit = 'cover';
+  popupLogo.style.padding = '0';
+  popupLogo.src = partner.photo;
+  popupLogo.alt = partner.name;
   document.getElementById("popupText").innerText = partner.text;
   document.getElementById("partnerIntro").style.display = "flex";
   document.getElementById("partnerFrame").style.display = "none";
